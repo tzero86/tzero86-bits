@@ -27,11 +27,6 @@ paginate     = 10
   # Default theme "light" or "dark"
   defaultTheme = "dark"
 
-# [taxonomies]
-#     category = "blog"
-#     tag      = "tags"
-#     #series   = "series"
-
 [languages]
   [languages.en]
     title = "tzero86.bits"
