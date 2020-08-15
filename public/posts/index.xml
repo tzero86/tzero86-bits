@@ -1,0 +1,114 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Posts on tzero86.bits</title>
+        <link>https://tzero86-bits.netlify.app/posts/</link>
+        <description>Recent content in Posts on tzero86.bits</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
+        <lastBuildDate>Sat, 15 Aug 2020 16:56:33 -0400</lastBuildDate>
+        <atom:link href="https://tzero86-bits.netlify.app/posts/index.xml" rel="self" type="application/rss+xml" />
+        
+        <item>
+            <title>Nmap_basics.sh</title>
+            <link>https://tzero86-bits.netlify.app/posts/nmap_basics/</link>
+            <pubDate>Sat, 15 Aug 2020 16:56:33 -0400</pubDate>
+            
+            <guid>https://tzero86-bits.netlify.app/posts/nmap_basics/</guid>
+            <description>#NMAP - Basic Usage#  nmap is an free, open-source and powerful tool used to discover hosts and services on a computer network. In our example, we are using nmap to scan this machine to identify all services that are running on a particular port. nmap has many capabilities, below &amp;gt; is a table summarizing some of the functionality it provides. {from TryHackme}
+ Here are some of the basic switches/flags that your can use when running an nmap scan:</description>
+            <content type="html"><![CDATA[<h2 id="nmap---basic-usage">#NMAP - Basic Usage#</h2>
+<blockquote>
+<p><strong>nmap</strong> is an free, open-source and powerful tool used to discover hosts and services on a computer network. In our example, we are
+using nmap to scan this machine  to identify all services that are running on a particular port. nmap  has many capabilities, below &gt; is a table summarizing some of the functionality it provides.
+<em>{from TryHackme}</em></p>
+</blockquote>
+<p>Here are some of the basic switches/flags that your can use when running an nmap scan:</p>
+<table>
+<thead>
+<tr>
+<th align="left">nmap flag</th>
+<th align="center">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">-sV</td>
+<td align="center"><em>Attempts to determine the version of the services running</em></td>
+</tr>
+<tr>
+<td align="left">-p {port} or -p-</td>
+<td align="center"><em>Port scan for port or scan all ports</em></td>
+</tr>
+<tr>
+<td align="left">-Pn</td>
+<td align="center"><em>Disable host discovery and just scan for open ports</em></td>
+</tr>
+<tr>
+<td align="left">-A</td>
+<td align="center"><em>OS and version detection, runs integrated scripts</em></td>
+</tr>
+<tr>
+<td align="left">-sC</td>
+<td align="center"><em>Scan with the default nmap scripts</em></td>
+</tr>
+<tr>
+<td align="left">-v</td>
+<td align="center"><em>Verbose mode</em></td>
+</tr>
+<tr>
+<td align="left">-sU</td>
+<td align="center"><em>UDP port scan</em></td>
+</tr>
+<tr>
+<td align="left">-sS</td>
+<td align="center"><em>TCP SYN port scan</em></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="center"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="how-to-scan-nmap-ports">#How to Scan Nmap Ports#</h2>
+<p>To scan Nmap ports on a  remote system, enter the following in the terminal:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">  sudo nmap <span style="color:#f92672">{</span>target_IP<span style="color:#f92672">}</span>
+</code></pre></div><p>Replace the {target_IP} with the IP address of the system you’re scanning. This is the most basic format for Nmap, and it will return information about the ports on that system. While is this a quick scan, <strong>it wont scan all ports by default</strong>. To specify all ports look at the <strong>-p-</strong> flag in the previous table.</p>
+<p>In addition to scanning by IP address, you can also use the following commands to specify a target:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e">#To scan a host:</span>
+nmap www.hostname.com
+
+<span style="color:#75715e">#To scan a range of IP addresses (.1 – .10):</span>
+nmap 192.168.0.1-10
+
+<span style="color:#75715e">#To run Nmap on a subnet:</span>
+nmap 192.168.0.1/13
+
+<span style="color:#75715e">#To scan targets from a text file:</span>
+nmap –iL textlist.txt
+</code></pre></div><pre><code>  Happy hacking.
+  tzero86
+</code></pre>]]></content>
+        </item>
+        
+        <item>
+            <title>f1rst_st3p.sh</title>
+            <link>https://tzero86-bits.netlify.app/posts/first_step/</link>
+            <pubDate>Sat, 15 Aug 2020 16:02:22 -0400</pubDate>
+            
+            <guid>https://tzero86-bits.netlify.app/posts/first_step/</guid>
+            <description>This is just the start. The first step towards a great adventure of hacking, pentesting and hopefully bug bounty related things. However, this is not intended to be a guide of any kind. This a noob palace of sorts. There is no learning without challenge, there is no challenge without pain. Those who struggle, learn the way.
+Happy hacking.
+tzero86.</description>
+            <content type="html"><![CDATA[
+    <img src="../jules.jpg"  alt="Hello Friend"  class="center"  style="border-radius: 500px; padding: 20px"  />
+
+
+<p>This is just the start. The first step towards a great adventure of hacking, pentesting and hopefully bug bounty related things. However, this is not intended to be a guide of any kind. This a noob palace of sorts. There is no learning without challenge, there is no challenge without pain. Those who struggle, learn the way.</p>
+<p>Happy hacking.</p>
+<p>tzero86.</p>
+]]></content>
+        </item>
+        
+    </channel>
+</rss>

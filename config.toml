@@ -1,4 +1,4 @@
-baseurl      = "localhost"
+baseurl      = "https://tzero86-bits.netlify.app/"
 title        = "tzero86.bits"
 languageCode = "en-us"
 theme        = "hello-friend-ng"
@@ -10,6 +10,11 @@ paginate     = 10
   dateformNum     = "2006-01-02"
   dateformNumTime = "2006-01-02 15:04 -0700"
 
+  # dir name of your blog content (default is `content/posts`).
+  # the list of set content will show up on your index page (baseurl).
+  contentTypeName = "posts"
+
+  showMenuItems = true
   # Subtitle for home
   homeSubtitle = "The cave of the newbie"
 
@@ -47,4 +52,4 @@ paginate     = 10
   [[menu.main]]
     identifier = "blog"
     name       = "Blog"
-    url        = "/posts"
+    url        = "/posts/"

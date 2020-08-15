@@ -3,19 +3,42 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>localhost/blog/</loc>
+    <loc>https://tzero86-bits.netlify.app/tags/hacking/</loc>
+    <lastmod>2020-08-15T16:56:33-04:00</lastmod>
   </url>
   
   <url>
-    <loc>localhost/series/</loc>
+    <loc>https://tzero86-bits.netlify.app/posts/nmap_basics/</loc>
+    <lastmod>2020-08-15T16:56:33-04:00</lastmod>
   </url>
   
   <url>
-    <loc>localhost/tags/</loc>
+    <loc>https://tzero86-bits.netlify.app/posts/</loc>
+    <lastmod>2020-08-15T16:56:33-04:00</lastmod>
   </url>
   
   <url>
-    <loc>localhost/</loc>
+    <loc>https://tzero86-bits.netlify.app/tags/</loc>
+    <lastmod>2020-08-15T16:56:33-04:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tzero86-bits.netlify.app/tags/tools/</loc>
+    <lastmod>2020-08-15T16:56:33-04:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tzero86-bits.netlify.app/</loc>
+    <lastmod>2020-08-15T16:56:33-04:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tzero86-bits.netlify.app/posts/first_step/</loc>
+    <lastmod>2020-08-15T16:02:22-04:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tzero86-bits.netlify.app/categories/</loc>
   </url>
   
 </urlset>
