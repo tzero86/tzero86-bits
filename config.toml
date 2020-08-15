@@ -16,7 +16,7 @@ paginate     = 10
 
   showMenuItems = true
   # Subtitle for home
-  homeSubtitle = "The cave of the newbie"
+  homeSubtitle = "The cave of the noob: hacking notes and rants."
 
   # Set disableReadOtherPosts to true in order to hide the links to other posts.
   disableReadOtherPosts = false
@@ -25,7 +25,7 @@ paginate     = 10
   enableSharingButtons = true
 
   # Metadata mostly used in document's head
-  description = "hacking notes and tutorials"
+  description = "hacking notes and rants"
   keywords = "homepage, blog"
   images = [""]
 
@@ -35,7 +35,7 @@ paginate     = 10
 [languages]
   [languages.en]
     title = "tzero86.bits"
-    subtitle = "The cave of the newbie"
+    subtitle = "The cave of the noob: hacking notes and rants."
     keywords = ""
     copyright = '<a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a>'
     readOtherPosts = "Read other posts"
