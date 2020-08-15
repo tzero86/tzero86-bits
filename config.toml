@@ -30,7 +30,7 @@ paginate     = 10
 [taxonomies]
     category = "blog"
     tag      = "tags"
-    series   = "series"
+    #series   = "series"
 
 [languages]
   [languages.en]
