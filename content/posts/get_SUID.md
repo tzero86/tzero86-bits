@@ -4,6 +4,7 @@ date: 2020-08-15T18:13:59-04:00
 draft: false
 toc: false
 images:
+cover: "img/get_suid.png"
 tags:
   - hacking
   - tools

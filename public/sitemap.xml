@@ -3,6 +3,21 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://tzero86-bits.netlify.app/page/about/</loc>
+    <lastmod>2020-08-16T00:30:23-04:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tzero86-bits.netlify.app/page/</loc>
+    <lastmod>2020-08-16T00:30:23-04:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tzero86-bits.netlify.app/</loc>
+    <lastmod>2020-08-16T00:30:23-04:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://tzero86-bits.netlify.app/posts/gobuster/</loc>
     <lastmod>2020-08-15T21:25:53-04:00</lastmod>
   </url>
@@ -28,11 +43,6 @@
   </url>
   
   <url>
-    <loc>https://tzero86-bits.netlify.app/</loc>
-    <lastmod>2020-08-15T21:25:53-04:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://tzero86-bits.netlify.app/posts/get_suid/</loc>
     <lastmod>2020-08-15T18:13:59-04:00</lastmod>
   </url>
@@ -40,11 +50,6 @@
   <url>
     <loc>https://tzero86-bits.netlify.app/posts/nmap_basics/</loc>
     <lastmod>2020-08-15T16:56:33-04:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://tzero86-bits.netlify.app/posts/first_step/</loc>
-    <lastmod>2020-08-15T16:02:22-04:00</lastmod>
   </url>
   
   <url>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Pages on tzero86.bits</title>
+    <link>https://tzero86-bits.netlify.app/page/</link>
+    <description>Recent content in Pages on tzero86.bits</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
+    <lastBuildDate>Sun, 16 Aug 2020 00:30:23 -0400</lastBuildDate>
+    
+	<atom:link href="https://tzero86-bits.netlify.app/page/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>4b0ut m3</title>
+      <link>https://tzero86-bits.netlify.app/page/about/</link>
+      <pubDate>Sun, 16 Aug 2020 00:30:23 -0400</pubDate>
+      
+      <guid>https://tzero86-bits.netlify.app/page/about/</guid>
+      <description># Lasciate ogne speranza, voi ch&amp;rsquo;intrate
+I&amp;rsquo;m a software quality engineer by day, a perpetual student by night. Trying hard to learn ethical hacking and penetration testing. This is my space, a refuge for the noob. I also play bass when somehow I find myself away from a computer.
+This is just the start and I really mean the start, I been learning this for just about 3 months. Can&amp;rsquo;t image the amount of things I&amp;rsquo;ve yet to learn.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -20,7 +20,7 @@
       <guid>https://tzero86-bits.netlify.app/posts/gobuster/</guid>
       <description>#GoBuster Basic usage# GoBuster brute-force tool for URIs (directories and files), DNS subdomains and virtual host names.
  Get GoBuster: If you need to download this tool to your system, visit this link  To start with the basic usage for this tool, let&amp;rsquo;s review some of the flags we can specify to run gobuster.
-  GoBuster flag Description     -e Print the full URLs in your console   -u The target URL   -w Path to your wordlist   -U and -P Username and Password for Basic Auth   -p {proxy} Proxy to use for requests   -c {http cookies} Specify a cookie for simulating your auth    GoBuster requires us to provide a wordlist in order to brute force our way through.</description>
+ .table { width: 100%; margin-bottom: 1rem; color: #212529 } .table td, .table th { padding: .</description>
     </item>
     
     <item>
@@ -41,17 +41,6 @@
       <guid>https://tzero86-bits.netlify.app/posts/nmap_basics/</guid>
       <description>#NMAP - Basic Usage#  nmap is an free, open-source and powerful tool used to discover hosts and services on a computer network. In our example, we are using nmap to scan this machine to identify all services that are running on a particular port. nmap has many capabilities, below &amp;gt; is a table summarizing some of the functionality it provides. {from TryHackme}
  Here are some of the basic switches/flags that your can use when running an nmap scan:</description>
-    </item>
-    
-    <item>
-      <title>f1rst_st3p.sh</title>
-      <link>https://tzero86-bits.netlify.app/posts/first_step/</link>
-      <pubDate>Sat, 15 Aug 2020 16:02:22 -0400</pubDate>
-      
-      <guid>https://tzero86-bits.netlify.app/posts/first_step/</guid>
-      <description>This is just the start. The first step towards a great adventure of hacking, pentesting and hopefully bug bounty related things. However, this is not intended to be a guide of any kind. This a noob palace of sorts. There is no learning without challenge, there is no challenge without pain. Those who struggle, learn the way.
-Happy hacking.
-tzero86.</description>
     </item>
     
   </channel>

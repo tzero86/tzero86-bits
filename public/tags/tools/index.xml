@@ -20,7 +20,7 @@
       <guid>https://tzero86-bits.netlify.app/posts/gobuster/</guid>
       <description>#GoBuster Basic usage# GoBuster brute-force tool for URIs (directories and files), DNS subdomains and virtual host names.
  Get GoBuster: If you need to download this tool to your system, visit this link  To start with the basic usage for this tool, let&amp;rsquo;s review some of the flags we can specify to run gobuster.
-  GoBuster flag Description     -e Print the full URLs in your console   -u The target URL   -w Path to your wordlist   -U and -P Username and Password for Basic Auth   -p {proxy} Proxy to use for requests   -c {http cookies} Specify a cookie for simulating your auth    GoBuster requires us to provide a wordlist in order to brute force our way through.</description>
+ .table { width: 100%; margin-bottom: 1rem; color: #212529 } .table td, .table th { padding: .</description>
     </item>
     
     <item>

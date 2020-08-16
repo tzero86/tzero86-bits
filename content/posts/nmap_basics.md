@@ -4,6 +4,7 @@ date: 2020-08-15T16:56:33-04:00
 draft: false
 toc: false
 images:
+cover: "img/nmap_cover.png"
 tags:
   - hacking
   - tools

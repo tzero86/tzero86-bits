@@ -11,7 +11,20 @@
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
 <link rel="canonical" href="https://tzero86-bits.netlify.app/posts/nmap_basics/" />
-<link rel="stylesheet" href="https://tzero86-bits.netlify.app/bootstrap-table.css">
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-175520987-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
 
 
     <title>
@@ -39,7 +52,7 @@
  Here are some of the basic switches/flags that your can use when running an nmap scan:">
 <meta itemprop="datePublished" content="2020-08-15T16:56:33-04:00" />
 <meta itemprop="dateModified" content="2020-08-15T16:56:33-04:00" />
-<meta itemprop="wordCount" content="275">
+<meta itemprop="wordCount" content="860">
 <meta itemprop="image" content="https://tzero86-bits.netlify.app/"/>
 
 
@@ -73,7 +86,6 @@
     <body class="dark-theme">
         <div class="container">
             <header class="header">
-    <link rel="stylesheet" href="https://tzero86-bits.netlify.app/bootstrap-table.css">
     <span class="header__inner">
         <a href="/" style="text-decoration: none;">
     <div class="logo">
@@ -93,7 +105,7 @@
         <span class="header__right">
             
                 <nav class="menu">
-    <ul class="menu__inner"><li><a href="https://tzero86-bits.netlify.app/posts/">Blog</a></li>
+    <ul class="menu__inner"><li><a href="https://tzero86-bits.netlify.app/page/about/">About me</a></li><li><a href="https://tzero86-bits.netlify.app/posts/">Blog Posts</a></li><li><a href="https://tzero86-bits.netlify.app/">Home</a></li>
     </ul>
 </nav>
 
@@ -126,7 +138,7 @@
           <circle cx="12" cy="12" r="10"></circle>
           <polyline points="12 6 12 12 16 14"></polyline>
         </svg>
-        2 minutes
+        5 minutes
 
         
       </p>
@@ -138,6 +150,8 @@
       </h1>
 
       
+        <img src="/img/nmap_cover.png" class="post-cover" />
+      
 
       <div class="post-content">
         <h2 id="nmap---basic-usage">#NMAP - Basic Usage#</h2>
@@ -147,7 +161,359 @@ using nmap to scan this machine  to identify all services that are running on a 
 <em>{from TryHackme}</em></p>
 </blockquote>
 <p>Here are some of the basic switches/flags that your can use when running an nmap scan:</p>
-<table>
+<style>
+    .table {
+    width: 100%;
+    margin-bottom: 1rem;
+    color: #212529
+}
+
+.table td,
+.table th {
+    padding: .75rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6
+}
+
+.table thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #dee2e6
+}
+
+.table tbody+tbody {
+    border-top: 2px solid #dee2e6
+}
+
+.table-sm td,
+.table-sm th {
+    padding: .3rem
+}
+
+.table-bordered {
+    border: 1px solid #dee2e6
+}
+
+.table-bordered td,
+.table-bordered th {
+    border: 1px solid #dee2e6
+}
+
+.table-bordered thead td,
+.table-bordered thead th {
+    border-bottom-width: 2px
+}
+
+.table-borderless tbody+tbody,
+.table-borderless td,
+.table-borderless th,
+.table-borderless thead th {
+    border: 0
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, .05)
+}
+
+.table-hover tbody tr:hover {
+    color: #212529;
+    background-color: rgba(0, 0, 0, .075)
+}
+
+.table-primary,
+.table-primary>td,
+.table-primary>th {
+    background-color: #b8daff
+}
+
+.table-primary tbody+tbody,
+.table-primary td,
+.table-primary th,
+.table-primary thead th {
+    border-color: #7abaff
+}
+
+.table-hover .table-primary:hover {
+    background-color: #9fcdff
+}
+
+.table-hover .table-primary:hover>td,
+.table-hover .table-primary:hover>th {
+    background-color: #9fcdff
+}
+
+.table-secondary,
+.table-secondary>td,
+.table-secondary>th {
+    background-color: #d6d8db
+}
+
+.table-secondary tbody+tbody,
+.table-secondary td,
+.table-secondary th,
+.table-secondary thead th {
+    border-color: #b3b7bb
+}
+
+.table-hover .table-secondary:hover {
+    background-color: #c8cbcf
+}
+
+.table-hover .table-secondary:hover>td,
+.table-hover .table-secondary:hover>th {
+    background-color: #c8cbcf
+}
+
+.table-success,
+.table-success>td,
+.table-success>th {
+    background-color: #c3e6cb
+}
+
+.table-success tbody+tbody,
+.table-success td,
+.table-success th,
+.table-success thead th {
+    border-color: #8fd19e
+}
+
+.table-hover .table-success:hover {
+    background-color: #b1dfbb
+}
+
+.table-hover .table-success:hover>td,
+.table-hover .table-success:hover>th {
+    background-color: #b1dfbb
+}
+
+.table-info,
+.table-info>td,
+.table-info>th {
+    background-color: #bee5eb
+}
+
+.table-info tbody+tbody,
+.table-info td,
+.table-info th,
+.table-info thead th {
+    border-color: #86cfda
+}
+
+.table-hover .table-info:hover {
+    background-color: #abdde5
+}
+
+.table-hover .table-info:hover>td,
+.table-hover .table-info:hover>th {
+    background-color: #abdde5
+}
+
+.table-warning,
+.table-warning>td,
+.table-warning>th {
+    background-color: #ffeeba
+}
+
+.table-warning tbody+tbody,
+.table-warning td,
+.table-warning th,
+.table-warning thead th {
+    border-color: #ffdf7e
+}
+
+.table-hover .table-warning:hover {
+    background-color: #ffe8a1
+}
+
+.table-hover .table-warning:hover>td,
+.table-hover .table-warning:hover>th {
+    background-color: #ffe8a1
+}
+
+.table-danger,
+.table-danger>td,
+.table-danger>th {
+    background-color: #f5c6cb
+}
+
+.table-danger tbody+tbody,
+.table-danger td,
+.table-danger th,
+.table-danger thead th {
+    border-color: #ed969e
+}
+
+.table-hover .table-danger:hover {
+    background-color: #f1b0b7
+}
+
+.table-hover .table-danger:hover>td,
+.table-hover .table-danger:hover>th {
+    background-color: #f1b0b7
+}
+
+.table-light,
+.table-light>td,
+.table-light>th {
+    background-color: #fdfdfe
+}
+
+.table-light tbody+tbody,
+.table-light td,
+.table-light th,
+.table-light thead th {
+    border-color: #fbfcfc
+}
+
+.table-hover .table-light:hover {
+    background-color: #ececf6
+}
+
+.table-hover .table-light:hover>td,
+.table-hover .table-light:hover>th {
+    background-color: #ececf6
+}
+
+.table-dark,
+.table-dark>td,
+.table-dark>th {
+    background-color: #c6c8ca
+}
+
+.table-dark tbody+tbody,
+.table-dark td,
+.table-dark th,
+.table-dark thead th {
+    border-color: #95999c
+}
+
+.table-hover .table-dark:hover {
+    background-color: #b9bbbe
+}
+
+.table-hover .table-dark:hover>td,
+.table-hover .table-dark:hover>th {
+    background-color: #b9bbbe
+}
+
+.table-active,
+.table-active>td,
+.table-active>th {
+    background-color: rgba(0, 0, 0, .075)
+}
+
+.table-hover .table-active:hover {
+    background-color: rgba(0, 0, 0, .075)
+}
+
+.table-hover .table-active:hover>td,
+.table-hover .table-active:hover>th {
+    background-color: rgba(0, 0, 0, .075)
+}
+
+.table .thead-dark th {
+    color: #fff;
+    background-color: #343a40;
+    border-color: #454d55
+}
+
+.table .thead-light th {
+    color: #495057;
+    background-color: #e9ecef;
+    border-color: #dee2e6
+}
+
+.table-dark {
+    color: #fff;
+    background-color: #343a40
+}
+
+.table-dark td,
+.table-dark th,
+.table-dark thead th {
+    border-color: #454d55
+}
+
+.table-dark.table-bordered {
+    border: 0
+}
+
+.table-dark.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(255, 255, 255, .05)
+}
+
+.table-dark.table-hover tbody tr:hover {
+    color: #fff;
+    background-color: rgba(255, 255, 255, .075)
+}
+
+@media (max-width:575.98px) {
+    .table-responsive-sm {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch
+    }
+    .table-responsive-sm>.table-bordered {
+        border: 0
+    }
+}
+
+@media (max-width:767.98px) {
+    .table-responsive-md {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch
+    }
+    .table-responsive-md>.table-bordered {
+        border: 0
+    }
+}
+
+@media (max-width:991.98px) {
+    .table-responsive-lg {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch
+    }
+    .table-responsive-lg>.table-bordered {
+        border: 0
+    }
+}
+
+@media (max-width:1199.98px) {
+    .table-responsive-xl {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch
+    }
+    .table-responsive-xl>.table-bordered {
+        border: 0
+    }
+}
+
+.table-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch
+}
+
+.table-responsive>.table-bordered {
+    border: 0
+}
+
+.table-center {
+   margin: auto;
+   width: 100% !important; 
+}
+</style>
+
+<span class="table table-center table-dark table-striped table-bordered table-hover">
+    <div class="table-center">
+        <table>
 <thead>
 <tr>
 <th align="left">nmap flag</th>
@@ -187,12 +553,11 @@ using nmap to scan this machine  to identify all services that are running on a 
 <td align="left">-sS</td>
 <td align="center"><em>TCP SYN port scan</em></td>
 </tr>
-<tr>
-<td align="left"></td>
-<td align="center"></td>
-</tr>
 </tbody>
 </table>
+
+    </div>
+</span>
 <h2 id="how-to-scan-nmap-ports">#How to Scan Nmap Ports#</h2>
 <p>To scan Nmap ports on a  remote system, enter the following in the terminal:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">  sudo nmap <span style="color:#f92672">{</span>target_IP<span style="color:#f92672">}</span>
@@ -245,7 +610,7 @@ nmap –iL textlist.txt
           <line x1="16" y1="17" x2="8" y2="17"></line>
           <polyline points="10 9 9 9 8 9"></polyline>
         </svg>
-        275 Words
+        860 Words
       </p>
 
       <p>
@@ -370,13 +735,6 @@ nmap –iL textlist.txt
           
 
           
-            <span class="button next">
-              <a href="https://tzero86-bits.netlify.app/posts/first_step/">
-                <span class="button__text">f1rst_st3p.sh</span>
-                <span class="button__icon">→</span>
-              </a>
-            </span>
-          
         </div>
       </div>
     
@@ -417,6 +775,20 @@ nmap –iL textlist.txt
 
 
 <script type="text/javascript" src="/bundle.min.dc716e9092c9820b77f96da294d0120aeeb189b5bcea9752309ebea27fd53bbe6b13cffb2aca8ecf32525647ceb7001f76091de4199ac5a3caa432c070247f5b.js" integrity="sha512-3HFukJLJggt3&#43;W2ilNASCu6xibW86pdSMJ6&#43;on/VO75rE8/7KsqOzzJSVkfOtwAfdgkd5BmaxaPKpDLAcCR/Ww=="></script>
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-175520987-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
 
 
 

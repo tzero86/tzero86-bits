@@ -17,19 +17,366 @@
             <guid>https://tzero86-bits.netlify.app/posts/gobuster/</guid>
             <description>#GoBuster Basic usage# GoBuster brute-force tool for URIs (directories and files), DNS subdomains and virtual host names.
  Get GoBuster: If you need to download this tool to your system, visit this link  To start with the basic usage for this tool, let&amp;rsquo;s review some of the flags we can specify to run gobuster.
-  GoBuster flag Description     -e Print the full URLs in your console   -u The target URL   -w Path to your wordlist   -U and -P Username and Password for Basic Auth   -p {proxy} Proxy to use for requests   -c {http cookies} Specify a cookie for simulating your auth    GoBuster requires us to provide a wordlist in order to brute force our way through.</description>
+ .table { width: 100%; margin-bottom: 1rem; color: #212529 } .table td, .table th { padding: .</description>
             <content type="html"><![CDATA[<h2 id="gobuster-basic-usage">#GoBuster Basic usage#</h2>
 <p>GoBuster brute-force tool for URIs (directories and files), DNS subdomains and virtual host names.</p>
 <ul>
 <li><strong>Get GoBuster</strong>: If you need to download this tool to your system, <a href="https://github.com/OJ/gobuster">visit this link</a></li>
 </ul>
 <p>To start with the basic usage for this tool, let&rsquo;s review some of the flags we can specify to run gobuster.</p>
+<style>
+    .table {
+    width: 100%;
+    margin-bottom: 1rem;
+    color: #212529
+}
 
+.table td,
+.table th {
+    padding: .75rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6
+}
 
+.table thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #dee2e6
+}
 
+.table tbody+tbody {
+    border-top: 2px solid #dee2e6
+}
 
+.table-sm td,
+.table-sm th {
+    padding: .3rem
+}
 
-<table class="table table-responsive table-dark table-striped table-bordered">
+.table-bordered {
+    border: 1px solid #dee2e6
+}
+
+.table-bordered td,
+.table-bordered th {
+    border: 1px solid #dee2e6
+}
+
+.table-bordered thead td,
+.table-bordered thead th {
+    border-bottom-width: 2px
+}
+
+.table-borderless tbody+tbody,
+.table-borderless td,
+.table-borderless th,
+.table-borderless thead th {
+    border: 0
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, .05)
+}
+
+.table-hover tbody tr:hover {
+    color: #212529;
+    background-color: rgba(0, 0, 0, .075)
+}
+
+.table-primary,
+.table-primary>td,
+.table-primary>th {
+    background-color: #b8daff
+}
+
+.table-primary tbody+tbody,
+.table-primary td,
+.table-primary th,
+.table-primary thead th {
+    border-color: #7abaff
+}
+
+.table-hover .table-primary:hover {
+    background-color: #9fcdff
+}
+
+.table-hover .table-primary:hover>td,
+.table-hover .table-primary:hover>th {
+    background-color: #9fcdff
+}
+
+.table-secondary,
+.table-secondary>td,
+.table-secondary>th {
+    background-color: #d6d8db
+}
+
+.table-secondary tbody+tbody,
+.table-secondary td,
+.table-secondary th,
+.table-secondary thead th {
+    border-color: #b3b7bb
+}
+
+.table-hover .table-secondary:hover {
+    background-color: #c8cbcf
+}
+
+.table-hover .table-secondary:hover>td,
+.table-hover .table-secondary:hover>th {
+    background-color: #c8cbcf
+}
+
+.table-success,
+.table-success>td,
+.table-success>th {
+    background-color: #c3e6cb
+}
+
+.table-success tbody+tbody,
+.table-success td,
+.table-success th,
+.table-success thead th {
+    border-color: #8fd19e
+}
+
+.table-hover .table-success:hover {
+    background-color: #b1dfbb
+}
+
+.table-hover .table-success:hover>td,
+.table-hover .table-success:hover>th {
+    background-color: #b1dfbb
+}
+
+.table-info,
+.table-info>td,
+.table-info>th {
+    background-color: #bee5eb
+}
+
+.table-info tbody+tbody,
+.table-info td,
+.table-info th,
+.table-info thead th {
+    border-color: #86cfda
+}
+
+.table-hover .table-info:hover {
+    background-color: #abdde5
+}
+
+.table-hover .table-info:hover>td,
+.table-hover .table-info:hover>th {
+    background-color: #abdde5
+}
+
+.table-warning,
+.table-warning>td,
+.table-warning>th {
+    background-color: #ffeeba
+}
+
+.table-warning tbody+tbody,
+.table-warning td,
+.table-warning th,
+.table-warning thead th {
+    border-color: #ffdf7e
+}
+
+.table-hover .table-warning:hover {
+    background-color: #ffe8a1
+}
+
+.table-hover .table-warning:hover>td,
+.table-hover .table-warning:hover>th {
+    background-color: #ffe8a1
+}
+
+.table-danger,
+.table-danger>td,
+.table-danger>th {
+    background-color: #f5c6cb
+}
+
+.table-danger tbody+tbody,
+.table-danger td,
+.table-danger th,
+.table-danger thead th {
+    border-color: #ed969e
+}
+
+.table-hover .table-danger:hover {
+    background-color: #f1b0b7
+}
+
+.table-hover .table-danger:hover>td,
+.table-hover .table-danger:hover>th {
+    background-color: #f1b0b7
+}
+
+.table-light,
+.table-light>td,
+.table-light>th {
+    background-color: #fdfdfe
+}
+
+.table-light tbody+tbody,
+.table-light td,
+.table-light th,
+.table-light thead th {
+    border-color: #fbfcfc
+}
+
+.table-hover .table-light:hover {
+    background-color: #ececf6
+}
+
+.table-hover .table-light:hover>td,
+.table-hover .table-light:hover>th {
+    background-color: #ececf6
+}
+
+.table-dark,
+.table-dark>td,
+.table-dark>th {
+    background-color: #c6c8ca
+}
+
+.table-dark tbody+tbody,
+.table-dark td,
+.table-dark th,
+.table-dark thead th {
+    border-color: #95999c
+}
+
+.table-hover .table-dark:hover {
+    background-color: #b9bbbe
+}
+
+.table-hover .table-dark:hover>td,
+.table-hover .table-dark:hover>th {
+    background-color: #b9bbbe
+}
+
+.table-active,
+.table-active>td,
+.table-active>th {
+    background-color: rgba(0, 0, 0, .075)
+}
+
+.table-hover .table-active:hover {
+    background-color: rgba(0, 0, 0, .075)
+}
+
+.table-hover .table-active:hover>td,
+.table-hover .table-active:hover>th {
+    background-color: rgba(0, 0, 0, .075)
+}
+
+.table .thead-dark th {
+    color: #fff;
+    background-color: #343a40;
+    border-color: #454d55
+}
+
+.table .thead-light th {
+    color: #495057;
+    background-color: #e9ecef;
+    border-color: #dee2e6
+}
+
+.table-dark {
+    color: #fff;
+    background-color: #343a40
+}
+
+.table-dark td,
+.table-dark th,
+.table-dark thead th {
+    border-color: #454d55
+}
+
+.table-dark.table-bordered {
+    border: 0
+}
+
+.table-dark.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(255, 255, 255, .05)
+}
+
+.table-dark.table-hover tbody tr:hover {
+    color: #fff;
+    background-color: rgba(255, 255, 255, .075)
+}
+
+@media (max-width:575.98px) {
+    .table-responsive-sm {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch
+    }
+    .table-responsive-sm>.table-bordered {
+        border: 0
+    }
+}
+
+@media (max-width:767.98px) {
+    .table-responsive-md {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch
+    }
+    .table-responsive-md>.table-bordered {
+        border: 0
+    }
+}
+
+@media (max-width:991.98px) {
+    .table-responsive-lg {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch
+    }
+    .table-responsive-lg>.table-bordered {
+        border: 0
+    }
+}
+
+@media (max-width:1199.98px) {
+    .table-responsive-xl {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch
+    }
+    .table-responsive-xl>.table-bordered {
+        border: 0
+    }
+}
+
+.table-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch
+}
+
+.table-responsive>.table-bordered {
+    border: 0
+}
+
+.table-center {
+   margin: auto;
+   width: 100% !important; 
+}
+</style>
+
+<span class="table table-center table-dark table-striped table-bordered table-hover">
+    <div class="table-center">
+        <table>
 <thead>
 <tr>
 <th align="center">GoBuster flag</th>
@@ -64,6 +411,8 @@
 </tbody>
 </table>
 
+    </div>
+</span>
 <p>GoBuster requires us to provide a wordlist in order to brute force our way through. If you are using Kali linux you most likely already have several wordlists available in the <em><strong>/usr/share/wordlists/dirbuster/</strong></em>. If you are not, you&rsquo;ll be lucky just by googling for some.</p>
 <p>Now assuming we already have a worlist available, we can start our basic brute-force attack:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"> gobuster dir -u http://<span style="color:#f92672">{</span>target_IP<span style="color:#f92672">}</span>:<span style="color:#f92672">{</span>target_port<span style="color:#f92672">}</span> -w <span style="color:#f92672">{</span>wordlist_Path<span style="color:#f92672">}</span>
@@ -200,7 +549,359 @@ using nmap to scan this machine  to identify all services that are running on a 
 <em>{from TryHackme}</em></p>
 </blockquote>
 <p>Here are some of the basic switches/flags that your can use when running an nmap scan:</p>
-<table>
+<style>
+    .table {
+    width: 100%;
+    margin-bottom: 1rem;
+    color: #212529
+}
+
+.table td,
+.table th {
+    padding: .75rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6
+}
+
+.table thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #dee2e6
+}
+
+.table tbody+tbody {
+    border-top: 2px solid #dee2e6
+}
+
+.table-sm td,
+.table-sm th {
+    padding: .3rem
+}
+
+.table-bordered {
+    border: 1px solid #dee2e6
+}
+
+.table-bordered td,
+.table-bordered th {
+    border: 1px solid #dee2e6
+}
+
+.table-bordered thead td,
+.table-bordered thead th {
+    border-bottom-width: 2px
+}
+
+.table-borderless tbody+tbody,
+.table-borderless td,
+.table-borderless th,
+.table-borderless thead th {
+    border: 0
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, .05)
+}
+
+.table-hover tbody tr:hover {
+    color: #212529;
+    background-color: rgba(0, 0, 0, .075)
+}
+
+.table-primary,
+.table-primary>td,
+.table-primary>th {
+    background-color: #b8daff
+}
+
+.table-primary tbody+tbody,
+.table-primary td,
+.table-primary th,
+.table-primary thead th {
+    border-color: #7abaff
+}
+
+.table-hover .table-primary:hover {
+    background-color: #9fcdff
+}
+
+.table-hover .table-primary:hover>td,
+.table-hover .table-primary:hover>th {
+    background-color: #9fcdff
+}
+
+.table-secondary,
+.table-secondary>td,
+.table-secondary>th {
+    background-color: #d6d8db
+}
+
+.table-secondary tbody+tbody,
+.table-secondary td,
+.table-secondary th,
+.table-secondary thead th {
+    border-color: #b3b7bb
+}
+
+.table-hover .table-secondary:hover {
+    background-color: #c8cbcf
+}
+
+.table-hover .table-secondary:hover>td,
+.table-hover .table-secondary:hover>th {
+    background-color: #c8cbcf
+}
+
+.table-success,
+.table-success>td,
+.table-success>th {
+    background-color: #c3e6cb
+}
+
+.table-success tbody+tbody,
+.table-success td,
+.table-success th,
+.table-success thead th {
+    border-color: #8fd19e
+}
+
+.table-hover .table-success:hover {
+    background-color: #b1dfbb
+}
+
+.table-hover .table-success:hover>td,
+.table-hover .table-success:hover>th {
+    background-color: #b1dfbb
+}
+
+.table-info,
+.table-info>td,
+.table-info>th {
+    background-color: #bee5eb
+}
+
+.table-info tbody+tbody,
+.table-info td,
+.table-info th,
+.table-info thead th {
+    border-color: #86cfda
+}
+
+.table-hover .table-info:hover {
+    background-color: #abdde5
+}
+
+.table-hover .table-info:hover>td,
+.table-hover .table-info:hover>th {
+    background-color: #abdde5
+}
+
+.table-warning,
+.table-warning>td,
+.table-warning>th {
+    background-color: #ffeeba
+}
+
+.table-warning tbody+tbody,
+.table-warning td,
+.table-warning th,
+.table-warning thead th {
+    border-color: #ffdf7e
+}
+
+.table-hover .table-warning:hover {
+    background-color: #ffe8a1
+}
+
+.table-hover .table-warning:hover>td,
+.table-hover .table-warning:hover>th {
+    background-color: #ffe8a1
+}
+
+.table-danger,
+.table-danger>td,
+.table-danger>th {
+    background-color: #f5c6cb
+}
+
+.table-danger tbody+tbody,
+.table-danger td,
+.table-danger th,
+.table-danger thead th {
+    border-color: #ed969e
+}
+
+.table-hover .table-danger:hover {
+    background-color: #f1b0b7
+}
+
+.table-hover .table-danger:hover>td,
+.table-hover .table-danger:hover>th {
+    background-color: #f1b0b7
+}
+
+.table-light,
+.table-light>td,
+.table-light>th {
+    background-color: #fdfdfe
+}
+
+.table-light tbody+tbody,
+.table-light td,
+.table-light th,
+.table-light thead th {
+    border-color: #fbfcfc
+}
+
+.table-hover .table-light:hover {
+    background-color: #ececf6
+}
+
+.table-hover .table-light:hover>td,
+.table-hover .table-light:hover>th {
+    background-color: #ececf6
+}
+
+.table-dark,
+.table-dark>td,
+.table-dark>th {
+    background-color: #c6c8ca
+}
+
+.table-dark tbody+tbody,
+.table-dark td,
+.table-dark th,
+.table-dark thead th {
+    border-color: #95999c
+}
+
+.table-hover .table-dark:hover {
+    background-color: #b9bbbe
+}
+
+.table-hover .table-dark:hover>td,
+.table-hover .table-dark:hover>th {
+    background-color: #b9bbbe
+}
+
+.table-active,
+.table-active>td,
+.table-active>th {
+    background-color: rgba(0, 0, 0, .075)
+}
+
+.table-hover .table-active:hover {
+    background-color: rgba(0, 0, 0, .075)
+}
+
+.table-hover .table-active:hover>td,
+.table-hover .table-active:hover>th {
+    background-color: rgba(0, 0, 0, .075)
+}
+
+.table .thead-dark th {
+    color: #fff;
+    background-color: #343a40;
+    border-color: #454d55
+}
+
+.table .thead-light th {
+    color: #495057;
+    background-color: #e9ecef;
+    border-color: #dee2e6
+}
+
+.table-dark {
+    color: #fff;
+    background-color: #343a40
+}
+
+.table-dark td,
+.table-dark th,
+.table-dark thead th {
+    border-color: #454d55
+}
+
+.table-dark.table-bordered {
+    border: 0
+}
+
+.table-dark.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(255, 255, 255, .05)
+}
+
+.table-dark.table-hover tbody tr:hover {
+    color: #fff;
+    background-color: rgba(255, 255, 255, .075)
+}
+
+@media (max-width:575.98px) {
+    .table-responsive-sm {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch
+    }
+    .table-responsive-sm>.table-bordered {
+        border: 0
+    }
+}
+
+@media (max-width:767.98px) {
+    .table-responsive-md {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch
+    }
+    .table-responsive-md>.table-bordered {
+        border: 0
+    }
+}
+
+@media (max-width:991.98px) {
+    .table-responsive-lg {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch
+    }
+    .table-responsive-lg>.table-bordered {
+        border: 0
+    }
+}
+
+@media (max-width:1199.98px) {
+    .table-responsive-xl {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch
+    }
+    .table-responsive-xl>.table-bordered {
+        border: 0
+    }
+}
+
+.table-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch
+}
+
+.table-responsive>.table-bordered {
+    border: 0
+}
+
+.table-center {
+   margin: auto;
+   width: 100% !important; 
+}
+</style>
+
+<span class="table table-center table-dark table-striped table-bordered table-hover">
+    <div class="table-center">
+        <table>
 <thead>
 <tr>
 <th align="left">nmap flag</th>
@@ -240,12 +941,11 @@ using nmap to scan this machine  to identify all services that are running on a 
 <td align="left">-sS</td>
 <td align="center"><em>TCP SYN port scan</em></td>
 </tr>
-<tr>
-<td align="left"></td>
-<td align="center"></td>
-</tr>
 </tbody>
 </table>
+
+    </div>
+</span>
 <h2 id="how-to-scan-nmap-ports">#How to Scan Nmap Ports#</h2>
 <p>To scan Nmap ports on a  remote system, enter the following in the terminal:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">  sudo nmap <span style="color:#f92672">{</span>target_IP<span style="color:#f92672">}</span>
@@ -276,38 +976,6 @@ nmap –iL textlist.txt
     
 </div>
 
-]]></content>
-        </item>
-        
-        <item>
-            <title>f1rst_st3p.sh</title>
-            <link>https://tzero86-bits.netlify.app/posts/first_step/</link>
-            <pubDate>Sat, 15 Aug 2020 16:02:22 -0400</pubDate>
-            
-            <guid>https://tzero86-bits.netlify.app/posts/first_step/</guid>
-            <description>This is just the start. The first step towards a great adventure of hacking, pentesting and hopefully bug bounty related things. However, this is not intended to be a guide of any kind. This a noob palace of sorts. There is no learning without challenge, there is no challenge without pain. Those who struggle, learn the way.
-Happy hacking.
-tzero86.</description>
-            <content type="html"><![CDATA[
-    <img src="../img/jules.jpg"  alt="Hello Friend"  class="center"  style="border-radius:20%; padding: 0px; max-height: 300px; max-width: 300px; border: 5px solid white "  />
-
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-<div class="container" style="margin:10px !important">
-    <div class="center">
-        <script src="https://tryhackme.com/badge/71634"></script>
-    </div>
-    <div class="center">
-        <a href="https://twitter.com/Tzero86" target="_blank" class="fa fa-twitter" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a>
-        <a href="https://github.com/Tzero86" target="_blank" class="fa fa-github" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a>    
-    </div>
-    
-</div>
-
-<p>This is just the start. The first step towards a great adventure of hacking, pentesting and hopefully bug bounty related things. However, this is not intended to be a guide of any kind. This a noob palace of sorts. There is no learning without challenge, there is no challenge without pain. Those who struggle, learn the way.</p>
-<p>Happy hacking.</p>
-<p>tzero86.</p>
 ]]></content>
         </item>
         

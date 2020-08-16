@@ -4,6 +4,7 @@ date: 2020-08-15T21:25:53-04:00
 draft: false
 toc: false
 images:
+cover: "img/go_buster_cover.png"
 tags:
   - hacking
   - tools

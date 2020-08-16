@@ -54,9 +54,21 @@ googleAnalytics = "UA-175520987-1"
 
   # And you can even create generic menu
   [[menu.main]]
+    identifier = "home"
+    name       = "Home"
+    url        = "/"
+
+  [[menu.main]]
     identifier = "blog"
-    name       = "Blog"
+    name       = "Blog Posts"
     url        = "/posts/"
+
+  [[menu.main]]
+    identifier = "page"
+    name       = "About me"
+    url        = "/page/about/"
+
+  
 
   [[params.social]]
     name = "twitter"

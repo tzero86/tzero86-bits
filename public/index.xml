@@ -7,10 +7,21 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
-    <lastBuildDate>Sat, 15 Aug 2020 21:25:53 -0400</lastBuildDate>
+    <lastBuildDate>Sun, 16 Aug 2020 00:30:23 -0400</lastBuildDate>
     
 	<atom:link href="https://tzero86-bits.netlify.app/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>4b0ut m3</title>
+      <link>https://tzero86-bits.netlify.app/page/about/</link>
+      <pubDate>Sun, 16 Aug 2020 00:30:23 -0400</pubDate>
+      
+      <guid>https://tzero86-bits.netlify.app/page/about/</guid>
+      <description># Lasciate ogne speranza, voi ch&amp;rsquo;intrate
+I&amp;rsquo;m a software quality engineer by day, a perpetual student by night. Trying hard to learn ethical hacking and penetration testing. This is my space, a refuge for the noob. I also play bass when somehow I find myself away from a computer.
+This is just the start and I really mean the start, I been learning this for just about 3 months. Can&amp;rsquo;t image the amount of things I&amp;rsquo;ve yet to learn.</description>
+    </item>
     
     <item>
       <title>Gobuster_basics.sh</title>
@@ -20,7 +31,7 @@
       <guid>https://tzero86-bits.netlify.app/posts/gobuster/</guid>
       <description>#GoBuster Basic usage# GoBuster brute-force tool for URIs (directories and files), DNS subdomains and virtual host names.
  Get GoBuster: If you need to download this tool to your system, visit this link  To start with the basic usage for this tool, let&amp;rsquo;s review some of the flags we can specify to run gobuster.
-  GoBuster flag Description     -e Print the full URLs in your console   -u The target URL   -w Path to your wordlist   -U and -P Username and Password for Basic Auth   -p {proxy} Proxy to use for requests   -c {http cookies} Specify a cookie for simulating your auth    GoBuster requires us to provide a wordlist in order to brute force our way through.</description>
+ .table { width: 100%; margin-bottom: 1rem; color: #212529 } .table td, .table th { padding: .</description>
     </item>
     
     <item>
@@ -41,17 +52,6 @@
       <guid>https://tzero86-bits.netlify.app/posts/nmap_basics/</guid>
       <description>#NMAP - Basic Usage#  nmap is an free, open-source and powerful tool used to discover hosts and services on a computer network. In our example, we are using nmap to scan this machine to identify all services that are running on a particular port. nmap has many capabilities, below &amp;gt; is a table summarizing some of the functionality it provides. {from TryHackme}
  Here are some of the basic switches/flags that your can use when running an nmap scan:</description>
-    </item>
-    
-    <item>
-      <title>f1rst_st3p.sh</title>
-      <link>https://tzero86-bits.netlify.app/posts/first_step/</link>
-      <pubDate>Sat, 15 Aug 2020 16:02:22 -0400</pubDate>
-      
-      <guid>https://tzero86-bits.netlify.app/posts/first_step/</guid>
-      <description>This is just the start. The first step towards a great adventure of hacking, pentesting and hopefully bug bounty related things. However, this is not intended to be a guide of any kind. This a noob palace of sorts. There is no learning without challenge, there is no challenge without pain. Those who struggle, learn the way.
-Happy hacking.
-tzero86.</description>
     </item>
     
   </channel>
