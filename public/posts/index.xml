@@ -6,8 +6,67 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
         <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
-        <lastBuildDate>Sat, 15 Aug 2020 16:56:33 -0400</lastBuildDate>
+        <lastBuildDate>Sat, 15 Aug 2020 18:13:59 -0400</lastBuildDate>
         <atom:link href="https://tzero86-bits.netlify.app/posts/index.xml" rel="self" type="application/rss+xml" />
+        
+        <item>
+            <title>Get_SUID.sh</title>
+            <link>https://tzero86-bits.netlify.app/posts/get_suid/</link>
+            <pubDate>Sat, 15 Aug 2020 18:13:59 -0400</pubDate>
+            
+            <guid>https://tzero86-bits.netlify.app/posts/get_suid/</guid>
+            <description>#How to locate SUID Files using Find command#  In Linux, SUID (set owner userId upon execution) is a special type of &amp;gt;file permission given to a file. SUID gives temporary permissions to a &amp;gt;user to run the program/file with the permission of the file owner (rather &amp;gt;than the user who runs it). {TryHackme}
+ For example, the binary file to change your password has the SUID bit set on it (/usr/bin/passwd).</description>
+            <content type="html"><![CDATA[<h2 id="how-to-locate-suid-files-using-find-command">#How to locate SUID Files using Find command#</h2>
+<blockquote>
+<p>In Linux, <strong>SUID</strong> (set owner userId upon execution) is  a special type of &gt;file permission given to a file. <strong><em>SUID gives temporary  permissions to a &gt;user to run the program/file with the permission of  the file owner (rather &gt;than the user who runs it)</em></strong>. <strong><em>{TryHackme}</em></strong></p>
+</blockquote>
+<p>For example,  the binary file to change your password has the SUID bit set on it  <strong><em>(/usr/bin/passwd)</em></strong>. This is because to change your password, it will need  to write to the shadowers file that you do not have access to, root  does, so it has root privileges to make the right changes.</p>
+
+    <img src="../img/suid.png"  alt="Hello Friend"  class="center"  style="border-radius: 1px; padding: 20px"  />
+
+
+<p>Let&rsquo;s try to understand what SUID, SGID and the Stickly bits mean:</p>
+<ul>
+<li>
+<p><strong>SUID bit</strong>:</p>
+<ul>
+<li>On Files: User executes the file with permissions of the owner.</li>
+<li>On Directories: nothing.</li>
+</ul>
+</li>
+<li>
+<p><strong>SGID bit</strong>:</p>
+<ul>
+<li>On Files: User executes the file with permissions of the group owner.</li>
+<li>On Directories: Files created in directory get same permissions as group owner.</li>
+</ul>
+</li>
+<li>
+<p><strong>Sticky bit</strong>:</p>
+<ul>
+<li>On Files: No use.</li>
+<li>On Directories: Users are blocked from deleting files from other users.</li>
+</ul>
+</li>
+</ul>
+<p>SUID  bits can be dangerous, some binaries such as passwd need to be run with elevated privileges (as its resetting your password on the system), however other custom files could that have the SUID bit can lead to all  sorts of issues.</p>
+<p>To search the a system for these type of files, we can use the <strong>find</strong> command like this:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">find / -perm -u<span style="color:#f92672">=</span>s -type f 2&gt;/dev/null
+</code></pre></div><p>This will find all files that current user <em><strong>-u=s</strong></em> has permissions <em><strong>-perm</strong></em> to access, making sure they are file type <em><strong>-type file</strong></em> and will not show any errors due to lack of access to any file <em><strong>2&gt;/dev/null</strong></em></p>
+<p>Alternatively we can also do this:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">find / -user root -perm /4000  2&gt;&amp;<span style="color:#ae81ff">1</span> | grep -v <span style="color:#e6db74">&#34;Permission denied&#34;</span>
+</code></pre></div><ul>
+<li><strong>find /</strong>: we start the search on the root directory.</li>
+<li><strong>-user root</strong>: files owned by root user.</li>
+<li><strong>-perm /4000</strong>: files with octal format equivalent for SUID.</li>
+<li><strong>2&gt;&amp;1</strong>: redirect any standar error messages as a standar output.</li>
+<li><strong>|</strong>: The pipe character takes the output of previous command as input of the next command.</li>
+<li><strong>grep -v &ldquo;Permission denied&rdquo;</strong>: We use grep to filter out any result including access errors. <strong>-v</strong> means inverse, so it will skip any files with the permissions denied message in it.</li>
+</ul>
+<p>Happy hacking.</p>
+]]></content>
+        </item>
         
         <item>
             <title>Nmap_basics.sh</title>
@@ -101,8 +160,17 @@ nmap –iL textlist.txt
 Happy hacking.
 tzero86.</description>
             <content type="html"><![CDATA[
-    <img src="../jules.jpg"  alt="Hello Friend"  class="center"  style="border-radius: 500px; padding: 20px"  />
+    <img src="../img/jules.jpg"  alt="Hello Friend"  class="center"  style="border-radius: 500px; padding: 20px "  />
 
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<div class="container">
+    <div class="center">
+        <script src="https://tryhackme.com/badge/71634"></script>
+        <br>
+        <a href="#" class="fa fa-twitter"></a>
+    </div>    
+</div>
 
 <p>This is just the start. The first step towards a great adventure of hacking, pentesting and hopefully bug bounty related things. However, this is not intended to be a guide of any kind. This a noob palace of sorts. There is no learning without challenge, there is no challenge without pain. Those who struggle, learn the way.</p>
 <p>Happy hacking.</p>

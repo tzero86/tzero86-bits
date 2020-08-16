@@ -65,8 +65,7 @@ nmap 192.168.0.1/13
 nmap –iL textlist.txt
 ```
 
-~~~~~~~~~~~~~~
-  Happy hacking.
-  tzero86
-~~~~~~~~~~~~~~
+Happy hacking.
 
+
+{{< thm_badge >}}

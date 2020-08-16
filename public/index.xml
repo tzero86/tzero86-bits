@@ -7,10 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
-    <lastBuildDate>Sat, 15 Aug 2020 16:56:33 -0400</lastBuildDate>
+    <lastBuildDate>Sat, 15 Aug 2020 18:13:59 -0400</lastBuildDate>
     
 	<atom:link href="https://tzero86-bits.netlify.app/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Get_SUID.sh</title>
+      <link>https://tzero86-bits.netlify.app/posts/get_suid/</link>
+      <pubDate>Sat, 15 Aug 2020 18:13:59 -0400</pubDate>
+      
+      <guid>https://tzero86-bits.netlify.app/posts/get_suid/</guid>
+      <description>#How to locate SUID Files using Find command#  In Linux, SUID (set owner userId upon execution) is a special type of &amp;gt;file permission given to a file. SUID gives temporary permissions to a &amp;gt;user to run the program/file with the permission of the file owner (rather &amp;gt;than the user who runs it). {TryHackme}
+ For example, the binary file to change your password has the SUID bit set on it (/usr/bin/passwd).</description>
+    </item>
     
     <item>
       <title>Nmap_basics.sh</title>

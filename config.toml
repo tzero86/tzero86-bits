@@ -32,6 +32,8 @@ paginate     = 10
   # Default theme "light" or "dark"
   defaultTheme = "dark"
 
+  twitterLink = "https://twitter.com/Tzero86"
+
 [languages]
   [languages.en]
     title = "tzero86.bits"
@@ -43,13 +45,22 @@ paginate     = 10
     [languages.en.params.logo]
       logoText = "tzero86.bits"
       logoHomeLink = "/"
+      #path = "./hacker.svg"
+      #alt = "Your example logo alt text"
     # or
     #
-    # path = "/img/your-example-logo.svg"
-    # alt = "Your example logo alt text"
+    
 
   # And you can even create generic menu
   [[menu.main]]
     identifier = "blog"
     name       = "Blog"
     url        = "/posts/"
+
+  [[params.social]]
+    name = "twitter"
+    ulr = "https://twitter.com/Tzero86"
+
+  [[params.social]]
+    name = "github"
+    ulr = "https://github.com/Tzero86"
