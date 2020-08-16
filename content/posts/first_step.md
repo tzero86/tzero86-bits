@@ -11,7 +11,7 @@ tags:
   
 ---
 
-{{< image src="../img/jules.jpg" alt="Hello Friend" position="center" style="border-radius: 500px; padding: 20px " >}}
+{{< image src="../img/jules.jpg" alt="Hello Friend" position="center" style="border-radius:20%; padding: 0px; max-height: 300px; max-width: 300px; border: 5px solid white " >}}
 
 {{< thm_badge >}}
 
