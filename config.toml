@@ -59,8 +59,8 @@ paginate     = 10
 
   [[params.social]]
     name = "twitter"
-    ulr = "https://twitter.com/Tzero86"
+    url = "https://twitter.com/Tzero86"
 
   [[params.social]]
     name = "github"
-    ulr = "https://github.com/Tzero86"
+    url = "https://github.com/Tzero86"

@@ -9,11 +9,12 @@
    /* Style all font awesome icons */
 .fa {
     padding: 20px;
-    font-size: 30px;
+    font-size: 80px;
     width: 30px;
     text-align: center;
     text-decoration: none;
     border-radius: 50%;
+    text-decoration: none !important;
   }
   
   /* Add a hover effect if you want */
