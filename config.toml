@@ -3,6 +3,7 @@ title        = "tzero86.bits"
 languageCode = "en-us"
 theme        = "hello-friend-ng"
 paginate     = 10
+googleAnalytics = "UA-175520987-1"
 
 [params]
   dateform        = "Jan 2, 2006"
