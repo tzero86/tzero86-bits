@@ -342,8 +342,14 @@
     border: 0
 }
 
+.table-center {
+   margin: auto;
+   width: 100% !important; 
+}
 </style>
 
-<div class="table table-responsive table-dark table-striped table-bordered table-hover table-secondary">
-	{{ .Inner | markdownify }}
-</div>
+<span class="table table-center table-dark table-striped table-bordered table-hover">
+    <div class="table-center">
+        {{ .Inner | markdownify }}
+    </div>
+</span>
