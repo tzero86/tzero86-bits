@@ -7,15 +7,16 @@
 <meta name="author" content="">
 <meta name="description" content="#How to locate SUID Files using Find command#  In Linux, SUID (set owner userId upon execution) is a special type of &amp;gt;file permission given to a file. SUID gives temporary permissions to a &amp;gt;user to run the program/file with the permission of the file owner (rather &amp;gt;than the user who runs it). {TryHackme}
  For example, the binary file to change your password has the SUID bit set on it (/usr/bin/passwd)." />
-<meta name="keywords" content=", untagged" />
+<meta name="keywords" content=", hacking, tools" />
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
 <link rel="canonical" href="https://tzero86-bits.netlify.app/posts/get_suid/" />
+<link rel="stylesheet" href="https://tzero86-bits.netlify.app/bootstrap-table.css">
 
 
     <title>
         
-            Get_SUID.sh :: tzero86.bits  — The cave of the noob: hacking notes and rants.
+            Get_SUID.sh :: tzero86.bits  — hacking notes, tools and rants.
         
     </title>
 
@@ -43,7 +44,7 @@
 
 
 
-<meta itemprop="keywords" content="untagged," />
+<meta itemprop="keywords" content="hacking,tools," />
 
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://tzero86-bits.netlify.app/"/>
@@ -72,6 +73,7 @@
     <body class="dark-theme">
         <div class="container">
             <header class="header">
+    <link rel="stylesheet" href="https://tzero86-bits.netlify.app/bootstrap-table.css">
     <span class="header__inner">
         <a href="/" style="text-decoration: none;">
     <div class="logo">
@@ -188,13 +190,13 @@
 <p>Happy hacking.</p>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-<div class="container">
+<div class="container" style="margin:10px !important">
     <div class="center">
         <script src="https://tryhackme.com/badge/71634"></script>
     </div>
     <div class="center">
-        <a href="https://twitter.com/Tzero86" target="_blank" class="fa fa-twitter" style="text-decoration: none !important;  font-size: 30px;"></a>
-        <a href="https://github.com/Tzero86" target="_blank" class="fa fa-github" style="text-decoration: none !important;  font-size: 30px;"></a>    
+        <a href="https://twitter.com/Tzero86" target="_blank" class="fa fa-twitter" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a>
+        <a href="https://github.com/Tzero86" target="_blank" class="fa fa-github" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a>    
     </div>
     
 </div>
@@ -210,7 +212,7 @@
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon">
             <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
             <line x1="7" y1="7" x2="7" y2="7"></line>
-          </svg><span class="tag"><a href="https://tzero86-bits.netlify.app/tags/untagged/">untagged</a></span>
+          </svg><span class="tag"><a href="https://tzero86-bits.netlify.app/tags/hacking/">hacking</a></span><span class="tag"><a href="https://tzero86-bits.netlify.app/tags/tools/">tools</a></span>
         </p>
 
       <p>
@@ -336,6 +338,13 @@
         </div>
 
         <div class="pagination__buttons">
+          
+            <span class="button previous">
+              <a href="https://tzero86-bits.netlify.app/posts/gobuster/">
+                <span class="button__icon">←</span>
+                <span class="button__text">Gobuster_basics.sh</span>
+              </a>
+            </span>
           
 
           

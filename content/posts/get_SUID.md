@@ -5,7 +5,8 @@ draft: false
 toc: false
 images:
 tags:
-  - untagged
+  - hacking
+  - tools
 ---
 
 #How to locate SUID Files using Find command#

@@ -6,8 +6,112 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
         <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
-        <lastBuildDate>Sat, 15 Aug 2020 18:13:59 -0400</lastBuildDate>
+        <lastBuildDate>Sat, 15 Aug 2020 21:25:53 -0400</lastBuildDate>
         <atom:link href="https://tzero86-bits.netlify.app/posts/index.xml" rel="self" type="application/rss+xml" />
+        
+        <item>
+            <title>Gobuster_basics.sh</title>
+            <link>https://tzero86-bits.netlify.app/posts/gobuster/</link>
+            <pubDate>Sat, 15 Aug 2020 21:25:53 -0400</pubDate>
+            
+            <guid>https://tzero86-bits.netlify.app/posts/gobuster/</guid>
+            <description>#GoBuster Basic usage# GoBuster brute-force tool for URIs (directories and files), DNS subdomains and virtual host names.
+ Get GoBuster: If you need to download this tool to your system, visit this link  To start with the basic usage for this tool, let&amp;rsquo;s review some of the flags we can specify to run gobuster.
+  GoBuster flag Description     -e Print the full URLs in your console   -u The target URL   -w Path to your wordlist   -U and -P Username and Password for Basic Auth   -p {proxy} Proxy to use for requests   -c {http cookies} Specify a cookie for simulating your auth    GoBuster requires us to provide a wordlist in order to brute force our way through.</description>
+            <content type="html"><![CDATA[<h2 id="gobuster-basic-usage">#GoBuster Basic usage#</h2>
+<p>GoBuster brute-force tool for URIs (directories and files), DNS subdomains and virtual host names.</p>
+<ul>
+<li><strong>Get GoBuster</strong>: If you need to download this tool to your system, <a href="https://github.com/OJ/gobuster">visit this link</a></li>
+</ul>
+<p>To start with the basic usage for this tool, let&rsquo;s review some of the flags we can specify to run gobuster.</p>
+
+
+
+
+
+<table class="table table-responsive table-dark table-striped table-bordered">
+<thead>
+<tr>
+<th align="center">GoBuster flag</th>
+<th align="center">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><strong>-e</strong></td>
+<td align="center">Print the full URLs in your console</td>
+</tr>
+<tr>
+<td align="center"><strong>-u</strong></td>
+<td align="center">The target URL</td>
+</tr>
+<tr>
+<td align="center"><strong>-w</strong></td>
+<td align="center">Path to your wordlist</td>
+</tr>
+<tr>
+<td align="center"><strong>-U</strong> and -P</td>
+<td align="center">Username and Password for Basic Auth</td>
+</tr>
+<tr>
+<td align="center"><strong>-p {proxy}</strong></td>
+<td align="center">Proxy to use for requests</td>
+</tr>
+<tr>
+<td align="center"><strong>-c {http cookies}</strong></td>
+<td align="center">Specify a cookie for simulating your auth</td>
+</tr>
+</tbody>
+</table>
+
+<p>GoBuster requires us to provide a wordlist in order to brute force our way through. If you are using Kali linux you most likely already have several wordlists available in the <em><strong>/usr/share/wordlists/dirbuster/</strong></em>. If you are not, you&rsquo;ll be lucky just by googling for some.</p>
+<p>Now assuming we already have a worlist available, we can start our basic brute-force attack:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"> gobuster dir -u http://<span style="color:#f92672">{</span>target_IP<span style="color:#f92672">}</span>:<span style="color:#f92672">{</span>target_port<span style="color:#f92672">}</span> -w <span style="color:#f92672">{</span>wordlist_Path<span style="color:#f92672">}</span>
+</code></pre></div><p>it is worth noting you can specify a host url and not only IPs. With this in mind a basic full example would look like this:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"> gobuster dir -u http://127.0.0.1:80 -w /home/oj/wordlists/shortlist.txt
+</code></pre></div><p>And it&rsquo;ll produce and output similar to this:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#f92672">===============================================================</span>
+Gobuster v3.0.1
+by OJ Reeves <span style="color:#f92672">(</span>@TheColonial<span style="color:#f92672">)</span> &amp; Christian Mehlmauer <span style="color:#f92672">(</span>@_FireFart_<span style="color:#f92672">)</span>
+<span style="color:#f92672">===============================================================</span>
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Mode         : dir
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Url/Domain   : https://127.0.0.1/
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Threads      : <span style="color:#ae81ff">10</span>
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Wordlist     : /home/oj/wordlists/shortlist.txt
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Status codes : 200,204,301,302,307,401,403
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> User Agent   : gobuster/3.0.1
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Verbose      : true
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Timeout      : 10s
+<span style="color:#f92672">===============================================================</span>
+2019/06/21 11:50:51 Starting gobuster
+<span style="color:#f92672">===============================================================</span>
+Missed: /alsodoesnotexist <span style="color:#f92672">(</span>Status: 404<span style="color:#f92672">)</span>
+Found: /index <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span>
+Missed: /doesnotexist <span style="color:#f92672">(</span>Status: 404<span style="color:#f92672">)</span>
+Found: /categories <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span>
+Found: /posts <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span>
+Found: /contact <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span>
+<span style="color:#f92672">===============================================================</span>
+2019/06/21 11:50:51 Finished
+<span style="color:#f92672">===============================================================</span>
+</code></pre></div><p>There you have it, a basic usage of GoBuster to fuzz some directories. If you want to explore additional flags to use some advanced features and fine tune your attack. Run gobuster with the <strong>-h</strong> flag.</p>
+<p>Additionaly check out <a href="https://redteamtutorials.com/2018/11/19/gobuster-cheatsheet/">this post</a> from RedTeamTutorials to see some advanced options.</p>
+<p>Happy hacking.</p>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<div class="container" style="margin:10px !important">
+    <div class="center">
+        <script src="https://tryhackme.com/badge/71634"></script>
+    </div>
+    <div class="center">
+        <a href="https://twitter.com/Tzero86" target="_blank" class="fa fa-twitter" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a>
+        <a href="https://github.com/Tzero86" target="_blank" class="fa fa-github" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a>    
+    </div>
+    
+</div>
+
+]]></content>
+        </item>
         
         <item>
             <title>Get_SUID.sh</title>
@@ -67,13 +171,13 @@
 <p>Happy hacking.</p>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-<div class="container">
+<div class="container" style="margin:10px !important">
     <div class="center">
         <script src="https://tryhackme.com/badge/71634"></script>
     </div>
     <div class="center">
-        <a href="https://twitter.com/Tzero86" target="_blank" class="fa fa-twitter" style="text-decoration: none !important;  font-size: 30px;"></a>
-        <a href="https://github.com/Tzero86" target="_blank" class="fa fa-github" style="text-decoration: none !important;  font-size: 30px;"></a>    
+        <a href="https://twitter.com/Tzero86" target="_blank" class="fa fa-twitter" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a>
+        <a href="https://github.com/Tzero86" target="_blank" class="fa fa-github" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a>    
     </div>
     
 </div>
@@ -161,13 +265,13 @@ nmap –iL textlist.txt
 </code></pre></div><p>Happy hacking.</p>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-<div class="container">
+<div class="container" style="margin:10px !important">
     <div class="center">
         <script src="https://tryhackme.com/badge/71634"></script>
     </div>
     <div class="center">
-        <a href="https://twitter.com/Tzero86" target="_blank" class="fa fa-twitter" style="text-decoration: none !important;  font-size: 30px;"></a>
-        <a href="https://github.com/Tzero86" target="_blank" class="fa fa-github" style="text-decoration: none !important;  font-size: 30px;"></a>    
+        <a href="https://twitter.com/Tzero86" target="_blank" class="fa fa-twitter" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a>
+        <a href="https://github.com/Tzero86" target="_blank" class="fa fa-github" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a>    
     </div>
     
 </div>
@@ -185,18 +289,18 @@ nmap –iL textlist.txt
 Happy hacking.
 tzero86.</description>
             <content type="html"><![CDATA[
-    <img src="../img/jules.jpg"  alt="Hello Friend"  class="center"  style="border-radius: 500px; padding: 20px "  />
+    <img src="../img/jules.jpg"  alt="Hello Friend"  class="center"  style="border-radius:20%; padding: 0px; max-height: 300px; max-width: 300px; border: 5px solid white "  />
 
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-<div class="container">
+<div class="container" style="margin:10px !important">
     <div class="center">
         <script src="https://tryhackme.com/badge/71634"></script>
     </div>
     <div class="center">
-        <a href="https://twitter.com/Tzero86" target="_blank" class="fa fa-twitter" style="text-decoration: none !important;  font-size: 30px;"></a>
-        <a href="https://github.com/Tzero86" target="_blank" class="fa fa-github" style="text-decoration: none !important;  font-size: 30px;"></a>    
+        <a href="https://twitter.com/Tzero86" target="_blank" class="fa fa-twitter" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a>
+        <a href="https://github.com/Tzero86" target="_blank" class="fa fa-github" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a>    
     </div>
     
 </div>

@@ -19,7 +19,7 @@ tags:
 
 Here are some of the basic switches/flags that your can use when running an nmap scan:
 
-
+{{< table >}}
 | nmap flag       | Description                                                 |
 |:----------------|:-----------------------------------------------------------:|
 | -sV             | *Attempts to determine the version of the services running* |
@@ -30,8 +30,7 @@ Here are some of the basic switches/flags that your can use when running an nmap
 | -v              | *Verbose mode*                                              |
 | -sU             | *UDP port scan*                                             |
 | -sS             | *TCP SYN port scan*                                         |
-|                 |                                                             |
-
+{{</ table >}}
 
 
 

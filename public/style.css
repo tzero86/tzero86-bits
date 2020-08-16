@@ -1,6 +1,7 @@
 .container {
     display: flex;
     justify-content: center;
+    margin: 10px;
   }
   .center {
     width: 800px;
@@ -35,3 +36,7 @@
     background: #55ACEE;
     color: white;
   } 
+
+  .table{
+    border: 1px solid orangered !important;
+  }
