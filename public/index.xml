@@ -7,10 +7,21 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
-    <lastBuildDate>Sun, 16 Aug 2020 00:30:23 -0400</lastBuildDate>
+    <lastBuildDate>Sun, 16 Aug 2020 14:00:11 -0400</lastBuildDate>
     
 	<atom:link href="https://tzero86-bits.netlify.app/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Alfred_writeup.sh</title>
+      <link>https://tzero86-bits.netlify.app/posts/alfred_writeup/</link>
+      <pubDate>Sun, 16 Aug 2020 14:00:11 -0400</pubDate>
+      
+      <guid>https://tzero86-bits.netlify.app/posts/alfred_writeup/</guid>
+      <description>Alfred - TryHackme&amp;rsquo;s Room Writeup [Task 1] - Getting Initial Access For this room it seems we&amp;rsquo;ll need Nishang in order to gain access to the machine by using reverse shell scripts.
+So lets start by listing the links to get this Nishang tool:
+ Nishang: Click here to access the repository and get this Powershell toolset. Alfred Room on THM: Click here to visit this room on TryHackme platform.  Ok once you have that tool downloaded to your system we can get started.</description>
+    </item>
     
     <item>
       <title>4b0ut m3</title>
