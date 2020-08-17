@@ -122,6 +122,8 @@ We can go with the basic **admin:1234**, **admin:password**, **admin:admin**, et
 
 Look at that, using **admin:admin** to log in has granted us access to Jenkins.
 
+If a super weak password was not available, I'd probably try to force my way through this login form using **Burp's Intruder** or **hydra** with the **rockyou.txt** wordlist.
+
 ![Jenkins admin panel](https://i.imgur.com/kzHXdI4.png)
 So that gives us the answer to Question #2.
 
