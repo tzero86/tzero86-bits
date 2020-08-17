@@ -15,10 +15,9 @@
             <pubDate>Sun, 16 Aug 2020 14:00:11 -0400</pubDate>
             
             <guid>https://tzero86-bits.netlify.app/posts/alfred_writeup/</guid>
-            <description>Alfred - TryHackme&amp;rsquo;s Room Writeup [Task 1] - Getting Initial Access For this room it seems we&amp;rsquo;ll need Nishang in order to gain access to the machine by using reverse shell scripts.
-So lets start by listing the links to get this Nishang tool:
- Nishang: Click here to access the repository and get this Powershell toolset. Alfred Room on THM: Click here to visit this room on TryHackme platform.  Ok once you have that tool downloaded to your system we can get started.</description>
+            <description>Alfred - TryHackme&amp;rsquo;s Room Writeup This my first attempt at creating a writup, I tried putting every single step I took to solve this room. While providing enough (I think) details and descriptions so it is useful for noobs like me mostly. I started drafting this at the same time I managed to solve a question or even right after thinking a way to approach a solution for any of those.</description>
             <content type="html"><![CDATA[<h2 id="alfred---tryhackmes-room-writeup">Alfred - TryHackme&rsquo;s Room Writeup</h2>
+<p>This my first attempt at creating a writup, I tried putting every single step I took to solve this room. While providing enough (I think) details and descriptions so it is useful for noobs like me mostly. I started drafting this at the same time I managed to solve a question or even right after thinking a way to approach a solution for any of those. I even left some futile attemps of enumeration to be honest about my process of solving this. I hope somebody finds this useful somehow, it ceirtanly helped me to practice some tools and approaches. As I&rsquo;m still quite new to this, you can expect some errors in this post or maybe spot some things that an experienced person could probably solve better. I&rsquo;m learning, beware of the blog.</p>
 <h2 id="task-1---getting-initial-access">[Task 1] - Getting Initial Access</h2>
 <p>For this room it seems we&rsquo;ll need <strong>Nishang</strong> in order to gain access to the machine by using <strong><em>reverse shell scripts</em></strong>.</p>
 <p>So lets start by listing the links to get this <strong>Nishang</strong> tool:</p>
@@ -101,6 +100,7 @@ Progress: <span style="color:#ae81ff">11841</span> / <span style="color:#ae81ff"
 Ok so we get a login form, we might as well try out some basic user:password combinations to see if maybe the security has overlooked something that basic.</p>
 <p>We can go with the basic <strong>admin:1234</strong>, <strong>admin:password</strong>, <strong>admin:admin</strong>, etc.</p>
 <p>Look at that, using <strong>admin:admin</strong> to log in has granted us access to Jenkins.</p>
+<p>If a super weak password was not available, I&rsquo;d probably try to force my way through this login form using <strong>Burp&rsquo;s Intruder</strong> or <strong>hydra</strong> with the <strong>rockyou.txt</strong> wordlist.</p>
 <p><img src="https://i.imgur.com/kzHXdI4.png" alt="Jenkins admin panel">
 So that gives us the answer to Question #2.</p>
 <p>Let&rsquo;s move to the next objective.</p>

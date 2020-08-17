@@ -18,9 +18,7 @@
       <pubDate>Sun, 16 Aug 2020 14:00:11 -0400</pubDate>
       
       <guid>https://tzero86-bits.netlify.app/posts/alfred_writeup/</guid>
-      <description>Alfred - TryHackme&amp;rsquo;s Room Writeup [Task 1] - Getting Initial Access For this room it seems we&amp;rsquo;ll need Nishang in order to gain access to the machine by using reverse shell scripts.
-So lets start by listing the links to get this Nishang tool:
- Nishang: Click here to access the repository and get this Powershell toolset. Alfred Room on THM: Click here to visit this room on TryHackme platform.  Ok once you have that tool downloaded to your system we can get started.</description>
+      <description>Alfred - TryHackme&amp;rsquo;s Room Writeup This my first attempt at creating a writup, I tried putting every single step I took to solve this room. While providing enough (I think) details and descriptions so it is useful for noobs like me mostly. I started drafting this at the same time I managed to solve a question or even right after thinking a way to approach a solution for any of those.</description>
     </item>
     
   </channel>

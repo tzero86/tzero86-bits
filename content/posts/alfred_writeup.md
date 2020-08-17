@@ -2,7 +2,7 @@
 title: "Alfred_writeup.sh"
 date: 2020-08-16T14:00:11-04:00
 draft: false
-toc: false
+toc: true
 images:
 cover: "img/alfred_room_cover.gif"
 tags:
@@ -13,8 +13,12 @@ tags:
 
 ## Alfred - TryHackme's Room Writeup
 
- [Task 1] - Getting Initial Access
- --------------------------
+This my first attempt at creating a writup, I tried putting every single step I took to solve this room. While providing enough (I think) details and descriptions so it is useful for noobs like me mostly. I started drafting this at the same time I managed to solve a question or even right after thinking a way to approach a solution for any of those. I even left some futile attemps of enumeration to be honest about my process of solving this. I hope somebody finds this useful somehow, it ceirtanly helped me to practice some tools and approaches. As I'm still quite new to this, you can expect some errors in this post or maybe spot some things that an experienced person could probably solve better. I'm learning, beware of the blog.
+
+
+[Task 1] - Getting Initial Access
+--------------------------
+
 For this room it seems we'll need **Nishang** in order to gain access to the machine by using **_reverse shell scripts_**.
 
 So lets start by listing the links to get this **Nishang** tool:
