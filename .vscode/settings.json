@@ -1,0 +1,16 @@
+{
+    "grammarly.userWords": [
+        "THMs",
+        "exe",
+        "gobuster",
+        "httpd",
+        "iex",
+        "meterpreter",
+        "msfconsole",
+        "msfvenom",
+        "netcat",
+        "nishang",
+        "priv",
+        "whoami"
+    ]
+}

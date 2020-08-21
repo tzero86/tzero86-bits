@@ -12,7 +12,7 @@ _# Lasciate ogne speranza, voi ch'intrate_
 
 I'm a software quality engineer by day, a perpetual student by night. Trying hard to learn ethical hacking and penetration testing. This is my space, a refuge for the noob. I also play bass when somehow I find myself away from a computer.
 
-This is just the start and I really mean the start, I been learning this for just about 3 months. Can't image the amount of things I've yet to learn. Anyways, this is the first step towards a great adventure of hacking, pentesting and hopefully bug bounty related things. 
+This is just the start and I really mean the start, I been learning this for just about 3 months. Can't image the amount of things I've yet to learn. Anyways, this is the first step towards a great adventure of hacking, pen-testing and hopefully bug bounty related things. 
 
 Welcome to a pice of my mind. In this refuge for the noob I am, I'll be sharing hacking notes, tools, writeups, rants, etc. Hope you find some of it useful.
 
