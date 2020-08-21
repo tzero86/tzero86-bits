@@ -307,7 +307,7 @@ Let's see if we can find any CVE for this CMS.
 
 Looking on Exploit-DB we get an SQL injection CVE:
 
-![CVE for this CMS](https://i.imgur.com/yEqkdMP.png)
+![CVE for this CMS](https://i.imgur.com/evabUPI.png)
 
 Let's download this python exploit file and see what it does. In this case I renamed the exploit as **exploit.py**
 
