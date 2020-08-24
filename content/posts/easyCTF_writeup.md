@@ -8,7 +8,7 @@ cover: "img/easyCTF_cover.png"
 tags:
   - hacking
   - tryHackme
-  - writups
+  - writeups
 ---
 
 ## THM - EasyCTF/SimpleCTF Writeup
