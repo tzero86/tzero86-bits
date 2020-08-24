@@ -15,6 +15,9 @@ tags:
 This is a quick writeup or another "just-me-taking-notes" thing for the GameZone's TryhackMe room. This room is quite guided so there won't be much more detail added by this writup. Just straight to the point solutions for each task.
 Enjoy!
 
+- Please visit This room on TryHackMe by [clicking this link](https://tryhackme.com/room/gamezone).
+- **PLEASE NOTE:** Passwords and flag values were intentionally masked as required by THM writeups rules. The write-up follows my step by step solution to this box, errors and all.
+
 
 [Task 1] Deploy the vulnerable machine
 --------------------------------------
@@ -22,7 +25,7 @@ Enjoy!
 
 > Question #2 What is the name of the large cartoon avatar holding a sniper on the forum?
 
-For this we could do an image search but, since I know this from my old gamer times. It was quite easy to answer.
+For this we could do an image search but, since I know this from my old gamer times. It was quite easy to answer. If you don't know the answer, google is your friend.
 
 
 [Task 2] Obtain access via SQLi
