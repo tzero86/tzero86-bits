@@ -13,7 +13,7 @@ tags:
 # Skynet THM Room
 
 
-This is a quick writeup or another "just-me-taking-notes" thing for Snkynet TryhackMe's room.
+This is a quick writeup or another "just-me-taking-notes" thing for Snkynet TryhackMe's room. This is a pretty raw writeup detailing all my process to root this room, flaws and all. You have been warned :)
 
 Enjoy!
 
