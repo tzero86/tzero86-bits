@@ -1,5 +1,5 @@
 ---
-title: "Skynet_writeup"
+title: "Skynet_writeup.sh"
 date: 2020-08-25T20:59:31-04:00
 draft: false
 toc: false
@@ -13,7 +13,7 @@ tags:
 # Skynet THM Room
 
 
-This is a quick writeup or another "just-me-taking-notes" thing for Snkynet TryhackMe's room. This is a pretty raw writeup detailing all my process to root this room, flaws and all. You have been warned :)
+This is a quick writeup or another "just-me-taking-notes" thing for Skynet TryhackMe's room. This is a pretty raw writeup detailing all my process to root this room, flaws and all. You have been warned :)
 
 Enjoy!
 
