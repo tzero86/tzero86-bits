@@ -59,7 +59,7 @@ PORT     STATE SERVICE VERSION
 80/tcp   open  http    Apache httpd 2.4.29 ((Ubuntu))
 |_http-server-header: Apache/2.4.29 (Ubuntu)
 |_http-title: Apache2 Ubuntu Default Page: It works
-8000/tcp open  http    (PHP 7.2.32-1)
+8***/tcp open  http    (PHP 7.2.32-1)
 | fingerprint-strings: 
 |   FourOhFourRequest: 
 |     HTTP/1.0 404 Not Found
@@ -286,7 +286,7 @@ Module options (exploit/unix/webapp/bolt_authenticated_rce):
    PASSWORD                                    yes       Password to authenticate with
    Proxies                                     no        A proxy chain of format type:host:port[,type:host:port][...]
    RHOSTS                                      yes       The target host(s), range CIDR identifier, or hosts file with syntax 'file:<path>'
-   RPORT                8000                   yes       The target port (TCP)
+   RPORT                8***                   yes       The target port (TCP)
    SRVHOST              0.0.0.0                yes       The local host or network interface to listen on. This must be an address on the local machine or 0.0.0.0 to listen on all addresses.
    SRVPORT              8080                   yes       The local port to listen on.
    SSL                  false                  no        Negotiate SSL/TLS for outgoing connections
