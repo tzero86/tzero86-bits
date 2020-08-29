@@ -26,6 +26,10 @@
       <h1 class="post-title">
         <a href="{{ .Permalink }}">{{ .Title | markdownify }}</a>
       </h1>
+      
+      {{ with .Params.Cover }}
+        <img src="/{{ . }}" class="post-cover" />
+      {{ end }}
 
       {{- if .Params.toc }}
         <hr />
@@ -36,9 +40,7 @@
         <hr />
       {{- end }}
 
-      {{ with .Params.Cover }}
-        <img src="/{{ . }}" class="post-cover" />
-      {{ end }}
+      
 
       <div class="post-content">
         {{ .Content }}
@@ -132,7 +134,7 @@
       </div>
     {{ end }}
 
-
+    
     {{ if .Site.DisqusShortname }}
       {{ if not (eq .Params.Comments "false") }}
         <div id="comments">
