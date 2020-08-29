@@ -7,10 +7,75 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
-    <lastBuildDate>Sun, 16 Aug 2020 14:00:11 -0400</lastBuildDate>
+    <lastBuildDate>Fri, 28 Aug 2020 22:07:08 -0400</lastBuildDate>
     
 	<atom:link href="https://tzero86-bits.netlify.app/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>DailyBugle_writeup.sh</title>
+      <link>https://tzero86-bits.netlify.app/posts/dailybugle_writeup/</link>
+      <pubDate>Fri, 28 Aug 2020 22:07:08 -0400</pubDate>
+      
+      <guid>https://tzero86-bits.netlify.app/posts/dailybugle_writeup/</guid>
+      <description>Daily Bugle - THM Room This is a writeup or another one of my noob friendly(I hope) post-thingy for Daily Bugle TryhackMe&amp;rsquo;s room. This is a pretty raw writeup detailing all my process to root this room, flaws and all. Yup, I also write down my failed attempts to better illustrate my derailed train of thought.
+You have been warned :)
+Enjoy!
+ Please visit This room on TryHackMe by clicking this link.</description>
+    </item>
+    
+    <item>
+      <title>Bolt_writeup.sh</title>
+      <link>https://tzero86-bits.netlify.app/posts/bolt_writeup/</link>
+      <pubDate>Wed, 26 Aug 2020 21:34:28 -0400</pubDate>
+      
+      <guid>https://tzero86-bits.netlify.app/posts/bolt_writeup/</guid>
+      <description>Bolt - THM Room This is a quick writeup or another &amp;ldquo;just-me-taking-notes&amp;rdquo; thingy for Bolt TryhackMe&amp;rsquo;s room. This is a pretty raw writeup detailing all my process to root this room, flaws and all. You have been warned :)
+Enjoy!
+ Please visit This room on TryHackMe by clicking this link. PLEASE NOTE: Passwords and flag values were intentionally masked as required by THM writeups rules. The write-up follows my step by step solution to this box, errors and all.</description>
+    </item>
+    
+    <item>
+      <title>Hydra_writeup.sh</title>
+      <link>https://tzero86-bits.netlify.app/posts/hydra_writeup/</link>
+      <pubDate>Wed, 26 Aug 2020 14:43:42 -0400</pubDate>
+      
+      <guid>https://tzero86-bits.netlify.app/posts/hydra_writeup/</guid>
+      <description>Hydra - THM Room This is a quick writeup or another &amp;ldquo;just-me-taking-notes&amp;rdquo; thing for Hydra TryhackMe&amp;rsquo;s room. This is a pretty raw and quick writeup detailing my process to pawn this room.
+Enjoy!
+ Please visit This room on TryHackMe by clicking this link. PLEASE NOTE: Passwords and flag values were intentionally masked as required by THM writeups rules. The write-up follows my step by step solution to this box, errors and all.</description>
+    </item>
+    
+    <item>
+      <title>Skynet_writeup.sh</title>
+      <link>https://tzero86-bits.netlify.app/posts/skynet_writeup/</link>
+      <pubDate>Tue, 25 Aug 2020 20:59:31 -0400</pubDate>
+      
+      <guid>https://tzero86-bits.netlify.app/posts/skynet_writeup/</guid>
+      <description>Skynet THM Room This is a quick writeup or another &amp;ldquo;just-me-taking-notes&amp;rdquo; thing for Skynet TryhackMe&amp;rsquo;s room. This is a pretty raw writeup detailing all my process to root this room, flaws and all. You have been warned :)
+Enjoy!
+ Please visit This room on TryHackMe by clicking this link. PLEASE NOTE: Passwords and flag values were intentionally masked as required by THM writeups rules. The write-up follows my step by step solution to this box, errors and all.</description>
+    </item>
+    
+    <item>
+      <title>GameZone_writeup.sh</title>
+      <link>https://tzero86-bits.netlify.app/posts/gamezone_writeup/</link>
+      <pubDate>Mon, 24 Aug 2020 16:19:31 -0400</pubDate>
+      
+      <guid>https://tzero86-bits.netlify.app/posts/gamezone_writeup/</guid>
+      <description>Game Zone Room This is a quick writeup or another &amp;ldquo;just-me-taking-notes&amp;rdquo; thing for the GameZone&amp;rsquo;s TryhackMe room. This room is quite guided so there won&amp;rsquo;t be much more detail added by this writup. Just straight to the point solutions for each task. Enjoy!
+ Please visit This room on TryHackMe by clicking this link. PLEASE NOTE: Passwords and flag values were intentionally masked as required by THM writeups rules. The write-up follows my step by step solution to this box, errors and all.</description>
+    </item>
+    
+    <item>
+      <title>EasyCTF_writeup.sh</title>
+      <link>https://tzero86-bits.netlify.app/posts/easyctf_writeup/</link>
+      <pubDate>Fri, 21 Aug 2020 14:37:34 -0400</pubDate>
+      
+      <guid>https://tzero86-bits.netlify.app/posts/easyctf_writeup/</guid>
+      <description>THM - EasyCTF/SimpleCTF Writeup Welcome to my second write-up for a TryHackme machine, in this case we&amp;rsquo;ll be solving EasyCTF or should I say SimpleCTF It seems to be called as both by looking at the room name and URL. Anyways, I invite you to try out this room on TryHackme by following the link below.
+ Please visit This room on TryHackMe by clicking this link. PLEASE NOTE: Passwords and flag values were intentionally masked as required by THM writeups rules.</description>
+    </item>
     
     <item>
       <title>Alfred_writeup.sh</title>
@@ -18,7 +83,7 @@
       <pubDate>Sun, 16 Aug 2020 14:00:11 -0400</pubDate>
       
       <guid>https://tzero86-bits.netlify.app/posts/alfred_writeup/</guid>
-      <description>Alfred - TryHackme&amp;rsquo;s Room Writeup This my first attempt at creating a writup, I tried putting every single step I took to solve this room. While providing enough (I think) details and descriptions so it is useful for noobs like me mostly. I started drafting this at the same time I managed to solve a question or even right after thinking a way to approach a solution for any of those.</description>
+      <description>Alfred - TryHackme&amp;rsquo;s Room Writeup This is my first attempt at creating a write-up, I tried putting every single step I took to solve this room. While providing enough (I think) details and descriptions so it is useful for noobs like me mostly. I started drafting this at the same time I managed to solve a question or even right after thinking a way to approach a solution for any of those.</description>
     </item>
     
     <item>

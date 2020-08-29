@@ -4,6 +4,8 @@ languageCode = "en-us"
 theme        = "hello-friend-ng"
 paginate     = 10
 googleAnalytics = "UA-175520987-1"
+disqusShortname = "tzero86"
+
 
 [params]
   dateform        = "Jan 2, 2006"

