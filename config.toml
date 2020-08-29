@@ -29,7 +29,7 @@ disqusShortname = "tzero86bits"
 
   # Metadata mostly used in document's head
   description = "hacking notes and rants"
-  keywords = "homepage, blog"
+  keywords = "homepage, blog, hacking, ethical hacking, pentesting, tryhackme, writeups"
   images = [""]
 
   # Default theme "light" or "dark"
@@ -41,7 +41,7 @@ disqusShortname = "tzero86bits"
   [languages.en]
     title = "tzero86.bits"
     subtitle = "hacking notes, tools and rants."
-    keywords = ""
+    keywords = "hacking, ethical hacking, pentesting, tryhackme, writeups"
     copyright = '<a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a>'
     readOtherPosts = "Read other posts"
 
@@ -55,22 +55,18 @@ disqusShortname = "tzero86bits"
     
 
   # And you can even create generic menu
-  [[menu.main]]
-    identifier = "home"
-    name       = "Home"
-    url        = "/"
+  
 
   [[menu.main]]
     identifier = "blog"
-    name       = "Blog Posts"
+    name       = "/Posts"
     url        = "/posts/"
 
   [[menu.main]]
     identifier = "page"
-    name       = "About me"
+    name       = "/About"
     url        = "/page/about/"
 
-  
 
   [[params.social]]
     name = "twitter"
