@@ -1,10 +1,10 @@
 {{ define "main" }}
     <main class="post">
         {{ with .Params.images }}
-		{{ range first 1 . }}
-	        <meta property="og:image" content="{{ . | absURL }}" />
-		{{ end }}
-	{{ end }}
+            {{ range first 1 . }}
+                <meta property="og:image" content="{{ . | relURL }}" />
+            {{ end }}
+	    {{ end }}
         <div class="post-info">
             {{ if .IsTranslated }}
                 {{ i18n "postAvailable" }}

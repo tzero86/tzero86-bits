@@ -30,7 +30,7 @@ disqusShortname = "tzero86bits"
   # Metadata mostly used in document's head
   description = "hacking notes and rants"
   keywords = "homepage, blog, hacking, ethical hacking, pentesting, tryhackme, writeups"
-  images = [""]
+  images = ["/img"]
 
   # Default theme "light" or "dark"
   defaultTheme = "dark"
