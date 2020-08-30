@@ -3,6 +3,8 @@ title: "Skynet_writeup.sh"
 date: 2020-08-25T20:59:31-04:00
 draft: false
 toc: false
+images:
+  - "img/skynet_cover.gif"
 cover: "img/skynet_cover.gif"
 tags:
   - hacking

@@ -3,7 +3,8 @@ title: "OverPass2_hacked.sh"
 date: 2020-08-30T12:47:03-04:00
 draft: false
 toc: false
-image: 'img/overpass2_cover.png'
+images: 
+  - 'img/overpass2_cover.png'
 cover: 'img/overpass2_cover.png'
 tags:
   - hacking

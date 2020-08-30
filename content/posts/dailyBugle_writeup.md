@@ -3,6 +3,8 @@ title: "DailyBugle_writeup.sh"
 date: 2020-08-28T22:07:08-04:00
 draft: false
 toc: true
+images:
+  - "img/dailyBugle_cover.gif"
 cover: "img/dailyBugle_cover.gif"
 tags:
   - hacking

@@ -3,6 +3,8 @@ title: "Bolt_writeup.sh"
 date: 2020-08-26T21:34:28-04:00
 draft: false
 toc: true
+images:
+  - "img/bolt_cover.gif"
 cover: "img/bolt_cover.gif"
 tags:
   - hacking
