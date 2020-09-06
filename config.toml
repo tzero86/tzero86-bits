@@ -5,6 +5,7 @@ theme        = "hello-friend-ng"
 paginate     = 10
 googleAnalytics = "UA-175520987-1"
 disqusShortname = "tzero86bits"
+enableEmoji = true
 
 
 [params]
