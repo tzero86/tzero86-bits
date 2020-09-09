@@ -14,7 +14,7 @@ tags:
 
 # Buffer Overflow prep - THM Room
 
-This is another writeup, this time for 'Buffer Overflow Prep' TryhackMe's room. This is a pretty raw writeup detailing all my process to root this room, flaws and all. This room is quite long besides I have to learn almost everything about buffer overflows. So this is gonna be a really **long** post. You have been warned :)
+This is another writeup, this time for 'Buffer Overflow Prep' TryhackMe's room. This is a pretty raw writeup detailing all my process to root this room, flaws and all. This room is quite long besides I have to learn almost everything about buffer overflows so I expect to take a couple of days on this one. This is gonna be a really **long** post. You have been warned :)
 
 PS: I'm gonna be adding some audio tracks along the sections of this writeup so I don't fall asleep while I write this up and go through this room. You are welcome to listen to them.
 
@@ -869,9 +869,6 @@ From here we'll just use the same process to resolve the rest of the OVERFLOW co
 
 Note: For this one I had to do a few tries to get **all** badchars.
 
-***
-
-
 ### TASK 10 - [oscp.exe - OVERFLOW10]
 
 - OVERFLOW9 RESULTS: 
@@ -881,8 +878,9 @@ Note: For this one I had to do a few tries to get **all** badchars.
 
 
 
-That was a **LONG** room to go through, I had to stop several times along the way just to study a bit about buffer overflows, make mistakes, debug and retrace steps. But eventually I was able to finish the room. I still feel I need to practice a lot for this process to cement. Good thing the **Offensive Pentesting** path in try hackme has a lot more of these rooms to shape those skills. Check it out [here](https://tryhackme.com/path/outline/pentesting)
+That was a **LONG** room to go through, I had to stop several times along the way just to study a bit about buffer overflows, make mistakes, debug and retrace steps. But eventually I was able to finish the room. I still feel I need to practice a lot for this process to cement. Good thing the **Offensive Pentesting** path in TryHackMe has a lot more of these rooms to shape those skills. Check it out [here](https://tryhackme.com/path/outline/pentesting)
 
+I hope you somehow enjoy this post, I certainly had a lot of fun creating it!
 
 As usual, happy hacking.
 
