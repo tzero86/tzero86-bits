@@ -694,7 +694,7 @@ We did it, we got root and we got the last flag for the room:
 ![](https://i.imgur.com/ey7pfst.png)
 
 
-This a tough! I had to learn a lot to solve this one, made a lot of mistakes and even fall victim of some nice decoys set by TheMayor. This is honestly a great room, had to spent a couple of days to get through it. I don't really know if I have some connection issues with this particular box or if maybe I was doing something wrong that ended up causing the VM to block me somehow. if you know what I did wrong please leave a comment, I'd love to read what you think of my writeups guys. I tried to learn from my mistakes, I'm quite new at this and I'm constantly learning new things to get better. Any advice or feedback would be greatly appreciated. Thanks to you for reading and thanks to TheMayor for this awesome room.
+This was a tough one! I had to learn a lot to solve this one, made a lot of mistakes and even fall victim of some nice decoys set by TheMayor. This is honestly a great room, had to spent a couple of days to get through it. I don't really know if I have some connection issues with this particular box or if maybe I was doing something wrong that ended up causing the VM to block me somehow. if you know what I did wrong please leave a comment, I'd love to read what you think of my writeups guys. I tried to learn from my mistakes, I'm quite new at this and I'm constantly learning new things to get better. Any advice or feedback would be greatly appreciated. Thanks to you for reading and thanks to TheMayor for this awesome room.
 
 
 I'm gonna take some time to prep the report for this room, I'm gonna be using the template shared by TheCyberMentor most likely. Once I have that ready I'll attach the report here.
