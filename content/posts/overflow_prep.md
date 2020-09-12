@@ -1,5 +1,5 @@
 ---
-title: "BufferOverflow_prep.sh"
+title: "BufferOverflow_prep_writeup.sh"
 date: 2020-09-06T02:33:31-04:00
 draft: false
 toc: true
@@ -35,7 +35,7 @@ We start by deploying the VM and connecting through RDP:
 xfreerdp /u:admin /p:password /cert:ignore /v:10.10.84.54
 ```
 
-Once we do that we'll have remote desktop connection to that machine, we need to start Immunity debugger and then open oscp.exe that is located in the "vulnerable apps" folder in the Desktop.
+Once we do that we'll have a remote desktop connection to that machine, we need to start Immunity debugger and then open oscp.exe that is located in the "vulnerable apps" folder in the Desktop.
 
 > We need to remember to click on the "play" button on Immunity Debugger after opening oscp.exe.
 
