@@ -15,7 +15,7 @@ tags:
 
 ## Relevant - THM Room
 
-This is another writeup, this time for 'Relevate' TryhackMe's room. This is a writeup detailing all my process to root this room, flaws and all. I embrace mistakes and try to learn from them, therefore this post also includes my failed attempts. You have been warned :)
+This is another writeup, this time for 'Relevant' TryhackMe's room. This is a writeup detailing all my process to root this room, flaws and all. I embrace mistakes and try to learn from them, therefore this post also includes my failed attempts. You have been warned :)
 
 PS: I'm gonna be adding the penetration testing report for this room soon. I need to put in all the information, vulnerabilities, and any other information that could mimic a real-world report for a pentest assessment. Anyways, thanks for stopping by. Leave a comment, leave your feedback or suggestions. Have a great day!
 
