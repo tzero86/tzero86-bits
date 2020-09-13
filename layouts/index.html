@@ -140,6 +140,10 @@
             transition-delay: 0.15s;
         }
 
+        .textLink{
+            color: #FFFFFF;
+            text-decoration: none !important;
+        }
 
         @media (max-width: 1000px) {
             .wrap {
@@ -165,11 +169,11 @@
         {{- end }}
         <div class="wrap">
             {{ range first 1 (where (where .Site.RegularPages "Type" "in" site.Params.mainSections) ".Params.featured" "=" true) }}
-            <div class="tile">             
-              <img src='{{ .Params.cover }}'/>
+            <div class="tile">        
+                <a href="{{ .Page.RelPermalink }}"> <img src='{{ .Params.cover }}'/> </a>       
               <div class="text">
-                <h5>🟢 Latest Post → ▌<a href="{{ .Page.RelPermalink }}"> {{ .Page.Title }}</a>▐ </h5>
-                <p class="animate-text">{{ .Page.Summary }} </p>
+                <h5>🟢 Latest Post → ▌<a class="textLink" href="{{ .Page.RelPermalink }}"> {{ .Page.Title }}</a>▐ </h5>
+                <a class="textLink" href="{{ .Page.RelPermalink }}"> <p class="animate-text">{{ .Page.Summary }} </p> </a>
                 <div class="dots">
                     <a href="{{ .Page.RelPermalink }}">Read</a>
                 </div>
