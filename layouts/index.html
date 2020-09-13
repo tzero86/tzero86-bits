@@ -163,7 +163,6 @@
             {{ partial "social-icons.html" . }}
         </div>
         {{- end }}
-        <br><br>
         <div class="wrap">
             {{ range first 1 (where (where .Site.RegularPages "Type" "in" site.Params.mainSections) ".Params.featured" "=" true) }}
             <div class="tile">             
