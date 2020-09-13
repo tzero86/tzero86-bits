@@ -1,21 +1,185 @@
 {{ define "main" }}
-    <main aria-role="main">
-        
+<main aria-role="main">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+    <style>
+        body {
+            background-color: #eee
+        }
+
+        .wrap {
+            margin: 50px auto 0 auto;
+            width: 100%;
+            display: flex;
+            align-items: space-around;
+            max-width: 1200px;
+            
+        }
+
+        .tile {
+            width: 500px;
+            height: 220px;
+            margin: 10px;
+            background-color: #020202;
+            display: inline-block;
+            background-size: cover;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.4s ease-out;
+            box-shadow: 0px 15px 77px -31px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            color: white;
+            font-family: 'Roboto';
+            border-radius: 2%;
+
+        }
+
+        .tile img {
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            opacity: .6;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            transition: all 0.4s ease-out;
+            filter: saturate(0.25) hue-rotate(320deg);
+            -webkit-filter: saturate(0.25) hue-rotate(320deg);
+        }
+
+        .tile .text {
+            /*   z-index:99; */
+            position: absolute;
+            padding: 30px;
+            height: calc(100% - 0px);
+        }
+
+        .tile h5 {
+
+            font-weight: 100;
+            margin: 0;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .tile h6 {
+            font-weight: 100;
+            margin: 20px 0 0 0;
+            font-style: italic;
+            transform: translateX(200px);
+        }
+
+        .tile p {
+            font-weight: 300;
+            margin: 20px 0 0 0;
+            line-height: 25px;
+            /*   opacity:0; */
+            transform: translateX(-200px);
+            transition-delay: 0.2s;
+        }
+
+        .animate-text {
+            opacity: 0;
+            transition: all 0.6s ease-in-out;
+        }
+
+        .tile:hover {
+            /*   background-color:#99aeff; */
+            box-shadow: 0px 35px 77px -17px rgba(0, 0, 0, 0.6);
+            transform: scale(1.05);
+        }
+
+        .tile:hover img {
+            opacity: 0.2;
+        }
+
+        .tile:hover .animate-text {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .dots {
+            position: absolute;
+            bottom: -70px;
+            right: 30px;
+            margin: 0 auto;
+            width: 30px;
+            height: 30px;
+            color: currentColor;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-around;
+
+        }
+
+        .dots span {
+            width: 5px;
+            height: 5px;
+            background-color: currentColor;
+            border-radius: 50%;
+            display: block;
+            opacity: 0;
+            transition: transform 0.4s ease-out, opacity 0.5s ease;
+            transform: translateY(30px);
+
+        }
+
+        .tile:hover span {
+            opacity: 1;
+            transform: translateY(0px);
+        }
+
+        .dots span:nth-child(1) {
+            transition-delay: 0.05s;
+        }
+
+        .dots span:nth-child(2) {
+            transition-delay: 0.1s;
+        }
+
+        .dots span:nth-child(3) {
+            transition-delay: 0.15s;
+        }
+
+
+        @media (max-width: 1000px) {
+            .wrap {
+                flex-direction: column;
+                width: 400px;
+            }
+        }
+    </style>
+    <div>
+        {{ if .Site.Params.Portrait.Path }}
+        <img src="{{ .Site.Params.Portrait.Path }}" class="circle" alt="{{ .Site.Params.Portrait.Alt }}"
+            style="max-width:{{ .Site.Params.Portrait.MaxWidth }}" />
+        {{ end }}
+
+        <h1>{{ .Site.Title }}</h1>
+        {{- with .Site.Params.homeSubtitle }}
+        <p>{{.}}</p>
+        {{- end }}
+        {{- with .Site.Params.social }}
         <div>
-            {{ if .Site.Params.Portrait.Path }}
-               <img src="{{ .Site.Params.Portrait.Path }}" class="circle" alt="{{ .Site.Params.Portrait.Alt }}" style="max-width:{{ .Site.Params.Portrait.MaxWidth }}" />
-            {{ end }}
-
-            <h1>{{ .Site.Title }}</h1>
-            {{- with .Site.Params.homeSubtitle }}
-                <p>{{.}}</p>
-            {{- end }}
-
-            {{- with .Site.Params.social }}
-                <div>
-                    {{ partial "social-icons.html" . }}
-                </div>
-            {{- end }}
+            {{ partial "social-icons.html" . }}
         </div>
-    </main>
+        {{- end }}
+        <br><br>
+        <div class="wrap">
+            {{ range first 1 (where (where .Site.RegularPages "Type" "in" site.Params.mainSections) ".Params.featured" "=" true) }}
+            <div class="tile">             
+              <img src='{{ .Params.cover }}'/>
+              <div class="text">
+                <h5>⭕ Last Post: {{ .Page.Title }} </h5>
+                <p class="animate-text">{{ .Page.Summary }} </p>
+                <div class="dots">
+                    <a href="{{ .Page.RelPermalink }}">Read</a>
+                </div>
+              </div>
+             </div>
+            </div>
+            
+            </div>
+            {{ end }}
+    </div>
+</main>
 {{ end }}

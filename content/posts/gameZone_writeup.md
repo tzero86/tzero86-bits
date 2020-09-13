@@ -3,6 +3,8 @@ title: "GameZone_writeup.sh"
 date: 2020-08-24T16:19:31-04:00
 draft: false
 toc: true
+featured: false
+summary: "This is a quick writeup or another 'just-me-taking-notes' thing for the GameZone's TryhackMe room."
 cover: "img/gameZone_cover.gif"
 tags:
   - hacking
