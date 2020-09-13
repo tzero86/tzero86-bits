@@ -12,11 +12,11 @@
             display: flex;
             align-items: space-around;
             max-width: 1200px;
-            
+
         }
 
         .tile {
-            width: 500px;
+            width: 490px;
             height: 220px;
             margin: 10px;
             background-color: #020202;
@@ -25,7 +25,8 @@
             position: relative;
             cursor: pointer;
             transition: all 0.4s ease-out;
-            box-shadow: 0px 15px 77px -31px rgba(0, 0, 0, 0.2);
+            -webkit-box-shadow: 0px 10px 13px -7px #000000, 5px 5px 15px 5px rgba(0, 0, 0, 0);
+            box-shadow: 0px 10px 13px -7px #000000, 5px 5px 15px 5px rgba(0, 0, 0, 0);
             overflow: hidden;
             color: white;
             font-family: 'Roboto';
@@ -83,7 +84,8 @@
 
         .tile:hover {
             /*   background-color:#99aeff; */
-            box-shadow: 0px 35px 77px -17px rgba(0, 0, 0, 0.6);
+            -webkit-box-shadow: -10px 0px 13px -7px #000000, 10px 0px 13px -7px #000000, 5px 5px 15px 5px rgba(0, 0, 0, 0);
+            box-shadow: -10px 0px 13px -7px #000000, 10px 0px 13px -7px #000000, 5px 5px 15px 5px rgba(0, 0, 0, 0);
             transform: scale(1.05);
         }
 
@@ -140,7 +142,7 @@
             transition-delay: 0.15s;
         }
 
-        .textLink{
+        .textLink {
             color: #FFFFFF;
             text-decoration: none !important;
         }
@@ -169,20 +171,23 @@
         {{- end }}
         <div class="wrap">
             {{ range first 1 (where (where .Site.RegularPages "Type" "in" site.Params.mainSections) ".Params.featured" "=" true) }}
-            <div class="tile">        
-                <a href="{{ .Page.RelPermalink }}"> <img src='{{ .Params.cover }}'/> </a>       
-              <div class="text">
-                <h5>🟢 Latest Post → ▌<a class="textLink" href="{{ .Page.RelPermalink }}"> {{ .Page.Title }}</a>▐ </h5>
-                <a class="textLink" href="{{ .Page.RelPermalink }}"> <p class="animate-text">{{ .Page.Summary }} </p> </a>
-                <div class="dots">
-                    <a href="{{ .Page.RelPermalink }}">Read</a>
+            <div class="tile">
+                <a href="{{ .Page.RelPermalink }}"> <img src='{{ .Params.cover }}' /> </a>
+                <div class="text">
+                    <h5>🟢 Latest Post → ▌<a class="textLink" href="{{ .Page.RelPermalink }}"> {{ .Page.Title }}</a>▐
+                    </h5>
+                    <a class="textLink" href="{{ .Page.RelPermalink }}">
+                        <p class="animate-text">{{ .Page.Summary }} </p>
+                    </a>
+                    <div class="dots">
+                        <a href="{{ .Page.RelPermalink }}">Read</a>
+                    </div>
                 </div>
-              </div>
-             </div>
             </div>
-            
-            </div>
-            {{ end }}
+        </div>
+
+    </div>
+    {{ end }}
     </div>
 </main>
 {{ end }}
