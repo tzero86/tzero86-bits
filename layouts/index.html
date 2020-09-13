@@ -50,7 +50,7 @@
             /*   z-index:99; */
             position: absolute;
             padding: 30px;
-            height: calc(100% - 0px);
+            height: calc(100% - 80px);
         }
 
         .tile h5 {
@@ -169,7 +169,7 @@
             <div class="tile">             
               <img src='{{ .Params.cover }}'/>
               <div class="text">
-                <h5>⭕ Last Post: {{ .Page.Title }} </h5>
+                <h5>⭕ Last Post: [<a href="{{ .Page.RelPermalink }}"> {{ .Page.Title }}</a>] </h5>
                 <p class="animate-text">{{ .Page.Summary }} </p>
                 <div class="dots">
                     <a href="{{ .Page.RelPermalink }}">Read</a>
