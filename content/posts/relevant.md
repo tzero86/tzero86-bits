@@ -3,7 +3,7 @@ title: "Relevant_Writeup.sh"
 date: 2020-09-09T20:47:59-04:00
 draft: false
 toc: true
-featured: true
+featured: false
 summary: "Welcome to Relevant! We've been hired by a client that requests a penetration testing assessment before a product go-live date."
 images:
   - "img/relevant_cover.png"
