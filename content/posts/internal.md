@@ -1,5 +1,5 @@
 ---
-title: "Internal.sh"
+title: "Internal_writeup.sh"
 date: 2020-09-16T18:30:35-04:00
 draft: false
 toc: true

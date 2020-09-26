@@ -31,7 +31,7 @@ enableEmoji = true
   # Metadata mostly used in document's head
   description = "hacking notes and rants"
   keywords = "homepage, blog, hacking, ethical hacking, pentesting, tryhackme, writeups"
-  images = ["/img"]
+  images = ["content/img/tipetto.jpeg"]
 
   # Default theme "light" or "dark"
   defaultTheme = "dark"
@@ -50,7 +50,7 @@ enableEmoji = true
       logoText = "tzero86.bits"
       logoHomeLink = "/"
       #path = "./hacker.svg"
-      #alt = "Your example logo alt text"
+      #alt = "tzero86.bits"
     # or
     #
     
@@ -60,14 +60,18 @@ enableEmoji = true
 
   [[menu.main]]
     identifier = "blog"
-    name       = "/Posts"
+    name       = "All_Posts"
     url        = "/posts/"
 
   [[menu.main]]
     identifier = "page"
-    name       = "/About"
+    name       = "About_me"
     url        = "/page/about/"
 
+  [[menu.main]]
+    identifier = "tags"
+    name       = "Writeups"
+    url        = "/tags/writeups/"
 
   [[params.social]]
     name = "twitter"
@@ -76,3 +80,7 @@ enableEmoji = true
   [[params.social]]
     name = "github"
     url = "https://github.com/Tzero86"
+
+  [[params.social]]
+    name = "linkedin"
+    url = "https://www.linkedin.com/in/ermedina86/"
