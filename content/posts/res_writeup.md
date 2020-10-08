@@ -139,8 +139,8 @@ Let's see if we can get a reverse shell by running in the URL a netcat connectio
 We got a reverse shell, a really basic shell. Let's see if we can upgrade it to a python TTY by running the following command `python -c 'import pty; pty.spawn("/bin/sh")'`
 
 ![We stabilize the shell a bit](https://i.imgur.com/mGUqMF0.png)
-
 Mmm not sure that worked, anyway let's move on. 
+
 
 Now let's upload linPEAS to see if we can find a way to get root or the password for www-data. Remember to make linpeas executable first `chmod +x linpeas.sh` after uploading.
 
