@@ -3,7 +3,7 @@ title: "Bounty_hacker.sh"
 date: 2020-10-02T16:10:45-04:00
 draft: false
 toc: true
-featured: true
+featured: false
 summary: "You talked a big game about being the most elite hacker in the solar system. Prove it and claim your right to the status of Elite Bounty Hacker!"
 images:
   - "img/bountyHacker_cover.jpg"
