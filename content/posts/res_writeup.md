@@ -3,7 +3,7 @@ title: "Res_writeup.sh"
 date: 2020-10-07T17:57:40-04:00
 draft: false
 toc: true
-featured: true
+featured: false
 summary: "Hack into a vulnerable database server with an in-memory data-structure in this semi-guided challenge!"
 images:
   - "img/res_cover.png"
