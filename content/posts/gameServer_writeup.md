@@ -1,5 +1,5 @@
 ---
-title: "GameServer_writeup"
+title: "GamingServer_writeup"
 date: 2020-10-10T22:07:40-04:00
 draft: false
 toc: false
