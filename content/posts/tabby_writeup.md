@@ -6,7 +6,7 @@ featured: true
 toc: true
 summary: "Welcome to another writeup, this time we hack 'tabby' from HackTheBox to practice a bit more about LXD exploitation."
 images:
-  - "img/tabby_cover.jpg"
+  - "img/tabby_cover.png"
 cover: "img/tabby_cover.gif"
 tags:
   - hacking
