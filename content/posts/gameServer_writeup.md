@@ -3,7 +3,7 @@ title: "GamingServer_writeup"
 date: 2020-10-10T22:07:40-04:00
 draft: false
 toc: true
-featured: true
+featured: false
 summary: "Can you gain access to this gaming server built by amateurs with no experience of web development and take advantage of the deployment system?"
 images:
   - "img/gamingServer_cover.jpg"
