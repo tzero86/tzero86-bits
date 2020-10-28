@@ -2,7 +2,7 @@
 title: "Tabby_writeup"
 date: 2020-10-23T12:40:13-04:00
 draft: false
-featured: true
+featured: false
 toc: true
 summary: "Welcome to another writeup, this time we hack 'tabby' from HackTheBox to practice a bit more about LXD exploitation."
 images:
