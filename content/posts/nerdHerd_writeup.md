@@ -3,6 +3,7 @@ title: "NerdHerd_writeup"
 date: 2020-11-07T02:39:20-05:00
 draft: false
 featured: true
+toc: true
 summary: "Have you ever been stuck in a rabbit hole for days? Welcome to NerdHerd!"
 images:
   - "img/nerdherd_cover.jpg"
