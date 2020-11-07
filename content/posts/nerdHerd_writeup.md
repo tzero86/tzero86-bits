@@ -19,7 +19,7 @@ tags:
 
 Welcome to another writeup, this time we'll be trying to hack a newly released room on TryHackMe called NerdHerd, inspired by the TV series Chuck!.
 
-- Please visit This room on TryHackMe by [clicking this link](https://tryhackme.com/room/gamingserver).
+- Please visit This room on TryHackMe by [clicking this link](https://tryhackme.com/room/nerdherd).
 - **PLEASE NOTE:** Passwords, flag values, or any kind of answers to the room questions were intentionally masked as required by THM writeups rules. 
 
 
