@@ -2,7 +2,7 @@
 title: "Tartarus_writeup"
 date: 2020-10-28T10:10:38-04:00
 draft: false
-toc: true
+toc: false
 featured: true
 summary: "Welcome to another writeup, this time we hack Tartarus-Remastered another TryHackMe room. Let's see if we get root during the lunch break at work XD"
 images:
