@@ -251,7 +251,7 @@ That's it! we got the root flag, finally. But the room also contains a `bonus` f
 ## Getting the bonus flag
 
 
-The hint for the last flag is `brings back so many memories`... Let's see if we can find that last flag by using `grep` command along with find. We'll try to look into files containing `THM` since that's probably another flag in the format of `THM{weird_random_values}`:
+The hint for the last flag is `brings back so many memories`... Let's see if we can find that last flag by using `grep` command along with `find`. We'll try to look into files containing `THM` since that's probably another flag in the format of `THM{weird_random_values}`:
 
 > You can check [this](https://stackoverflow.com/questions/16956810/how-do-i-find-all-files-containing-specific-text-on-linux) post to read about how to use find & grep for this. Beware this will take some time since we'll be searching the whole machine. We should probably try to narrow down the search.
 
