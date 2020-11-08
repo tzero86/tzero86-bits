@@ -82,7 +82,9 @@ That seems to have worked and we do get a username of `cibartowski`. Let's see i
 
 ![](https://i.imgur.com/oHD3Fi2.png)
 
-I'm not sure the last decoding worked as expected. That certainly looks like a base64 encoding. This could very well be a rabbit hole.
+I'm not sure the last decoding worked as expected. That certainly looks like a base64 encoding. This could very well be a rabbit hole. 
+
+> That didn't stop me from being stuck there for a couple of days trying my best to decode/decrypt it :laughing:
 
 Let's proceed further. Before, we found an image and we didn't really do anything with that. Let's see if we can find anything on it. Let's run `exifTool` on it:
 
@@ -162,17 +164,17 @@ Let's see if we can actually connect to the share now (we can also see if maybe 
 
 That worked, we are able to connect to that `classified` share now. And we can see there is a file in there. Let's see what it has for us:
 
-![](https://i.imgur.com/Rn5fOXf.png)
+![](https://i.imgur.com/R1hjqhN.png)
 
 So we get another directory to look at. Let's see if that's something we can access via browser. After all `leet is all you need`.
 
-![](https://i.imgur.com/dunrfVd.png)
+![](https://i.imgur.com/wRIuZrX.png)
 
 Indeed we can access that directory right from the browser. And it seems we have some other file there.
 
 If we look at that file we get this:
 
-![](https://i.imgur.com/AlEWsfB.png)
+![](https://i.imgur.com/cS4edBA.png)
 
 Ok let's see if now we can access that `ssh` or if this is another game from the room creator (which is awesome BTW, just like chuck!):
 
@@ -242,7 +244,7 @@ Ok so now we need to locate that flag, let's see if `find` command helps us here
 
 Now let's see if `find` gives us a chance to go to sleep before sunrise XD:
 
-![](https://i.imgur.com/NdLt7CD.png)
+![](https://i.imgur.com/BYKy1vD.png)
 
 That's it! we got the root flag, finally. But the room also contains a `bonus` flag for good measure. Let's see if I have any brain left to find that before I fall asleep(it's 3:35 AM at this point).
 
