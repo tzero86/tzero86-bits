@@ -234,15 +234,18 @@ We repeat the same steps as before: `compile, upload, chmod +x, execute`
 
 IT WORKS!! we are root. Effing finally. Let's see where that damn flag is:
 
-![](https://i.imgur.com/MHbJDWh.png)
-
-So we are being trolled! that got me laughing late at night (wife's not happy), well played `0xpr0N3rd`.
-
-Ok so now we need to locate that flag, let's see if `find` command helps us here. Actually before we do that let's get an interactive shell first, since the one we got is a pain in the a**.
+Actually before we do that let's get an interactive shell first, since the one we got is a pain in the a**.
 
 ![](https://i.imgur.com/Pa6C2Dx.png)
 
-Now let's see if `find` gives us a chance to go to sleep before sunrise XD:
+
+![](https://i.imgur.com/AGTRLsq.png)
+
+So we are being trolled! that got me laughing late at night (wife's not happy), well played `0xpr0N3rd`.
+
+
+
+Ok so now we need to locate that flag, let's see if `find` command helps us here. Let's see if `find` gives us a chance to go to sleep before sunrise XD:
 
 ![](https://i.imgur.com/BYKy1vD.png)
 
