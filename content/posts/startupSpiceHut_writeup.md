@@ -4,7 +4,7 @@ date: 2020-11-12T18:46:31-05:00
 draft: false
 featured: false
 toc: true
-summary: "We are Spice Hut, a new startup company that just made it big! We ask that you preform a thorough penetration test and try to own root. Good luck!"
+summary: "We are Spice Hut, a new startup company that just made it big! We ask that you perform a thorough penetration test and try to own root. Good luck!"
 images:
   - "img/spiceHut_cover.jpg"
 cover: "img/spicehut_cover.gif"
