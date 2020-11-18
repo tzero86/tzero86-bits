@@ -2,7 +2,7 @@
 title: "BruteIt_writeup"
 date: 2020-11-14T22:26:26-05:00
 draft: false
-featured: true
+featured: false
 toc: true
 summary: "Learn how to brute, hash cracking and how to escalate privileges in this box!"
 images:
