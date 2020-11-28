@@ -2,7 +2,7 @@
 title: "Poster_writeup"
 date: 2020-11-17T20:50:13-05:00
 draft: false
-featured: true
+featured: false
 toc: true
 summary: "The sys admin set up an RDBMS in a safe way, let's play with it and hack our way in!"
 images:
