@@ -2,7 +2,7 @@
 title: "Chillhack_writeup"
 date: 2020-11-28T14:06:51-05:00
 draft: false
-featured: true
+featured: false
 toc: true
 summary: "This room provides the real world pentesting challenges. Let's give it a try!"
 images:
