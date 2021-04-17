@@ -2,7 +2,7 @@
 title: "All_In_One_writeup"
 date: 2020-12-22T19:37:05-05:00
 draft: false
-featured: true
+featured: false
 toc: true
 summary: "This is a fun box where you will get to exploit the system in several ways. Few intended and unintended paths to getting user and root access."
 images:
