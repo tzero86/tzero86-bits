@@ -27,7 +27,7 @@ After a long time, I'm back!. This time we'll hack through `Mr Robot` a THM room
 
 ## Starting off with some Scans
 
-Last weekend we tried solving this one with my friends from Trojan Wave and we didn't get far due to lack of time mostly, but I promised I will look into this room and give it my best to solve it. And Today after a long time of not doing any CTF-style rooms and got back at it. Join me on the quest of hacking this awesome room!
+Last weekend we tried solving this one with my friends from Trojan Wave and we didn't get far due to lack of time mostly, but I promised I will look into this room and give it my best to solve it. And Today after a long time of not doing any CTF-style rooms I get back at it. Join me on the quest of hacking this awesome room!
 
 Let's start by running an nmap scan and see what ports we have open to start hacking through this room.
 
