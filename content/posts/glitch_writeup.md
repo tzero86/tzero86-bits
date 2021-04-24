@@ -18,7 +18,7 @@ tags:
   - infamous55
 ---
 
-# THM - Mr Robot
+# THM - Glitch
 
 This time we'll hack through `Glitch` a THM room created by [infamous55](https://tryhackme.com/p/infamous55) Check it out in the link below.
 
