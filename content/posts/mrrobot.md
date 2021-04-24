@@ -2,7 +2,7 @@
 title: "Mr Robot"
 date: 2021-04-14T22:08:08-03:00
 draft: false
-featured: true
+featured: false
 toc: true
 summary: "A trip down Mr Robot's themed room, can we root this one? join me and let's find out!"
 images:
