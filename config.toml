@@ -2,6 +2,7 @@ baseURL = 'https://tzero86bits.tk/'
 languageCode = 'en-us'
 title = 'Tzero86@trojanwave'
 theme = "hugo-theme-console"
+enableEmojiSupport = true
 
 
 [params]
