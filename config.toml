@@ -1,7 +1,8 @@
-baseURL = 'http://tzero86bits.tk/'
+baseURL = 'https://tzero86bits.tk/'
 languageCode = 'en-us'
 title = 'Tzero86@trojanwave'
 theme = "hugo-theme-console"
+
 
 [params]
   # Cutting off the page title to two chars for mobile (console-demo -> co)
