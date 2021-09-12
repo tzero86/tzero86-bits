@@ -1,0 +1,13 @@
+--2021-09-12 13:35:55--  https://i.pinimg.com/originals/83/61/97/836197c04e518c15faad1e6c21db7adf.gif
+Loaded CA certificate '/etc/ssl/certs/ca-certificates.crt'
+Resolving i.pinimg.com (i.pinimg.com)... 104.18.14.176, 104.18.15.176, 2606:4700::6812:fb0, ...
+Connecting to i.pinimg.com (i.pinimg.com)|104.18.14.176|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 84380 (82K) [image/gif]
+Saving to: ‘836197c04e518c15faad1e6c21db7adf.gif.1’
+
+     0K .......... .......... .......... .......... .......... 60% 17,3M 0s
+    50K .......... .......... .......... ..                   100% 32,7M=0,004s
+
+2021-09-12 13:35:55 (21,2 MB/s) - ‘836197c04e518c15faad1e6c21db7adf.gif.1’ saved [84380/84380]
+
