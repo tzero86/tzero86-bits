@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>tryHackme on Tzero86@trojanwave</title>
+    <link>https://tzero86bits.tk/tags/tryhackme/</link>
+    <description>Recent content in tryHackme on Tzero86@trojanwave</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 23 Apr 2021 20:08:53 -0300</lastBuildDate><atom:link href="https://tzero86bits.tk/tags/tryhackme/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Glitch_writeup</title>
+      <link>https://tzero86bits.tk/posts/glitch_writeup/</link>
+      <pubDate>Fri, 23 Apr 2021 20:08:53 -0300</pubDate>
+      
+      <guid>https://tzero86bits.tk/posts/glitch_writeup/</guid>
+      <description>A Challenge showcasing a web app and simple privilege escalation. Can you find the glitch? well, let&amp;rsquo;s find out. Shall we?</description>
+    </item>
+    
+    <item>
+      <title>Mr Robot</title>
+      <link>https://tzero86bits.tk/posts/mrrobot/</link>
+      <pubDate>Wed, 14 Apr 2021 22:08:08 -0300</pubDate>
+      
+      <guid>https://tzero86bits.tk/posts/mrrobot/</guid>
+      <description>A trip down Mr Robot&amp;rsquo;s themed room, can we root this one? join me and let&amp;rsquo;s find out!</description>
+    </item>
+    
+    <item>
+      <title>All_In_One_writeup</title>
+      <link>https://tzero86bits.tk/posts/allinone_writeup/</link>
+      <pubDate>Tue, 22 Dec 2020 19:37:05 -0500</pubDate>
+      
+      <guid>https://tzero86bits.tk/posts/allinone_writeup/</guid>
+      <description>This is a fun box where you will get to exploit the system in several ways. Few intended and unintended paths to getting user and root access.</description>
+    </item>
+    
+    <item>
+      <title>Chillhack_writeup</title>
+      <link>https://tzero86bits.tk/posts/chillhack_writeup/</link>
+      <pubDate>Sat, 28 Nov 2020 14:06:51 -0500</pubDate>
+      
+      <guid>https://tzero86bits.tk/posts/chillhack_writeup/</guid>
+      <description>This room provides the real world pentesting challenges. Let&amp;rsquo;s give it a try!</description>
+    </item>
+    
+    <item>
+      <title>Poster_writeup</title>
+      <link>https://tzero86bits.tk/posts/poster_writeup/</link>
+      <pubDate>Tue, 17 Nov 2020 20:50:13 -0500</pubDate>
+      
+      <guid>https://tzero86bits.tk/posts/poster_writeup/</guid>
+      <description>The sys admin set up an RDBMS in a safe way, let&amp;rsquo;s play with it and hack our way in!</description>
+    </item>
+    
+    <item>
+      <title>BruteIt_writeup</title>
+      <link>https://tzero86bits.tk/posts/bruteit_writeup/</link>
+      <pubDate>Sat, 14 Nov 2020 22:26:26 -0500</pubDate>
+      
+      <guid>https://tzero86bits.tk/posts/bruteit_writeup/</guid>
+      <description>Learn how to brute, hash cracking and how to escalate privileges in this box!</description>
+    </item>
+    
+    <item>
+      <title>StartupSpiceHut_writeup</title>
+      <link>https://tzero86bits.tk/posts/startupspicehut_writeup/</link>
+      <pubDate>Thu, 12 Nov 2020 18:46:31 -0500</pubDate>
+      
+      <guid>https://tzero86bits.tk/posts/startupspicehut_writeup/</guid>
+      <description>We are Spice Hut, a new startup company that just made it big! We ask that you perform a thorough penetration test and try to own root. Good luck!</description>
+    </item>
+    
+    <item>
+      <title>NerdHerd_writeup</title>
+      <link>https://tzero86bits.tk/posts/nerdherd_writeup/</link>
+      <pubDate>Sat, 07 Nov 2020 02:39:20 -0500</pubDate>
+      
+      <guid>https://tzero86bits.tk/posts/nerdherd_writeup/</guid>
+      <description>Have you ever been stuck in a rabbit hole for days? Welcome to NerdHerd!</description>
+    </item>
+    
+    <item>
+      <title>Tartarus_writeup</title>
+      <link>https://tzero86bits.tk/posts/tartarus_writeup/</link>
+      <pubDate>Wed, 28 Oct 2020 10:10:38 -0400</pubDate>
+      
+      <guid>https://tzero86bits.tk/posts/tartarus_writeup/</guid>
+      <description>Welcome to another writeup, this time we hack Tartarus-Remastered another TryHackMe room. Let&amp;rsquo;s see if we get root during the lunch break at work XD</description>
+    </item>
+    
+    <item>
+      <title>GamingServer_writeup</title>
+      <link>https://tzero86bits.tk/posts/gameserver_writeup/</link>
+      <pubDate>Sat, 10 Oct 2020 22:07:40 -0400</pubDate>
+      
+      <guid>https://tzero86bits.tk/posts/gameserver_writeup/</guid>
+      <description>Can you gain access to this gaming server built by amateurs with no experience of web development and take advantage of the deployment system?</description>
+    </item>
+    
+    <item>
+      <title>Git_happens</title>
+      <link>https://tzero86bits.tk/posts/git_happens/</link>
+      <pubDate>Thu, 08 Oct 2020 21:39:14 -0400</pubDate>
+      
+      <guid>https://tzero86bits.tk/posts/git_happens/</guid>
+      <description>Boss wanted me to create a prototype, so here it is! We even used something called &amp;lsquo;version control&amp;rsquo; that made deploying this really easy!</description>
+    </item>
+    
+    <item>
+      <title>Res_writeup.sh</title>
+      <link>https://tzero86bits.tk/posts/res_writeup/</link>
+      <pubDate>Wed, 07 Oct 2020 17:57:40 -0400</pubDate>
+      
+      <guid>https://tzero86bits.tk/posts/res_writeup/</guid>
+      <description>Hack into a vulnerable database server with an in-memory data-structure in this semi-guided challenge!</description>
+    </item>
+    
+    <item>
+      <title>Bounty_hacker.sh</title>
+      <link>https://tzero86bits.tk/posts/bounty_hacker/</link>
+      <pubDate>Fri, 02 Oct 2020 16:10:45 -0400</pubDate>
+      
+      <guid>https://tzero86bits.tk/posts/bounty_hacker/</guid>
+      <description>You talked a big game about being the most elite hacker in the solar system. Prove it and claim your right to the status of Elite Bounty Hacker!</description>
+    </item>
+    
+    <item>
+      <title>Internal_writeup.sh</title>
+      <link>https://tzero86bits.tk/posts/internal/</link>
+      <pubDate>Wed, 16 Sep 2020 18:30:35 -0400</pubDate>
+      
+      <guid>https://tzero86bits.tk/posts/internal/</guid>
+      <description>You have been assigned to a client that wants a penetration test conducted on an environment due to be released to production in three weeks.</description>
+    </item>
+    
+    <item>
+      <title>Relevant_Writeup.sh</title>
+      <link>https://tzero86bits.tk/posts/relevant/</link>
+      <pubDate>Wed, 09 Sep 2020 20:47:59 -0400</pubDate>
+      
+      <guid>https://tzero86bits.tk/posts/relevant/</guid>
+      <description>Welcome to Relevant! We&amp;rsquo;ve been hired by a client that requests a penetration testing assessment before a product go-live date.</description>
+    </item>
+    
+    <item>
+      <title>BufferOverflow_prep_writeup.sh</title>
+      <link>https://tzero86bits.tk/posts/overflow_prep/</link>
+      <pubDate>Sun, 06 Sep 2020 02:33:31 -0400</pubDate>
+      
+      <guid>https://tzero86bits.tk/posts/overflow_prep/</guid>
+      <description>Buffer Overflow prep - THM Room This is another writeup, this time for &amp;lsquo;Buffer Overflow Prep&amp;rsquo; TryhackMe&amp;rsquo;s room. This is a pretty raw writeup detailing all my process to root this room, flaws and all. This room is quite long besides I have to learn almost everything about buffer overflows so I expect to take a couple of days on this one. This is gonna be a really long post. You have been warned :)</description>
+    </item>
+    
+    <item>
+      <title>OverPass2_hacked.sh</title>
+      <link>https://tzero86bits.tk/posts/overpass2/</link>
+      <pubDate>Sun, 30 Aug 2020 12:47:03 -0400</pubDate>
+      
+      <guid>https://tzero86bits.tk/posts/overpass2/</guid>
+      <description>THM Room - Overpass 2 Hacked This is a writeup or another one of my noob friendly(I hope) post-thingy for Overpass 2 hacked TryhackMe&amp;rsquo;s room. This is a pretty raw writeup detailing all my process to root this room, flaws and all. Yup, I also write down my failed attempts to better illustrate my derailed train of thought.
+You have been warned :)
+Enjoy!
+ Please visit This room on TryHackMe by clicking this link.</description>
+    </item>
+    
+    <item>
+      <title>DailyBugle_writeup.sh</title>
+      <link>https://tzero86bits.tk/posts/dailybugle_writeup/</link>
+      <pubDate>Fri, 28 Aug 2020 22:07:08 -0400</pubDate>
+      
+      <guid>https://tzero86bits.tk/posts/dailybugle_writeup/</guid>
+      <description>Daily Bugle - THM Room This is a writeup or another one of my noob friendly(I hope) post-thingy for Daily Bugle TryhackMe&amp;rsquo;s room. This is a pretty raw writeup detailing all my process to root this room, flaws and all. Yup, I also write down my failed attempts to better illustrate my derailed train of thought.
+You have been warned :)
+Enjoy!
+ Please visit This room on TryHackMe by clicking this link.</description>
+    </item>
+    
+    <item>
+      <title>Bolt_writeup.sh</title>
+      <link>https://tzero86bits.tk/posts/bolt_writeup/</link>
+      <pubDate>Wed, 26 Aug 2020 21:34:28 -0400</pubDate>
+      
+      <guid>https://tzero86bits.tk/posts/bolt_writeup/</guid>
+      <description>Bolt - THM Room This is a quick writeup or another &amp;ldquo;just-me-taking-notes&amp;rdquo; thingy for Bolt TryhackMe&amp;rsquo;s room. This is a pretty raw writeup detailing all my process to root this room, flaws and all. You have been warned :)
+Enjoy!
+ Please visit This room on TryHackMe by clicking this link. PLEASE NOTE: Passwords and flag values were intentionally masked as required by THM writeups rules. The write-up follows my step by step solution to this box, errors and all.</description>
+    </item>
+    
+    <item>
+      <title>Hydra_writeup.sh</title>
+      <link>https://tzero86bits.tk/posts/hydra_writeup/</link>
+      <pubDate>Wed, 26 Aug 2020 14:43:42 -0400</pubDate>
+      
+      <guid>https://tzero86bits.tk/posts/hydra_writeup/</guid>
+      <description>Hydra - THM Room This is a quick writeup or another &amp;ldquo;just-me-taking-notes&amp;rdquo; thing for Hydra TryhackMe&amp;rsquo;s room. This is a pretty raw and quick writeup detailing my process to pawn this room.
+Enjoy!
+ Please visit This room on TryHackMe by clicking this link. PLEASE NOTE: Passwords and flag values were intentionally masked as required by THM writeups rules. The write-up follows my step by step solution to this box, errors and all.</description>
+    </item>
+    
+    <item>
+      <title>Skynet_writeup.sh</title>
+      <link>https://tzero86bits.tk/posts/skynet_writeup/</link>
+      <pubDate>Tue, 25 Aug 2020 20:59:31 -0400</pubDate>
+      
+      <guid>https://tzero86bits.tk/posts/skynet_writeup/</guid>
+      <description>Skynet THM Room This is a quick writeup or another &amp;ldquo;just-me-taking-notes&amp;rdquo; thing for Skynet TryhackMe&amp;rsquo;s room. This is a pretty raw writeup detailing all my process to root this room, flaws and all. You have been warned :)
+Enjoy!
+ Please visit This room on TryHackMe by clicking this link. PLEASE NOTE: Passwords and flag values were intentionally masked as required by THM writeups rules. The write-up follows my step by step solution to this box, errors and all.</description>
+    </item>
+    
+    <item>
+      <title>GameZone_writeup.sh</title>
+      <link>https://tzero86bits.tk/posts/gamezone_writeup/</link>
+      <pubDate>Mon, 24 Aug 2020 16:19:31 -0400</pubDate>
+      
+      <guid>https://tzero86bits.tk/posts/gamezone_writeup/</guid>
+      <description>This is a quick writeup or another &amp;lsquo;just-me-taking-notes&amp;rsquo; thing for the GameZone&amp;rsquo;s TryhackMe room.</description>
+    </item>
+    
+    <item>
+      <title>EasyCTF_writeup.sh</title>
+      <link>https://tzero86bits.tk/posts/easyctf_writeup/</link>
+      <pubDate>Fri, 21 Aug 2020 14:37:34 -0400</pubDate>
+      
+      <guid>https://tzero86bits.tk/posts/easyctf_writeup/</guid>
+      <description>THM - EasyCTF/SimpleCTF Writeup Welcome to my second write-up for a TryHackme machine, in this case we&amp;rsquo;ll be solving EasyCTF or should I say SimpleCTF It seems to be called as both by looking at the room name and URL. Anyways, I invite you to try out this room on TryHackme by following the link below.
+ Please visit This room on TryHackMe by clicking this link. PLEASE NOTE: Passwords and flag values were intentionally masked as required by THM writeups rules.</description>
+    </item>
+    
+    <item>
+      <title>Alfred_writeup.sh</title>
+      <link>https://tzero86bits.tk/posts/alfred_writeup/</link>
+      <pubDate>Sun, 16 Aug 2020 14:00:11 -0400</pubDate>
+      
+      <guid>https://tzero86bits.tk/posts/alfred_writeup/</guid>
+      <description>Alfred - TryHackme&amp;rsquo;s Room Writeup This is my first attempt at creating a write-up, I tried putting every single step I took to solve this room. While providing enough (I think) details and descriptions so it is useful for noobs like me mostly. I started drafting this at the same time I managed to solve a question or even right after thinking a way to approach a solution for any of those.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>spicehut on Tzero86@trojanwave</title>
+    <link>https://tzero86bits.tk/tags/spicehut/</link>
+    <description>Recent content in spicehut on Tzero86@trojanwave</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 12 Nov 2020 18:46:31 -0500</lastBuildDate><atom:link href="https://tzero86bits.tk/tags/spicehut/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>StartupSpiceHut_writeup</title>
+      <link>https://tzero86bits.tk/posts/startupspicehut_writeup/</link>
+      <pubDate>Thu, 12 Nov 2020 18:46:31 -0500</pubDate>
+      
+      <guid>https://tzero86bits.tk/posts/startupspicehut_writeup/</guid>
+      <description>We are Spice Hut, a new startup company that just made it big! We ask that you perform a thorough penetration test and try to own root. Good luck!</description>
+    </item>
+    
+  </channel>
+</rss>

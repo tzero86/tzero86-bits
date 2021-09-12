@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>glitch on Tzero86@trojanwave</title>
+    <link>https://tzero86bits.tk/tags/glitch/</link>
+    <description>Recent content in glitch on Tzero86@trojanwave</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 23 Apr 2021 20:08:53 -0300</lastBuildDate><atom:link href="https://tzero86bits.tk/tags/glitch/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Glitch_writeup</title>
+      <link>https://tzero86bits.tk/posts/glitch_writeup/</link>
+      <pubDate>Fri, 23 Apr 2021 20:08:53 -0300</pubDate>
+      
+      <guid>https://tzero86bits.tk/posts/glitch_writeup/</guid>
+      <description>A Challenge showcasing a web app and simple privilege escalation. Can you find the glitch? well, let&amp;rsquo;s find out. Shall we?</description>
+    </item>
+    
+  </channel>
+</rss>

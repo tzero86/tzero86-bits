@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>poster on Tzero86@trojanwave</title>
+    <link>https://tzero86bits.tk/tags/poster/</link>
+    <description>Recent content in poster on Tzero86@trojanwave</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 22 Dec 2020 19:37:05 -0500</lastBuildDate><atom:link href="https://tzero86bits.tk/tags/poster/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>All_In_One_writeup</title>
+      <link>https://tzero86bits.tk/posts/allinone_writeup/</link>
+      <pubDate>Tue, 22 Dec 2020 19:37:05 -0500</pubDate>
+      
+      <guid>https://tzero86bits.tk/posts/allinone_writeup/</guid>
+      <description>This is a fun box where you will get to exploit the system in several ways. Few intended and unintended paths to getting user and root access.</description>
+    </item>
+    
+    <item>
+      <title>Poster_writeup</title>
+      <link>https://tzero86bits.tk/posts/poster_writeup/</link>
+      <pubDate>Tue, 17 Nov 2020 20:50:13 -0500</pubDate>
+      
+      <guid>https://tzero86bits.tk/posts/poster_writeup/</guid>
+      <description>The sys admin set up an RDBMS in a safe way, let&amp;rsquo;s play with it and hack our way in!</description>
+    </item>
+    
+  </channel>
+</rss>

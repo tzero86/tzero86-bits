@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Tzero86@trojanwave/posts/allinone_writeup/</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="all,follow">
+    <meta name="googlebot" content="index,follow,snippet,archive">
+    <link rel="stylesheet" href="https://tzero86bits.tk/hugo-theme-console/css/terminal-0.7.1.min.css">
+    <link rel="stylesheet" href="https://tzero86bits.tk/hugo-theme-console/css/animate-3.7.2.min.css">
+    <link rel="stylesheet" href="https://tzero86bits.tk/hugo-theme-console/css/console.css">
+    
+      <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+      <![endif]-->
+       <meta property="og:title" content="All_In_One_writeup" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://tzero86bits.tk/posts/allinone_writeup/" /><meta property="article:published_time" content="2020-12-22T19:37:05-05:00" />
+
+
+
+<meta name="twitter:title" content="All_In_One_writeup"/>
+<meta name="twitter:description" content="This is a fun box where you will get to exploit the system in several ways. Few intended and unintended paths to getting user and root access."/>
+
+</head>
+<body class="terminal">
+    <div class="container">
+        <div class="terminal-nav">
+          <header class="terminal-logo">
+            <div class="logo terminal-prompt">
+              
+              
+              <a href="https://tzero86bits.tk/" class="no-style site-name">Tzero86@trojanwave</a>:~# 
+              <a href='https://tzero86bits.tk/posts'>posts</a>/<a href='https://tzero86bits.tk/posts/allinone_writeup'>allinone_writeup</a>/</div></header>
+          <nav class="terminal-menu">
+            <ul vocab="https://schema.org/" typeof="BreadcrumbList">
+                
+                <li><a href="https://tzero86bits.tk/about/" typeof="ListItem">about/</a></li>
+                
+                <li><a href="https://tzero86bits.tk/posts/" typeof="ListItem">posts/</a></li>
+                
+                <li><a href="https://tzero86bits.tk/photos/" typeof="ListItem">photos/</a></li>
+                
+            </ul>
+          </nav>
+        </div>
+    </div>
+
+    <div class="container animated zoomIn fast" >
+        
+<h1>All_In_One_writeup</h1>
+Dec. 22, 2020
+
+
+<br/><br/>
+<img src="../img/aio_cover.gif" alt="Post Cover Gif animation";>
+<br/><br/>
+<h1 id="thm---all-in-one">THM - All in one</h1>
+<p>This time we&rsquo;ll hack through <code>All in One</code> a recently released THM room created by <code>i7m4d</code>. Check it out in the link below.</p>
+<ul>
+<li>Please visit This room on TryHackMe by <a href="https://tryhackme.com/room/allinonemj">clicking this link</a>.</li>
+<li><strong>PLEASE NOTE:</strong> Passwords, flag values, or any kind of answers to the room questions were intentionally masked as required by THM writeups rules.</li>
+</ul>
+<h2 id="enumeration">Enumeration</h2>
+<p>Let&rsquo;s start by running some scans on the target, I&rsquo;m feeling like using <code>Rustscan</code> once again. To start things up we run the following command:</p>
+<p><code>┌──(kali㉿kali)-[~/Documents/THM/allInOne] └─$ rustscan -u 5000 -a 10.10.139.211 -- -A -sV -sC</code></p>
+<p><img src="https://i.imgur.com/CkY8SWV.png" alt=""></p>
+<p>Let&rsquo;s also fire up <code>gobuster</code> to see if we can identify any directories on this server that we can access:</p>
+<p><code>┌──(kali㉿kali)-[~/Documents/THM/allInOne] └─$ gobuster dir -u http://10.10.139.211:80 -w /usr/share/wordlists/dirb/big.txt </code></p>
+<p><img src="https://i.imgur.com/iM65FM3.png" alt=""></p>
+<p>We can already see something insteresting, the server is running <code>Wordpress</code>. Let&rsquo;s see what we find at that URL:</p>
+<p><img src="https://i.imgur.com/jFavizB.png" alt=""></p>
+<p>We get a home page so we can access that Wordpress site after all. Let&rsquo;s recap all the information we got so far:</p>
+<ul>
+<li>Open Ports: <code>21</code>, <code>22</code> and <code>80</code>.
+<ul>
+<li>Port 21: Accepts <code>anonymous login</code>. But there is nothing there to see, unless I missed something :joy:.</li>
+<li>Port 22: <code>SSH</code> running <code>OpenSSH 7.6p1</code>.</li>
+<li>Port 80: <code>Default Apache</code> page.</li>
+</ul>
+</li>
+<li>CMS: <code>Wordpress</code> installation at <code>/wordpress</code>.</li>
+<li>Username Mentioned: If we look at the welcome page post we see a potential username mentioned, called <code>elyana</code>.</li>
+</ul>
+<h2 id="wpscan">WPscan</h2>
+<p>Now let&rsquo;s see what vulnerabilities we can potentially identify for that Wordpress installation. Let&rsquo;s run <code>WPscan</code> and see if it finds any. To do that, we run the command as follows:</p>
+<p><code>┌──(kali㉿kali)-[~/Documents/THM/allInOne] └─$ wpscan --url http://10.10.139.211:80/wordpress --no-banner --api-token {YOUR_WPSCAN_API_KEY_HERE}</code></p>
+<p><img src="https://i.imgur.com/xZke5jT.png" alt=""></p>
+<p>Once WPScan finishes the scan, we get a long list of results. First we get 8 vulnerabilities for the version of Wordpress itself:</p>
+<p><img src="https://i.imgur.com/rjno7p1.png" alt=""></p>
+<blockquote>
+<p>NOTE: For the sake of space I won&rsquo;t be listing all vulnerabilities on the screenshots. WPScan results are usually very lenghty.</p>
+</blockquote>
+<p>We also get a couple of vulnerabilities for a Wordpress Plugin called, <code>mail-masta</code>:</p>
+<p><img src="https://i.imgur.com/QgMb4Zq.png" alt=""></p>
+<p>Having all these vulnerabilities listed clearly means we could potentially get access to this target in various ways. In the next section we&rsquo;ll start looking into how we can actually abuse some of these vulns to get us the initial access to the target.</p>
+<h2 id="lfi-local-file-inclusion">LFI (Local File Inclusion)</h2>
+<p>The first thing I would probably want to see if we somehow can confirm the username we gathered before is actually a user in the server. Lucky us, we do have a vulnerability which allow us to perform an LFI. Which will basically let us read files that are in the server. Could we even manage to get the <code>/etc/passwd</code> file where the users are listed?</p>
+<p>First we need to know where to look for more details on this vulnerability in particular in order to get familiar with how it works. If we observe the results provided by WPScan, for the LFI vuln in particular. We see a series of links that could be useful, in particular the one from exploit-db.com.</p>
+<p>Let&rsquo;s check that link out:</p>
+<p><img src="https://i.imgur.com/Cd9TLLF.png" alt=""></p>
+<p>There are several ways of exploiting this LFI, we&rsquo;ll try the very first one. According to the report it should let us perform it without any authentication needed. We just need to use the sample URL we got and replace the file we want to read. Let&rsquo;s see this working on the following screencapture:</p>
+<p><img src="https://i.imgur.com/Eze7xEl.png" alt=""></p>
+<p>As you can see we were able to exploit this plugin vulnerability and confirm that indeed <code>elyana</code> is a user in the system. Shall we try to crack the password for this user? I think so.</p>
+<h2 id="attempting-brute-forcing-with-hydra">Attempting brute-forcing with Hydra</h2>
+<p>We&rsquo;ll try to use Hydra to crack the password of the user <code>elyana</code>, for that we&rsquo;ll need some things before we can perform the attack. In Wordpress, unless changed by the admin, the login panel can usually be accessed by navigating to the <code>/wp-admin/</code> URL, let&rsquo;s see if that&rsquo;s the case this time too:</p>
+<p><img src="https://i.imgur.com/3F2s6QI.png" alt=""></p>
+<p>It works, awesome. So we&rsquo;ll by trying to log-in as <code>elyana</code> and using <code>burpSuite</code> or the browser <code>dev-tools</code> to inspect the login request to see which type of request we are sending and how it is formatted. We&rsquo;ll use this information along with the response from the server, to setup our attack in <code>hydra</code>.</p>
+<p>So we just need to enter the username, anything as the password and with the dev-tools (or burp) open inspect the request and response:</p>
+<p><img src="https://i.imgur.com/0Yqhi2I.png" alt=""></p>
+<p>From this request we need the following details to feed them to Hydra:</p>
+<ul>
+<li>Request Method: <code>POST</code></li>
+<li>Request URL: <code>http://10.10.145.252/wordpress/wp-login.php</code></li>
+<li>Username and Password parameters: <code>log</code> and <code>pwd</code>.</li>
+<li>Error Message: <code>Error: The password you entered for the username elyana is incorrect</code>.</li>
+</ul>
+<p>Now let&rsquo;s use this to craft our attack command using hydra:</p>
+<p><code>hydra -l elyana -P /usr/share/wordlists/rockyou.txt 10.10.145.252 http-post-form '/wordpress/wp-login.php:log=^USER^&amp;pwd=^PASS^:F=incorrect'</code></p>
+<p><img src="https://i.imgur.com/QiojZxR.png" alt=""></p>
+<p>This is taking too much time, and we don&rsquo;t even have any certainty that the password is indeed included in the wordlist we used. We need to find another approach.</p>
+<p>If we go back the LFI vuln, we can try to get another file that could point us in the right direction. In Wordpress there is a general config file called <code>wp-config.php</code> where the Database password is stored. Rarely but it happens, users tend to reuse the same password for the user accounts. Let&rsquo;s see if we can get that file with LFI in a similar fashion as we did for the passwd file.</p>
+<p>If we visit the IP of the target on the browser, we&rsquo;ll get the default apache page. This page mentions something useful for us:</p>
+<p><img src="https://i.imgur.com/BbD7feJ.png" alt=""></p>
+<p>If we think about it, we can assume the Wordpress installation should be at the following path: <code>/var/www/html/wordpress/</code> and the wp-config.php file it&rsquo;s usually in wordpress root folder. Let&rsquo;s see if we can read that out, for this let&rsquo;s try with another version of the LFI that we saw on exploit-db. After reviewing the exploit a while none of the LFI variants worked to get the file. I did a bit of googling around and found a mention to something called a PHP Filter that could help us get the encoded version of the file we want. The LFI command using the PHP filter will look like this:</p>
+<p><code>/wp-content/plugins/mail-masta/inc/campaign/count_of_send.php/?pl=php://filter/convert.base64-encode/resource=/var/www/html/wordpress/wp-config.php</code></p>
+<p>Let&rsquo;s try it out:</p>
+<p><img src="https://i.imgur.com/EinY5vw.png" alt=""></p>
+<p>Now we need to decode this huge text we got back, we can use <code>CyberChef</code> for that, let&rsquo;s copy the text and decode it (base64) using cyberchef:</p>
+<p><img src="https://i.imgur.com/xJGnX9o.png" alt=""></p>
+<p>As you can see the DB username and password are in the file, let&rsquo;s see if we can log in as <code>elyana</code> using the password mentioned in that file we just decoded:</p>
+<p><img src="https://i.imgur.com/JyaNBtC.png" alt=""></p>
+<p>It worked! We have access to the Admin panel of wordpress, which means from now on we could try the other vulnerabilities to get ourselves access to the server and get the flags.</p>
+<h2 id="abusing-wp-themes">Abusing WP Themes</h2>
+<p>One pretty common way of getting a reverse shell back to our box is by abusing the Theme Editor feature of wordpress to modify a theme file and have it include a PHP reverse shell. We&rsquo;ve seen this already in another room that I can&rsquo;t quite remember, but should be in one of my previous writeups here in the blog. Let&rsquo;s quickly see if we can do that.</p>
+<p>We need to navigate within the WP Admin panel to this location:</p>
+<p><img src="https://i.imgur.com/B4FBmJx.png" alt=""></p>
+<p>Once there we need to add the reverse shell code, we&rsquo;ll use this varian that should be supported. You can get this reverse shell at the following <a href="https://github.com/pentestmonkey/php-reverse-shell/blob/master/php-reverse-shell.php">link</a>.</p>
+<p>We just replace the code for the 404 template with the rev shell code:</p>
+<p><img src="https://i.imgur.com/5dcJhm1.png" alt=""></p>
+<blockquote>
+<p>NOTE: Make sure to replace the placeholder values for IP and PORT. To target your attack machine (Tryhackme VPN ip, usually tun0)</p>
+</blockquote>
+<p>Then we just need to update the file we changed, and call it so we get our reverse shell connection:</p>
+<blockquote>
+<p>NOTE: Remember to fire up your netcat listener, in my case: <code>nc -nlvp 2112</code></p>
+</blockquote>
+<p>Now we just need to invoke the <code>404.php</code> page by navigating to for example, a non-existing post. Let&rsquo;s see if it works:</p>
+<p><img src="https://i.imgur.com/XsghWXM.png" alt=""></p>
+<p>It works! We got the initial access, finally!</p>
+<h2 id="getting-the-usertxt-flag">Getting the user.txt flag</h2>
+<p>Even though we have an initial access into the target, we still don&rsquo;t have enough permissions to read the user.txt file. We need to find a way to escalate privileges or even get a hold on the password for elyana.</p>
+<p><img src="https://i.imgur.com/9Im50fy.png" alt=""></p>
+<p>If we check Elyana&rsquo;s user directory, we see a file called hint.txt that we can view. It seems we are gonna have to find the password. Since the file could have any name, the only real piece of info we have is the username of <code>elyana</code>. Let&rsquo;s use the <code>find</code> command to hopefully get the files that contain that username:</p>
+<p><img src="https://i.imgur.com/AOm9LKh.png" alt=""></p>
+<p>We got the password, let&rsquo;s see if we can SSH using that:</p>
+<p><img src="https://i.imgur.com/M5FuA1d.png" alt=""></p>
+<p>We got the flag, however it seems encoded and looks like base64 again. Let&rsquo;s pipe the output of cat to base64 utility to decode it:</p>
+<p><img src="https://i.imgur.com/Fo0whRu.png" alt="">
+That&rsquo;s it we got the first flag.</p>
+<h2 id="getting-the-roottxt-flag">Getting the root.txt flag</h2>
+<p>Now that we have the initial access we need to get root, let&rsquo;s fire up a local python http server in our machine where we have downloaded <code>linpeas.sh</code> (Check this <a href="https://raw.githubusercontent.com/carlospolop/privilege-escalation-awesome-scripts-suite/master/linPEAS/linpeas.sh">link</a> to get it). Having that ready, let&rsquo;s upload linpeas to the target machine and run it:</p>
+<blockquote>
+<p>NOTE: You need to <code>chmod +x linpeas.sh</code> before running it!</p>
+</blockquote>
+<p><img src="https://i.imgur.com/Sqi99qd.png" alt=""></p>
+<p>Once we get the results, we are lucky linpeas did something we forget. To check if the user can run any command as sudo:</p>
+<p><img src="https://i.imgur.com/ZNsPOU5.png" alt=""></p>
+<p>If we check GTFObins.github.io and search for that binary, we get this:</p>
+<p><img src="https://i.imgur.com/UVlA7Hl.png" alt=""></p>
+<p>So it seems we can fire up a bash/sh shell that even though will be a bit broken since the page tells us it won&rsquo;t be a full TTY shell. We could still try to use it to read the root flag:</p>
+<p><img src="https://i.imgur.com/NWm1gAC.png" alt="">
+We did it, the password was again encoded so we use the same command as before. We cat the file and pipe the output into the base64 utility.</p>
+<p>This is a really awesome room, there are so many other ways we can get root on this box. I won&rsquo;t be covering them all since this is the path I took to solve it. I usually do my writeups at the same time I&rsquo;m going though the lab so, that&rsquo;s it for this time. This is my way of solving this box.</p>
+<p>I would still look into the other vulnerabilities to learn more, but won&rsquo;t be part of this writeup. I hope you enjoyed the room, kudos to <code>i7m4d</code> for creating it!</p>
+<p>Happy hacking!</p>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<br>
+<div class="container center" style="margin:10px !important;  text-align: center!important">
+    <div class="center">
+        <script src="https://tryhackme.com/badge/71634"></script>
+    </div>
+    <div class="center">
+        <a href="https://twitter.com/Tzero86" target="_blank" class="fa fa-twitter" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a>
+        <a href="https://github.com/Tzero86" target="_blank" class="fa fa-github" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a> 
+        <a href="https://www.linkedin.com/in/ermedina86/" target="_blank" class="fa fa-linkedin" style="text-decoration: none !important;  font-size: 30px; padding: 5px"></a> 
+        <br> 
+    </div>
+</div>
+
+
+
+        <div class="footer">
+    Made with <a href="https://gohugo.io/">Hugo</a> with
+    <a href="https://github.com/mrmierzejewski/hugo-theme-console/">Console Theme</a>. 
+</div>
+
+    </div>
+  </body>
+</html>

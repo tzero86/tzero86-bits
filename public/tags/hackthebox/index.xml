@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>hackthebox on Tzero86@trojanwave</title>
+    <link>https://tzero86bits.tk/tags/hackthebox/</link>
+    <description>Recent content in hackthebox on Tzero86@trojanwave</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 23 Oct 2020 12:40:13 -0400</lastBuildDate><atom:link href="https://tzero86bits.tk/tags/hackthebox/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Tabby_writeup</title>
+      <link>https://tzero86bits.tk/posts/tabby_writeup/</link>
+      <pubDate>Fri, 23 Oct 2020 12:40:13 -0400</pubDate>
+      
+      <guid>https://tzero86bits.tk/posts/tabby_writeup/</guid>
+      <description>Welcome to another writeup, this time we hack &amp;lsquo;tabby&amp;rsquo; from HackTheBox to practice a bit more about LXD exploitation.</description>
+    </item>
+    
+  </channel>
+</rss>
