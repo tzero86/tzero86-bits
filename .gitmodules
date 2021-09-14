@@ -1,6 +1,0 @@
-[submodule "themes/hugo-theme-console"]
-	path = themes/hugo-theme-console
-	url = https://github.com/mrmierzejewski/hugo-theme-console.git
-[submodule "themes/hugo-theme-console-dark"]
-	path = themes/hugo-theme-console-dark
-	url = https://github.com/zx1239856/hugo-theme-console-dark
