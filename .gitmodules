@@ -1,0 +1,3 @@
+[submodule "themes/hugo-theme-console-dark-1"]
+	path = themes/hugo-theme-console-dark-1
+	url = https://github.com/zx1239856/hugo-theme-console-dark

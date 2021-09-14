@@ -1,7 +1,7 @@
 baseURL = 'https://tzero86bits.tk/'
 languageCode = 'en-us'
 title = 'Tzero86@trojanwave'
-theme = "hugo-theme-console-dark"
+theme = "hugo-theme-console-dark-1"
 paginate     = 10
 googleAnalytics = "UA-175520987-1"
 disqusShortname = "tzero86bits"
