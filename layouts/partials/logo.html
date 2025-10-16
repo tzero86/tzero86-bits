@@ -1,0 +1,42 @@
+<a
+    href="{{ if .Site.Params.Logo.LogoHomeLink }}{{ .Site.Params.Logo.LogoHomeLink }}{{ else }}{{ .Site.BaseURL | relLangURL }}{{ end }}"
+    style="text-decoration: none"
+>
+    <div class="logo">
+        {{ if .Site.Params.Logo.path }}
+        <img
+            src="{{ .Site.Params.Logo.path }}"
+            alt="{{ .Site.Params.Logo.alt }}"
+        />
+        {{ else }}
+        <span class="logo__mark"
+            >{{ with .Site.Params.Logo.logoMark }}{{ . }}{{ else }}>{{ end
+            }}</span
+        >
+        <span
+            class="logo__text {{ with .Site.Params.Logo.logoCursorPathname}}logo__pathname{{ end }}"
+        >
+            {{ with .Site.Params.Logo.logoText }}{{ . }}{{ else }}hello{{ end }}
+        </span>
+        {{- /* Build style string for logo__cursor */ -}} {{- $logoCursorStyle
+        := "" -}} {{- with .Site.Params.Logo.logoCursorDisabled -}} {{-
+        $logoCursorStyle = printf "%svisibility:hidden;" $logoCursorStyle -}}
+        {{- end -}} {{- with .Site.Params.Logo.logoCursorColor -}} {{-
+        $logoCursorStyle = printf "%sbackground-color:%s;" $logoCursorStyle .
+        -}} {{- end -}} {{- with .Site.Params.Logo.logoCursorAnimate -}} {{-
+        $logoCursorStyle = printf "%sanimation-duration:%s;" $logoCursorStyle .
+        -}} {{- end -}}
+        <span
+            class="logo__cursor"
+            {{
+            if
+            $logoCursorStyle
+            }}
+            style="{{ $logoCursorStyle }}"
+            {{
+            end
+            }}
+        ></span>
+        {{ end }}
+    </div>
+</a>

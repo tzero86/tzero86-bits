@@ -1,0 +1,43 @@
+# Hugo build output
+/public/
+/resources/
+/resources/_gen/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE/editor folders
+.idea/
+.vscode/
+
+# Node.js dependencies
+node_modules/
+
+# Hugo cache and temp files
+.hugo_build.lock
+
+# Backup files
+*~
+*.swp
+*.swo
+
+# Log files
+*.log
+
+# Netlify deploy previews
+.netlify/
+
+# Other common ignores
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ignore zip and archive files
+*.zip
+*.tar.gz
+*.tar
+*.rar
+
+# Ignore Hugo themes exampleSite content
+themes/*/exampleSite/

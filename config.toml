@@ -1,41 +1,162 @@
-baseURL = 'https://tzero86bits.tk/'
+baseURL = "http://localhost:1313"
 languageCode = 'en-us'
 title = 'Tzero86@trojanwave'
-theme = "hugo-theme-console-dark-1"
-paginate     = 10
+theme = "terminalcv"
+[pagination]
+  pagerSize = 10
 googleAnalytics = "UA-175520987-1"
 disqusShortname = "tzero86bits"
 enableEmoji = true
 
 
 [params]
-  # Cutting off the page title to two chars for mobile (console-demo -> co)
-  titleCutting = true
+  version = "2.0.0"
+  description = "My terminal cv"
+  blog = true
 
-  # Set the animation style -- https://animate.style/
-  # To disable animations, please remove or comment animationStyle parameter
-  animateStyle = "animated zoomIn fast" 
+  [params.prompt.core]
+    text = "visitor@tzero86"
+    color = "green"
+    before = "["
+    beforeColor = "red"
+    after = "]"
+    afterColor = "red"
 
-  [[params.navlinks]]
-  name = "about/"
-  url = "about/"
 
-  [[params.navlinks]]
-  name = "posts/"
-  url = "posts/"
+  [params.prompt.separator]
+    text = ""
 
-  [[params.navlinks]]
-  name = "articulos_en_español/"
-  url= "https://tzero86.gitbook.io/tzero86/"
-  
-  [[params.social]]
-    name = "twitter"
-    url = "https://twitter.com/Tzero86"
+  [params.prompt.path]
+    before = "["
+    beforeColor = "red"
+    text = "~/home"
+    color = "green"
+    after = "]"
+    afterColor = "red"
 
-  [[params.social]]
-    name = "github"
-    url = "https://github.com/Tzero86"
+  [params.prompt.extra]
+    text = ": "
+    color = "orange"
 
-  [[params.social]]
-    name = "linkedin"
-    url = "https://www.linkedin.com/in/ermedina86/"
+  listLS = true
+  exitMessage = "[Session completed, the browserwindow can be safely closed]"
+  source = true
+  greeting = """
+                                                                                                                     
+                                                                                                                     
+                                                                                    OOOOOOOOO        SSSSSSSSSSSSSSS 
+                                                                                  OO:::::::::OO    SS:::::::::::::::S
+                                                                                OO:::::::::::::OO S:::::SSSSSS::::::S
+                                                                               O:::::::OOO:::::::OS:::::S     SSSSSSS
+xxxxxxx      xxxxxxx eeeeeeeeeeee    rrrrr   rrrrrrrrr      ooooooooooo        O::::::O   O::::::OS:::::S            
+ x:::::x    x:::::xee::::::::::::ee  r::::rrr:::::::::r   oo:::::::::::oo      O:::::O     O:::::OS:::::S            
+  x:::::x  x:::::xe::::::eeeee:::::eer:::::::::::::::::r o:::::::::::::::o     O:::::O     O:::::O S::::SSSS         
+   x:::::xx:::::xe::::::e     e:::::err::::::rrrrr::::::ro:::::ooooo:::::o     O:::::O     O:::::O  SS::::::SSSSS    
+    x::::::::::x e:::::::eeeee::::::e r:::::r     r:::::ro::::o     o::::o     O:::::O     O:::::O    SSS::::::::SS  
+     x::::::::x  e:::::::::::::::::e  r:::::r     rrrrrrro::::o     o::::o     O:::::O     O:::::O       SSSSSS::::S 
+     x::::::::x  e::::::eeeeeeeeeee   r:::::r            o::::o     o::::o     O:::::O     O:::::O            S:::::S
+    x::::::::::x e:::::::e            r:::::r            o::::o     o::::o     O::::::O   O::::::O            S:::::S
+   x:::::xx:::::xe::::::::e           r:::::r            o:::::ooooo:::::o     O:::::::OOO:::::::OSSSSSSS     S:::::S
+  x:::::x  x:::::xe::::::::eeeeeeee   r:::::r            o:::::::::::::::o      OO:::::::::::::OO S::::::SSSSSS:::::S
+ x:::::x    x:::::xee:::::::::::::e   r:::::r             oo:::::::::::oo         OO:::::::::OO   S:::::::::::::::SS 
+xxxxxxx      xxxxxxx eeeeeeeeeeeeee   rrrrrrr               ooooooooooo             OOOOOOOOO      SSSSSSSSSSSSSSS   
+                                                                                                                     
+                                                                                                                     
+                                                                                                                     
+                                                                                                                     
+                                                                                                                     
+                                                                                                                     
+                                                                                                                     
+ Welcome to my blog!
+ Type 'help' for a list of available commands
+ """
+  greetingColor = "white"
+
+  bootsequence = """
+Booting Linux 6.4.0-arch1-1 x86_64...
+Initializing hardware...
+[    0.000000] Memory: 16384K/32768K available
+[    0.000000] CPU: Intel(R) Core(TM) i7-10700K @ 3.80GHz
+[    0.000000] Kernel command line: BOOT_IMAGE=/vmlinuz-linux root=/dev/sda1 rw quiet
+[    0.000000] DMI: System Manufacturer/System Product Name
+[    0.000000] Enabling fast boot...
+[    0.000000] Mounting root filesystem...
+[    0.000000] Starting udev...
+[    0.000000] Loading modules...
+[    0.000000] Starting network manager...
+[    0.000000] Bringing up loopback interface: [  OK  ]
+[    0.000000] Starting web server: [  OK  ]
+[    0.000000] Starting Hugo static site generator: [  OK  ]
+[    0.000000] Starting TerminalCV: [  OK  ]
+[    0.000000] All services started successfully.
+
+Welcome to TerminalCV Linux!
+Type 'help' to see available commands.
+ """
+
+ignoreLogs = ['warning-goldmark-raw-html']
+[params.whois.details]
+  name = "Elias Medina"
+  profession = "Software Quality Engineer"
+  location = "Buenos Aires"
+  email = "tzero86@example.com"
+  homelink = "https://www.tzero86.xyz"
+  description = "I'm a Software Quality Engineer with over 10 years of experience in software testing, quality assurance, and cybersecurity. I love learning new technologies and sharing my knowledge through writing and public speaking."
+
+[[params.social.details]]
+  name = "twitter"
+  url = "https://twitter.com/Tzero86"
+[[params.social.details]]
+  name = "github"
+  url = "https://github.com/Tzero86"
+[[params.social.details]]
+  name = "linkedin"
+  url = "https://www.linkedin.com/in/ermedina86/"
+
+[[params.work.details]]
+  jobTitle = "Security Researcher"
+  company = "TrojanWave"
+  location = "Remote"
+  date = "2020 - Present"
+  description = "Researching and writing about cybersecurity topics."
+
+[[params.education.details]]
+  courseName = "Computer Science"
+  date = "2010 - 2015"
+  description = "Studied at University of Buenos Aires"
+
+
+[[params.skills.details]]
+    name = "Software Testing"
+    percentage = 95
+    description = "Manual and automated testing, test case design, bug reporting"
+
+[[params.skills.details]]
+    name = "Quality Assurance"
+    percentage = 90
+    description = "QA processes, test planning, quality metrics"
+
+[[params.skills.details]]
+    name = "Scripting"
+    percentage = 85
+    description = "Python, Java, JavaScript, Bash scripting"
+
+[[params.skills.details]]
+    name = "DevOps"
+    percentage = 80
+    description = "CI/CD, Docker, Kubernetes, Jenkins"
+
+[[params.skills.details]]
+  name = "Pentesting"
+  percentage = 90
+  Description = "Penetration testing and security analysis"
+
+[[params.languages.details]]
+  name = "English"
+  color = "Blue"
+  percentage = 100
+
+[[params.languages.details]]
+  name = "Spanish"
+  percentage = 100
+  description = "Native speaker"

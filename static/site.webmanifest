@@ -1,0 +1,9 @@
+{
+    "name": "Tzero86@trojanwave",
+    "short_name": "Tzero86",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#000000",
+    "theme_color": "#000000",
+    "description": "TerminalCV Hugo Blog"
+}

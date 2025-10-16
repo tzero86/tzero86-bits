@@ -1,0 +1,3 @@
+WARN  Raw HTML omitted while rendering "J:/tzero86-bits/content/posts/hydra_writeup.md"; see https://gohugo.io/getting-started/configuration-markup/#rendererunsafe
+You can suppress this warning by adding the following to your site configuration:
+ignoreLogs = ['warning-goldmark-raw-html']
