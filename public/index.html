@@ -166,6 +166,15 @@
         
             
                 '---\n' +
+                '[[b;grey;]Software Quality Engineer]\n' +
+                'Globant (AON, DELOITTE, EA, BIOWARE, WOLTERS KLUWER)\n' +
+                'Buenos Aires\n' +
+                '2015 - Present\n' +
+                '\n' +
+                'Working on various projects as a Software Quality Engineer, focusing on test automation and quality assurance.' +
+                '\r',
+            
+                '---\n' +
                 '[[b;grey;]Security Researcher]\n' +
                 'TrojanWave\n' +
                 'Remote\n' +
@@ -223,16 +232,18 @@
                 '\r',
             
                 '[[b;grey;]DevOps:]\n' +
-                progressBar( 80 ) +
-                '80' + '%\n' +
+                progressBar( 70 ) +
+                '70' + '%\n' +
                 
                 'CI\/CD, Docker, Kubernetes, Jenkins\n' +
                 
                 '\r',
             
                 '[[b;grey;]Pentesting:]\n' +
-                progressBar( 90 ) +
-                '90' + '%\n' +
+                progressBar( 70 ) +
+                '70' + '%\n' +
+                
+                'Penetration testing and security analysis\n' +
                 
                 '\r',
             
@@ -350,10 +361,70 @@
             }
         });
 
+        
+        $('#nano-modal').on('mousemove', function(e) {
+            var $span = $('#copyright');
+            var rect = $span[0].getBoundingClientRect();
+            var centerX = rect.left + rect.width / 2;
+            var centerY = rect.top + rect.height / 2;
+            var mouseX = e.clientX;
+            var mouseY = e.clientY;
+            var offsetX = mouseX - centerX;
+            var offsetY = mouseY - centerY;
+            
+            let poses = {
+                neutral: '( o_o )',
+                left:   '( o . )',
+                right:  '( . o )',
+                up:     '( ^_^ )',
+                down:   '( -_- )',
+                upleft: '( ^ . )',
+                upright:'( . ^ )',
+                downleft:'( - . )',
+                downright:'( . - )'
+            };
+            let pose = poses.neutral;
+            if (offsetY < -30 && offsetX < -30) {
+                pose = poses.upleft;
+            } else if (offsetY < -30 && offsetX > 30) {
+                pose = poses.upright;
+            } else if (offsetY > 30 && offsetX < -30) {
+                pose = poses.downleft;
+            } else if (offsetY > 30 && offsetX > 30) {
+                pose = poses.downright;
+            } else if (offsetY < -30) {
+                pose = poses.up;
+            } else if (offsetY > 30) {
+                pose = poses.down;
+            } else if (offsetX < -30) {
+                pose = poses.left;
+            } else if (offsetX > 30) {
+                pose = poses.right;
+            }
+            $span.text(pose);
+        });
+        
+        $('#nano-modal').on('mouseleave', function() {
+            $('#copyright').text('( o_o )');
+        });
+
         $('body').terminal(function(command, term) {
 
             var useLess = false;
             
+
+            function posts(term) {
+                $.ajax({
+                    url: "posts/",
+                    type: 'GET',
+                    success: function(data) {
+                        term.echo(data, {raw: true});
+                    },
+                    error: function() {
+                        term.echo("Error: Could not load posts data");
+                    }
+                });
+            };
 
             function echoArray(array) {
                 if (useLess) {
@@ -517,7 +588,7 @@
                 $('.terminal .cmd').hide();
 
                 var bootRaw = "\"Booting Zero OS Linux 6.4.0-arch1-1 x86_64...\\r\\nInitializing hardware...\\r\\n[    0.000000] Memory: 16384K/32768K available\\r\\n[    0.000000] CPU: Intel(R) Core(TM) i7-10700K @ 3.80GHz\\r\\n[    0.000000] Kernel command line: BOOT_IMAGE=/vmlinuz-linux root=/dev/sda1 rw quiet\\r\\n[    0.000000] DMI: System Manufacturer/System Product Name\\r\\n[    0.000000] Enabling fast boot...\\r\\n[    0.000000] Mounting root filesystem...\\r\\n[    0.000000] Starting udev...\\r\\n[    0.000000] Loading modules...\\r\\n[    0.000000] Starting network manager...\\r\\n[    0.000000] Bringing up loopback interface: [  OK  ]\\r\\n[    0.000000] Starting web server: [  OK  ]\\r\\n[    0.000000] Starting Hugo static site generator: [  OK  ]\\r\\n[    0.000000] Starting TerminalCV: [  OK  ]\\r\\n[    0.000000] All services started successfully.\\r\\n\\r\\nWelcome to Zero OS!\\r\\n \"";
-                var greetRaw = "\"                                                                                                                     \\r\\n ███████████                                   ███████     █████████ \\r\\n░█░░░░░░███                                  ███░░░░░███  ███░░░░░███\\r\\n░     ███░    ██████  ████████   ██████     ███     ░░███░███    ░░░ \\r\\n     ███     ███░░███░░███░░███ ███░░███   ░███      ░███░░█████████ \\r\\n    ███     ░███████  ░███ ░░░ ░███ ░███   ░███      ░███ ░░░░░░░░███\\r\\n  ████     █░███░░░   ░███     ░███ ░███   ░░███     ███  ███    ░███\\r\\n ███████████░░██████  █████    ░░██████     ░░░███████░  ░░█████████ \\r\\n░░░░░░░░░░░  ░░░░░░  ░░░░░      ░░░░░░        ░░░░░░░     ░░░░░░░░░  \\r\\n                                                                     \\r\\n                                                                                         \\r\\n Welcome to my blog!\\r\\n Type 'help' for a list of available commands\\r\\n \"";
+                var greetRaw = "\"                                                                                                                     \\r\\n ███████████                                   ███████     █████████ \\r\\n░█░░░░░░███                                  ███░░░░░███  ███░░░░░███\\r\\n░     ███░    ██████  ████████   ██████     ███     ░░███░███    ░░░ \\r\\n     ███     ███░░███░░███░░███ ███░░███   ░███      ░███░░█████████ \\r\\n    ███     ░███████  ░███ ░░░ ░███ ░███   ░███      ░███ ░░░░░░░░███\\r\\n  ████     █░███░░░   ░███     ░███ ░███   ░░███     ███  ███    ░███\\r\\n ███████████░░██████  █████    ░░██████     ░░░███████░  ░░█████████ \\r\\n░░░░░░░░░░░  ░░░░░░  ░░░░░      ░░░░░░        ░░░░░░░     ░░░░░░░░░  \\r\\n                                                                     \\r\\n                                                                                         \\r\\n Welcome to my blog and sort of curriculum vitae!\\r\\n Type 'help' or '?' for a list of available commands\\r\\n \"";
                 
                 bootRaw = bootRaw.slice(1, -1).replace(/\\r\\n|\\n/g, '\n');
                 greetRaw = greetRaw.slice(1, -1).replace(/\\r\\n|\\n/g, '\n');
@@ -552,7 +623,7 @@
                 });
             },
 
-            prompt: '[[;red;][][[;green;]visitor@tzero86][[;red;]]][[;grey;]][[;red;][][[;green;]~\/home][[;red;]]][[;orange;]: ]',
+            prompt: '[[;green;][][[;white;]visitor@tzero86.xyz][[;green;]]][[;grey;]][[;green;][][[;white;]~\/home][[;green;]]][[;white;]: ]',
 
             keydown: function(e, term) {
                 if (animation) {
@@ -566,8 +637,28 @@
                 }
             },
             autocompleteMenu: true,
-            completion: Object.keys(commands)
+            completion: function(command, callback) {
+                var completions = Object.keys(commands);
+                var parts = command.trim().split(/\s+/);
 
+                
+                if ((parts[0] === 'nano' || parts[0] === 'cat') && (parts.length === 1 || (parts.length === 2 && command.endsWith(' ')))) {
+                    callback(postSlugs);
+                }
+                
+                else if ((parts[0] === 'nano' || parts[0] === 'cat') && parts.length === 2) {
+                    var prefix = parts[1];
+                    callback(postSlugs.filter(function(slug) {
+                        return slug.startsWith(prefix);
+                    }));
+                }
+                
+                else if (parts.length === 1) {
+                    callback(completions);
+                } else {
+                    callback([]);
+                }
+            }
         });
     });
 </script>
@@ -575,12 +666,12 @@
 <div id="nano-modal" style="display: none">
     <div id="nano-editor">
         <div id="nano-header">
-            GNU nano 6.2 &nbsp;&nbsp;[readonly] &nbsp;&nbsp;Post Viewer
+            GNU nano 6.2.z &nbsp;&nbsp;[readonly] &nbsp;&nbsp;Post Viewer
         </div>
         <pre id="nano-content"></pre>
         <div id="nano-footer">
-            <span>^G Help</span>
             <span id="nano-exit">^X Exit</span>
+            <span id="copyright" style="font-family: monospace">( o_o )</span>
         </div>
     </div>
 </div>
@@ -651,6 +742,7 @@
         min-height: 0;
         max-height: 100%;
         overflow-y: auto;
+        overflow-x: hidden;  
         flex: 1 1 auto;
     }
     #nano-content img {

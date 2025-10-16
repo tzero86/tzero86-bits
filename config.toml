@@ -1,4 +1,4 @@
-baseURL = "http://localhost:1313"
+baseURL = "https://www.tzero86.xyz"
 languageCode = 'en-us'
 title = 'Tzero86@trojanwave'
 theme = "terminalcv"
@@ -15,12 +15,12 @@ enableEmoji = true
   blog = true
 
   [params.prompt.core]
-    text = "visitor@tzero86"
-    color = "green"
+    text = "visitor@tzero86.xyz"
+    color = "white"
     before = "["
-    beforeColor = "red"
+    beforeColor = "green"
     after = "]"
-    afterColor = "red"
+    afterColor = "green"
 
 
   [params.prompt.separator]
@@ -28,15 +28,15 @@ enableEmoji = true
 
   [params.prompt.path]
     before = "["
-    beforeColor = "red"
+    beforeColor = "green"
     text = "~/home"
-    color = "green"
+    color = "white"
     after = "]"
-    afterColor = "red"
+    afterColor = "green"
 
   [params.prompt.extra]
     text = ": "
-    color = "orange"
+    color = "white"
 
   listLS = true
   exitMessage = "[Session completed, the browserwindow can be safely closed]"
@@ -53,8 +53,8 @@ enableEmoji = true
 ░░░░░░░░░░░  ░░░░░░  ░░░░░      ░░░░░░        ░░░░░░░     ░░░░░░░░░  
                                                                      
                                                                                          
- Welcome to my blog!
- Type 'help' for a list of available commands
+ Welcome to my blog and sort of curriculum vitae!
+ Type 'help' or '?' for a list of available commands
  """
   greetingColor = "green"
 
@@ -99,6 +99,13 @@ ignoreLogs = ['warning-goldmark-raw-html']
   url = "https://www.linkedin.com/in/ermedina86/"
 
 [[params.work.details]]
+  jobTitle = "Software Quality Engineer"
+  company = "Globant (AON, DELOITTE, EA, BIOWARE, WOLTERS KLUWER)"
+  location = "Buenos Aires"
+  date = "2015 - Present"
+  description = "Working on various projects as a Software Quality Engineer, focusing on test automation and quality assurance."  
+
+[[params.work.details]]
   jobTitle = "Security Researcher"
   company = "TrojanWave"
   location = "Remote"
@@ -128,13 +135,13 @@ ignoreLogs = ['warning-goldmark-raw-html']
 
 [[params.skills.details]]
     name = "DevOps"
-    percentage = 80
+    percentage = 70
     description = "CI/CD, Docker, Kubernetes, Jenkins"
 
 [[params.skills.details]]
   name = "Pentesting"
-  percentage = 90
-  Description = "Penetration testing and security analysis"
+  percentage = 70
+  description = "Penetration testing and security analysis"
 
 [[params.languages.details]]
   name = "English"
@@ -145,3 +152,8 @@ ignoreLogs = ['warning-goldmark-raw-html']
   name = "Spanish"
   percentage = 100
   description = "Native speaker"
+
+# Make sure any local/test settings are updated for production:
+# - baseURL should be your public site URL
+# - Remove or update any test-specific params
+# - Check for any hardcoded paths or debug flags in your theme/templates
