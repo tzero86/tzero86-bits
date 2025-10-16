@@ -43,37 +43,23 @@ enableEmoji = true
   source = true
   greeting = """
                                                                                                                      
-                                                                                                                     
-                                                                                    OOOOOOOOO        SSSSSSSSSSSSSSS 
-                                                                                  OO:::::::::OO    SS:::::::::::::::S
-                                                                                OO:::::::::::::OO S:::::SSSSSS::::::S
-                                                                               O:::::::OOO:::::::OS:::::S     SSSSSSS
-xxxxxxx      xxxxxxx eeeeeeeeeeee    rrrrr   rrrrrrrrr      ooooooooooo        O::::::O   O::::::OS:::::S            
- x:::::x    x:::::xee::::::::::::ee  r::::rrr:::::::::r   oo:::::::::::oo      O:::::O     O:::::OS:::::S            
-  x:::::x  x:::::xe::::::eeeee:::::eer:::::::::::::::::r o:::::::::::::::o     O:::::O     O:::::O S::::SSSS         
-   x:::::xx:::::xe::::::e     e:::::err::::::rrrrr::::::ro:::::ooooo:::::o     O:::::O     O:::::O  SS::::::SSSSS    
-    x::::::::::x e:::::::eeeee::::::e r:::::r     r:::::ro::::o     o::::o     O:::::O     O:::::O    SSS::::::::SS  
-     x::::::::x  e:::::::::::::::::e  r:::::r     rrrrrrro::::o     o::::o     O:::::O     O:::::O       SSSSSS::::S 
-     x::::::::x  e::::::eeeeeeeeeee   r:::::r            o::::o     o::::o     O:::::O     O:::::O            S:::::S
-    x::::::::::x e:::::::e            r:::::r            o::::o     o::::o     O::::::O   O::::::O            S:::::S
-   x:::::xx:::::xe::::::::e           r:::::r            o:::::ooooo:::::o     O:::::::OOO:::::::OSSSSSSS     S:::::S
-  x:::::x  x:::::xe::::::::eeeeeeee   r:::::r            o:::::::::::::::o      OO:::::::::::::OO S::::::SSSSSS:::::S
- x:::::x    x:::::xee:::::::::::::e   r:::::r             oo:::::::::::oo         OO:::::::::OO   S:::::::::::::::SS 
-xxxxxxx      xxxxxxx eeeeeeeeeeeeee   rrrrrrr               ooooooooooo             OOOOOOOOO      SSSSSSSSSSSSSSS   
-                                                                                                                     
-                                                                                                                     
-                                                                                                                     
-                                                                                                                     
-                                                                                                                     
-                                                                                                                     
-                                                                                                                     
+ ███████████                                   ███████     █████████ 
+░█░░░░░░███                                  ███░░░░░███  ███░░░░░███
+░     ███░    ██████  ████████   ██████     ███     ░░███░███    ░░░ 
+     ███     ███░░███░░███░░███ ███░░███   ░███      ░███░░█████████ 
+    ███     ░███████  ░███ ░░░ ░███ ░███   ░███      ░███ ░░░░░░░░███
+  ████     █░███░░░   ░███     ░███ ░███   ░░███     ███  ███    ░███
+ ███████████░░██████  █████    ░░██████     ░░░███████░  ░░█████████ 
+░░░░░░░░░░░  ░░░░░░  ░░░░░      ░░░░░░        ░░░░░░░     ░░░░░░░░░  
+                                                                     
+                                                                                         
  Welcome to my blog!
  Type 'help' for a list of available commands
  """
-  greetingColor = "white"
+  greetingColor = "green"
 
   bootsequence = """
-Booting Linux 6.4.0-arch1-1 x86_64...
+Booting Zero OS Linux 6.4.0-arch1-1 x86_64...
 Initializing hardware...
 [    0.000000] Memory: 16384K/32768K available
 [    0.000000] CPU: Intel(R) Core(TM) i7-10700K @ 3.80GHz
@@ -90,8 +76,7 @@ Initializing hardware...
 [    0.000000] Starting TerminalCV: [  OK  ]
 [    0.000000] All services started successfully.
 
-Welcome to TerminalCV Linux!
-Type 'help' to see available commands.
+Welcome to Zero OS!
  """
 
 ignoreLogs = ['warning-goldmark-raw-html']
