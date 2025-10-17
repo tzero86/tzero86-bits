@@ -10,8 +10,8 @@ enableEmoji = true
 
 
 [params]
-  version = "2.0.0"
-  description = "My terminal cv"
+  version = "2.0.1"
+  description = "Zero OS"
   blog = true
 
   [params.prompt.core]

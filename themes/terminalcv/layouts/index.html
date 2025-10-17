@@ -40,11 +40,14 @@
             ["ls", "List all posts"],
             {{ end }}
             ["cat", "Open a post"],
+            ["nano", "View a post in nano editor"], // <-- add this line
             {{ end }}
             ["all", "Show all details about me"]
         ].forEach(function(item) {
             if (item) commands[item[0]] = item[1];
         });
+
+        var commandNames = Object.keys(commands);
 
         function progressBar(number) {
             var barLength = Math.round(number / 10);
@@ -369,6 +372,35 @@
             $('#copyright').text('( o_o )');
         });
 
+        // Dynamically fetch post slugs BEFORE showing prompt (during boot sequence)
+        var postSlugs = [];
+        function fetchPostSlugs(term, callback) {
+            $.ajax({
+                url: "posts/",
+                type: "GET",
+                success: function(data) {
+                    // Extract plain text from HTML, then split into lines
+                    var text = $(data).text();
+                    var lines = text.split('\n');
+                    var matches = [];
+                    lines.forEach(function(line) {
+                        var match = line.match(/^Filename:\s*([^\s]+)/i);
+                        if (match) {
+                            matches.push(match[1]);
+                        }
+                    });
+                    postSlugs = matches;
+                    console.log("Post filenames found for completion:", postSlugs);
+                    if (callback) callback();
+                },
+                error: function(xhr, status, error) {
+                    console.log("Error fetching posts for completion:", error);
+                    postSlugs = [];
+                    if (callback) callback();
+                }
+            });
+        }
+
         $('body').terminal(function(command, term) {
 
             var useLess = false;
@@ -585,39 +617,42 @@
                 term.pause();
                 $('.terminal .cmd').hide();
 
-                var bootRaw = {{ .Site.Params.prompt.extra.bootsequence | default "" | jsonify }};
-                var greetRaw = {{ .Site.Params.prompt.extra.greeting | default "" | jsonify }};
-                // Remove leading/trailing quotes from JSON string
-                bootRaw = bootRaw.slice(1, -1).replace(/\\r\\n|\\n/g, '\n');
-                greetRaw = greetRaw.slice(1, -1).replace(/\\r\\n|\\n/g, '\n');
+                // Fetch post slugs first, then run boot sequence
+                fetchPostSlugs(term, function() {
+                    var bootRaw = {{ .Site.Params.prompt.extra.bootsequence | default "" | jsonify }};
+                    var greetRaw = {{ .Site.Params.prompt.extra.greeting | default "" | jsonify }};
+                    // Remove leading/trailing quotes from JSON string
+                    bootRaw = bootRaw.slice(1, -1).replace(/\\r\\n|\\n/g, '\n');
+                    greetRaw = greetRaw.slice(1, -1).replace(/\\r\\n|\\n/g, '\n');
 
-                var bootLines = bootRaw.split('\n');
-                var greetingLines = greetRaw.split('\n');
-                var delay = 80;
-                var greetDelay = 40;
+                    var bootLines = bootRaw.split('\n');
+                    var greetingLines = greetRaw.split('\n');
+                    var delay = 80;
+                    var greetDelay = 40;
 
-                function showLines(lines, idx, next, color) {
-                    if (idx < lines.length) {
-                        var line = lines[idx];
-                        if (line.trim().length > 0) {
-                            term.echo(color ? `[[b;${color};]${line}]` : line);
-                        } else {
-                            term.echo('');
+                    function showLines(lines, idx, next, color) {
+                        if (idx < lines.length) {
+                            var line = lines[idx];
+                            if (line.trim().length > 0) {
+                                term.echo(color ? `[[b;${color};]${line}]` : line);
+                            } else {
+                                term.echo('');
+                            }
+                            setTimeout(function() {
+                                showLines(lines, idx + 1, next, color);
+                            }, color ? greetDelay : delay);
+                        } else if (next) {
+                            next();
                         }
-                        setTimeout(function() {
-                            showLines(lines, idx + 1, next, color);
-                        }, color ? greetDelay : delay);
-                    } else if (next) {
-                        next();
                     }
-                }
 
-                showLines(bootLines, 0, function() {
-                    term.clear();
-                    showLines(greetingLines, 0, function() {
-                        $('.terminal .cmd').show();
-                        term.resume();
-                    }, '{{ .Site.Params.greetingColor | default "white" }}');
+                    showLines(bootLines, 0, function() {
+                        term.clear();
+                        showLines(greetingLines, 0, function() {
+                            $('.terminal .cmd').show();
+                            term.resume();
+                        }, '{{ .Site.Params.greetingColor | default "white" }}');
+                    });
                 });
             },
 
@@ -637,28 +672,61 @@
 
 
             autocompleteMenu: true,
-            completion: function(command, callback) {
-                var completions = Object.keys(commands);
-                var parts = command.trim().split(/\s+/);
+            completion: function() {
+                var before = this.before_cursor();
+                var trailingSpace = /\s$/.test(before);
+                var tokens = before.split(/\s+/).filter(Boolean);
 
-                // If nano/cat and no argument, suggest postSlugs
-                if ((parts[0] === 'nano' || parts[0] === 'cat') && (parts.length === 1 || (parts.length === 2 && command.endsWith(' ')))) {
-                    callback(postSlugs);
+                // Nothing typed yet → list all commands
+                if (tokens.length === 0) {
+                    return commandNames;
                 }
-                // If nano/cat and partial argument, filter postSlugs by prefix
-                else if ((parts[0] === 'nano' || parts[0] === 'cat') && parts.length === 2) {
-                    var prefix = parts[1];
-                    callback(postSlugs.filter(function(slug) {
-                        return slug.startsWith(prefix);
-                    }));
+
+                var cmdName = tokens[0];
+                var args = tokens.slice(1);
+
+                // Support “less <command …>” wrappers
+                if (cmdName === 'less') {
+                    if (tokens.length === 1) {
+                        return trailingSpace
+                            ? commandNames
+                            : commandNames.filter(function(item) {
+                                return item.startsWith(cmdName);
+                            });
+                    }
+
+                    cmdName = tokens[1];
+                    args = tokens.slice(2);
+
+                    if (tokens.length === 2 && !trailingSpace) {
+                        var partialAfterLess = tokens[1];
+                        return commandNames.filter(function(item) {
+                            return item.startsWith(partialAfterLess);
+                        });
+                    }
                 }
-                // Only suggest commands for first word
-                else if (parts.length === 1) {
-                    callback(completions);
-                } else {
-                    callback([]);
+
+                // After “nano ” or “cat ” → suggest post slugs
+                if (['nano', 'cat'].includes(cmdName)) {
+                    if (args.length === 0 && !trailingSpace) {
+                        return [];
+                    }
+                    var partialSlug = trailingSpace ? '' : (args[args.length - 1] || '');
+                    return postSlugs.filter(function(slug) {
+                        return slug.startsWith(partialSlug);
+                    });
                 }
-            }
+
+                // Still typing the command itself
+                if (args.length === 0 && !trailingSpace) {
+                    var partialCommand = cmdName;
+                    return commandNames.filter(function(item) {
+                        return item.startsWith(partialCommand);
+                    });
+                }
+
+                return [];
+            },
         });
     });
 </script>
@@ -695,7 +763,12 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background: #111;
+        background: rgba(
+            0,
+            0,
+            0,
+            0.98
+        ); /* black background, slight transparency */
         z-index: 9999;
         display: flex;
         align-items: stretch;
@@ -706,7 +779,7 @@
         height: 100vh;
     }
     #nano-editor {
-        background: #181818;
+        background: #000; /* black background */
         color: #eee;
         font-family: monospace;
         padding: 0;
@@ -717,15 +790,15 @@
         box-shadow: none;
         width: 100vw;
         min-width: 0;
-        border: 2px solid #333;
+        border: 2px solid #333; /* match terminal border */
         position: relative;
         display: flex;
         flex-direction: column;
         height: 100vh;
     }
     #nano-header {
-        background: #222;
-        color: #fff;
+        background: #222; /* match terminal header/footer */
+        color: #00ff00; /* green for "terminal" feel */
         padding: 6px 18px;
         font-weight: bold;
         border-bottom: 1px solid #333;
@@ -733,7 +806,7 @@
         letter-spacing: 1px;
     }
     #nano-content {
-        background: #181818;
+        background: #000; /* black background */
         color: #eee;
         white-space: pre-wrap;
         word-break: break-word;
@@ -742,7 +815,7 @@
         min-height: 0;
         max-height: 100%;
         overflow-y: auto;
-        overflow-x: hidden; /* Prevent horizontal scrollbar */
+        overflow-x: hidden;
         flex: 1 1 auto;
     }
     #nano-content img {
@@ -752,8 +825,8 @@
         margin: 0 auto;
     }
     #nano-footer {
-        background: #222;
-        color: #fff;
+        background: #222; /* match terminal header/footer */
+        color: #00ff00; /* green for "terminal" feel */
         border-top: 1px solid #333;
         padding: 6px 18px;
         font-size: 14px;
@@ -763,12 +836,13 @@
         gap: 24px;
     }
     #nano-footer span {
-        color: #fff;
+        color: #00ff00; /* green for terminal effect */
         font-weight: bold;
     }
     #nano-exit {
         cursor: pointer;
         user-select: none;
+        color: #ff5555 !important; /* red for exit, stands out */
     }
     #nano-modal:focus {
         outline: none;

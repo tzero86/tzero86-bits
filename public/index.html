@@ -8,7 +8,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="My terminal cv">
+    <meta name="description" content="Zero OS">
     <meta property="og:title" content="Tzero86@trojanwave" />
     <meta property="og:type" content="website"/>
     <meta property="og:url" content="http://localhost:1313/" />
@@ -73,11 +73,14 @@
             ["posts", "List all posts"],
             
             ["cat", "Open a post"],
+            ["nano", "View a post in nano editor"], 
             
             ["all", "Show all details about me"]
         ].forEach(function(item) {
             if (item) commands[item[0]] = item[1];
         });
+
+        var commandNames = Object.keys(commands);
 
         function progressBar(number) {
             var barLength = Math.round(number / 10);
@@ -289,7 +292,7 @@
                       '|      |       |       |   \n' +
                       '|______|_______|_______|   \n' +
                       '[[;red;]May the source be with you]\n' +
-                      '[[;grey;]https://github.com/coolapso/hugo-theme-terminalcv\n';
+                      '[[;grey;]Based off this original theme by Coolapso: https://github.com/coolapso/hugo-theme-terminalcv\n';
 
         var all = [
             whois,
@@ -407,6 +410,35 @@
         $('#nano-modal').on('mouseleave', function() {
             $('#copyright').text('( o_o )');
         });
+
+        
+        var postSlugs = [];
+        function fetchPostSlugs(term, callback) {
+            $.ajax({
+                url: "posts/",
+                type: "GET",
+                success: function(data) {
+                    
+                    var text = $(data).text();
+                    var lines = text.split('\n');
+                    var matches = [];
+                    lines.forEach(function(line) {
+                        var match = line.match(/^Filename:\s*([^\s]+)/i);
+                        if (match) {
+                            matches.push(match[1]);
+                        }
+                    });
+                    postSlugs = matches;
+                    console.log("Post filenames found for completion:", postSlugs);
+                    if (callback) callback();
+                },
+                error: function(xhr, status, error) {
+                    console.log("Error fetching posts for completion:", error);
+                    postSlugs = [];
+                    if (callback) callback();
+                }
+            });
+        }
 
         $('body').terminal(function(command, term) {
 
@@ -550,7 +582,7 @@
                 
                 
                 case 'version':
-                    term.echo("2.0.0");
+                    term.echo("2.0.1");
                     break;
                 
                 
@@ -587,39 +619,42 @@
                 term.pause();
                 $('.terminal .cmd').hide();
 
-                var bootRaw = "\"Booting Zero OS Linux 6.4.0-arch1-1 x86_64...\\r\\nInitializing hardware...\\r\\n[    0.000000] Memory: 16384K/32768K available\\r\\n[    0.000000] CPU: Intel(R) Core(TM) i7-10700K @ 3.80GHz\\r\\n[    0.000000] Kernel command line: BOOT_IMAGE=/vmlinuz-linux root=/dev/sda1 rw quiet\\r\\n[    0.000000] DMI: System Manufacturer/System Product Name\\r\\n[    0.000000] Enabling fast boot...\\r\\n[    0.000000] Mounting root filesystem...\\r\\n[    0.000000] Starting udev...\\r\\n[    0.000000] Loading modules...\\r\\n[    0.000000] Starting network manager...\\r\\n[    0.000000] Bringing up loopback interface: [  OK  ]\\r\\n[    0.000000] Starting web server: [  OK  ]\\r\\n[    0.000000] Starting Hugo static site generator: [  OK  ]\\r\\n[    0.000000] Starting TerminalCV: [  OK  ]\\r\\n[    0.000000] All services started successfully.\\r\\n\\r\\nWelcome to Zero OS!\\r\\n \"";
-                var greetRaw = "\"                                                                                                                     \\r\\n ███████████                                   ███████     █████████ \\r\\n░█░░░░░░███                                  ███░░░░░███  ███░░░░░███\\r\\n░     ███░    ██████  ████████   ██████     ███     ░░███░███    ░░░ \\r\\n     ███     ███░░███░░███░░███ ███░░███   ░███      ░███░░█████████ \\r\\n    ███     ░███████  ░███ ░░░ ░███ ░███   ░███      ░███ ░░░░░░░░███\\r\\n  ████     █░███░░░   ░███     ░███ ░███   ░░███     ███  ███    ░███\\r\\n ███████████░░██████  █████    ░░██████     ░░░███████░  ░░█████████ \\r\\n░░░░░░░░░░░  ░░░░░░  ░░░░░      ░░░░░░        ░░░░░░░     ░░░░░░░░░  \\r\\n                                                                     \\r\\n                                                                                         \\r\\n Welcome to my blog and sort of curriculum vitae!\\r\\n Type 'help' or '?' for a list of available commands\\r\\n \"";
                 
-                bootRaw = bootRaw.slice(1, -1).replace(/\\r\\n|\\n/g, '\n');
-                greetRaw = greetRaw.slice(1, -1).replace(/\\r\\n|\\n/g, '\n');
+                fetchPostSlugs(term, function() {
+                    var bootRaw = "\"Booting Zero OS Linux 6.4.0-arch1-1 x86_64...\\r\\nInitializing hardware...\\r\\n[    0.000000] Memory: 16384K/32768K available\\r\\n[    0.000000] CPU: Intel(R) Core(TM) i7-10700K @ 3.80GHz\\r\\n[    0.000000] Kernel command line: BOOT_IMAGE=/vmlinuz-linux root=/dev/sda1 rw quiet\\r\\n[    0.000000] DMI: System Manufacturer/System Product Name\\r\\n[    0.000000] Enabling fast boot...\\r\\n[    0.000000] Mounting root filesystem...\\r\\n[    0.000000] Starting udev...\\r\\n[    0.000000] Loading modules...\\r\\n[    0.000000] Starting network manager...\\r\\n[    0.000000] Bringing up loopback interface: [  OK  ]\\r\\n[    0.000000] Starting web server: [  OK  ]\\r\\n[    0.000000] Starting Hugo static site generator: [  OK  ]\\r\\n[    0.000000] Starting TerminalCV: [  OK  ]\\r\\n[    0.000000] All services started successfully.\\r\\n\\r\\nWelcome to Zero OS!\\r\\n \"";
+                    var greetRaw = "\"                                                                                                                     \\r\\n ███████████                                   ███████     █████████ \\r\\n░█░░░░░░███                                  ███░░░░░███  ███░░░░░███\\r\\n░     ███░    ██████  ████████   ██████     ███     ░░███░███    ░░░ \\r\\n     ███     ███░░███░░███░░███ ███░░███   ░███      ░███░░█████████ \\r\\n    ███     ░███████  ░███ ░░░ ░███ ░███   ░███      ░███ ░░░░░░░░███\\r\\n  ████     █░███░░░   ░███     ░███ ░███   ░░███     ███  ███    ░███\\r\\n ███████████░░██████  █████    ░░██████     ░░░███████░  ░░█████████ \\r\\n░░░░░░░░░░░  ░░░░░░  ░░░░░      ░░░░░░        ░░░░░░░     ░░░░░░░░░  \\r\\n                                                                     \\r\\n                                                                                         \\r\\n Welcome to my blog and sort of curriculum vitae!\\r\\n Type 'help' or '?' for a list of available commands\\r\\n \"";
+                    
+                    bootRaw = bootRaw.slice(1, -1).replace(/\\r\\n|\\n/g, '\n');
+                    greetRaw = greetRaw.slice(1, -1).replace(/\\r\\n|\\n/g, '\n');
 
-                var bootLines = bootRaw.split('\n');
-                var greetingLines = greetRaw.split('\n');
-                var delay = 80;
-                var greetDelay = 40;
+                    var bootLines = bootRaw.split('\n');
+                    var greetingLines = greetRaw.split('\n');
+                    var delay = 80;
+                    var greetDelay = 40;
 
-                function showLines(lines, idx, next, color) {
-                    if (idx < lines.length) {
-                        var line = lines[idx];
-                        if (line.trim().length > 0) {
-                            term.echo(color ? `[[b;${color};]${line}]` : line);
-                        } else {
-                            term.echo('');
+                    function showLines(lines, idx, next, color) {
+                        if (idx < lines.length) {
+                            var line = lines[idx];
+                            if (line.trim().length > 0) {
+                                term.echo(color ? `[[b;${color};]${line}]` : line);
+                            } else {
+                                term.echo('');
+                            }
+                            setTimeout(function() {
+                                showLines(lines, idx + 1, next, color);
+                            }, color ? greetDelay : delay);
+                        } else if (next) {
+                            next();
                         }
-                        setTimeout(function() {
-                            showLines(lines, idx + 1, next, color);
-                        }, color ? greetDelay : delay);
-                    } else if (next) {
-                        next();
                     }
-                }
 
-                showLines(bootLines, 0, function() {
-                    term.clear();
-                    showLines(greetingLines, 0, function() {
-                        $('.terminal .cmd').show();
-                        term.resume();
-                    }, 'white');
+                    showLines(bootLines, 0, function() {
+                        term.clear();
+                        showLines(greetingLines, 0, function() {
+                            $('.terminal .cmd').show();
+                            term.resume();
+                        }, 'white');
+                    });
                 });
             },
 
@@ -637,29 +672,63 @@
                 }
             },
 
+
             autocompleteMenu: true,
-            completion: function(command, callback) {
-                var completions = Object.keys(commands);
-                var parts = command.trim().split(/\s+/);
+            completion: function() {
+                var before = this.before_cursor();
+                var trailingSpace = /\s$/.test(before);
+                var tokens = before.split(/\s+/).filter(Boolean);
 
                 
-                if ((parts[0] === 'nano' || parts[0] === 'cat') && (parts.length === 1 || (parts.length === 2 && command.endsWith(' ')))) {
-                    callback(postSlugs);
+                if (tokens.length === 0) {
+                    return commandNames;
                 }
+
+                var cmdName = tokens[0];
+                var args = tokens.slice(1);
+
                 
-                else if ((parts[0] === 'nano' || parts[0] === 'cat') && parts.length === 2) {
-                    var prefix = parts[1];
-                    callback(postSlugs.filter(function(slug) {
-                        return slug.startsWith(prefix);
-                    }));
+                if (cmdName === 'less') {
+                    if (tokens.length === 1) {
+                        return trailingSpace
+                            ? commandNames
+                            : commandNames.filter(function(item) {
+                                return item.startsWith(cmdName);
+                            });
+                    }
+
+                    cmdName = tokens[1];
+                    args = tokens.slice(2);
+
+                    if (tokens.length === 2 && !trailingSpace) {
+                        var partialAfterLess = tokens[1];
+                        return commandNames.filter(function(item) {
+                            return item.startsWith(partialAfterLess);
+                        });
+                    }
                 }
+
                 
-                else if (parts.length === 1) {
-                    callback(completions);
-                } else {
-                    callback([]);
+                if (['nano', 'cat'].includes(cmdName)) {
+                    if (args.length === 0 && !trailingSpace) {
+                        return [];
+                    }
+                    var partialSlug = trailingSpace ? '' : (args[args.length - 1] || '');
+                    return postSlugs.filter(function(slug) {
+                        return slug.startsWith(partialSlug);
+                    });
                 }
-            }
+
+                
+                if (args.length === 0 && !trailingSpace) {
+                    var partialCommand = cmdName;
+                    return commandNames.filter(function(item) {
+                        return item.startsWith(partialCommand);
+                    });
+                }
+
+                return [];
+            },
         });
     });
 </script>
@@ -696,7 +765,12 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background: #111;
+        background: rgba(
+            0,
+            0,
+            0,
+            0.98
+        );  
         z-index: 9999;
         display: flex;
         align-items: stretch;
@@ -707,7 +781,7 @@
         height: 100vh;
     }
     #nano-editor {
-        background: #181818;
+        background: #000;  
         color: #eee;
         font-family: monospace;
         padding: 0;
@@ -718,15 +792,15 @@
         box-shadow: none;
         width: 100vw;
         min-width: 0;
-        border: 2px solid #333;
+        border: 2px solid #333;  
         position: relative;
         display: flex;
         flex-direction: column;
         height: 100vh;
     }
     #nano-header {
-        background: #222;
-        color: #fff;
+        background: #222;  
+        color: #00ff00;  
         padding: 6px 18px;
         font-weight: bold;
         border-bottom: 1px solid #333;
@@ -734,7 +808,7 @@
         letter-spacing: 1px;
     }
     #nano-content {
-        background: #181818;
+        background: #000;  
         color: #eee;
         white-space: pre-wrap;
         word-break: break-word;
@@ -743,7 +817,7 @@
         min-height: 0;
         max-height: 100%;
         overflow-y: auto;
-        overflow-x: hidden;  
+        overflow-x: hidden;
         flex: 1 1 auto;
     }
     #nano-content img {
@@ -753,8 +827,8 @@
         margin: 0 auto;
     }
     #nano-footer {
-        background: #222;
-        color: #fff;
+        background: #222;  
+        color: #00ff00;  
         border-top: 1px solid #333;
         padding: 6px 18px;
         font-size: 14px;
@@ -764,12 +838,13 @@
         gap: 24px;
     }
     #nano-footer span {
-        color: #fff;
+        color: #00ff00;  
         font-weight: bold;
     }
     #nano-exit {
         cursor: pointer;
         user-select: none;
+        color: #ff5555 !important;  
     }
     #nano-modal:focus {
         outline: none;
