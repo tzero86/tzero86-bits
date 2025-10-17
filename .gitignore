@@ -40,4 +40,4 @@ yarn-error.log*
 *.rar
 
 # Ignore Hugo themes exampleSite content
-themes/*/exampleSite/
+
