@@ -152,3 +152,51 @@ ignoreLogs = ['warning-goldmark-raw-html']
   name = "Spanish"
   percentage = 100
   description = "Native speaker"
+
+[[params.projects.details]]
+  title = "tzero86-bits"
+  date = "2023-10-01"
+  link = "https://github.com/Tzero86/tzero86-bits"
+  description = "Ethical Hacking notes and posts Blog. Upcoming v2 design"
+
+[[params.projects.details]]
+  title = "ethicalHackingNotes"
+  date = "2023-09-01"
+  link = "https://github.com/Tzero86/ethicalHackingNotes"
+  description = "Artículos educativos sobre ethical hacking en español"
+
+[[params.projects.details]]
+  title = "alien-dark-theme"
+  date = "2023-08-01"
+  link = "https://github.com/Tzero86/alien-dark-theme"
+  description = "Alien Dark is a dark theme for Visual Studio Code"
+
+[[params.projects.details]]
+  title = "cucumber-typescript-playwright"
+  date = "2023-07-01"
+  link = "https://github.com/Tzero86/cucumber-typescript-playwright"
+  description = "A Test automation framework using Cucumber, TypeScript and Playwright"
+
+[[params.projects.details]]
+  title = "iframeit"
+  date = "2023-06-01"
+  link = "https://github.com/Tzero86/iframeit"
+  description = "A super simple script to quickly generate an embeddable frame"
+
+[[params.projects.details]]
+  title = "zTools"
+  date = "2023-05-01"
+  link = "https://github.com/Tzero86/zTools"
+  description = "A custom dashboard build with Textual for my infosec custom-made scripts"
+
+[[params.projects.details]]
+  title = "lameScan"
+  date = "2023-04-01"
+  link = "https://github.com/Tzero86/lameScan"
+  description = "A very lame port scanner with multithreading support"
+
+[[params.projects.details]]
+  title = "CypressAxe"
+  date = "2023-03-01"
+  link = "https://github.com/Tzero86/CypressAxe"
+  description = "An Automated Testing POC for Accessibility Testing"
