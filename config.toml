@@ -152,8 +152,3 @@ ignoreLogs = ['warning-goldmark-raw-html']
   name = "Spanish"
   percentage = 100
   description = "Native speaker"
-
-# Make sure any local/test settings are updated for production:
-# - baseURL should be your public site URL
-# - Remove or update any test-specific params
-# - Check for any hardcoded paths or debug flags in your theme/templates
