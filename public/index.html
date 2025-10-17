@@ -4,12 +4,12 @@
     <head>
 	<meta name="generator" content="Hugo 0.151.0">
             <meta charset="utf-8" />
-    <title>Tzero86@trojanwave </title>
+    <title>Tzero86@xyz </title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Zero OS">
-    <meta property="og:title" content="Tzero86@trojanwave" />
+    <meta property="og:title" content="Tzero86@xyz" />
     <meta property="og:type" content="website"/>
     <meta property="og:url" content="http://localhost:1313/" />
     <link rel="sitemap" type="application/xml" title="Sitemap" href=""/>
@@ -419,15 +419,12 @@
                 type: "GET",
                 success: function(data) {
                     
-                    var text = $(data).text();
-                    var lines = text.split('\n');
                     var matches = [];
-                    lines.forEach(function(line) {
-                        var match = line.match(/^Filename:\s*([^\s]+)/i);
-                        if (match) {
-                            matches.push(match[1]);
-                        }
-                    });
+                    var regex = /<strong>Filename:<\/strong>\s*([^<\s]+)/gi;
+                    var match;
+                    while ((match = regex.exec(data)) !== null) {
+                        matches.push(match[1]);
+                    }
                     postSlugs = matches;
                     console.log("Post filenames found for completion:", postSlugs);
                     if (callback) callback();

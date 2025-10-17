@@ -379,16 +379,13 @@
                 url: "posts/",
                 type: "GET",
                 success: function(data) {
-                    // Extract plain text from HTML, then split into lines
-                    var text = $(data).text();
-                    var lines = text.split('\n');
+                    // Extract filenames using regex on raw HTML string to avoid jQuery parsing issues
                     var matches = [];
-                    lines.forEach(function(line) {
-                        var match = line.match(/^Filename:\s*([^\s]+)/i);
-                        if (match) {
-                            matches.push(match[1]);
-                        }
-                    });
+                    var regex = /<strong>Filename:<\/strong>\s*([^<\s]+)/gi;
+                    var match;
+                    while ((match = regex.exec(data)) !== null) {
+                        matches.push(match[1]);
+                    }
                     postSlugs = matches;
                     console.log("Post filenames found for completion:", postSlugs);
                     if (callback) callback();

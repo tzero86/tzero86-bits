@@ -1,6 +1,6 @@
 baseURL = "https://www.tzero86.xyz"
 languageCode = 'en-us'
-title = 'Tzero86@trojanwave'
+title = 'Tzero86@xyz'
 theme = "terminalcv"
 [pagination]
   pagerSize = 10
