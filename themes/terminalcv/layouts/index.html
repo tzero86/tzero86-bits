@@ -1,0 +1,796 @@
+{{ define "body" }}
+<script>
+    jQuery(document).ready(function($) {
+        var animation = false;
+
+        // Build commands object safely using Hugo
+        var commands = {};
+        [
+            ["help", "shows help"],
+            ["less", "Use less as output method"],
+            ["whois", "list basic details"],
+            ["social", "list social networks"],
+            ["work", "list work experience"],
+            ["education", "list education"],
+            ["skills", "list core skills"],
+            ["softskills", "list soft skills"],
+            ["languages", "list spoken languages"],
+            ["projects", "list projects"],
+            {{ if .Site.Params.certifications }}
+            ["certifications", "list certifications"],
+            {{ end }}
+            {{ if .Site.Params.startxLocation }}
+            ["startx", "starts graphical environment"],
+            {{ end }}
+            {{ if .Site.Params.misc }}
+            ["{{ .Site.Params.misc.commandName | default "other" }}", "{{ .Site.Params.misc.title }}"],
+            {{ end }}
+            {{ if not .Site.Params.Source }}
+            ["source", "shows details about template powering this website"],
+            {{ end }}
+            {{ if .Site.Params.version }}
+            ["version", "Current version"],
+            {{ end }}
+            {{ if .Site.Params.exitLocation }}
+            ["exit", "exit the terminal"],
+            {{ end }}
+            {{ if .Site.Params.blog }}
+            ["posts", "List all posts"],
+            {{ if .Site.Params.listLS }}
+            ["ls", "List all posts"],
+            {{ end }}
+            ["cat", "Open a post"],
+            {{ end }}
+            ["all", "Show all details about me"]
+        ].forEach(function(item) {
+            if (item) commands[item[0]] = item[1];
+        });
+
+        function progressBar(number) {
+            var barLength = Math.round(number / 10);
+            var barFilled = Array(barLength + 1).join("&#9611;");
+            var barBlank= Array(11 - barLength).join("&#9617;");
+
+            return barFilled + barBlank
+        }
+
+        // Calculate the tabbing to keep commands and descriptions aligned in the help message
+        function padKey(key, length) {
+            return key + ' '.repeat(length - key.length);
+        }
+
+        function commandsHelp() {
+            let longestKeyLength = Math.max(...Object.keys(commands).map(key => key.length));
+
+            let helpText = ""
+            for (let key in commands) {
+                if (commands.hasOwnProperty(key)) {
+                    helpText += ` ${padKey(key, longestKeyLength)}\t${commands[key]}\n`
+                }
+            }
+            return helpText
+        }
+
+        var help = '\n[[b;white;]usage:]\n' +
+                    '\n <command> - execute the command\n' +
+                    ' less <command> - use less to display the output\n\n' +
+                    '\n[[b;white;]Available commands:]\n' +
+                   commandsHelp();
+
+        var whois = [
+        {{ with .Site.Params.whois.details }}
+            '[[b;grey;]Name:]\t\t\t{{ .name }}\n' +
+            '[[b;grey;]Profession:]\t\t{{ .profession }}\n' +
+            '[[b;grey;]Location:]\t\t{{ .location }}\n' +
+            {{ if .email }}
+            '[[b;grey;]Email:]\t\t\t{{ .email }}\n' +
+            {{ end }}
+            {{ if .homelink }}
+            '[[b;grey;]Homepage:]\t\t{{ .homelink }}\n' +
+            {{ end }}
+            {{ if .description }}
+            '{{ .description }}' +
+            {{ end }}
+            '\r',
+        {{ end }}
+        ];
+
+        // Build social map safely using Hugo
+        var sMap = {
+            {{ with .Site.Params.social.details }}
+                {{ range . }}
+                "{{ .name }}": "{{ .url }}",
+                {{ end }}
+            {{ end }}
+        };
+
+        function social() {
+            var hideName = false;
+            {{ if .Site.Params.social.settings.hideName }}
+            hideName = true;
+            {{ end }}
+            var socialText = [];
+            var longestKeyLength = Math.max(...Object.keys(sMap).map(key => key.length));
+            for (let key in sMap) {
+                if (sMap.hasOwnProperty(key)) {
+                    if (hideName) {
+                        socialText.push(sMap[key]);
+                    } else {
+                        socialText.push(`${padKey(key, longestKeyLength)}\t${sMap[key]}`);
+                    }
+                }
+            }
+            return socialText;
+        }
+
+        var certifications = [
+        {{ with .Site.Params.certifications.details }}
+            {{ range . }}
+                '---\n' +
+                '[[b;{{ .color | default "grey" }};]{{ .certName }}]\n' +
+                '{{ .date }}\n' +
+                {{ if .company }}
+                '{{ .company }}\n' +
+                {{ end }}
+                {{ if .description }}
+                '{{ .description }}\n' +
+                {{ end }}
+                {{ if .badge }}
+                'Badge: \t{{ .badge }}\n' +
+                {{ end }}
+                '\r',
+            {{ end }}
+        {{ end }}
+        ];
+
+        var work = [
+        {{ with .Site.Params.work.details }}
+            {{ range .}}
+                '---\n' +
+                '[[b;{{ .color | default "grey" }};]{{ .jobTitle }}]\n' +
+                '{{ .company }}\n' +
+                '{{ .location}}\n' +
+                '{{ .date }}\n' +
+                '\n' +
+                '{{ .description }}' +
+                '\r',
+            {{ end }}
+        {{ end }}
+        ];
+
+        var education = [
+        {{ with .Site.Params.education.details }}
+            {{ range . }}
+                '---\n' +
+                '[[b;{{ .color | default "grey" }};]{{ .courseName }}]\n' +
+                '{{ .date }}\n' +
+                {{ if .description }}
+                    "{{ .description }}\n" +
+                {{ end }}
+                "\r",
+            {{ end }}
+        {{ end }}
+        ];
+
+        var projects = [
+        {{ with .Site.Params.projects.details }}
+            {{ range .}}
+                '---\n' +
+                '[[b;{{ .color | default "grey" }};]{{ .title }}]\n' +
+                '{{ .date }}\n' +
+                '{{ .link }}\n' +
+                {{ if .description }}
+                '{{ .description }}\n' +
+                {{ end }}
+                "\r",
+          {{ end }}
+        {{ end }}
+        ];
+
+        var skills = [
+        {{ with .Site.Params.skills.details }}
+            {{ range . }}
+                '[[b;{{ .color | default "grey" }};]{{ .name }}:]\n' +
+                progressBar({{ .percentage }}) +
+                '{{ .percentage }}' + '%\n' +
+                {{ if .description }}
+                '{{ .description }}\n' +
+                {{ end }}
+                '\r',
+            {{ end }}
+        {{ end }}
+        ];
+
+        var softSkills = [
+        {{ with .Site.Params.softSkills.details }}
+            {{ range . }}
+                '[[b;{{ .color | default "grey" }};]{{ .name }}:]\n' +
+                progressBar({{ .percentage }}) +
+                '{{ .percentage }}' + '%\n' +
+                {{ if .description }}
+                '{{ .description }}\n' +
+                {{ end }}
+                '\r',
+            {{ end }}
+        {{ end }}
+        ];
+
+        var languages = [
+        {{ with .Site.Params.languages.details }}
+            {{ range . }}
+                '[[b;{{ .color | default "grey" }};]{{ .name }}:]\n' +
+                progressBar({{ .percentage }})+
+                '{{ .percentage }}' + '%\n' +
+                {{ if .description }}
+                '{{ .description }}\n' +
+                {{ end }}
+                '\r',
+            {{ end }}
+        {{ end }}
+        ];
+
+        var misc = [
+             {{ with .Site.Params.misc }}
+            '[[b;{{ .titleColor }};]{{ .title }}]\n' +
+            '[[;{{ .contentColor }};]{{ .content }}]\n',
+             {{ end }}
+        ];
+
+        var source =  '        _______            \n' +
+                      '       |       |           \n' +
+                      '       |       |           \n' +
+                      '       |_______|_______    \n' +
+                      '               |       |   \n' +
+                      '               |       |   \n' +
+                      ' ______________|_______|   \n' +
+                      '|      |       |       |   \n' +
+                      '|      |       |       |   \n' +
+                      '|______|_______|_______|   \n' +
+                      '[[;red;]May the source be with you]\n' +
+                      '[[;grey;]Based off this original theme by Coolapso: https://github.com/coolapso/hugo-theme-terminalcv\n';
+
+        var all = [
+            whois,
+            social(),
+            work,
+            education,
+            skills,
+            softSkills,
+            languages,
+            projects,
+            certifications,
+            misc,
+            {{ if .Site.Params.misc }}
+            {{ end }}
+            {{ if .Site.Params.source }}
+            source,
+            {{ end }}
+        ]
+
+        // Hide terminal input before boot sequence
+        $('body').on('terminal:init', function(e, term) {
+            $('.terminal .cmd').hide();
+        });
+
+        // Add missing catPost function
+        function catPost(term, postdir) {
+            var url = "/posts/" + postdir + "/";
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function(data) {
+                    term.echo(data, {raw: true});
+                    // Scroll terminal container to top after displaying post
+                    var $terminal = $('.terminal');
+                    if ($terminal.length) {
+                        $terminal.scrollTop(0);
+                    }
+                },
+                error: function() {
+                    term.echo("Error: Could not load post " + postdir);
+                }
+            });
+        }
+
+        // Add nanoPost function
+        function nanoPost(postdir) {
+            var url = "/posts/" + postdir + "/";
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function(data) {
+                    $('#nano-content').html(data);
+                    $('#nano-modal').show().focus();
+                },
+                error: function() {
+                    $('#nano-content').text("Error: Could not load post " + postdir);
+                    $('#nano-modal').show().focus();
+                }
+            });
+        }
+
+        // Handle nano modal exit
+        $('#nano-exit').on('click', function() {
+            $('#nano-modal').hide();
+        });
+        $(document).on('keydown', function(e) {
+            if ($('#nano-modal').is(':visible')) {
+                // Ctrl+X to exit
+                if (e.ctrlKey && e.key.toLowerCase() === 'x') {
+                    $('#nano-modal').hide();
+                }
+            }
+        });
+
+        // Animate "emoticon" in nano copyright span to show different poses on mouse movement (left/right/up/down)
+        $('#nano-modal').on('mousemove', function(e) {
+            var $span = $('#copyright');
+            var rect = $span[0].getBoundingClientRect();
+            var centerX = rect.left + rect.width / 2;
+            var centerY = rect.top + rect.height / 2;
+            var mouseX = e.clientX;
+            var mouseY = e.clientY;
+            var offsetX = mouseX - centerX;
+            var offsetY = mouseY - centerY;
+            // Pick a pose based on mouse position
+            let poses = {
+                neutral: '( o_o )',
+                left:   '( o . )',
+                right:  '( . o )',
+                up:     '( ^_^ )',
+                down:   '( -_- )',
+                upleft: '( ^ . )',
+                upright:'( . ^ )',
+                downleft:'( - . )',
+                downright:'( . - )'
+            };
+            let pose = poses.neutral;
+            if (offsetY < -30 && offsetX < -30) {
+                pose = poses.upleft;
+            } else if (offsetY < -30 && offsetX > 30) {
+                pose = poses.upright;
+            } else if (offsetY > 30 && offsetX < -30) {
+                pose = poses.downleft;
+            } else if (offsetY > 30 && offsetX > 30) {
+                pose = poses.downright;
+            } else if (offsetY < -30) {
+                pose = poses.up;
+            } else if (offsetY > 30) {
+                pose = poses.down;
+            } else if (offsetX < -30) {
+                pose = poses.left;
+            } else if (offsetX > 30) {
+                pose = poses.right;
+            }
+            $span.text(pose);
+        });
+        // Reset emoticon when mouse leaves modal
+        $('#nano-modal').on('mouseleave', function() {
+            $('#copyright').text('( o_o )');
+        });
+
+        $('body').terminal(function(command, term) {
+
+            var useLess = false;
+            {{if .Site.Params.useLess }}
+            useLess = true;
+            {{ end }}
+
+            function posts(term) {
+                $.ajax({
+                    url: "posts/",
+                    type: 'GET',
+                    success: function(data) {
+                        term.echo(data, {raw: true});
+                    },
+                    error: function() {
+                        term.echo("Error: Could not load posts data");
+                    }
+                });
+            };
+
+            function echoArray(array) {
+                if (useLess) {
+                    term.less(array, {
+                        onExit: function () {
+                            term.set_command('');
+                            term.scroll_to_bottom();
+                        },
+                    });
+                } else {
+                    for (i = 0; i < array.length; i += 1) {
+                        term.echo(array[i]);
+                    }
+                }
+            }
+            //Function used by StartX to draw the progressBar
+            function progress(percent, width) {
+                var size = Math.round(width*percent/100);
+                var left = '', taken = '', i;
+                for (i=size; i--;) {
+                    taken += '=';
+                }
+                if (taken.length > 0) {
+                    taken = taken.replace(/=$/, '>');
+                }
+                for (i=width-size; i--;) {
+                    left += ' ';
+                }
+                return '[' + taken + left + '] ' + percent + '%';
+            }
+
+            function loading () {
+                var i = 0, size = 30;
+                prompt = term.get_prompt();
+                string = progress(0, size);
+                term.set_prompt(progress);
+                animation = true;
+                (function loop() {
+                    string = progress(i++, size);
+                    term.set_prompt(string);
+                    if (i < 100) {
+                        timer = setTimeout(loop, 10);
+                    } else {
+                        term.echo(progress(i, size) + ' [[b;green;]OK]').set_prompt(prompt);
+                        animation = false
+                    }
+                })();
+            }
+
+            commands = command.split(/[ ]+/);
+            if (commands[0] == 'less') {
+                useLess = true;
+                commands.shift();
+            }
+
+            switch(commands[0]) {
+                case 'whois':
+                    {{ if .Site.Params.whois.settings.useLess }}
+                    useLess = true;
+                    {{ end }}
+                    echoArray(whois);
+                    break;
+                case 'social':
+                    {{ if .Site.Params.social.settings.useLess }}
+                    useLess = true;
+                    {{ end }}
+                    echoArray(social());
+                    break;
+                case 'work':
+                    {{ if .Site.Params.work.settings.useLess }}
+                    useLess = true;
+                    {{ end }}
+                    echoArray(work);
+                    break;
+                case 'education':
+                    {{ if .Site.Params.education.settings.useLess }}
+                    useLess = true;
+                    {{ end }}
+                    echoArray(education);
+                    break;
+                case 'skills':
+                    {{ if .Site.Params.skills.settings.useLess }}
+                    useLess = true;
+                    {{ end }}
+                    echoArray(skills);
+                    break;
+                case 'softskills':
+                    {{ if .Site.Params.softskills.settings.useLess }}
+                    useLess = true;
+                    {{ end }}
+                    echoArray(softSkills);
+                    break;
+                case 'languages':
+                    {{ if .Site.Params.languages.settings.useLess }}
+                    useLess = true;
+                    {{ end }}
+                    echoArray(languages);
+                    break;
+                case 'projects':
+                    {{ if .Site.Params.projects.settings.useLess }}
+                    useLess = true;
+                    {{ end }}
+                    echoArray(projects);
+                    break;
+                case 'certifications':
+                    {{ if .Site.Params.certifications.settings.useLess }}
+                    useLess = true;
+                    {{ end }}
+                    echoArray(certifications);
+                    break;
+                case '{{ .Site.Params.misc.commandName | default "misc"}}':
+                    {{ if .Site.Params.misc.settings.useLess }}
+                    useLess = true;
+                    {{ end }}
+                    echoArray(misc);
+                    break;
+                case 'help':
+                case '?':
+                    term.echo(help);
+                    break;
+                case 'all':
+                    {{ if .Site.Params.all.settings.useLess }}
+                    useLess = true;
+                    {{ end }}
+                    echoArray(all.flat(1));
+                    break;
+                {{ if .Site.Params.startxLocation }}
+                case 'startx':
+                    term.echo("loading ...");
+                    loading();
+                    setTimeout(function(){window.location = "{{ .Site.Params.startxLocation }}"}, 2000);
+                    break;
+                {{ end }}
+                case ':(){:|:&};:':
+                    term.echo("nice try");
+                    break;
+                case 'source':
+                    {{ if .Site.Params.misc.settings.useLess }}
+                    useLess = true;
+                    {{ end }}
+                    term.echo(source);
+                    break;
+                case 'exit':
+                {{ if .Site.Params.exitLocation }}
+                    term.echo("terminating ... ");
+                    loading();
+                    setTimeout(function(){window.location = '{{ .Site.Params.exitLocation }}'}, 2000);
+                    break;
+                {{ else }}
+                    term.echo("Terminating session, thanks for visiting");
+                    loading();
+                    setTimeout(function() {
+                      term.pause();
+                      term.clear();
+                      term.echo("{{ .Site.Params.exitMessage }}");
+                    }, 2000);
+                    break;
+                {{ end }}
+                {{ if .Site.Params.version }}
+                case 'version':
+                    term.echo("{{ .Site.Params.version }}");
+                    break;
+                {{ end }}
+                {{ if .Site.Params.blog }}
+                case 'cat':
+                    if (commands.length < 2) {
+                        term.echo("Usage: cat <filename>");
+                    } else {
+                        var postdir = commands[1];
+                        catPost(term, postdir);
+                    }
+                    break;
+                case 'posts':
+                case 'ls':
+                    posts(term);
+                    break;
+                {{ end }}
+                case 'nano':
+                    if (commands.length < 2) {
+                        term.echo("Usage: nano <filename>");
+                    } else {
+                        var postdir = commands[1];
+                        nanoPost(postdir);
+                    }
+                    break;
+                case '':
+                    break;
+                default:
+                    term.echo("\nunknown command: " + command + "\n" +
+                              "please type 'help' or '?' for a list of available commands\n");
+            }
+        }, {
+            greetings: false,
+            onInit: function(term) {
+                term.pause();
+                $('.terminal .cmd').hide();
+
+                var bootRaw = {{ .Site.Params.prompt.extra.bootsequence | default "" | jsonify }};
+                var greetRaw = {{ .Site.Params.prompt.extra.greeting | default "" | jsonify }};
+                // Remove leading/trailing quotes from JSON string
+                bootRaw = bootRaw.slice(1, -1).replace(/\\r\\n|\\n/g, '\n');
+                greetRaw = greetRaw.slice(1, -1).replace(/\\r\\n|\\n/g, '\n');
+
+                var bootLines = bootRaw.split('\n');
+                var greetingLines = greetRaw.split('\n');
+                var delay = 80;
+                var greetDelay = 40;
+
+                function showLines(lines, idx, next, color) {
+                    if (idx < lines.length) {
+                        var line = lines[idx];
+                        if (line.trim().length > 0) {
+                            term.echo(color ? `[[b;${color};]${line}]` : line);
+                        } else {
+                            term.echo('');
+                        }
+                        setTimeout(function() {
+                            showLines(lines, idx + 1, next, color);
+                        }, color ? greetDelay : delay);
+                    } else if (next) {
+                        next();
+                    }
+                }
+
+                showLines(bootLines, 0, function() {
+                    term.clear();
+                    showLines(greetingLines, 0, function() {
+                        $('.terminal .cmd').show();
+                        term.resume();
+                    }, '{{ .Site.Params.greetingColor | default "white" }}');
+                });
+            },
+
+            prompt: '{{ with .Site.Params.prompt }}{{ with .core }}[[;{{ .beforeColor | default "grey" }};]{{ .before }}][[;{{ .color | default "grey" }};]{{ .text }}][[;{{ .afterColor | default "gey" }};]{{ .after }}]{{ end }}{{ with .separator }}[[;{{ .separatorColor | default "grey" }};]{{ .text }}]{{ end }}{{ with .path }}[[;{{ .beforeColor | default "grey" }};]{{ .before }}][[;{{ .color | default "grey" }};]{{ .text | default ":~$" }}][[;{{ .afterColor | default "grey" }};]{{ .after }}]{{ end }}{{ with .extra }}[[;{{ .color | default "grey" }};]{{ .text }}]{{ end }}{{ end }}',
+
+            keydown: function(e, term) {
+                if (animation) {
+                    if (e.which == 68 && e.ctrlKey) { // CTRL+D
+                        clearTimeout(timer);
+                        animation = false;
+                        term.echo(string + ' [[b;red;]FAIL]')
+                        .set_prompt(prompt);
+                    }
+                    return false;
+                }
+            },
+
+
+            autocompleteMenu: true,
+            completion: function(command, callback) {
+                var completions = Object.keys(commands);
+                var parts = command.trim().split(/\s+/);
+
+                // If nano/cat and no argument, suggest postSlugs
+                if ((parts[0] === 'nano' || parts[0] === 'cat') && (parts.length === 1 || (parts.length === 2 && command.endsWith(' ')))) {
+                    callback(postSlugs);
+                }
+                // If nano/cat and partial argument, filter postSlugs by prefix
+                else if ((parts[0] === 'nano' || parts[0] === 'cat') && parts.length === 2) {
+                    var prefix = parts[1];
+                    callback(postSlugs.filter(function(slug) {
+                        return slug.startsWith(prefix);
+                    }));
+                }
+                // Only suggest commands for first word
+                else if (parts.length === 1) {
+                    callback(completions);
+                } else {
+                    callback([]);
+                }
+            }
+        });
+    });
+</script>
+<!-- Add modal for nano editor -->
+<div id="nano-modal" style="display: none">
+    <div id="nano-editor">
+        <div id="nano-header">
+            GNU nano 6.2.z &nbsp;&nbsp;[readonly] &nbsp;&nbsp;Post Viewer
+        </div>
+        <pre id="nano-content"></pre>
+        <div id="nano-footer">
+            <span id="nano-exit">^X Exit</span>
+            <span id="copyright" style="font-family: monospace">( o_o )</span>
+        </div>
+    </div>
+</div>
+
+<style>
+    body {
+        width: 100%;
+        font-size: 18px;
+    }
+    /* Ensure images in terminal output fit the viewport */
+    .terminal img,
+    #nano-content img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 0 auto;
+    }
+    #nano-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #111;
+        z-index: 9999;
+        display: flex;
+        align-items: stretch;
+        justify-content: center;
+        padding: 0;
+        font-family: monospace;
+        width: 100vw;
+        height: 100vh;
+    }
+    #nano-editor {
+        background: #181818;
+        color: #eee;
+        font-family: monospace;
+        padding: 0;
+        border-radius: 0;
+        max-width: 100vw;
+        max-height: 100vh;
+        overflow: auto;
+        box-shadow: none;
+        width: 100vw;
+        min-width: 0;
+        border: 2px solid #333;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+    }
+    #nano-header {
+        background: #222;
+        color: #fff;
+        padding: 6px 18px;
+        font-weight: bold;
+        border-bottom: 1px solid #333;
+        font-size: 16px;
+        letter-spacing: 1px;
+    }
+    #nano-content {
+        background: #181818;
+        color: #eee;
+        white-space: pre-wrap;
+        word-break: break-word;
+        padding: 18px 18px 32px 18px;
+        font-size: 16px;
+        min-height: 0;
+        max-height: 100%;
+        overflow-y: auto;
+        overflow-x: hidden; /* Prevent horizontal scrollbar */
+        flex: 1 1 auto;
+    }
+    #nano-content img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 0 auto;
+    }
+    #nano-footer {
+        background: #222;
+        color: #fff;
+        border-top: 1px solid #333;
+        padding: 6px 18px;
+        font-size: 14px;
+        font-family: monospace;
+        display: flex;
+        justify-content: flex-start;
+        gap: 24px;
+    }
+    #nano-footer span {
+        color: #fff;
+        font-weight: bold;
+    }
+    #nano-exit {
+        cursor: pointer;
+        user-select: none;
+    }
+    #nano-modal:focus {
+        outline: none;
+    }
+    /* Retro scrollbar styling for nano modal */
+    #nano-content::-webkit-scrollbar {
+        width: 12px;
+        background: #222;
+    }
+    #nano-content::-webkit-scrollbar-thumb {
+        background: #444;
+        border: 2px solid #222;
+        border-radius: 0;
+        box-shadow: inset 0 0 4px #000;
+    }
+    #nano-content::-webkit-scrollbar-corner {
+        background: #222;
+    }
+    /* Firefox scrollbar */
+    #nano-content {
+        scrollbar-width: thin;
+        scrollbar-color: #444 #222;
+    }
+</style>
+{{ end }}
