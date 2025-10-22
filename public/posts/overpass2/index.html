@@ -17,19 +17,22 @@ Aug. 30, 2020
 <h2 id="task-1-forensics---analyse-the-pcap">[Task 1] Forensics - Analyse the PCAP</h2>
 <h2 id="-task-1---question-1">[ Task 1 - Question #1]</h2>
 <blockquote>
-<p>What was the URL of the page they used to upload a reverse shell?</p></blockquote>
+<p>What was the URL of the page they used to upload a reverse shell?</p>
+</blockquote>
 <p>The room provides a PCAP file that we can analyze. In my case I opened the file with Wireshark.</p>
 <p><img src="https://i.imgur.com/o3BWTQc.png" alt="PCAP File found REQ URL"></p>
 <p>With this we can answer the first question.</p>
 <p>Next question is:</p>
 <h2 id="-task-1---question-2">[ Task 1 - Question #2]</h2>
 <blockquote>
-<p>What payload did the attacker use to gain access?</p></blockquote>
+<p>What payload did the attacker use to gain access?</p>
+</blockquote>
 <p>We do some further analysis of the pcap file with wireshark. If you look carefully you&rsquo;ll see there is an <strong>upload.php</strong> exploitation. If you righ click the packets and select <strong>follow-&gt;TCP Stream</strong> or <strong>follow-X-Stream</strong> you can see the different steps of the request(prof not a great explanation). The thing is this help us determine the payload that was used:</p>
 <p><img src="https://i.imgur.com/Fr68op6.png" alt="Payload Used."></p>
 <h2 id="-task-1---question-3">[ Task 1 - Question #3]</h2>
 <blockquote>
-<p>What password did the attacker use to privesc?</p></blockquote>
+<p>What password did the attacker use to privesc?</p>
+</blockquote>
 <p>If we keep the &ldquo;trail&rdquo; of the attack we observe something like this:</p>
 <ul>
 <li>Payload is uploaded using upload.php
@@ -40,12 +43,14 @@ Aug. 30, 2020
 <p><img src="https://i.imgur.com/TvUM6QB.png" alt="Password used at 1st attempt"></p>
 <h2 id="-task-1---question-4">[ Task 1 - Question #4]</h2>
 <blockquote>
-<p>How did the attacker establish persistence?</p></blockquote>
+<p>How did the attacker establish persistence?</p>
+</blockquote>
 <p><img src="https://i.imgur.com/bu2RfFR.png" alt="tool used"></p>
 <p>If keep reviewing the stream we see the tool used by the attacker to gain persistance.</p>
 <h2 id="-task-1---question-5">[ Task 1 - Question #5]</h2>
 <blockquote>
-<p>Using the fasttrack wordlist, how many of the system passwords were crackable?</p></blockquote>
+<p>Using the fasttrack wordlist, how many of the system passwords were crackable?</p>
+</blockquote>
 <p>If we follow the trail we see the attacker has logged the contents of the shadow file:</p>
 <p><img src="https://i.imgur.com/ceyxCqe.png" alt="shadow file dump"></p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo cat /etc/shadow
@@ -102,26 +107,31 @@ Aug. 30, 2020
 </span></span></code></pre></div><p>And with that we get the answer to that last question of Task 1.</p>
 <h2 id="task-2-research---analyse-the-code">[Task 2] Research - Analyse the code</h2>
 <blockquote>
-<p>Now that you&rsquo;ve found the code for the backdoor, it&rsquo;s time to analyse it.</p></blockquote>
+<p>Now that you&rsquo;ve found the code for the backdoor, it&rsquo;s time to analyse it.</p>
+</blockquote>
 <p>We&rsquo;ll let&rsquo;s see if we can continue our way through this room.</p>
 <h2 id="-task-2---question-1">[ Task 2 - Question #1]</h2>
 <blockquote>
-<p>What&rsquo;s the default hash for the backdoor?</p></blockquote>
+<p>What&rsquo;s the default hash for the backdoor?</p>
+</blockquote>
 <p>Since we know already the script that was downloaded (git cloned) to get access we can take a loot at it. This gives us the default hash that is used for the backdor.</p>
 <p><img src="https://i.imgur.com/BZ48oJq.png" alt="Default Hash used in the ssh-backdoor script"></p>
 <h2 id="-task-2---question-2">[ Task 2 - Question #2]</h2>
 <blockquote>
-<p>What&rsquo;s the hardcoded salt for the backdoor?</p></blockquote>
+<p>What&rsquo;s the hardcoded salt for the backdoor?</p>
+</blockquote>
 <p>If we look further down the script code we&rsquo;ll see the default salt being used for the script.</p>
 <p><img src="https://i.imgur.com/qWzqVEJ.png" alt="Default salt for ssh-backdoor"></p>
 <h2 id="-task-2---question-3">[ Task 2 - Question #3]</h2>
 <blockquote>
-<p>What&rsquo;s the default hash for the backdoor?</p></blockquote>
+<p>What&rsquo;s the default hash for the backdoor?</p>
+</blockquote>
 <p>By inspecting a bit more we find the default hash set for the backdoor.</p>
 <p><img src="https://i.imgur.com/OqSs7sj.png" alt="Default backdoor hash"></p>
 <h2 id="-task-2---question-4">[ Task 2 - Question #4]</h2>
 <blockquote>
-<p>Crack the hash using rockyou and a cracking tool of your choice. What&rsquo;s the password?</p></blockquote>
+<p>Crack the hash using rockyou and a cracking tool of your choice. What&rsquo;s the password?</p>
+</blockquote>
 <p>for this we can run hashcat this time for SHA512 salted hash:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Documents/THM/overpass2Hacked<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ hashcat -m1710 hash3 /usr/share/wordlists/rockyou.txt  
@@ -188,7 +198,8 @@ Aug. 30, 2020
 </span></span></code></pre></div><p>With that we have Task 2 completed.</p>
 <h2 id="-task-3---question-1">[ Task 3 - Question #1]</h2>
 <blockquote>
-<p>The attacker defaced the website. What message did they leave as a heading?</p></blockquote>
+<p>The attacker defaced the website. What message did they leave as a heading?</p>
+</blockquote>
 <p>If we deploy the machine and access the ip with the browser we get this:</p>
 <p><img src="https://i.imgur.com/wpCesEH.png" alt="Defaced site"></p>
 <p>Since we know the backdoor just requires the password we already cracked, we can connect with SHH on the backdoor&rsquo;s port.</p>
@@ -205,7 +216,8 @@ Aug. 30, 2020
 </span></span><span style="display:flex;"><span>james@overpass-production:/home/james/ssh-backdoor$ 
 </span></span></code></pre></div><h2 id="-task-3---question-3-2-needs-no-answer">[ Task 3 - Question #3 (#2 needs no answer)]</h2>
 <blockquote>
-<p>What&rsquo;s the user flag?</p></blockquote>
+<p>What&rsquo;s the user flag?</p>
+</blockquote>
 <p>Once in there we can get the first flag.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>james@overpass-production:/home/james/ssh-backdoor$ ls
 </span></span><span style="display:flex;"><span>README.md  backdoor.service  cooctus.png  id_rsa.pub  main.go
@@ -217,7 +229,8 @@ Aug. 30, 2020
 </span></span><span style="display:flex;"><span>thm<span style="color:#f92672">{</span>d11<span style="color:#f92672">{</span>REDACTED<span style="color:#f92672">}</span>e6567<span style="color:#f92672">}</span>
 </span></span></code></pre></div><h2 id="-task-3---question-4-">[ Task 3 - Question #4 ]</h2>
 <blockquote>
-<p>What&rsquo;s the root flag?</p></blockquote>
+<p>What&rsquo;s the root flag?</p>
+</blockquote>
 <p>If we look in james directory we see there is an executable file. However, if we run that file as is we get a bash shell but we still are logged in as james. We need root. Googling a bit there is a mention that if we run bash with <strong>-p</strong> to get a startup behavior that does not reset the user ID. I need to get back to this and study a bit more <strong>man bash</strong> contains more details.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>james@overpass-production:/home/james$ ls -al
 </span></span><span style="display:flex;"><span>total <span style="color:#ae81ff">1136</span>

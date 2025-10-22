@@ -22,7 +22,8 @@ Oct. 8, 2020
 <p>It is not crazy to assume this machine could have a git repository.</p>
 <p>Turns out pubicly hosting your repository on a production website, by just cloning the repo, seems to be quite a bad idea. Long story short it seems git and other version control systems create a folder with a <code>copy</code> of the repository fo tracking. Meaning we can get full access to the code repository if the admin is not restricting access to that location.</p>
 <blockquote>
-<p>If this seems interesting, I suggest reading <a href="https://en.internetwache.org/dont-publicly-expose-git-or-how-we-downloaded-your-websites-sourcecode-an-analysis-of-alexas-1m-28-07-2015/">this</a> article I consulted.</p></blockquote>
+<p>If this seems interesting, I suggest reading <a href="https://en.internetwache.org/dont-publicly-expose-git-or-how-we-downloaded-your-websites-sourcecode-an-analysis-of-alexas-1m-28-07-2015/">this</a> article I consulted.</p>
+</blockquote>
 <p>So let&rsquo;s see if we have access to a possible repository at <code>/.git</code> location:</p>
 <p><img src="https://i.imgur.com/nMOPNSq.png" alt="We do have access!"></p>
 <p>Ok so far so good. Let&rsquo;s see what we can find by looking around the repo a bit. Mmm it seems we cannot just browse around this repo, since any link I click is downloading a file (that we can read though).</p>

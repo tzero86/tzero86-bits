@@ -16,7 +16,8 @@ Aug. 28, 2020
 </ul>
 <h2 id="task-1-deploy">[TASK 1] Deploy</h2>
 <blockquote>
-<p>Question #1: Access the web server, who robbed the bank?</p></blockquote>
+<p>Question #1: Access the web server, who robbed the bank?</p>
+</blockquote>
 <p>Let&rsquo;s start as usual by running an nmap scan:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Documents/THM/dailyBugle<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ nmap -A -T4 10.10.179.65 
@@ -47,7 +48,8 @@ Aug. 28, 2020
 <p>The information on this page gives us the answer to the first question.</p>
 <h2 id="task-2-obtain-user-and-root">[Task 2] Obtain user and root</h2>
 <blockquote>
-<p>Question #1 What is the Joomla Version?</p></blockquote>
+<p>Question #1 What is the Joomla Version?</p>
+</blockquote>
 <p>There is no visible information on the page that reveals the version. We can look into the source code, but before we do that. Let&rsquo;s capture with Burp a login request and put Hydra to work on trying to brute force access for us:</p>
 <p>This is the request as captured in Burp:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>POST /index.php/component/users/?task<span style="color:#f92672">=</span>user.login&amp;Itemid<span style="color:#f92672">=</span><span style="color:#ae81ff">101</span> HTTP/1.1

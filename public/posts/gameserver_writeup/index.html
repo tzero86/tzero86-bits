@@ -15,7 +15,8 @@ Oct. 10, 2020
 <h3 id="recon">Recon</h3>
 <p>I started a scan with <code>Autorecon</code> and while that is running let&rsquo;s look into what&rsquo;s at port <code>80</code>.</p>
 <blockquote>
-<p><code>sudo autorecon 10.10.85.253</code></p></blockquote>
+<p><code>sudo autorecon 10.10.85.253</code></p>
+</blockquote>
 <p>If we browse to the IP address, we can see we do have a webpage being served about some game:</p>
 <p><img src="https://i.imgur.com/QOJf7kD.png" alt=""></p>
 <p>And If we  open the console we see right away there is a mention to a possible username of <code>john</code>.</p>
@@ -27,7 +28,8 @@ Let&rsquo;s see if we can upload a <code>phpbash</code>. You can download a copy
 <p><img src="https://i.imgur.com/wp85FL4.png" alt=""></p>
 <p>The mem is just an image of Beaker, who according to the internet is:</p>
 <blockquote>
-<p>Beaker is the hapless assistant to Dr. Bunsen Honeydew from The Muppets.</p></blockquote>
+<p>Beaker is the hapless assistant to Dr. Bunsen Honeydew from The Muppets.</p>
+</blockquote>
 <p>Gobuster found another interesting directory: <code>/secret</code></p>
 <p><img src="https://i.imgur.com/lZ2z39X.png" alt=""></p>
 <p>The secret key is an RSA Private one.
@@ -47,13 +49,15 @@ Let&rsquo;s see if we can ssh login as <code>John</code> using that key. To do t
 <p>Now let&rsquo;s see how we get root. First I fire up a simple http server with python to upload <code>linpeas.sh</code> to the target machine. And then run linpeas.</p>
 <p><img src="https://i.imgur.com/8TRAJcD.png" alt=""></p>
 <blockquote>
-<p>Remember to <code>chmod +x linpeas.sh</code> before trying to run it.</p></blockquote>
+<p>Remember to <code>chmod +x linpeas.sh</code> before trying to run it.</p>
+</blockquote>
 <p>Linpeas results don&rsquo;t show anything that I know how to exploit, but while checking <code>id</code> command for the logged user something interesting comes up:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>john@exploitable:/tmp$ id
 </span></span><span style="display:flex;"><span>uid<span style="color:#f92672">=</span>1000<span style="color:#f92672">(</span>john<span style="color:#f92672">)</span> gid<span style="color:#f92672">=</span>1000<span style="color:#f92672">(</span>john<span style="color:#f92672">)</span> groups<span style="color:#f92672">=</span>1000<span style="color:#f92672">(</span>john<span style="color:#f92672">)</span>,4<span style="color:#f92672">(</span>adm<span style="color:#f92672">)</span>,24<span style="color:#f92672">(</span>cdrom<span style="color:#f92672">)</span>,27<span style="color:#f92672">(</span>sudo<span style="color:#f92672">)</span>,30<span style="color:#f92672">(</span>dip<span style="color:#f92672">)</span>,46<span style="color:#f92672">(</span>plugdev<span style="color:#f92672">)</span>,108<span style="color:#f92672">(</span>lxd<span style="color:#f92672">)</span>
 </span></span></code></pre></div><p>It seems John is part of the <code>ldx</code> group. And if I remember correctly I read something about getting root if you are part of that group. I think it was on <code>hacktricks</code>. Let&rsquo;s check <a href="https://book.hacktricks.xyz/linux-unix/privilege-escalation/interesting-groups-linux-pe/lxd-privilege-escalation">that</a> out.</p>
 <blockquote>
-<p>Also check out this post about LXD which puts a nice context on this vulnerability. Follow <a href="https://reboare.github.io/lxd/lxd-escape.html">this Link</a> to read it.</p></blockquote>
+<p>Also check out this post about LXD which puts a nice context on this vulnerability. Follow <a href="https://reboare.github.io/lxd/lxd-escape.html">this Link</a> to read it.</p>
+</blockquote>
 <p>I tried the <code>With Internet</code> method first, by that didn&rsquo;t work. So let&rsquo;s try the <code>Method 2</code> and see if we get lucky this time:</p>
 <p>We first need to create ourselves an image of Alpine, using the <code>lxd-alpine-builder</code> script located <a href="https://github.com/saghul/lxd-alpine-builder">here</a>.</p>
 <p>We just need to run the builder script as sudo and it&rsquo;ll start making the image for us:</p>

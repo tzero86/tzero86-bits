@@ -13,7 +13,8 @@ Aug. 21, 2020
 <li><strong>PLEASE NOTE:</strong> Passwords and flag values were intentionally masked as required by THM writeups rules. The write-up follows my step by step solution to this box, errors and all.</li>
 </ul>
 <blockquote>
-<p>Question #1: How many services are running under port 1000?</p></blockquote>
+<p>Question #1: How many services are running under port 1000?</p>
+</blockquote>
 <p>First let&rsquo;s fire up a <strong>Nmap</strong> scan to see if we can identify any services, making sure we skip the initial ping <strong>[-Pn]</strong>, scan all ports <strong>[-p-]</strong>:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>tzero86㉿tzbox<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Documents/THM/easyCTF<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ sudo nmap -A -Pn -p- -T4  10.10.251.248
@@ -75,10 +76,12 @@ Aug. 21, 2020
 </span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Found ssh on tcp/2222 on target 10.10.251.248
 </span></span></code></pre></div><p>And with this scan we can answer the second question.</p>
 <blockquote>
-<p>Question #2: What is running on the higher port?</p></blockquote>
+<p>Question #2: What is running on the higher port?</p>
+</blockquote>
 <p>Let&rsquo;s move on to the next one.</p>
 <blockquote>
-<p>Question #3: What&rsquo;s the CVE you&rsquo;re using against the application?</p></blockquote>
+<p>Question #3: What&rsquo;s the CVE you&rsquo;re using against the application?</p>
+</blockquote>
 <p>So we need to look for a vulnerability to exploit. Let&rsquo;s see if we can find anything related to <strong>vsFTPd 3.0.3</strong> or related to <strong>Apache HTTPd 2.4.18</strong>.</p>
 <p>The first thing we know about the FTP service running on port 21 is that it has anonymous access enabled. So let&rsquo;s connect to it and maybe download all the files if there is anything interesting that can aid us.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>tzero86㉿tzbox<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
@@ -153,9 +156,11 @@ Aug. 21, 2020
 </span></span><span style="display:flex;"><span>Hydra <span style="color:#f92672">(</span>https://github.com/vanhauser-thc/thc-hydra<span style="color:#f92672">)</span> finished at 2020-08-21 13:05:22
 </span></span></code></pre></div><p>There we go, we have a user and pass to connect to SSH. With this we can answer the following room questions:</p>
 <blockquote>
-<p>Question #5 What&rsquo;s the password?</p></blockquote>
+<p>Question #5 What&rsquo;s the password?</p>
+</blockquote>
 <blockquote>
-<p>Question #6 Where can you login with the details obtained?</p></blockquote>
+<p>Question #6 Where can you login with the details obtained?</p>
+</blockquote>
 <p>Let&rsquo;s check the SSH login out:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>tzero86㉿tzbox<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Documents/THM/easyCTF<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ ssh mitch@10.10.49.87 -p <span style="color:#ae81ff">2222</span>                                                                                              <span style="color:#ae81ff">255</span> ⨯
@@ -185,16 +190,19 @@ Aug. 21, 2020
 </span></span></code></pre></div><p>Let&rsquo;s review where we are at. We managed to get into the FTP server with anonymous login, we download a file for Mitch and got information that he uses bad insecure passwords. We then used Hydra to brute force the password and got the SSH password. We logged into SSH as Mitch and found out the user.txt value. We also know from looking a bit on the SSH, there is another username <strong>sunbath</strong>.</p>
 <p>With this we can answer some questions from the room already. Still no idea what CVE we should be using for Question 2. But we can answer the following:</p>
 <blockquote>
-<p>Question #7: What&rsquo;s the user flag?</p></blockquote>
+<p>Question #7: What&rsquo;s the user flag?</p>
+</blockquote>
 <blockquote>
-<p>Question #8: Is there any other user in the home directory? What&rsquo;s its name?</p></blockquote>
+<p>Question #8: Is there any other user in the home directory? What&rsquo;s its name?</p>
+</blockquote>
 <p>The next question ask us if we can use anything to leverage root privileges, let&rsquo;s check in the current SSH session if our user <strong>mitch</strong> has any access:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ sudo -l
 </span></span><span style="display:flex;"><span>User mitch may run the following commands on Machine:
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">(</span>root<span style="color:#f92672">)</span> NOPASSWD: /usr/bin/vim
 </span></span></code></pre></div><p>This let us answer question 9:</p>
 <blockquote>
-<p>Question #9: What can you leverage to spawn a privileged shell?</p></blockquote>
+<p>Question #9: What can you leverage to spawn a privileged shell?</p>
+</blockquote>
 <p>We now know Mitch can run <strong>vim</strong> as root. Once inside vim we press <strong>ESC</strong> then type in <strong>:!bash</strong> and press enter, just follow my steps and shown below:</p>
 <p><img src="/img/Vim_Exploit_Sudo.gif" alt="Priv Esc with vim running as sudo"></p>
 <p>After that we can just review a bit to see what we find. From the room&rsquo;s question we know we need to locate the root flag. So let&rsquo;s browse to the root folder and see if it is there:</p>
@@ -205,12 +213,15 @@ Aug. 21, 2020
 </span></span><span style="display:flex;"><span>root@Machine:/root# 
 </span></span></code></pre></div><p>Having found a way to get root access, we can now answer the question 10.</p>
 <blockquote>
-<p>Question #10: What&rsquo;s the root flag?</p></blockquote>
+<p>Question #10: What&rsquo;s the root flag?</p>
+</blockquote>
 <p>But we are still missing the CVE number answer to question #3 and also the answer to question #4. It seems we need to find some additional information. These are the questions still pending:</p>
 <blockquote>
-<p>Question #3: What&rsquo;s the CVE you&rsquo;re using against the application?</p></blockquote>
+<p>Question #3: What&rsquo;s the CVE you&rsquo;re using against the application?</p>
+</blockquote>
 <blockquote>
-<p>Question #4: To what kind of vulnerability is the application vulnerable?</p></blockquote>
+<p>Question #4: To what kind of vulnerability is the application vulnerable?</p>
+</blockquote>
 <p>Maybe we missed something but we surely forgot to run a <strong>gobuster</strong> scan. Let&rsquo;s do that now:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>tzero86㉿tzbox<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ gobuster dir -u http://10.10.49.87/ -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt 

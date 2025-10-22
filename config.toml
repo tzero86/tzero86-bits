@@ -56,25 +56,25 @@ enableEmoji = true
  Welcome to my blog and sort of curriculum vitae!
  Type 'help' or '?' for a list of available commands
  """
-  greetingColor = "green"
+  greetingColor = "white"
 
   bootsequence = """
 Booting Zero OS Linux 6.4.0-arch1-1 x86_64...
 Initializing hardware...
-[    0.000000] Memory: 16384K/32768K available
-[    0.000000] CPU: Intel(R) Core(TM) i7-10700K @ 3.80GHz
-[    0.000000] Kernel command line: BOOT_IMAGE=/vmlinuz-linux root=/dev/sda1 rw quiet
-[    0.000000] DMI: System Manufacturer/System Product Name
-[    0.000000] Enabling fast boot...
-[    0.000000] Mounting root filesystem...
-[    0.000000] Starting udev...
-[    0.000000] Loading modules...
-[    0.000000] Starting network manager...
-[    0.000000] Bringing up loopback interface: [  OK  ]
-[    0.000000] Starting web server: [  OK  ]
-[    0.000000] Starting Hugo static site generator: [  OK  ]
-[    0.000000] Starting TerminalCV: [  OK  ]
-[    0.000000] All services started successfully.
+[0.000000] Memory: 16384K/32768K available
+[0.000000] CPU: Intel(R) Core(TM) i7-10700K @ 3.80GHz
+[0.000000] Kernel command line: BOOT_IMAGE=/vmlinuz-linux root=/dev/sda1 rw quiet
+[0.000000] DMI: System Manufacturer/System Product Name
+[0.000000] Enabling fast boot...
+[0.000000] Mounting root filesystem...
+[0.000000] Starting udev...
+[0.000000] Loading modules...
+[0.000000] Starting network manager...
+[0.000000] Bringing up loopback interface: [  OK  ]
+[0.000000] Starting web server: [  OK  ]
+[0.000000] Starting Hugo static site generator: [  OK  ]
+[0.000000] Starting TerminalCV Modified theme: [  OK  ]
+[0.000000] All services started successfully.
 
 Welcome to Zero OS!
  """
@@ -86,7 +86,7 @@ ignoreLogs = ['warning-goldmark-raw-html']
   location = "Buenos Aires"
   email = "tzero86@example.com"
   homelink = "https://www.tzero86.xyz"
-  description = "I'm a Software Quality Engineer with over 10 years of experience in software testing, quality assurance, and cybersecurity. I love learning new technologies and sharing my knowledge through writing and public speaking."
+  description = "I'm a Software Quality Engineer with over 10+ years of experience in software testing, quality assurance, and career mentoring. I also have an interest in cybersecurity. I love learning new technologies and sharing my knowledge with the community. Nowadays I'm focused on AI tools for testing and security."
 
 [[params.social.details]]
   name = "twitter"
@@ -103,19 +103,19 @@ ignoreLogs = ['warning-goldmark-raw-html']
   company = "Globant (AON, DELOITTE, EA, BIOWARE, WOLTERS KLUWER)"
   location = "Buenos Aires"
   date = "2015 - Present"
-  description = "Working on various projects as a Software Quality Engineer, focusing on test automation and quality assurance."  
+  description = "Working on various projects as a Software Quality Engineer, focusing on technical testing tasks for an LLM-Based application."
 
 [[params.work.details]]
   jobTitle = "Security Researcher"
   company = "TrojanWave"
   location = "Remote"
   date = "2020 - Present"
-  description = "Researching and writing about cybersecurity topics."
+  description = "Researching and writing about cybersecurity topics and training labs."
 
 [[params.education.details]]
   courseName = "Computer Science"
   date = "2010 - 2015"
-  description = "Studied at University of Buenos Aires"
+  description = "Studied at University of La Plata"
 
 
 [[params.skills.details]]
@@ -143,33 +143,49 @@ ignoreLogs = ['warning-goldmark-raw-html']
   percentage = 70
   description = "Penetration testing and security analysis"
 
+[[params.skills.details]]
+    name = "API Testing"
+    percentage = 80
+    description = "Postman, REST Assured, Python Requests, API testing strategies"
+
+[[params.skills.details]]
+    name = "Accessibility Testing"
+    percentage = 75
+    description = "WCAG guidelines, Axe, Lighthouse, accessibility testing techniques"
+
+[[params.skills.details]]
+    name = "Tool Creation: Python & Streamlit"
+    percentage = 80
+    description = "Building custom testing tools and dashboards using Python and Streamlit"
+
 [[params.languages.details]]
   name = "English"
-  color = "Blue"
-  percentage = 100
+  color = "White"
+  percentage = 98 
 
 [[params.languages.details]]
   name = "Spanish"
+  color = "White"
   percentage = 100
   description = "Native speaker"
 
 [[params.projects.details]]
   title = "tzero86-bits"
-  date = "2023-10-01"
+  date = "2025-10-22"
   link = "https://github.com/Tzero86/tzero86-bits"
-  description = "Ethical Hacking notes and posts Blog. Upcoming v2 design"
+  description = "Ethical Hacking notes and posts Blog."
 
 [[params.projects.details]]
   title = "ethicalHackingNotes"
   date = "2023-09-01"
   link = "https://github.com/Tzero86/ethicalHackingNotes"
-  description = "Artículos educativos sobre ethical hacking en español"
+  description = "Artículos educativos sobre ethical hacking en español."
 
 [[params.projects.details]]
   title = "alien-dark-theme"
   date = "2023-08-01"
   link = "https://github.com/Tzero86/alien-dark-theme"
-  description = "Alien Dark is a dark theme for Visual Studio Code"
+  description = "Alien Dark is a dark theme for Visual Studio Code inspired by sci-fi aesthetics."
 
 [[params.projects.details]]
   title = "cucumber-typescript-playwright"

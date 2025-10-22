@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>{{ .Site.Title }}{{ $url := urls.Parse .Page.Permalink }}{{ $url.Path }}</title>
+    <title>{{ .Site.Title }}{{ with .Page.Permalink }}{{ $url := urls.Parse . }}{{ $url.Path }}{{ end }}</title>
     {{ with .Site.Params.description }}<meta name="description" content="{{ . }}">{{ end }}
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="all,follow">
@@ -47,6 +47,12 @@
         </div>
     </div>
 
+    <div class="greeting" {{ with .Site.Params.prompt.extra.greetingColor }}style="color:{{ . }};"{{ else }}style="color:#333;"{{ end }}>
+      <script>
+        console.log("Greeting color value:", "{{ .Site.Params.prompt.extra.greetingColor }}", "Config path: .Site.Params.prompt.extra.greetingColor");
+      </script>
+      {{ .Site.Params.greeting | safeHTML }}
+    </div>
     <div class="container {{ .Site.Params.animateStyle }}" >
         {{ block "main" . }}
         {{ end }}

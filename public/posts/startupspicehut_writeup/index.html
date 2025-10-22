@@ -38,7 +38,8 @@ Nov. 12, 2020
 <p>If we connect back to the FTP and try to upload the file (I&rsquo;m trying a phpbash.php) we see that we don&rsquo;t have permissions at the root of the share. However, if we change directory into that empty <code>ftp</code> folder we found earlier, we are able to upload our file:</p>
 <p><img src="https://i.imgur.com/YAFGphe.png" alt=""></p>
 <blockquote>
-<p>NOTE: If you look at the initial transfer, we didn&rsquo;t get back any file transfer size. Turns out I was sending a bad file first it was a corrupted php file. In the second attempt after getting a fresh copy of phpbash it did work fine. Download phpbash <a href="https://raw.githubusercontent.com/Arrexel/phpbash/master/phpbash.php">here</a></p></blockquote>
+<p>NOTE: If you look at the initial transfer, we didn&rsquo;t get back any file transfer size. Turns out I was sending a bad file first it was a corrupted php file. In the second attempt after getting a fresh copy of phpbash it did work fine. Download phpbash <a href="https://raw.githubusercontent.com/Arrexel/phpbash/master/phpbash.php">here</a></p>
+</blockquote>
 <p>Let&rsquo;s see if we can access that file from the <code>/files</code> route in our browser:</p>
 <p><img src="https://i.imgur.com/l13lmSB.png" alt=""></p>
 <p>Well the file is there, let&rsquo;s see if it can actually run:</p>
@@ -59,7 +60,8 @@ Nov. 12, 2020
 Now let&rsquo;s try to upload that file to the target machine:</p>
 <p><img src="https://i.imgur.com/eYO8fan.png" alt=""></p>
 <blockquote>
-<p>NOTE: Remember we only have write permissions inside <code>/var/www/html/files/ftp/</code> if you try to upload anywhere else you&rsquo;ll get a nice <code>permission denied</code>.</p></blockquote>
+<p>NOTE: Remember we only have write permissions inside <code>/var/www/html/files/ftp/</code> if you try to upload anywhere else you&rsquo;ll get a nice <code>permission denied</code>.</p>
+</blockquote>
 <p>Ok that works, now let&rsquo;s make sure we make that file executable by running <code>chmod +x linpeas.sh</code> and then we execute it <code>./linpeash.sh</code>:</p>
 <p>Well that&rsquo; took a while to run and&hellip; it didn&rsquo;t found anything immediately exploitable for us (unless you are not a noob like me and noticed something good there :joy: ). However, it seems to have found an username of <code>vagrant</code> and some unexpected folders named <code>incidents</code>, <code>data</code> and <code>vagrant</code>. Another possible interesting piece of info is that we have <code>/usr/bin/gettext.sh</code> inside the <code>PATH</code> variable.</p>
 <h3 id="incidents">Incidents</h3>
@@ -68,7 +70,8 @@ Now let&rsquo;s try to upload that file to the target machine:</p>
 <p>If you know this file type, you&rsquo;ll probably know already that we&rsquo;ll have to tinker around with <code>Wireshark</code> or a similar program next. So I&rsquo;ve already copied that folder to the writable <code>ftp</code> folder so we can access it easily and download a copy into our kali box.</p>
 <p><img src="https://i.imgur.com/OQVaMYl.png" alt=""></p>
 <blockquote>
-<p><em>pcapng</em> file is a standard format for storing captured data. PCAPNG files normally contain several blocks of data. These blocks of data contain different types of information that are useful in. capturing and analyzing network data, such as connection traffic.The blocks may consist of a section header block, interface.</p></blockquote>
+<p><em>pcapng</em> file is a standard format for storing captured data. PCAPNG files normally contain several blocks of data. These blocks of data contain different types of information that are useful in. capturing and analyzing network data, such as connection traffic.The blocks may consist of a section header block, interface.</p>
+</blockquote>
 <h3 id="wiresharking-for-the-win">Wiresharking for the win</h3>
 <p>Let&rsquo;s open Wireshark with that file and see what we can find. If we start looking at the events captured in the packet, we can see there is an upload of a <code>shell.php</code>. Let&rsquo;s follow the trail of that, after inspecting for a while we get to this part where we clearly see the user used python to stabilize his shell and then proceeded to list directories. We also see there is a <code>recipe.txt</code>, a username mentioned and even a password and the contents of the <code>/etc/passwd</code> file.</p>
 <p><img src="https://i.imgur.com/Eu9pCDk.png" alt=""></p>

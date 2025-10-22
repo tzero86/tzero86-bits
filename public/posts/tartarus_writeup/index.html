@@ -71,14 +71,16 @@ Oct. 28, 2020
 <p><img src="https://i.imgur.com/Vh8mDXQ.png" alt=""></p>
 <p>Ok now let&rsquo;s check that <code>cleanup.py</code> file that&rsquo;s running as a cron job. And see if we can edit it to get us root.</p>
 <blockquote>
-<p>NOTE: To make sure I don&rsquo;t lose the original file, I ran <code>cp cleanup.py cleanup.py.bak</code></p></blockquote>
+<p>NOTE: To make sure I don&rsquo;t lose the original file, I ran <code>cp cleanup.py cleanup.py.bak</code></p>
+</blockquote>
 <p>Now let&rsquo;s see if we can edit the file with nano:</p>
 <p>Even though we got an error before nano opens, we are able to edit the file. We make the changes to the command being executed so it creates a copy of <code>bash</code> with privileges that we can execute later in one of our accessible directories:</p>
 <p><img src="https://i.imgur.com/sQ9FYjp.png" alt=""></p>
 <p>We save the file and we just wait, since the file is tied to a cronjob we need to wait for it to get executed:</p>
 <p>If you notice the command tells the system to copy bash into a <code>tmp/rootbash</code> folder.</p>
 <blockquote>
-<p>NOTE: Credits to @ratiros01 on that command, I was just failing at making that work until I came across his idea for that in one of his posts.</p></blockquote>
+<p>NOTE: Credits to @ratiros01 on that command, I was just failing at making that work until I came across his idea for that in one of his posts.</p>
+</blockquote>
 <p>Let&rsquo;s navigate to that temp folder and see if we get our bash copied. We do, it worked. Now we need to run that file, however we need to make use of the switch <code>-p</code> so the binary would not drop his privileges. Otherwise it would run with the permissions our current user has.</p>
 <p><img src="https://i.imgur.com/LtTBQvp.png" alt=""></p>
 <p>It worked great and we are now root!, let&rsquo;s grab that flag and complete the room.</p>

@@ -14,10 +14,10 @@ Dec. 22, 2020
 </ul>
 <h2 id="enumeration">Enumeration</h2>
 <p>Let&rsquo;s start by running some scans on the target, I&rsquo;m feeling like using <code>Rustscan</code> once again. To start things up we run the following command:</p>
-<p><code> ┌──(kali㉿kali)-[~/Documents/THM/allInOne] └─$ rustscan -u 5000 -a 10.10.139.211 -- -A -sV -sC </code></p>
+<p><code>┌──(kali㉿kali)-[~/Documents/THM/allInOne] └─$ rustscan -u 5000 -a 10.10.139.211 -- -A -sV -sC</code></p>
 <p><img src="https://i.imgur.com/CkY8SWV.png" alt=""></p>
 <p>Let&rsquo;s also fire up <code>gobuster</code> to see if we can identify any directories on this server that we can access:</p>
-<p><code> ┌──(kali㉿kali)-[~/Documents/THM/allInOne] └─$ gobuster dir -u http://10.10.139.211:80 -w /usr/share/wordlists/dirb/big.txt  </code></p>
+<p><code>┌──(kali㉿kali)-[~/Documents/THM/allInOne] └─$ gobuster dir -u http://10.10.139.211:80 -w /usr/share/wordlists/dirb/big.txt </code></p>
 <p><img src="https://i.imgur.com/iM65FM3.png" alt=""></p>
 <p>We can already see something insteresting, the server is running <code>Wordpress</code>. Let&rsquo;s see what we find at that URL:</p>
 <p><img src="https://i.imgur.com/jFavizB.png" alt=""></p>
@@ -35,12 +35,13 @@ Dec. 22, 2020
 </ul>
 <h2 id="wpscan">WPscan</h2>
 <p>Now let&rsquo;s see what vulnerabilities we can potentially identify for that Wordpress installation. Let&rsquo;s run <code>WPscan</code> and see if it finds any. To do that, we run the command as follows:</p>
-<p><code> ┌──(kali㉿kali)-[~/Documents/THM/allInOne] └─$ wpscan --url http://10.10.139.211:80/wordpress --no-banner --api-token {YOUR_WPSCAN_API_KEY_HERE} </code></p>
+<p><code>┌──(kali㉿kali)-[~/Documents/THM/allInOne] └─$ wpscan --url http://10.10.139.211:80/wordpress --no-banner --api-token {YOUR_WPSCAN_API_KEY_HERE}</code></p>
 <p><img src="https://i.imgur.com/xZke5jT.png" alt=""></p>
 <p>Once WPScan finishes the scan, we get a long list of results. First we get 8 vulnerabilities for the version of Wordpress itself:</p>
 <p><img src="https://i.imgur.com/rjno7p1.png" alt=""></p>
 <blockquote>
-<p>NOTE: For the sake of space I won&rsquo;t be listing all vulnerabilities on the screenshots. WPScan results are usually very lenghty.</p></blockquote>
+<p>NOTE: For the sake of space I won&rsquo;t be listing all vulnerabilities on the screenshots. WPScan results are usually very lenghty.</p>
+</blockquote>
 <p>We also get a couple of vulnerabilities for a Wordpress Plugin called, <code>mail-masta</code>:</p>
 <p><img src="https://i.imgur.com/QgMb4Zq.png" alt=""></p>
 <p>Having all these vulnerabilities listed clearly means we could potentially get access to this target in various ways. In the next section we&rsquo;ll start looking into how we can actually abuse some of these vulns to get us the initial access to the target.</p>
@@ -66,7 +67,7 @@ Dec. 22, 2020
 <li>Error Message: <code>Error: The password you entered for the username elyana is incorrect</code>.</li>
 </ul>
 <p>Now let&rsquo;s use this to craft our attack command using hydra:</p>
-<p><code> hydra -l elyana -P /usr/share/wordlists/rockyou.txt 10.10.145.252 http-post-form '/wordpress/wp-login.php:log=^USER^&amp;pwd=^PASS^:F=incorrect' </code></p>
+<p><code>hydra -l elyana -P /usr/share/wordlists/rockyou.txt 10.10.145.252 http-post-form '/wordpress/wp-login.php:log=^USER^&amp;pwd=^PASS^:F=incorrect'</code></p>
 <p><img src="https://i.imgur.com/QiojZxR.png" alt=""></p>
 <p>This is taking too much time, and we don&rsquo;t even have any certainty that the password is indeed included in the wordlist we used. We need to find another approach.</p>
 <p>If we go back the LFI vuln, we can try to get another file that could point us in the right direction. In Wordpress there is a general config file called <code>wp-config.php</code> where the Database password is stored. Rarely but it happens, users tend to reuse the same password for the user accounts. Let&rsquo;s see if we can get that file with LFI in a similar fashion as we did for the passwd file.</p>
@@ -89,10 +90,12 @@ Dec. 22, 2020
 <p>We just replace the code for the 404 template with the rev shell code:</p>
 <p><img src="https://i.imgur.com/5dcJhm1.png" alt=""></p>
 <blockquote>
-<p>NOTE: Make sure to replace the placeholder values for IP and PORT. To target your attack machine (Tryhackme VPN ip, usually tun0)</p></blockquote>
+<p>NOTE: Make sure to replace the placeholder values for IP and PORT. To target your attack machine (Tryhackme VPN ip, usually tun0)</p>
+</blockquote>
 <p>Then we just need to update the file we changed, and call it so we get our reverse shell connection:</p>
 <blockquote>
-<p>NOTE: Remember to fire up your netcat listener, in my case: <code>nc -nlvp 2112</code></p></blockquote>
+<p>NOTE: Remember to fire up your netcat listener, in my case: <code>nc -nlvp 2112</code></p>
+</blockquote>
 <p>Now we just need to invoke the <code>404.php</code> page by navigating to for example, a non-existing post. Let&rsquo;s see if it works:</p>
 <p><img src="https://i.imgur.com/XsghWXM.png" alt=""></p>
 <p>It works! We got the initial access, finally!</p>
@@ -109,7 +112,8 @@ That&rsquo;s it we got the first flag.</p>
 <h2 id="getting-the-roottxt-flag">Getting the root.txt flag</h2>
 <p>Now that we have the initial access we need to get root, let&rsquo;s fire up a local python http server in our machine where we have downloaded <code>linpeas.sh</code> (Check this <a href="https://raw.githubusercontent.com/carlospolop/privilege-escalation-awesome-scripts-suite/master/linPEAS/linpeas.sh">link</a> to get it). Having that ready, let&rsquo;s upload linpeas to the target machine and run it:</p>
 <blockquote>
-<p>NOTE: You need to <code>chmod +x linpeas.sh</code> before running it!</p></blockquote>
+<p>NOTE: You need to <code>chmod +x linpeas.sh</code> before running it!</p>
+</blockquote>
 <p><img src="https://i.imgur.com/Sqi99qd.png" alt=""></p>
 <p>Once we get the results, we are lucky linpeas did something we forget. To check if the user can run any command as sudo:</p>
 <p><img src="https://i.imgur.com/ZNsPOU5.png" alt=""></p>
